@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 27 Jun 2020 20:10:49 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/stun/index.xml" rel="self" type="application/rss+xml"/><item><title>RFC5389 - Session Traversal Utilities for NAT</title><link>https://www.junyi.dev/posts/rfc5389-stun/</link><pubDate>Sat, 27 Jun 2020 20:10:49 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+STUN 是一种协议，用于检查两个终端之间的连通性，可以工作在多种 NAT 之中，不需要 NAT 对其有任何行为。
+STUN 本身不是一个 NAT 穿透的解决方案，而是一个 NAT 穿透条件检测工具。</description><content:encoded>&lt;p&gt;STUN 是一种协议，用于检查两个终端之间的连通性，可以工作在多种 NAT 之中，不需要 NAT 对其有任何行为。&lt;/p&gt;
+&lt;p&gt;STUN 本身不是一个 NAT 穿透的解决方案，而是一个 NAT 穿透&lt;strong&gt;条件检测工具&lt;/strong&gt;。&lt;/p&gt;
+&lt;h1 id="说在前面" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%af%b4%e5%9c%a8%e5%89%8d%e9%9d%a2"&gt;
+##
+&lt;/a&gt;
+说在前面
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;转载请注明作者及出处！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;翻译中遇到的问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 文章不能很好区分 indication 和 indication transaction&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 存在不理解的内容以该格式进行标记 &lt;span style="color: red;"&gt;?? 不理解的内容？？&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;还未检查的项目：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 翻译的名词不会一个单词多个翻译。保证一致性&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 句子结束的句号是否完整&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 单词左右两边是否有空格&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 大小写、拼写问题&lt;/li&gt;
+&lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 或、且，是否全都是左右两边加逗号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;译者注：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;本翻译仅供参考，目的是让读者更好地理解 STUN 协议（&lt;a href=""&gt;RFC 5389&lt;/a&gt;）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;我个人&lt;/strong&gt;对翻译的要求是逻辑严密准确，且文章&lt;strong&gt;核心内容&lt;/strong&gt;与英文原版一致。&lt;/p&gt;
+&lt;p&gt;为了更方便读者理解，本翻译 &lt;strong&gt;不保证&lt;/strong&gt; 部分措辞细节与英文原版一致。&lt;/p&gt;
+&lt;p&gt;为了保证文章的准确性，个别名词将不会进行翻译。&lt;/p&gt;
+&lt;p&gt;同样，为了保证文章的准确性，每句话的翻译都会附上英文原版供读者参考。&lt;/p&gt;
+&lt;p&gt;译者语文和英语的水平都不高，再次强调，本翻译仅供参考。&lt;/p&gt;
+&lt;p&gt;译者：Junyi&lt;/p&gt;
+&lt;p&gt;联系邮箱：hhh#u.nus.edu (自行替换成 at 符号)&lt;/p&gt;
+&lt;h1 id="stun" &gt;
+&lt;div&gt;
+&lt;a href="#stun"&gt;
+##
+&lt;/a&gt;
+STUN
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;STUN 全名叫 Session Traversal Utilities for NAT (STUN)&lt;/p&gt;
+&lt;p&gt;最新定义在 &lt;a href="https://datatracker.ietf.org/doc/rfc5389/"&gt;RFC 5389&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;STUN 是一种协议，用于检查两个终端之间的连通性，可以工作在多种 NAT 之中，不需要 NAT 对其有任何行为。&lt;/p&gt;
+&lt;p&gt;STUN 本身不是一个 NAT 穿透的解决方案，而是一个 NAT 穿透条件检测工具。&lt;/p&gt;
+&lt;p&gt;STUN 最初定义在 RFC 3489，有时我们也说这个最初版本为 “经典 STUN” （classic STUN）&lt;/p&gt;
+&lt;p&gt;在那时候其实已经是一个完整的 NAT 穿透问题的解决方案了，客户端可以去发现自己是否在 NAT 之后，确定其所在 NAT 的类型，发现其经过 NAT 转换后的 IP 地址和端口号，利用这个 IP 地址和端口号执行 SIP（Session Initiation Protocol）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;听起来挺美好的哈，但是随着我们的应用部署，发现经典的 STUN 有时候根本不工作！&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;通过 STUN 获取到的 IP 地址和端口信息有时候可以让两个 peer 互通，有时候不行&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 peer 不互通时，经典 STUN 没有提供补救措施&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在有些 NAT 内，经典 STUN 的算法是错误的&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;经典 STUN 存在安全漏洞（攻击者可以给 peer 提供错误的映射地址、拓扑、约束）。这个问题无法从根本解决，我们最新的协议也只能缓解这个问题。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基于以上原因，RFC 3489 &lt;strong&gt;已经被废弃&lt;/strong&gt;。&lt;/p&gt;
+&lt;h1 id="3-操作概述-overview-of-operation" &gt;
+&lt;div&gt;
+&lt;a href="#3-%e6%93%8d%e4%bd%9c%e6%a6%82%e8%bf%b0-overview-of-operation"&gt;
+##
+&lt;/a&gt;
+3. 操作概述 Overview of Operation
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This section is descriptive only.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;本节仅作描述性用途。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN is a client-server protocol.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;STUN 是一种 client-server 协议，换句话讲，运行 STUN 协议实现的主机既可以充当客户端也可以充当服务器。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It supports two types of transactions.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;STUN 支持两种类型的事务。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;One is a &lt;strong&gt;request/response transaction&lt;/strong&gt; in which a client sends a request to a server, and the server returns a response.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;其中一种是&lt;strong&gt;请求/响应型事务&lt;/strong&gt;。就是说客户端发送一个 request 给服务器，服务器返回给客户端一个 response 。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The second is an &lt;strong&gt;indication transaction&lt;/strong&gt; in which either agent – client or server – sends an indication that generates no response.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;另一种是&lt;strong&gt;指示型事务&lt;/strong&gt;。客户端或服务器只是??发送一个指示，并没有任何 response。??&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Both types of transactions include a &lt;strong&gt;transaction ID&lt;/strong&gt;, which is a randomly selected 96-bit number.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;上述的两种事务类型，都包含一个随机选择的96位的事务ID。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;For &lt;strong&gt;request/response transactions&lt;/strong&gt;, this transaction ID allows the client to associate the response with the request that generated it; for &lt;strong&gt;indications&lt;/strong&gt;, the transaction ID serves as a debugging aid.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;对于&lt;strong&gt;请求/响应型事务&lt;/strong&gt;，??事务ID允许客户端将其生成的请求事务与收到的响应事务相关联。??&lt;/p&gt;
+&lt;p&gt;对于&lt;strong&gt;指示型事务&lt;/strong&gt;，事务ID充当调试工具的角色。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;All STUN messages start with a fixed header that includes a &lt;strong&gt;method&lt;/strong&gt;, a &lt;strong&gt;class&lt;/strong&gt;, and the &lt;strong&gt;transaction ID&lt;/strong&gt;.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;所有的 STUN 消息都以一个固定的头部开始。这个头部包含&lt;strong&gt;方法&lt;/strong&gt;、&lt;strong&gt;类&lt;/strong&gt;、&lt;strong&gt;事务ID&lt;/strong&gt;[^1]&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;strong&gt;method&lt;/strong&gt; indicates which of the various requests or indications this is; this specification defines just one method, Binding, but other methods are expected to be defined in other documents.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;方法&lt;/strong&gt;表示这是哪种请求，或，这是哪种&lt;strong&gt;指示&lt;/strong&gt;。在当前您阅读的这个 RFC 规范里，我们只规定了一种方法：Binding。（其他的方法有望在其他文档中定义）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;strong&gt;class&lt;/strong&gt; indicates whether this is a request, a &lt;strong&gt;success response&lt;/strong&gt;, an &lt;strong&gt;error response&lt;/strong&gt;, or an &lt;strong&gt;indication&lt;/strong&gt;.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;类表示这是一个请求、成功的响应、错误的响应还是一个指示。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Following the fixed header comes zero or more attributes, which are &lt;strong&gt;Type-Length-Value&lt;/strong&gt; extensions that convey additional information for the specific message.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;紧跟在固定头部后面的是 0 个或多个 &lt;strong&gt;Type-Length-Value&lt;/strong&gt; 扩展属性。不用细说，相信你也明白这个扩展属性的用途是为了传递附加信息。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This document defines a single method called Binding. The Binding method can be used either in request/response transactions or in indication transactions.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这份文档只定义了 Binding 这个方法，这个方法既可以用在请求/响应型事务，又可以用在指示型事物。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When used in request/response transactions, the Binding method can be used to determine the particular “binding” a NAT has allocated to a STUN client. When used in either request/ response &lt;strong&gt;or&lt;/strong&gt; in indication transactions, the Binding method can also be used to keep these “bindings” alive.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;当在请求/响应型事务中使用 Binding 方法时，它可以用来确定一个 NAT 分配给 STUN 客户端的特定 “绑定”。&lt;/p&gt;
+&lt;p&gt;当在请求/响应型事务&lt;strong&gt;或&lt;/strong&gt;指示型事物中使用 Binding 方法时，这个方法还可以用来维持这些特定 “绑定” 是活动的。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In the Binding request/response transaction, a Binding request is sent from a STUN client to a STUN server.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在使用 Binding 方法的请求/响应型事务中，一条 Binding 请求 会从 STUN 客户端发往 STUN 服务器。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When the Binding request arrives at the STUN server, it may have passed through one or more NATs between the STUN client and the STUN server (in Figure 1, there were two such NATs).&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;一条 Binding 请求 到达 STUN 服务器的过程里，可能会穿越 1 个或多个 NAT 设备。（在 Figure 1 中穿越了两个 NAT 设备）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;As the Binding request message passes through a NAT, the NAT will modify the source transport address (that is, the source IP address and the source port) of the packet. As a result, the source transport address of the request received by the server will be the public IP address and port created &lt;strong&gt;by the NAT closest to the server&lt;/strong&gt;. This is called a reflexive transport address.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在一个 Bingding 请求 数据包经过 NAT 的时候，NAT 会修改该数据包的来源地址和端口。&lt;/p&gt;
+&lt;p&gt;对于服务器来说，接收到的这份数据包的来源地址和端口其实是&lt;strong&gt;离服务器最近的 NAT的公网 IP 地址和端口&lt;/strong&gt; 。&lt;/p&gt;
+&lt;p&gt;这叫做 reflexive transport address。&lt;/p&gt;
+&lt;p&gt;??这个请求数据包的source地址叫做 reflexive transport address？??&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The STUN server copies that source transport address into an XOR-MAPPED-ADDRESS attribute in the STUN Binding response and sends the Binding response back to the STUN client. As this packet passes back through a NAT, the NAT will modify the &lt;strong&gt;destination&lt;/strong&gt; transport address in the IP header, but the transport address in the XOR-MAPPED-ADDRESS attribute within the body of the STUN response will remain untouched.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;接着，STUN 服务器会产生一个 Binding 响应，然后复制收到数据包的 来源地址和端口 到 Binding 响应 里的一个叫做 XOR-MAPPED-ADDRESS 的属性中，然后将 Binding 响应 发回 STUN 客户端。&lt;/p&gt;
+&lt;p&gt;这个响应数据包也会经过 NAT，NAT 会修改该数据包的&lt;strong&gt;目标&lt;/strong&gt;地址和端口。&lt;/p&gt;
+&lt;p&gt;注意，NAT 只会修改 IP 报头的地址和端口（来源或目标），不会修改 XOR-MAPPED-ADDRESS 中的内容。也就是说，NAT 只修改头部，不修改 Payload。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In this way, the client can learn its reflexive transport address allocated by the outermost NAT with respect to the STUN server.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;通过这种方式，客户端可以了解到自己 最外部 NAT 给自己分配的的 reflexive transport address。&lt;/p&gt;
+&lt;p&gt;这里说的最外部，指的是相对于 STUN server 的最外部。套娃你懂吧，STUN server 有可能在一个非常大的子网里，这个时候客户端了解到的只是离 STUN 最近的那个 NAT 反射回的地址。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In some usages, STUN must be multiplexed with other protocols (e.g., [MMUSIC-ICE], [SIP-OUTBOUND]). In these usages, there must be a way to inspect a packet and determine if it is a STUN packet or not.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在某些情况下， STUN 必须与其他协议复用（比如 MMUSIC-ICE, SIP-OUTBOUND）。在这些情况下，必须有一种方式来检测数据包是否为 STUN 协议类型。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN provides three fields in the STUN header with fixed values that can be used for this purpose. If this is not sufficient, then STUN packets can also contain a FINGERPRINT value, which can further be used to distinguish the packets.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;STUN 在头部提供了三个字段用于其特殊情况下检测协议类型的目的。如果这三个字段仍然不够完成检测工作，那么 STUN 数据包中还可以通过包含 FINGERPRINT 值 来进一步区分数据包的协议类型。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN defines a set of optional procedures that a usage can decide to use, called mechanisms. These mechanisms include DNS discovery, a redirection technique to an alternate server, a fingerprint attribute for demultiplexing, and two authentication and message-integrity exchanges. The authentication mechanisms revolve around the use of a username, password, and message-integrity value. Two authentication mechanisms, the long-term credential mechanism and the short-term credential mechanism, are defined in this specification.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;STUN 定义了一系列的可选操作，称为机制。这些机制包含了：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;DNS发现机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;备选服务器的重定向机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解多路复用[^2]的 fingerprint 属性机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;双授权机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;信息完整性交换机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其中，双授权机制，在本手册中定义为长期凭据机制和短期凭据机制。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Each usage specifies the mechanisms allowed with that usage.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;不同的使用场景决定了这些机制的具体用法。换句话讲，不同的使用场景被允许使用的机制是不同的。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In the long-term credential mechanism, the client and server share a pre-provisioned username and password and perform a digest challenge / response exchange inspired by (but differing in details) to the one defined for HTTP [RFC2617].&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在长期凭据机制里，客户端和服务器共享一个预先分配好的用户名和密码，然后执行 digest challenge / response exchange。&lt;/p&gt;
+&lt;p&gt;这个长期凭据机制受到 RFC 2617 的启发，但是具体细节上与 RFC 2617 不同。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In the short-term credential mechanism, the client and the server exchange a username and password through some out-of-band method prior to the STUN exchange. For example, in the ICE usage [MMUSIC-ICE] the two endpoints use out-of-band signaling to exchange a username and password. These are used to integrity protect and authenticate the request and response. There is no challenge or nonce used.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在短期凭据机制里，客户端和服务器在 STUN 交换 之前，通过一些 out-of-band 的方式[^3]来交换用户名和密码。举个例子，在 ICE中，两个端点使用 out-of-band 信令 来交换用户名和密码。它们被用来保证消息的完整性和对请求和响应进行授权。没有使用 challenge 或 nonce[^4]。&lt;/p&gt;
+&lt;h2 id="4-术语-terminology" &gt;
+&lt;div&gt;
+&lt;a href="#4-%e6%9c%af%e8%af%ad-terminology"&gt;
+#
+&lt;/a&gt;
+&lt;a href="#4-%e6%9c%af%e8%af%ad-Terminology" title="4. 术语 Terminology"&gt;&lt;/a&gt;4. 术语 Terminology
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In this document, the key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” are to be interpreted as described in BCP 14, RFC 2119 [RFC2119] and indicate requirement levels for compliant STUN implementations.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在这份文档中，“**&lt;em&gt;必须&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;必须不&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;必需要&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;应当&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;不应当&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;最好&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;最好不&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;建议&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;或许&lt;/em&gt;&lt;strong&gt;”，“&lt;/strong&gt;&lt;em&gt;可选&lt;/em&gt;**”，将按照 BCP 14，RFC 2119 来解释说明 STUN 所需的的实现级别。&lt;/p&gt;
+&lt;p&gt;因为中英文单词差异，所以在本翻译中，涉及到的上述词汇都会用**&lt;em&gt;粗体倾斜下划线&lt;/em&gt;**来表示。&lt;/p&gt;
+&lt;h2 id="5-定义-definitions" &gt;
+&lt;div&gt;
+&lt;a href="#5-%e5%ae%9a%e4%b9%89-definitions"&gt;
+#
+&lt;/a&gt;
+&lt;a href="#5-%e5%ae%9a%e4%b9%89-Definitions" title="5. 定义 Definitions"&gt;&lt;/a&gt;5. 定义 Definitions
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN Agent: A STUN agent is an entity that implements the STUN protocol. The entity can be either a STUN client or a STUN server.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;STUN 代理&lt;/strong&gt;：一个实现了 STUN 协议的实体被称为 STUN 代理。（既可以为客户端又可以为服务器）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN Client: A STUN client is an entity that sends STUN requests and receives STUN responses. A STUN client can also send indications. In this specification, the terms STUN client and client are synonymous.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;STUN 客户端&lt;/strong&gt;：一个可以发送 STUN 请求，且，接受 STUN 响应的实体，被称为 STUN 客户端。STUN 客户端也可以发送指示[^5]。您可以理解 STUN 客户端和客户端是同义词。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN Server: A STUN server is an entity that receives STUN requests and sends STUN responses. A STUN server can also send indications. In this specification, the terms STUN server and server are synonymous.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;STUN 服务器&lt;/strong&gt;：一个可以接收 STUN 请求，且，发送 STUN 响应的实体，被称为 STUN 服务器。STUN 服务器也可以发送指示[^5]。您可以理解 STUN 服务器和服务器是同义词。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Transport Address: The combination of an IP address and port number (such as a UDP or TCP port number).&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;传输地址&lt;/strong&gt;：IP地址和端口的组合被称为传输地址。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Reflexive Transport Address: A transport address learned by a client that identifies that client as seen by another host on an IP network, typically a STUN server. When there is an intervening NAT between the client and the other host, the reflexive transport address represents the mapped address allocated to the client on the public side of the NAT. Reflexive transport addresses are learned from the mapped address attribute (MAPPED-ADDRESS or XOR-MAPPED-ADDRESS) in STUN responses.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;反射性传输地址&lt;/strong&gt;：一个客户端从“其他主机”那里了解到的自己的传输地址。一般这个“其他主机”指的是 STUN 服务器。当 NAT 干预在客户端与“其他主机”之间时，反射性传输地址代表了这个客户端在 NAT 的公共区域那一侧被分配到的传输地址。这个反射性传输地址被放在 STUN 响应的 MAPPED-ADDRESS 或 XOR-MAPPED-ADDRESS 里。&lt;/p&gt;
+&lt;p&gt;讲人话就是，客户端拿到的公网IP地址和端口号的组合就叫反射性传输地址。（不严谨，要想严谨还是得看上面的定义）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Mapped Address: Same meaning as reflexive address. This term is retained only for historic reasons and due to the naming of the MAPPED-ADDRESS and XOR-MAPPED-ADDRESS attributes.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;映射地址&lt;/strong&gt;：跟反射性传输地址一样。这是个因为历史原因而保留下来的词。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Long-Term Credential: A username and associated password that represent a shared secret between client and server. Long-term credentials are generally granted to the client when a subscriber enrolls in a service and persist until the subscriber leaves the service or explicitly changes the credential.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;长期凭据&lt;/strong&gt;：客户端和服务器共享的用户名密码。长期凭据通常在订阅者订阅一个服务时授予给客户端，并且一直持续到订阅者退出服务或显式更改凭据。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Long-Term Password: The password from a long-term credential.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;长期密码&lt;/strong&gt;：长期凭据所使用的密码。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Short-Term Credential: A &lt;strong&gt;temporary&lt;/strong&gt; username and associated password that represent a shared secret between client and server. Short-term credentials are obtained through some kind of protocol mechanism between the client and server, preceding the STUN exchange. A short-term credential has an explicit temporal scope, which may be based on a specific amount of time (such as 5 minutes) or on an event (such as termination of a SIP dialog).&lt;/p&gt;
+&lt;p&gt;The specific scope of a short-term credential is defined by the application usage.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;短期凭据&lt;/strong&gt;：客户端和服务器共享的&lt;strong&gt;临时的&lt;/strong&gt;用户名密码。短期凭据一般是在 STUN 交换之前，通过某种协议机制获得的。短期凭据有一个显式的时间范围，可能基于时间量（比如 5 分钟），或，基于事件（比如 SIP 对话的终止）。&lt;/p&gt;
+&lt;p&gt;具体的时间范围，由具体的应用程序使用场景决定。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Short-Term Password: The password component of a short-term credential.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;短期密码&lt;/strong&gt;：短期凭据所使用的密码。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN Indication: A STUN message that does not receive a response.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;STUN 指示&lt;/strong&gt;：一个不接收响应的 STUN 消息。（说人话就是只发不收，就告诉你一声。）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Attribute: The STUN term for a Type-Length-Value (TLV) object that can be added to a STUN message. Attributes are divided into two types: comprehension-required and comprehension-optional. STUN agents can safely ignore comprehension-optional attributes they don’t understand, but cannot successfully process a message if it contains comprehension-required attributes that are not understood.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;属性&lt;/strong&gt;：一个 TLV 对象可以被附加在 STUN 消息里。一共有两种类型的属性：必须要理解的和可选理解的。STUN 代理 可以安全的忽略那些它们无法理解的、可选理解的属性，但是无法成功处理它们无法理解的、必须要理解的属性。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;RTO: Retransmission TimeOut, which defines the initial period of time between transmission of a request and the first retransmit of that request.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;RTO&lt;/strong&gt;：重传超时。也就是从请求传输到第一次重新传输之间的时间。&lt;/p&gt;
+&lt;h2 id="6-stun-消息结构-stun-message-structure" &gt;
+&lt;div&gt;
+&lt;a href="#6-stun-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84-stun-message-structure"&gt;
+#
+&lt;/a&gt;
+&lt;a href="#6-STUN-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84-STUN-Message-Structure" title="6. STUN 消息结构 STUN Message Structure"&gt;&lt;/a&gt;6. STUN 消息结构 STUN Message Structure
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;STUN messages are encoded in binary using network-oriented format (most significant byte or octet first, also commonly known as big-endian). The transmission order is described in detail in Appendix B of RFC 791 [RFC0791]. Unless otherwise noted, numeric constants are in decimal (base 10).&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;STUN 消息使用 MSB 的二进制格式编码（big-endian）。传输顺序在 RFC 791 的 Appendix B 中有详细描述。除了特别注明之外，数字常量都以 10 进制表示。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;All STUN messages MUST start with a 20-byte header followed by zero or more &lt;strong&gt;Attributes&lt;/strong&gt;. The STUN header contains a STUN message type, magic cookie, transaction ID, and message length.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;所有的 STUN 消息 &lt;strong&gt;&lt;em&gt;必须&lt;/em&gt;&lt;/strong&gt; 以 20-byte 长度的头部开始，紧跟着 0 个 或 多个&lt;strong&gt;属性&lt;/strong&gt;。STUN 头部包含了 STUN 消息类型、magic cookie、事务ID、消息长度。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-none" data-lang="none"&gt; 0 1 2 3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|0 0| STUN Message Type | Message Length |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| Magic Cookie |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| |
+| Transaction ID (96 bits) |
+| |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+Figure 2: Format of STUN Message Header
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;The most significant 2 bits of every STUN message MUST be zeroes. This can be used to differentiate STUN packets from other protocols when STUN is multiplexed with other protocols on the same port.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;每条 STUN 消息 的最高 2 bit &lt;strong&gt;&lt;em&gt;必须&lt;/em&gt;&lt;/strong&gt; 为零。这可以在 STUN 与其他协议在同一端口复用时，区分 STUN 数据包。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The message type defines the message class (request, success response, failure response, or indication) and the message method (the primary function) of the STUN message. Although there are four message classes, there are only two types of transactions in STUN: request/response transactions (which consist of a request message and a response message) and indication transactions (which consist of a single &lt;strong&gt;indication&lt;/strong&gt; message). Response classes are split into error and success responses to aid in quickly processing the STUN message.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;STUN 消息类型定义了消息所属的类（请求，成功的响应，失败的响应，指示），和，一条 STUN 消息的方法（主要功能）[^6]&lt;/p&gt;
+&lt;p&gt;尽管有四种消息所属的类，但在 STUN 中只有两种事务类型：请求/响应型事务（包含请求消息和响应消息），和，指示型事务（包含单独的一条&lt;strong&gt;STUN 指示&lt;/strong&gt;[^7]消息）。响应类被划分为失败的响应和成功的响应，目的是帮助快速处理 STUN 消息。&lt;/p&gt;
+&lt;p&gt;更直观一点来讲：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Transaction Type：请求/响应型事务
+&lt;ul&gt;
+&lt;li&gt;Message Type：请求&lt;/li&gt;
+&lt;li&gt;Message Type：成功的响应&lt;/li&gt;
+&lt;li&gt;Message Type：失败的响应&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Transaction Type：指示型事务
+&lt;ul&gt;
+&lt;li&gt;Message Type：指示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The message type field is decomposed further into the following structure:&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;STUN Message Type&lt;/strong&gt; 字段被分解成以下结构：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-none" data-lang="none"&gt; 0 1
+2 3 4 5 6 7 8 9 0 1 2 3 4 5
++--+--+-+-+-+-+-+-+-+-+-+-+-+-+
+|M |M |M|M|M|C|M|M|M|C|M|M|M|M|
+|11|10|9|8|7|1|6|5|4|0|3|2|1|0|
++--+--+-+-+-+-+-+-+-+-+-+-+-+-+
+Figure 3: Format of STUN Message Type Field
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;Here the bits in the message type field are shown as most significant (M11) through least significant (M0). M11 through M0 represent a 12-bit encoding of the method. C1 and C0 represent a 2-bit encoding of the class. A class of 0b00 is a request, a class of 0b01 is an indication, a class of 0b10 is a success response, and a class of 0b11 is an error response. This specification defines a single method, Binding. &lt;strong&gt;The method and class are orthogonal, so that for each method, a request, success response, error response, and indication are possible for that method.&lt;/strong&gt; Extensions defining new methods MUST indicate which classes are permitted for that method.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;Message Type 字段从最高有效位（M11）开始到最低有效位（M0）结束。M11 到 M0 一共是 12-bit，这12个bit编码了方法。 C1 和 C- 表示类，由2个bit组成。0b00 表示一个请求，0b01 表示一个指示，0b10 表示一个成功的响应，0b11 表示一个失败的响应。&lt;/p&gt;
+&lt;p&gt;当前文档里定义了一个单独的方法，Bingding。方法和类是??正交??的关系，&lt;strong&gt;因此对于每个方法，都要有请求、指示、成功的响应、失败的响应。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;定义新的扩展方法时 &lt;strong&gt;&lt;em&gt;必须&lt;/em&gt;&lt;/strong&gt; 指明允许哪些类&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;For example, a Binding request has class=0b00 (request) and method=0b000000000001 (Binding) and is encoded into the first 16 bits as 0x0001. A Binding response has class=0b10 (success response) and method=0b000000000001, and is encoded into the first 16 bits as 0x0101.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;例如，一个 Binding 方法的请求的类的编码为 0b00，方法号为 0b000000000001。前16个bit的十六进制编码为 0x0001。Binding 方法的响应的类的编码为 0b10，方法号同样为 0b000000000001，前16个bit的十六进制编码为 0x0101。&lt;/p&gt;
+&lt;p&gt;译者补充：注意，您可能会好奇，类的编码长度为2bit，方法编码长度为12bit，加起来一共14bit，为什么这里说前16bit呢？原因是，这里说的前16个bit，指的是 STUN 消息（或着说 STUN 数据包）的前16bit，对于一个 STUN 消息，最高位的 2bit 是被保留的，还记得吗？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: This unfortunate encoding is due to assignment of values in [RFC3489] that did not consider encoding Indications, Success, and Errors using bit fields.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;请注意：&lt;/p&gt;
+&lt;p&gt;The magic cookie field MUST contain the fixed value 0x2112A442 in network byte order. In RFC 3489 [RFC3489], this field was part of the transaction ID; placing the magic cookie in this location allows a server to detect if the client will understand certain attributes that were added in this revised specification. In addition, it aids in distinguishing STUN packets from packets of other protocols when STUN is multiplexed with those other protocols on the same port.&lt;/p&gt;
+&lt;p&gt;[^1]: 还记得吗，事务ID是一个随机选择的 96位 的数字
+[^2]: 解多路复用就是与多路复用的作用相反的一个过程
+[^3]: In &lt;a href="https://en.wikipedia.org/wiki/Computer_networking"&gt;computer networking&lt;/a&gt;, &lt;strong&gt;out-of-band data&lt;/strong&gt; is the data transferred through a stream that is independent from the main &lt;em&gt;in-band&lt;/em&gt; data stream.
+[^4]: 在資訊安全中，Nonce是一個在加密通訊只能使用一次的數字。在認證協定中，它往往是一個隨機或偽隨機數，以避免重送攻擊。
+[^5]: indicatino 在 indication transaction 中被发送。 指示 在 指示型事务 中被发送
+[^6]: The method indicates which of the various requests or indications this is. 方法表示这是哪种请求，或，这是哪种指示。
+[^7]: 一个不接收响应的 STUN 消息。（说人话就是只发不收，就告诉你一声。）&lt;/p&gt;
+&lt;h1 id="2023年8月23日注" &gt;
+&lt;div&gt;
+&lt;a href="#2023%e5%b9%b48%e6%9c%8823%e6%97%a5%e6%b3%a8"&gt;
+##
+&lt;/a&gt;
+2023年8月23日注
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;之前写了好多格式，现在不支持，哎
+等哪天有空了把源代码找出来。。。&lt;/p&gt;</content:encoded><category>技术文章</category><category>STUN</category><guid isPermaLink="true">https://www.junyi.dev/posts/rfc5389-stun/</guid></item></channel></rss>

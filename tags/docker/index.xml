@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 15 Apr 2021 20:39:13 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>TVM Dockerfile (CPU only)</title><link>https://www.junyi.dev/posts/tvm-docker/</link><pubDate>Thu, 15 Apr 2021 20:39:13 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+写了一个 Dockerfile，可以一键部署 TVM 的 CPU 版本</description><content:encoded>&lt;p&gt;写了一个 Dockerfile，可以一键部署 TVM 的 CPU 版本&lt;/p&gt;
+&lt;p&gt;映射 container 端口 22 即可使用 ssh，用户名密码都是 tvm&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://gist.github.com/Junyi-99/dbfe984fe3e3af4d2a2c7d11a48ad151"&gt;在 GitHub 查看 Dockerfile&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;构建指令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker build -t tvm_cpu:0.7.0-x86_64 .
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或者你也可以直接拉取我的镜像：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker pull dockerjunyi/tvm_cpu:0.7.0-x86_64
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用方法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# -p 容器内 22 端口映射到本地 2222&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# -i 交互模式运行容器&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# -t 开启伪输入终端（与 -i 连用）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 运行一个容器，将容器内 22 端口映射到本地 2222，容器设置为交互模式，开启伪输入终端，容器 image 叫做 dockerjunyi/tvm_cpu:0.7.0-x86_64，同时执行容器内的 /bin/bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker run -p 2222:22 -it dockerjunyi/tvm_cpu:0.7.0-x86_64 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当然，运行起来容器之后，如果不想使用 docker 的交互模式，你也可以通过映射出的 ssh 端口来访问&lt;/p&gt;</content:encoded><category>TVM</category><category>Docker</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-docker/</guid></item></channel></rss>

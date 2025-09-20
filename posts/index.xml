@@ -1,0 +1,1450 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 05 Sep 2025 13:07:09 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>从树莓派到 NUC：玩具的升级</title><link>https://www.junyi.dev/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。</description><content:encoded>&lt;p&gt;陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。&lt;/p&gt;
+&lt;h2 id="树莓派的功与过" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%a0%91%e8%8e%93%e6%b4%be%e7%9a%84%e5%8a%9f%e4%b8%8e%e8%bf%87"&gt;
+#
+&lt;/a&gt;
+树莓派的功与过
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;树莓派 4B 曾是我数字生活的重要支柱。它安静地运行着各类轻量服务：从监控家庭网络流量，到跑一些自动化脚本，甚至充当临时的开发测试环境。为了保持稳定，我特意配置了&lt;strong&gt;每周日自动重启&lt;/strong&gt;的定时任务，这套机制让它在大多数时候都表现得相当可靠。&lt;/p&gt;
+&lt;p&gt;但树莓派的短板也随着使用深度逐渐暴露。最让我焦虑的是 TF 卡的存储可靠性——即便选用了号称&amp;quot;耐用级&amp;quot;的 Endurance 卡，也无法完全避免潜在的 I/O 风险。在上一篇关于&lt;a href="http://localhost:1313/posts/k3s-101/"&gt;树莓派 5 集群配置 k3s&lt;/a&gt;的文章发布后，我的四节点集群仅稳定运行了一周，就有一个节点因突发大量 &lt;strong&gt;I/O Error&lt;/strong&gt; 彻底挂掉，而它用的正是我精心挑选的高耐久卡，寿命甚至不如 4B 上的普通卡。&lt;/p&gt;
+&lt;p&gt;性能瓶颈则在复杂场景下愈发明显：编译稍大的项目时进度条会陷入漫长等待，多服务并行时偶尔出现的卡顿也提醒着我硬件的局限。虽然可以通过外接 SSD 缓解存储问题，但这无疑增加了设备的复杂度，与其如此，不如直接升级到更可靠的平台。&lt;/p&gt;
+&lt;h2 id="nuc-的开箱与性能跃升" &gt;
+&lt;div&gt;
+&lt;a href="#nuc-%e7%9a%84%e5%bc%80%e7%ae%b1%e4%b8%8e%e6%80%a7%e8%83%bd%e8%b7%83%e5%8d%87"&gt;
+#
+&lt;/a&gt;
+NUC 的开箱与性能跃升
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;拆开 NUC 包装时，第一感觉是 &amp;ldquo;精致得不像一台迷你主机&amp;rdquo;。巴掌大的机身比树莓派大不了多少，但沉甸甸的金属外壳透着一股扎实感。我给它装了 &lt;a href="https://ubuntu.com/download/desktop"&gt;Ubuntu Desktop 24.04&lt;/a&gt;。性能差距让我感到很舒适：之前在树莓派上编译一个 Go 项目需要 3 分钟，在 NUC 上居然 1 分钟就搞定了；&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
+&lt;figcaption&gt;Fig.1 - 小巧却强悍的 Intel NUC&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;NUC 带来的不仅是性能提升，更是心理上的踏实感（内置 SSD 彻底告别了 TF 卡的读写焦虑，更充足的内存和 x86 架构让它能轻松应对更复杂的任务）。现在我终于敢本地跑一个小型数据库了（以前总担心频繁读写会烧卡）。&lt;/p&gt;
+&lt;p&gt;至于退役的树莓派？它们会转型为边缘计算节点，继续发挥余热。&lt;/p&gt;
+&lt;h2 id="结语" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%bb%93%e8%af%ad"&gt;
+#
+&lt;/a&gt;
+结语
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;偶尔看到树莓派的指示灯还在规律闪烁，会想起刚拿到它时的兴奋。其实折腾这些设备的乐趣，从来不是追求最新最强，而是看着它们在不同阶段找到合适的位置，就像看着自己用过的工具慢慢有了属于自己的故事。&lt;/p&gt;</content:encoded><category>Linux</category><category>Raspberry Pi</category><category>Intel NUC</category><category>MISC</category><guid isPermaLink="true">https://www.junyi.dev/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 键帽更换指南</title><link>https://www.junyi.dev/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 Shift 和 Space，外观变得非常难看）。
+虽然有人说可以去 Apple 直营店更换键帽1，但据说每次只能更换几个。对于我这种整块键盘都打油的情况，显然还是自己动手来得更实际。
+写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频2只演示了普通按键（字母键和数字键）的拆解，刻意跳过了长键帽（如 Space、Caps Lock、ESC）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。</description><content:encoded>&lt;p&gt;众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 &lt;kbd&gt;Shift&lt;/kbd&gt; 和 &lt;kbd&gt;Space&lt;/kbd&gt;，外观变得非常难看）。&lt;/p&gt;
+&lt;p&gt;虽然有人说可以去 Apple 直营店更换键帽&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，但据说每次只能更换几个。对于我这种&lt;strong&gt;整块键盘都打油&lt;/strong&gt;的情况，显然还是自己动手来得更实际。&lt;/p&gt;
+&lt;p&gt;写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;只演示了普通按键（字母键和数字键）的拆解，&lt;strong&gt;刻意跳过了&lt;/strong&gt;长键帽（如 &lt;kbd&gt;Space&lt;/kbd&gt;、&lt;kbd&gt;Caps Lock&lt;/kbd&gt;、&lt;kbd&gt;ESC&lt;/kbd&gt;）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
+&lt;figcaption&gt;
+换键帽前（上）和换键帽后（下）
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;我在淘宝上购买了全套键帽，花了 85 元，打算自己更换：&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/taobao.jpeg" style="border-radius:0.5rem; width: 256px"&gt;
+&lt;figcaption&gt;
+淘宝购买的全套键帽
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;（后来才看到，闲鱼全套键帽只要 ¥20 到 ¥40 之间每套&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;。。。）&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="拆掉旧键帽" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%8b%86%e6%8e%89%e6%97%a7%e9%94%ae%e5%b8%bd"&gt;
+#
+&lt;/a&gt;
+拆掉旧键帽
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;MacBook Pro 使用的是剪刀脚结构，因此我们必须遵循剪刀脚键盘的拆解方法。&lt;/p&gt;
+&lt;h3 id="普通按键拆装" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%99%ae%e9%80%9a%e6%8c%89%e9%94%ae%e6%8b%86%e8%a3%85"&gt;
+##
+&lt;/a&gt;
+普通按键拆装
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;操作步骤：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;定位卡扣&lt;/strong&gt;: 每个普通键帽都有四个卡扣，分别位于四个角&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;从右下角开始&lt;/strong&gt;: 用撬棒微微翘起键帽右下角，听到轻微的&amp;quot;啪&amp;quot;声表示卡扣已释放&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;接着左下角&lt;/strong&gt;: 重复同样操作释放左下角的卡扣&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提起键帽&lt;/strong&gt;: 当下方两个卡扣都释放后，轻轻向上提起整个键帽&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;完全取下&lt;/strong&gt;: 上方卡扣会自然脱离&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;注意事项：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⚠️ 不要用力过猛，剪刀脚结构比较脆弱&lt;/li&gt;
+&lt;li&gt;⚠️ 避免直接向上拉扯，可能会损坏卡扣&lt;/li&gt;
+&lt;li&gt;💡 建议使用塑料撬棒而不是金属工具，避免刮伤&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;你可以参考这个视频&lt;sup id="fnref1:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;，视频中演示了普通按键的拆解方法。&lt;/p&gt;
+&lt;p&gt;安装键帽与拆卸过程相反，首先把键帽从上方滑到卡槽里，然后按压键帽，直到键帽完全卡入卡槽。&lt;/p&gt;
+&lt;p&gt;⚠️ 注意不要大力按压键帽，因为键帽的塑料件非常脆弱。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="长键帽拆装如-shiftcaps-lockesc" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%95%bf%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e5%a6%82-shiftcaps-lockesc"&gt;
+##
+&lt;/a&gt;
+长键帽拆装（如 Shift、Caps Lock、ESC）
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;这类键帽内部通常带有一到两个平衡杆（铁丝），结构更复杂。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;拆卸建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同样从右下角开始，再拆左下角；&lt;/li&gt;
+&lt;li&gt;拆下时注意不要用力过猛，&lt;strong&gt;避免下方金属卡槽变形&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+拆下的 Caps Lock 键（镊子指着）和 Shift 键（较长）
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;安装建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果是 1 个平衡杆：&lt;br&gt;
+把铁丝先固定在键帽上，滑入键盘的缺口，再正常安装即可。&lt;/li&gt;
+&lt;li&gt;如果是 2 个平衡杆：&lt;br&gt;
+将&lt;strong&gt;上方平衡杆装在键帽上&lt;/strong&gt;，&lt;strong&gt;下方平衡杆卡在键盘上&lt;/strong&gt;。&lt;br&gt;
+安装时先对准上方卡槽，轻轻按入；再将下方卡扣压入孔位；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/longkey.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+只有一个平衡杆的键帽，先把平衡杆卡住缺口，然后再正常装
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="短键帽拆装方向键" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%9f%ad%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e6%96%b9%e5%90%91%e9%94%ae"&gt;
+##
+&lt;/a&gt;
+短键帽拆装（方向键）
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;上方向键：先撬开左侧卡扣，然后&lt;strong&gt;从左向右滑出&lt;/strong&gt;；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;左/下/右方向键：先撬开右侧卡扣，然后&lt;strong&gt;从右向左滑出&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;（在拆之前，请参考方向键构造图）&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkeys.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_side.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_top.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+方向键构造图
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="总结" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%80%bb%e7%bb%93"&gt;
+#
+&lt;/a&gt;
+总结
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;记得最后检查一下所有拆下来的键，防止有一些铁丝忘记取下来，我在装的最后就发现有两个铁丝忘记取出来。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/final.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+更换下来的旧键帽
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="常见问题解决" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3"&gt;
+##
+&lt;/a&gt;
+常见问题解决
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;键帽装回去后按压感觉不对怎么办？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查平衡杆是否正确卡入卡槽&lt;/li&gt;
+&lt;li&gt;确认剪刀脚支架没有变形或断裂&lt;/li&gt;
+&lt;li&gt;重新拆卸并按正确顺序安装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;键帽容易脱落？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查四个卡扣是否都正确扣入&lt;/li&gt;
+&lt;li&gt;平衡杆的安装方向是否正确&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;按键有卡顿现象？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查是否有灰尘或异物卡在键帽下方&lt;/li&gt;
+&lt;li&gt;确认剪刀脚支架安装位置正确&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="专业建议" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%93%e4%b8%9a%e5%bb%ba%e8%ae%ae"&gt;
+##
+&lt;/a&gt;
+专业建议
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;如果你对自己的动手能力不自信，或者已经有卡扣/剪刀脚损坏，建议：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;联系 Apple 官方维修点；&lt;/li&gt;
+&lt;li&gt;找可信的第三方维修；&lt;/li&gt;
+&lt;li&gt;观看更多视频教程练练手再动工。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank"&gt;MacbookPRO键帽打油怎么办？据说天才吧可以免费更换，是吗？&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/"&gt;哔哩哔哩：MacBook剪刀键盘拆装（键帽+剪刀支架）&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://post.smzdm.com/p/ao9wevx9/"&gt;什么值得买：Macbook Pro 键盘打油，键帽更换作业&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/posts/replace-keyboard/</guid></item><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。
+本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。</description><content:encoded>&lt;p&gt;K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。&lt;/p&gt;
+&lt;p&gt;本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。&lt;/p&gt;
+&lt;h2 id="step-1-在-master-和-agent-节点分别执行命令" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-%e5%9c%a8-master-%e5%92%8c-agent-%e8%8a%82%e7%82%b9%e5%88%86%e5%88%ab%e6%89%a7%e8%a1%8c%e5%91%bd%e4%bb%a4"&gt;
+#
+&lt;/a&gt;
+Step 1. 在 Master 和 Agent 节点分别执行命令
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这部分参考了&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;的 &amp;ldquo;Setting Up with k3s&amp;rdquo; 章节&lt;/p&gt;
+&lt;h3 id="master-节点" &gt;
+&lt;div&gt;
+&lt;a href="#master-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Master 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-1&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="agent-节点" &gt;
+&lt;div&gt;
+&lt;a href="#agent-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Agent 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-2&lt;/code&gt;, &lt;code&gt;pi-3&lt;/code&gt;, &lt;code&gt;pi-4&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;K3S_URL&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://100.84.216.88:6443 &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;K3S_TOKEN&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;K10d0e1ccd102d3f60043941ab35d22f29ca15e0ecf48e138d502fd258ee232cb84::server:bc76905e2c32080b0c2a0501293876bd &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; sh -s -
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3S_URL 和 K3S_TOKEN 请写你自己的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3s agent 节点不需要配置 `system-default-registry`。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;details&gt;
+&lt;summary&gt;为什么我的 &lt;code&gt;K3S_URL&lt;/code&gt; 是 &lt;code&gt;100.84.216.88&lt;/code&gt;&lt;/summary&gt;
+&lt;p&gt;因为我使用 tailscale &lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; 给树莓派集群构建了虚拟局域网。&lt;/p&gt;
+&lt;p&gt;请根据你的实际情况进行配置。&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;如何查看 &lt;code&gt;K3S_TOKEN&lt;/code&gt;&lt;/summary&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat /var/lib/rancher/k3s/server/node-token
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/details&gt;
+&lt;h2 id="step-2-验证安装效果" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-%e9%aa%8c%e8%af%81%e5%ae%89%e8%a3%85%e6%95%88%e6%9e%9c"&gt;
+#
+&lt;/a&gt;
+Step 2. 验证安装效果
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-5.png" alt="agent 已加入 master"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="其他k3s-在中国大陆地区的安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%85%b6%e4%bb%96k3s-%e5%9c%a8%e4%b8%ad%e5%9b%bd%e5%a4%a7%e9%99%86%e5%9c%b0%e5%8c%ba%e7%9a%84%e5%ae%89%e8%a3%85"&gt;
+#
+&lt;/a&gt;
+其他：K3s 在中国大陆地区的安装
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="方法一全新安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%b8%80%e5%85%a8%e6%96%b0%e5%ae%89%e8%a3%85"&gt;
+##
+&lt;/a&gt;
+方法一：全新安装
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 介绍了在安装时通过指定 &lt;code&gt;INSTALL_K3S_MIRROR=cn&lt;/code&gt; 和 &lt;code&gt;--system-default-registry&lt;/code&gt; 来更换 registry mirror。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 全新安装（master 节点）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image.png" alt="全新安装命令执行结果" /&gt;
+&lt;figcaption&gt;全新安装 - 命令执行结果&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="方法二换源" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%ba%8c%e6%8d%a2%e6%ba%90"&gt;
+##
+&lt;/a&gt;
+方法二：换源
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;这个方法适用于在国外配置好环境之后，设备迁移到中国大陆地区的无法访问默认源的用户。&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;我执行完 Rancher 的快速入门指南里提供的命令，发现 pods 根本没启动的&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Rancher 快速入门指南提供的代码（正常安装 k3s 但是无法启动 pod）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-2.png" alt="卡在 ContainerCreating 步骤" /&gt;
+&lt;figcaption&gt;卡在 ContainerCreating 步骤（黄色高亮部分）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;p&gt;在 &lt;code&gt;/etc/systemd/system/k3s.service&lt;/code&gt; 里面指定 &lt;code&gt;--system-default-registry&lt;/code&gt;，然后 &lt;code&gt;systemctl daemon-reload &amp;amp;&amp;amp; systemctl restart k3s&lt;/code&gt; 重启服务即可&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Unit&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 2&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Description&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;Lightweight Kubernetes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 3&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Documentation&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://k3s.io
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 4&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Wants&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 5&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;After&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Install&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;WantedBy&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;multi-user.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 9&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;10&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Service&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;11&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Type&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;notify
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;12&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/default/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;13&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/sysconfig/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;14&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/systemd/system/k3s.service.env
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;15&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;KillMode&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;process
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;16&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Delegate&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;17&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Having non-zero Limit*s causes performance problems due to accounting overhead&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;18&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# in the kernel. We recommend using cgroups to do container-local accounting.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;19&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNOFILE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;1048576&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;20&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNPROC&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;21&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitCORE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;22&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TasksMax&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;23&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TimeoutStartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;24&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Restart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;always
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;25&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;RestartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;5s
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;26&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/bin/sh -xc &lt;span style="color:#5af78e"&gt;&amp;#39;! /usr/bin/systemctl is-enabled --quiet nm-cloud-setup.service 2&amp;gt;/dev/null&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;27&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe br_netfilter
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;28&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe overlay
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;29&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/usr/local/bin/k3s &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;30&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; server &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;31&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;--system-default-registry&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;32&lt;/span&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;registry.cn-hangzhou.aliyuncs.com&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl restart k3s
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-3.png" alt="k3s正在重启服务" /&gt;
+&lt;figcaption&gt;k3s 正在重启服务，已经有一个服务就绪（黄色高亮）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-4.png" alt="Container 成功被创建" /&gt;
+&lt;figcaption&gt;稍等一会，全部的 Container 成功被创建&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;一些题外话&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt; 说通过 &lt;code&gt;crictl info&lt;/code&gt; 找到 &lt;code&gt;/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl&lt;/code&gt; 文件，然后修改这个文件中描述的 endpoint 地址&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;但是这个方案看起来特别奇怪。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;sup id="fnref:7"&gt;&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref"&gt;7&lt;/a&gt;&lt;/sup&gt; 里面提到&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;但是通过 &lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 的方式安装之后，并没有出现 &lt;code&gt;/etc/rancher/k3s/registries.yaml&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;那么它是怎么知道 registry 的 mirror 是谁呢？&lt;/p&gt;
+&lt;/details&gt;
+&lt;h3 id="安装后的验证" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%ae%89%e8%a3%85%e5%90%8e%e7%9a%84%e9%aa%8c%e8%af%81"&gt;
+##
+&lt;/a&gt;
+安装后的验证
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get pods -n kube-system
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-1.png" alt="alt text"&gt;&lt;/p&gt;
+&lt;style&gt;
+@import 'style.css';
+&lt;/style&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://tailscale.com/"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:7"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>Linux</category><category>k3s</category><category>Raspberry Pi 5</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>超低电压输入的升降压电路（0.3V 转 5V）</title><link>https://www.junyi.dev/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+图 1 - Ultra Boost Converter</description><content:encoded>&lt;figure&gt;
+&lt;img style="border-radius:0.5em; box-shadow: 0px 0px 5px rgba(0,0,0,0.2)" src="https://www.junyi.dev/posts/boost-converter/pic1.JPG" alt="Boost Converter by Junyi" width="500" /&gt;
+&lt;figcaption&gt;图 1 - Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="芯片选型" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%8a%af%e7%89%87%e9%80%89%e5%9e%8b"&gt;
+#
+&lt;/a&gt;
+芯片选型
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;接了一个很有挑战的需求，需要我把 0.5V 的电压转换到 2.0V。&lt;/p&gt;
+&lt;p&gt;传统的 Boost-Buck 电路无法实现这个需求，因为一个普通二极管的压降约为 0.7V，可是电源只能提供 0.5V 的电压。&lt;/p&gt;
+&lt;p&gt;大部分现有的电压转换芯片，需要 0.9V 的启动电压，电源不能满足这个要求。&lt;/p&gt;
+&lt;p&gt;找了很久，发现了 TPS61200 这款芯片，它支持 0.3V-5.5V 的输入，并且以 1.8V - 5.5V 的电压输出（可调且固定）&lt;/p&gt;
+&lt;h2 id="pcb-设计" &gt;
+&lt;div&gt;
+&lt;a href="#pcb-%e8%ae%be%e8%ae%a1"&gt;
+#
+&lt;/a&gt;
+PCB 设计
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;很好的 JYF 老师，指点我很多，使我的 PCB 旋转。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;没什么问题，就是有一些问题要改一下&lt;/p&gt;
+&lt;p&gt;—— JYF&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;然后 JYF 老师教了我很多关于电源电路设计的技巧，比如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;铺铜时使用“阻止区”避免产生“天线”&lt;/li&gt;
+&lt;li&gt;在“天线”的附近，打过孔，让干扰回流到地&lt;/li&gt;
+&lt;li&gt;画板子，把板子尺寸设置成 5mm 倍数，好做外壳&lt;/li&gt;
+&lt;li&gt;钢网在淘宝做更便宜&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;横着的座子不好用，换成罚站的好用&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;虽然 JYF 老师偶尔“内涵”我一下，但还是得感谢 JYF 老师，他的帮助这是让这个项目&lt;strong&gt;一次成功&lt;/strong&gt;的关键。&lt;/p&gt;
+&lt;!-- &lt;figure&gt;
+&lt;img style="border-radius: 8px; overflow: hidden; box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.05);" src="https://www.junyi.dev/posts/boost-converter/subtext.png" alt="Subtexted by JYF" width="50%" /&gt;
+&lt;figcaption&gt;图 2 - JYF 内涵我&lt;/figcaption&gt;
+&lt;/figure&gt; --&gt;
+&lt;p&gt;（顺便一提，我偷懒去掉了 MPP 电路，可能持续 20ms 对电源索取 1A 的电流，在某些燃料电池里相当于短路，从而影响电源寿命）&lt;/p&gt;
+&lt;h2 id="焊接" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%84%8a%e6%8e%a5"&gt;
+#
+&lt;/a&gt;
+焊接
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这是我第一次手工焊接 QFN 芯片，弄坏了一个 PCB 才焊接好。最后的成品质量很高。&lt;/p&gt;
+&lt;p&gt;之前焊接 0805 很丑，现在焊接 0603 封装现在也不在话下。&lt;del&gt;以后失业可以去工厂打螺丝了&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
+&lt;h2 id="成品图" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%88%90%e5%93%81%e5%9b%be"&gt;
+#
+&lt;/a&gt;
+成品图
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view1.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view2.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 2 - Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/onboard_LED.jpg" alt="Boost Converter by 3.0V battery" /&gt;
+&lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/by_battery.jpg" alt="Boost Converter by 1.5V battery"/&gt;
+&lt;figcaption&gt;(b) 使用 1.5V 电池&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 3 - 来自不同电压输入，输出 2.0V 稳压点亮 LED&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/new_version.jpg" alt="New Boost Converter" /&gt;
+&lt;!-- &lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt; --&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;p style="padding-left:1em"&gt;&lt;strong&gt;2024 年 6 月 15 日 更新内容：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;移除了排针&lt;/li&gt;
+&lt;li&gt;移除了纽扣电池座&lt;/li&gt;
+&lt;li&gt;移除了 POWERSAVE 选项（默认 enable）&lt;/li&gt;
+&lt;li&gt;可调输出电压从 0.5V~3.3V 改进到 0.5V~5.5V&lt;/li&gt;
+&lt;li&gt;更换为 3mm 电位器，反馈电路距离变短&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 4 - 升级之后的 Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;</content:encoded><category>Project</category><guid isPermaLink="true">https://www.junyi.dev/posts/boost-converter/</guid></item><item><title>隐藏 GitHub Pages 里的敏感文章（GitHub Actions）</title><link>https://www.junyi.dev/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+# 背景 如何防止他人看到你托管在 GitHub Pages 上的某些文章？
+这篇指南提供了一种在 GitHub Pages 上托管网站同时保持敏感内容私密的策略。</description><content:encoded>&lt;h2 id="背景" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%83%8c%e6%99%af"&gt;
+#
+&lt;/a&gt;
+背景
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;如何&lt;strong&gt;防止他人看到你&lt;/strong&gt;托管在 GitHub Pages 上的某些文章？&lt;/p&gt;
+&lt;p&gt;这篇指南提供了一种在 GitHub Pages 上托管网站同时保持敏感内容私密的策略。&lt;/p&gt;
+&lt;p&gt;这个解决方案涉及到使用两个独立的 GitHub 仓库：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;私有仓库 &lt;code&gt;blog-src&lt;/code&gt;: 存放你的网站源代码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公开仓库 &lt;code&gt;blog.github.io&lt;/code&gt;: 用于生成的静态网站。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个方法确保敏感内容在 &lt;code&gt;blog-src&lt;/code&gt; 中保持私密。&lt;/p&gt;
+&lt;p&gt;每次对 &lt;code&gt;blog-src&lt;/code&gt; 进行提交时，一个自动化过程会构建静态网站并将其推送到 &lt;code&gt;blog.github.io&lt;/code&gt;（参见&lt;a href="#fig1"&gt;图 1&lt;/a&gt;）。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/github-actions/fig1.png" alt="The Overview of using Github Actions to publish GitHub pages" width="500" /&gt;
+&lt;figcaption&gt;图 1 - 修改 &lt;code&gt;blog-src&lt;/code&gt; 时，自动构建网站并同步到 &lt;code&gt;blog.github.io&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;让我们看看如何实现这个功能！&lt;/p&gt;
+&lt;h2 id="第一步创建一个-personal-access-token" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-personal-access-token"&gt;
+#
+&lt;/a&gt;
+第一步，创建一个 personal access token
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;访问&lt;a href="https://github.com/settings/tokens"&gt;此页面&lt;/a&gt;（Settings ➜ Developer Settings ➜ Personal access tokens）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Generate new token (classic)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;勾选所有的 &amp;ldquo;repo&amp;rdquo; 和 &amp;ldquo;workflow&amp;rdquo;。（参见&lt;a href="#fig2"&gt;图 2&lt;/a&gt;）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/create-personal-key.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 2 - 给 GitHub Action 创建一个 personal access token&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/created-token.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 3 - 创建好的 personal access token&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;复制你生成的 Token，比如我的是 &lt;code&gt;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&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;（此 Token 仅用作演示，实际已失效）&lt;/p&gt;
+&lt;h2 id="第二步给-blog-src-创建一个-repository-secret" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e7%bb%99-blog-src-%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-repository-secret"&gt;
+#
+&lt;/a&gt;
+第二步，给 &lt;code&gt;blog-src&lt;/code&gt; 创建一个 repository secret
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这个仓库包含我们网站的源代码，和一个 GitHub Action。&lt;/p&gt;
+&lt;p&gt;因此，我们需要把 personal access token（从第一步生成）放到 repository secret 里，以支持 GitHub Action 过程。&lt;/p&gt;
+&lt;p&gt;转到 &lt;code&gt;blog-src&lt;/code&gt; ➜ Settings ➜ Secrets and variables ➜ Actions ➜ New &lt;strong&gt;repository&lt;/strong&gt; secret&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/new-repo-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 4 - 创建 repository secret 的入口&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/add-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 5 - 创建一个 repository secret&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="第三步给-blog-src-设置一个-workflow" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e4%b8%89%e6%ad%a5%e7%bb%99-blog-src-%e8%ae%be%e7%bd%ae%e4%b8%80%e4%b8%aa-workflow"&gt;
+#
+&lt;/a&gt;
+第三步，给 &lt;code&gt;blog-src&lt;/code&gt; 设置一个 workflow
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Repository ➜ Actions ➜ Set up a workflow yourself&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/setup-actions.png" alt="Setup Actions", width="500" /&gt;
+&lt;figcaption&gt;图 6 - 设置一个 workflow.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;你需要学习如何编写工作流，以下是一些你可以阅读的文档：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart"&gt;GitHub Actions 快速入门&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples"&gt;工作流示例&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;仔细设计你的 workflow 文件，这里是一个示例：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# A Sample workflow for building and deploying a site to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy Website to Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;push&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;branches&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - main &lt;span style="color:#78787e"&gt;# Triggers this workflow whenever there&amp;#39;s a push to the `main` branch&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Allows you to run this workflow manually from the Actions tab&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;workflow_dispatch&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;schedule&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Runs at 00:00 UTC every day&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;cron&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;0 0 * * *&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;permissions&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;contents&lt;/span&gt;: read
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;pages&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;id-token&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;concurrency&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;group&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cancel-in-progress&lt;/span&gt;: &lt;span style="color:#ff6ac1"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Default to bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;defaults&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;shell&lt;/span&gt;: bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;jobs&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;build-and-deploy&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;runs-on&lt;/span&gt;: ubuntu-latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;env&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;YOUR_ENV_HERE&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0.1.2.3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;steps&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Checkout
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: actions/checkout@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;submodules&lt;/span&gt;: recursive
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;fetch-depth&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Build my website
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;: |&lt;span style="color:#5af78e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; echo &amp;#34;Building the website ... (Remember to replace it with the real command!!!)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy to GitHub Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: peaceiris/actions-gh-pages@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;personal_token&lt;/span&gt;: ${{ secrets.GH_PAGES_PAT }} &lt;span style="color:#78787e"&gt;# The pre-defined secret in Step 2.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;publish_dir&lt;/span&gt;: ./public &lt;span style="color:#78787e"&gt;# Content in this folder will be pushed to the target repo.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_name&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_email&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]@users.noreply.github.com&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;external_repository&lt;/span&gt;: Junyi-99/blog.github.io &lt;span style="color:#78787e"&gt;# Your GitHub Pages Repo (target repo)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;commit_message&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;Automated deployment from Repository blog-src&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第四步推送到-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e5%9b%9b%e6%ad%a5%e6%8e%a8%e9%80%81%e5%88%b0-blog-src"&gt;
+#
+&lt;/a&gt;
+第四步，推送到 &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;在这个步骤中，你需要做的就是向 &lt;code&gt;blog-src&lt;/code&gt; &lt;strong&gt;推送&lt;/strong&gt; 一些提交，如果一切顺利的话，你的 GitHub Actions 将会自动执行，构建你的网站，并将其推送到 &lt;code&gt;blog.github.io&lt;/code&gt; 仓库。&lt;/p&gt;
+&lt;p&gt;（文章结束）&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/posts/github-actions/</guid></item><item><title>科研路上的思考与实践</title><link>https://www.junyi.dev/posts/research-101/</link><pubDate>Mon, 04 Mar 2024 13:02:12 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+# 引言 本文整理自每周组会的讨论内容，涵盖了科研工作的全流程经验与思考。从阅读论文到撰写研究，从方法论设计到实验执行，这些内容旨在为科研新手提供实用的指导，帮助建立正确的科研思维和工作方法。
+# 读 Paper 看 paper 解决什么问题，比看它用什么方法要更重要
+有创新吗？如果大家都是这么做的，就不算创新。（如果要其他人做这个事情，其他人也会这么做）</description><content:encoded>&lt;h2 id="引言" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%bc%95%e8%a8%80"&gt;
+#
+&lt;/a&gt;
+引言
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;本文整理自每周组会的讨论内容，涵盖了科研工作的全流程经验与思考。从阅读论文到撰写研究，从方法论设计到实验执行，这些内容旨在为科研新手提供实用的指导，帮助建立正确的科研思维和工作方法。&lt;/p&gt;
+&lt;h2 id="读-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%af%bb-paper"&gt;
+#
+&lt;/a&gt;
+读 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;看 paper 解决什么问题，比看它用什么方法要更重要&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;有创新吗？如果大家都是这么做的，就不算创新。（如果要其他人做这个事情，其他人也会这么做）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;回答下面三个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;这个 paper 的 contribution 是什么？&lt;/li&gt;
+&lt;li&gt;为什么这个 paper 可以中？&lt;/li&gt;
+&lt;li&gt;这个 paper 的 weakness 在哪里？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;思考一下，如果让你跟这篇 paper 做 exactly 一样的工作，你会跟他用一样的方法吗？&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="想-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%83%b3-paper"&gt;
+#
+&lt;/a&gt;
+想 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;我们的工作要吸引真正的用户使用，在过程中发现参数设置是否合理。要仔细考虑怎么去 incentive 其他人去使用我们的项目，来探索领域内的相关场景。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果有1000人用你的项目，这是个什么样的项目呢？怎么让他们心甘情愿为社区做贡献？&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;ruby&gt;Re-search&lt;rt&gt;重新-找&lt;/rt&gt;&lt;/ruby&gt;，在你想问题的时候得问自己：&lt;/p&gt;
+&lt;p&gt;“paper 想全了吗？”&lt;/p&gt;
+&lt;p&gt;“feature 都找出来了吗？”&lt;/p&gt;
+&lt;p&gt;”为什么有这么多 feature ?“&lt;/p&gt;
+&lt;p&gt;“这些 feature 是可以拍脑袋想的吗？”&lt;/p&gt;
+&lt;p&gt;“时刻记着 garbage in garbage out.”&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当你看到一个 metric 的时候：&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s important to have a methodology to analysis.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="讲-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%ae%b2-paper"&gt;
+#
+&lt;/a&gt;
+讲 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;不要只讲他怎么做的，要用自己的语言 summarize 它&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;（告诉一些新人）我们应当关注以下问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;what&amp;rsquo;s the problem?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;what&amp;rsquo;s the solution?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;what&amp;rsquo;s the key message in your slides? (为了xxx，你到底想说啥？)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当老师给你说一件事的时候，你 24 小时之内应该去做，不要想那么多。或者给老师一个 timing 的回复。
+「比如让你 “联系 XX 老师” 的时候，最好 24 小时内就去联系」&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="写-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%86%99-paper"&gt;
+#
+&lt;/a&gt;
+写 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;写 paper 的时候自己觉得 exciting 才能写得好！&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;思考自己的 Research contribution 在什么地方？ &lt;strong&gt;What&amp;rsquo;s new here？&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;别人读完你的 paper，学到了什么（比如你可以在 conclusion 写一段话，表示自己在这个领域有什么贡献）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;reviewer 读这一段的时候，会想得到什么信息？&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;流程创新的，需要在流程里的有个核心步骤，并且说出来创新点在哪里。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我这篇paper为什么被拒？想一下为什么 reviewer 说我 novelty 不够？没事，很多paper都可以被说 novelty 不够 (&lt;a href="#fig1"&gt;Fig.1&lt;/a&gt;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选数据是一个非常慎重的事情&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="fig1.png" alt="view-service" width="400" /&gt;
+&lt;figcaption&gt;Fig.1 - The most common comments at ICLR 2024, keywords extrated by GPT4.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I’m sure someone will ask “but won’t that get my idea stolen?”. I’ve heard anecdotally of that happening, but not to me or anyone I know in my field. Most likely because the idea is only the first tiny piece of the thesis: the idea is always followed by a significant investment of labor to execute and evaluate. The people you talk to are too busy with their own work to invest all that labor on your idea. But they’ll be happy to give you feedback on it.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id="审-paper--写-review" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%ae%a1-paper--%e5%86%99-review"&gt;
+#
+&lt;/a&gt;
+审 Paper / 写 Review
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;一个 Review 要有一段话对这个工作做总结，并且整理出这个工作的 contribution：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;contribution 1&lt;/li&gt;
+&lt;li&gt;contribution 2&lt;/li&gt;
+&lt;li&gt;contribution 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;（关注一下，方法和实验是否说明有 contribution）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Strengths&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Strength 1&lt;/li&gt;
+&lt;li&gt;Strength 2&lt;/li&gt;
+&lt;li&gt;Strength 3&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Weakness&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Weakness 1&lt;/li&gt;
+&lt;li&gt;Weakness 2&lt;/li&gt;
+&lt;li&gt;Weakness 3&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Minor Components&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一个paper也就4、5个 findings&lt;/p&gt;
+&lt;h2 id="方法论--做实验" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e8%ae%ba--%e5%81%9a%e5%ae%9e%e9%aa%8c"&gt;
+#
+&lt;/a&gt;
+方法论 &amp;amp; 做实验
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;想明白 methodology 再做实验。而不是做实验再想 methodology。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Experiment 做完之前就可以写 paper 了&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;大家都知道的信息&lt;strong&gt;不代表没用&lt;/strong&gt;，你可以用数据做 confirm。&lt;/p&gt;
+&lt;p&gt;Methodology 应该都想好了，正好有 XXX paper 所以你这么多。&lt;/p&gt;
+&lt;p&gt;你一定要把数据的 methodology 讲清楚（怎么收集的数据）。因为你有 X goal 所以有 Y metric。
+你应该定义一个 metric：goal是什么。你定义的 metric，和用什么来做，是两回事。
+注意：定义 metric 和 用什么数据集 是没关系的。&lt;/p&gt;
+&lt;p&gt;整个paper应该围绕一个图/table 去铺开，作为整个 paper 的精华。先把结果写清楚，再美化结果。
+一般来说 table 比 figure 更有信息量。&lt;/p&gt;
+&lt;p&gt;注意：这个paper不会因为你把table换成图，从拒绝变为接受，当然有一个好看的图会觉得很酷。&lt;/p&gt;
+&lt;p&gt;Coefficient？&lt;/p&gt;
+&lt;p&gt;XX 写 paper 很快。但是你喜欢把东西揉在一起。&lt;/p&gt;
+&lt;p&gt;prof：没 ai 之前，一天写 2 页论文，现在 idea 想明白了写 paper 就一天&lt;/p&gt;
+&lt;p&gt;prof：structure 应该理清楚，然后再写 paper。&lt;/p&gt;
+&lt;p&gt;prof：我发现你喜欢把 实现 和 methodology 混在一起。&lt;/p&gt;
+&lt;p&gt;prof: 你应该把这两个解耦。design 和 methodology 放前面，implementation 放后面。&lt;/p&gt;
+&lt;p&gt;prof：我要做什么事，遇到什么问题，怎么解决的。数据那边（finetune），实现（用什么数据finetune、怎么finetune）&lt;/p&gt;
+&lt;p&gt;prof：读paper最怕 “读一个methodology，用 arxiv 数据集实现，所以怎么样” 这个时候读者就会 question 你为啥要用 arxiv 为啥不用别的啊？ 所以我们要把 methodology 和 implementation 分开。&lt;/p&gt;
+&lt;p&gt;junyi：这个跟软件工程很像，解耦 interface 和 impl&lt;/p&gt;
+&lt;p&gt;prof：你得有一个逻辑让别人知道你为什么这么写。如果你写“我们每个section都按照 methodology，implementation，methodology，implement”&lt;/p&gt;
+&lt;p&gt;prof：顶层设计要做好，后面的实现是另外一个部分。用 iclr 2024 数据集，用 iclr 2023 做 cross validation。&lt;/p&gt;
+&lt;p&gt;prof: ai 领域的审稿，会带来很多噪声。&lt;/p&gt;
+&lt;p&gt;prof: 实验本身没有价值，只有当你能把它 转化为结论、并且解释“为什么”时，它才变成论文的一部分。&lt;/p&gt;
+&lt;p&gt;prof: 除了展示你的结果图表，还要进一步分析你的图表。&lt;/p&gt;
+&lt;p&gt;prof: 要 跳出 本科、硕士 的 思维模式，要 try to make a paper 出来。&lt;/p&gt;</content:encoded><category>MISC</category><guid isPermaLink="true">https://www.junyi.dev/posts/research-101/</guid></item><item><title>使用 git-crypt 加密你的仓库</title><link>https://www.junyi.dev/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+git-crypt enables transparent encryption and decryption of files in a git repository.
+Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
+&lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/flow.svg" alt="BasicFlow"&gt;&lt;/p&gt;
+&lt;h2 id="step-1-install-git-crypt" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-install-git-crypt"&gt;
+#
+&lt;/a&gt;
+Step 1: Install git-crypt
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install git-crypt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git-crypt init &lt;span style="color:#78787e"&gt;# in an initialized git repository&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Specify files to encrypt by creating a .gitattributes file:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-gitattributes" data-lang="gitattributes"&gt;# The config is similar to .gitignore
+accounts/*.bean filter=git-crypt diff=git-crypt
+*.md filter=git-crypt diff=git-crypt
+*.png filter=git-crypt diff=git-crypt
+*.jpg filter=git-crypt diff=git-crypt
+*.excalidraw filter=git-crypt diff=git-crypt
+*.txt filter=git-crypt diff=git-crypt
+*.pdf filter=git-crypt diff=git-crypt
+*.json filter=git-crypt diff=git-crypt
+# Making sure that .gitattributes is never encrypted. DON&amp;#39;T TOUCH THAT LINE AND ONE BELOW
+.gitattributes !filter !diff
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="step-2-add-files" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-add-files"&gt;
+#
+&lt;/a&gt;
+Step 2: Add files
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git commit -m &lt;span style="color:#5af78e"&gt;&amp;#34;Add git-crypt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-3-check-git-crypt-status" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-check-git-crypt-status"&gt;
+#
+&lt;/a&gt;
+Step 3: Check git-crypt status
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -e&lt;/code&gt; Show encrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -u&lt;/code&gt; Show unencrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -f&lt;/code&gt; Fix problems with the repository&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="results" &gt;
+&lt;div&gt;
+&lt;a href="#results"&gt;
+#
+&lt;/a&gt;
+Results
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The beancount file is encrypted.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/image-1.png" alt="Alt text"&gt;&lt;/p&gt;
+&lt;h2 id="后续更新" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%90%8e%e7%bb%ad%e6%9b%b4%e6%96%b0"&gt;
+#
+&lt;/a&gt;
+后续更新
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="1-月-30-日更新" &gt;
+&lt;div&gt;
+&lt;a href="#1-%e6%9c%88-30-%e6%97%a5%e6%9b%b4%e6%96%b0"&gt;
+##
+&lt;/a&gt;
+1 月 30 日更新
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;我乱玩，把自己锁死了。&lt;/p&gt;
+&lt;p&gt;这个傻逼工具，是可以在你不 export symmetric key 的情况下，允许你 lock 仓库的。&lt;/p&gt;
+&lt;p&gt;然后我就在没有 export symmetric key 的情况下，把自己锁死了。&lt;/p&gt;
+&lt;p&gt;文件没有备份，因为我为了“安全”，只保留了加密后的 commit，历史的提交日志都删了。&lt;/p&gt;
+&lt;p&gt;😊 真是愉快的一天呢&lt;/p&gt;</content:encoded><category>技术分享</category><guid isPermaLink="true">https://www.junyi.dev/posts/git-crypt/</guid></item><item><title>Distributed System: Primary Backup Replication</title><link>https://www.junyi.dev/posts/paxos-review-3/</link><pubDate>Tue, 12 Sep 2023 15:15:37 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+开胃菜来了！
+你有一个硬盘，存了很多重要资料，你担心这个硬盘某天坏了，怎么办？
+当然是多买点硬盘，把数据备份在不同的硬盘上。</description><content:encoded>&lt;p&gt;开胃菜来了！&lt;/p&gt;
+&lt;p&gt;你有一个硬盘，存了很多重要资料，你担心这个硬盘某天坏了，怎么办？&lt;/p&gt;
+&lt;p&gt;当然是多买点硬盘，把数据备份在不同的硬盘上。&lt;/p&gt;
+&lt;p&gt;保证可靠，就是通过多个一致的数据副本来实现的。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="前提假设" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%89%8d%e6%8f%90%e5%81%87%e8%ae%be"&gt;
+#
+&lt;/a&gt;
+前提假设
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;我们假设所有的操作都是&lt;ruby&gt;确定&lt;rt&gt;deterministic&lt;/rt&gt;&lt;/ruby&gt;的&lt;/p&gt;
+&lt;!--
+多线程那样，因为 scheduler 的原因导致每次执行的结果都不一样。 --&gt;
+&lt;h2 id="最简单的-primary--backup" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%ae%80%e5%8d%95%e7%9a%84-primary--backup"&gt;
+#
+&lt;/a&gt;
+最简单的 primary &amp;amp; backup
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;client&lt;strong&gt;s&lt;/strong&gt; 发送 operation (Put, Get, Append) 到 primary-server&lt;/li&gt;
+&lt;li&gt;primary-server 决定 operation 的执行顺序&lt;/li&gt;
+&lt;li&gt;primary-server 把 operation 的执行顺序发送给 backup-server&lt;/li&gt;
+&lt;li&gt;backup-server 按照 primary-server 发送的顺序执行 operation（hot-standby）
+&lt;ul&gt;
+&lt;li&gt;或者 backup-server 按照 primary-server 发送的顺序记录 operation 但不执行（cold-standby）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;等 backup-server 成功结束，primary-server 给 client 发回复&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;问题是，怎么决定谁来当 primary-server？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;怎么决定谁来当 backup-server？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;client 怎么知道谁是 primary-server？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;答案：&lt;/strong&gt; &lt;span class="spoiler"&gt;引入一台 view-server，让这个 view-server 来做决定，并且 client 去问 view-server 谁是 primary-server。为什么叫它 view-server？因为这涉及到一个重要概念「view」，后面会讲到，别着急！&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;知道了答案，我们可以这样设计整个系统：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;我们让每台服务器发送心跳给 view-server，告诉 view-server 自己还活着。&lt;/p&gt;
+&lt;p&gt;问：有没有可能自己活着但是 view-server 认为自己死了？&lt;span class="spoiler"&gt; 有可能因为网络问题，心跳没发出去，view-server 认为节点挂了，但其实节点还活着&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们 promote idle-server 成为 backup-server，但不越级 promote 成为 primary-server&lt;/p&gt;
+&lt;p&gt;问：除非有种情况？&lt;span class="spoiler"&gt;系统刚启动时（全都是 idle-server、需要一个 primary 的时候）&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;只有 backup-server 会被 promote 成 primary-server&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="view-service.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.1 - One View Server and Two Nodes&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="什么是-view-server-里的-view" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%bb%80%e4%b9%88%e6%98%af-view-server-%e9%87%8c%e7%9a%84-view"&gt;
+#
+&lt;/a&gt;
+什么是 view-server 里的 view
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;一个 view 是一个 primary-server 和一个 backup-server 的集合，描述了当前状态&lt;strong&gt;谁是 primary 谁是 backup&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;注意，一个 view 里，只有一个 primary 和一个 backup，其它的 server 标记为 idle。（想想看为什么这样设计？）&lt;/p&gt;
+&lt;p&gt;view 由 view-server 进行管理，其他节点可以获取到当前系统的 view。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="view.png" alt="view-service" width="400" /&gt;
+&lt;figcaption&gt;Fig.2 - Example of three different views, denotes three different states of the system&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;看了上面的描述，感觉自己又行了，于是我设计出了下面的流程&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;系统刚开始，挑一个 primary-server，然后挑一个 backup-server，其它的都是 idle-server，然后开始工作。&lt;/p&gt;
+&lt;p&gt;primary 立马让 backup 成为新的 primary，从 idle 里面挑一个成为 backup，然后让这个新的 primary 把状态都发送给 backup&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;很简单嘛！这能有什么问题？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;话音刚落，问题就来了。&lt;/p&gt;
+&lt;p&gt;请看下面这个情况：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;`View 1, primary=A, backup=B;`&lt;/span&gt; 这时候 A 挂了，B 成为 primary，从 idle 里面挑一个 C 成为 backup，然后 B 发送状态给 C。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;`View 2, primary=B, backup=C;`&lt;/span&gt; B 发状态的时候挂了，C 成为 primary，idle 里面没机器了
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;`View 3, primary=C, backup=_;`&lt;/span&gt; C：😅？（此时 C 根本不知道系统的状态是什么）
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以我们刚刚对整个系统的描述，是有缺陷的。&lt;/p&gt;
+&lt;p&gt;怎么改呢，我们让 view-server 必须等待 primary-server &lt;ruby&gt;确认&lt;rt&gt;ACK&lt;/rt&gt;&lt;/ruby&gt; 当前的 view。&lt;/p&gt;
+&lt;p&gt;就算 primary-server 挂了，view-server 也要等 ACK。&lt;/p&gt;
+&lt;p&gt;（直觉告诉我们，这种等待 ACK 的行为可能导致系统卡住）&lt;/p&gt;
+&lt;h2 id="总结一下所有的规则" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%80%bb%e7%bb%93%e4%b8%80%e4%b8%8b%e6%89%80%e6%9c%89%e7%9a%84%e8%a7%84%e5%88%99"&gt;
+#
+&lt;/a&gt;
+总结一下所有的规则
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;在 view i+1 的 primary 必须是 view i 的 backup&lt;/p&gt;
+&lt;p&gt;如果没有这个规则会怎样？&lt;span class="spoiler"&gt;&lt;strong&gt;Split brain:&lt;/strong&gt; primary A, backup B, but can&amp;rsquo;t reach view-server. C,D are promoted to primary and backup, C doesn&amp;rsquo;t know previous state.&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;primary 必须等 backup 执行完，才可以回复 client&lt;/p&gt;
+&lt;p&gt;如果没有这个规则会怎样？&lt;span class="spoiler"&gt;&lt;strong&gt;Missing write:&lt;/strong&gt; client writes to A，A crashes before writing to B, clients read from B&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;一定要转发 read() 给 backup 吗？（这是一个常见的优化操作）&lt;span class="spoiler"&gt;必须转发。不然可能出现 &lt;strong&gt;Stale read&lt;/strong&gt;: at &lt;em&gt;view 1&lt;/em&gt;, A,B are primary and backup, but A cannot reach view-server. now &lt;em&gt;view 2&lt;/em&gt;, B,C are primary backup. client 1 writes to B, client 2 reads from A. A returns outdated data（不过 stale read 依然符合 sequential consistency）&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果 view 是正确的，backup 必须接受&lt;ruby&gt;转发的请求&lt;rt&gt;Forwarded Request&lt;/rt&gt;&lt;/ruby&gt;，并且执行&lt;/p&gt;
+&lt;p&gt;如果没有这个规则会怎样？&lt;span class="spoiler"&gt;&lt;strong&gt;Partially Split Brain&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;non-primary 节点&lt;strong&gt;必须拒绝&lt;/strong&gt; client 的请求&lt;/p&gt;
+&lt;p&gt;如果没有这个规则会怎样？&lt;span class="spoiler"&gt;&lt;strong&gt;Inconsistencies:&lt;/strong&gt; client&amp;rsquo;s view may outdated, send request to old primary server.&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;state-transfer 的时候不能有操作。（Atomic State Transfer）&lt;/p&gt;
+&lt;p&gt;如果没有这个规则会怎样？&lt;span class="spoiler"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="脑裂-split-brain" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%84%91%e8%a3%82-split-brain"&gt;
+#
+&lt;/a&gt;
+脑裂 (Split-brain)
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这个词有点吓人。。。其实是在说：&lt;strong&gt;在网络故障时，两个及以上的节点都认为自己是 Leader (primary-server)。&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;View 1, primary=A, backup=B; 这时候 A 网络出故障无法连接到 view-server，B 成为新的 primary。
+View 2, primary=B, backup=_; B 是 新的 primary，但 A 也认为自己是 primary&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在我们之前的规定里，只有 primary-server 会回复 client，但是脑裂的时候，两个节点都会回复 client，这就可能导致 client 收到的数据不一致。
+（破坏了 Linearzability）&lt;/p&gt;
+&lt;h2 id="系统卡住" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%b3%bb%e7%bb%9f%e5%8d%a1%e4%bd%8f"&gt;
+#
+&lt;/a&gt;
+系统卡住
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;有哪些可能导致系统卡住（处理不了 client 的请求）的情况？&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;view-server 挂了&lt;/li&gt;
+&lt;li&gt;整个网络挂了&lt;/li&gt;
+&lt;li&gt;client 只能练到 view-server，不能连接到 primary-server&lt;/li&gt;
+&lt;li&gt;backup server 没有了（因为 primary 转移状态给 backup，转移完了回复 view-server 一个 ACK）&lt;/li&gt;
+&lt;li&gt;状态转移之前 primary 挂了&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="重复写入" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%87%8d%e5%a4%8d%e5%86%99%e5%85%a5"&gt;
+#
+&lt;/a&gt;
+重复写入
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h2 id="为什么-primary-backup-比较难" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-primary-backup-%e6%af%94%e8%be%83%e9%9a%be"&gt;
+#
+&lt;/a&gt;
+为什么 Primary Backup 比较难
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;primary 可能挂掉&lt;/li&gt;
+&lt;li&gt;backup 可能挂掉&lt;/li&gt;
+&lt;li&gt;通讯可能 临时/永久 挂掉&lt;/li&gt;
+&lt;li&gt;参与者的决策可能存在延迟：
+&lt;ul&gt;
+&lt;li&gt;view server 不知道 primary 挂了&lt;/li&gt;
+&lt;li&gt;primary 挂了吗？挂了之后恢复，还需要回复 client 吗？&lt;/li&gt;
+&lt;li&gt;backup 挂了吗？state transfer 结束了吗？&lt;/li&gt;
+&lt;li&gt;client 不知道 view 有没有切换&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="总结一下-view-server-的缺点" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%80%bb%e7%bb%93%e4%b8%80%e4%b8%8b-view-server-%e7%9a%84%e7%bc%ba%e7%82%b9"&gt;
+#
+&lt;/a&gt;
+总结一下 view-server 的缺点
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;view-server 自己存在单点故障问题&lt;/li&gt;
+&lt;li&gt;view-server 必须等待 primary 的 ack，即使 primary 可能挂了也要等&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="状态机复制state-machine-replication" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%8a%b6%e6%80%81%e6%9c%ba%e5%a4%8d%e5%88%b6state-machine-replication"&gt;
+#
+&lt;/a&gt;
+&lt;ruby&gt;状态机复制&lt;rt&gt;State Machine Replication&lt;/rt&gt;&lt;/ruby&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;状态机有一个特性：&lt;/strong&gt; 任何初始状态一样的状态机，如果执行的命令序列一样，则最终达到的状态也一样。&lt;/p&gt;
+&lt;p&gt;如果将此特性应用在多参与者进行协商共识上，可以理解为系统中存在多个具有完全相同的状态机（参与者），这些状态机能最终保持一致的关键就是起始状态完全一致和执行命令序列完全一致。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;根据状态机的特性，要让多台机器的最终状态一致，只要确保它们的初始状态是一致的，并且接收到的操作指令序列也是一致的即可，无论这个操作指令是新增、修改、删除抑或是其他任何可能的程序行为，都可以理解为要将一连串的操作日志正确地广播给各个分布式节点。&lt;/p&gt;
+&lt;p&gt;我们并不要求所有节点的每一条指令都是同时开始、同步完成的，只要求在此期间的内部状态不能被外部观察到，且当操作指令序列执行完毕时，所有节点的最终的状态是一致的，这种模型就被称为状态机复制（State Machine Replication）。&lt;/p&gt;
+&lt;style&gt;
+.spoiler {
+color: black;
+background-color: black;
+transition: color 0.2s;
+border-radius: 5px;
+padding-right: 5px;
+padding-left: 5px;
+}
+/* .spoiler::before {
+content: "hover me to see the answer";
+color: white;
+background-color: black;
+} */
+.spoiler:hover {
+visibility: visible;
+color: white
+}
+/*
+.spoiler:hover::before {
+display: none;
+} */
+&lt;/style&gt;
+&lt;h2 id="tips" &gt;
+&lt;div&gt;
+&lt;a href="#tips"&gt;
+#
+&lt;/a&gt;
+Tips
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;实现 Paxos 的注意事项可以参考 Junhui 的 Cheatsheet&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h2 id="reference" &gt;
+&lt;div&gt;
+&lt;a href="#reference"&gt;
+#
+&lt;/a&gt;
+Reference
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-3/</guid></item><item><title>Distributed System: Consistency</title><link>https://www.junyi.dev/posts/paxos-review-2/</link><pubDate>Tue, 12 Sep 2023 14:06:01 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+这篇文章主要是对分布式系统中的一致性Consistency进行区分</description><content:encoded>&lt;p&gt;这篇文章主要是对分布式系统中的&lt;ruby&gt;一致性&lt;rt&gt;Consistency&lt;/rt&gt;&lt;/ruby&gt;进行区分&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;ruby&gt;弱一致性&lt;rt&gt;Weak Consistency&lt;/rt&gt;&lt;/ruby&gt;&lt;/strong&gt;：允许系统的行为与单一系统的行为不一致。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;ruby&gt;强一致性&lt;rt&gt;Strong Consistency&lt;/rt&gt;&lt;/ruby&gt;&lt;/strong&gt;：整个系统表现得像是一个单一的、无并发的实体。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;下面的一致性，由弱到强&lt;/p&gt;
+&lt;h2 id="最终一致性eventual-consistency" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%bb%88%e4%b8%80%e8%87%b4%e6%80%a7eventual-consistency"&gt;
+#
+&lt;/a&gt;
+&lt;ruby&gt;最终一致性&lt;rt&gt;Eventual Consistency&lt;/rt&gt;&lt;/ruby&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;系统最终会达到一致的状态。&lt;/p&gt;
+&lt;h2 id="因果一致性causal-consistency" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9b%a0%e6%9e%9c%e4%b8%80%e8%87%b4%e6%80%a7causal-consistency"&gt;
+#
+&lt;/a&gt;
+&lt;ruby&gt;因果一致性&lt;rt&gt;Causal Consistency&lt;/rt&gt;&lt;/ruby&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;比 Sequential Consistency 更弱。
+如果操作 A 依赖于操作 B，那么操作 B 发生在操作 A 之前，但是如果操作 A 和操作 B 之间没有因果关系，那么操作 A 和操作 B 的顺序是不确定的。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;有因才有果，因在果之前&lt;/p&gt;
+&lt;p&gt;先看见因，再看见果&lt;/p&gt;
+&lt;p&gt;如果一个问题被回答，显然问题本身得先在那里，因为给出答案的人必须已经看到这个问题，我们认为在问题和答案之间存在因果依赖。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;比如微信朋友圈需要服务器之间采用因果一致性，来保证用户刷朋友圈时不会看到评论所对应的答复而看不到对应的评论。&lt;/p&gt;
+&lt;img src="wechat-arch.png" alt="drawing" width="600" /&gt;
+&lt;p&gt;延伸阅读：怎么生成唯一且递增的 ID？&lt;a href="https://www.infoq.cn/article/wechat-serial-number-generator-architecture/"&gt;微信序列号生成器架构设计及演变&lt;/a&gt;&lt;a href="https://segmentfault.com/a/1190000040964518"&gt;雪花算法&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="序列一致性sequential-consistency" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%ba%8f%e5%88%97%e4%b8%80%e8%87%b4%e6%80%a7sequential-consistency"&gt;
+#
+&lt;/a&gt;
+&lt;ruby&gt;序列一致性&lt;rt&gt;Sequential Consistency&lt;/rt&gt;&lt;/ruby&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;不管系统怎么运行，得到的结果就好像把所有节点的所有操作按照某个 sequential order 排序后运行，但是在这个 sequential order 中，来自同一个节点的操作仍然保持着它们在节点中被指定的顺序。&lt;/p&gt;
+&lt;p&gt;换句话说，物理意义上的时间，不能决定&lt;ruby&gt;操作&lt;rt&gt;operations&lt;/rt&gt;&lt;/ruby&gt;的执行顺序&lt;/p&gt;
+&lt;p&gt;用作 Transaction 时我们称之为 Serializability&lt;/p&gt;
+&lt;p&gt;常用在 银行、金融数据库、事务&lt;/p&gt;
+&lt;h2 id="线性一致性linearizable-consistency" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ba%bf%e6%80%a7%e4%b8%80%e8%87%b4%e6%80%a7linearizable-consistency"&gt;
+#
+&lt;/a&gt;
+&lt;ruby&gt;线性一致性&lt;rt&gt;Linearizable Consistency&lt;/rt&gt;&lt;/ruby&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;也叫 Linearizability&lt;/p&gt;
+&lt;p&gt;是【顺序一致性 + 按照物理时间顺序执行】。&lt;/p&gt;
+&lt;p&gt;满足线性一致性的数据结构，表现得像是一个单一的、无并发的实体。&lt;span style="color: #cd7a32;"&gt;&lt;strong&gt;是最强的保证&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;比如 Google Spanner&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;介绍到这里，基本上对 Consistency 有了大致的了解，接下来可以看 Primary Backup Replication 了。&lt;/p&gt;
+&lt;h2 id="lab-2" &gt;
+&lt;div&gt;
+&lt;a href="#lab-2"&gt;
+#
+&lt;/a&gt;
+Lab 2
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;实现 Primary-backup replication：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;client 发送请求给 primary-server&lt;/li&gt;
+&lt;li&gt;由一个 中央 view-server 决定谁是 primary 谁是 backup&lt;/li&gt;
+&lt;li&gt;primary 挂了，backup 顶上来&lt;/li&gt;
+&lt;/ol&gt;
+&lt;img src="pbr.png" alt="drawing" width="400"/&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-2/</guid></item><item><title>Distributed System: Ordering of events</title><link>https://www.junyi.dev/posts/paxos-review-1/</link><pubDate>Tue, 12 Sep 2023 11:32:04 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+上个学期的 CS5223 Distributed Systems ，Prof. Li 讲的蛮好，尽管实现了 Basic Paxos 和 Multi Paxos（多亏了 Junhui 的 cheatsheet1），但是耐不住时间的拷打，写的 Paxos 都快忘光了&amp;amp;hellip;
+所以，赶紧开一篇博客把想法都记录下来，以便之后的复习。</description><content:encoded>&lt;p&gt;上个学期的 &lt;a href="https://nusmods.com/courses/CS5223/distributed-systems"&gt;CS5223 Distributed Systems&lt;/a&gt; ，Prof. Li 讲的蛮好，尽管实现了 Basic Paxos 和 Multi Paxos（多亏了 Junhui 的 cheatsheet&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;），但是耐不住时间的拷打，写的 Paxos 都快忘光了&amp;hellip;&lt;/p&gt;
+&lt;!-- （而且没实现分布式事务） --&gt;
+&lt;p&gt;所以，赶紧开一篇博客把想法都记录下来，以便&lt;strong&gt;之后的复习&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;首先简单过一下这些基础概念&lt;/p&gt;
+&lt;h2 id="happens-before-relationship" &gt;
+&lt;div&gt;
+&lt;a href="#happens-before-relationship"&gt;
+#
+&lt;/a&gt;
+Happens-before relationship
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Within a process, A comes before B then A→B, it also means&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;B &lt;strong&gt;could&lt;/strong&gt; have been influenced by A&lt;/p&gt;&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If a → b, then b !→ a&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;What about a!→b, does that mean b→a? &lt;span style="color: white"&gt;&lt;strong&gt;NO&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If a → b, and b → c, then a → c (transitivity)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;a !→ b and b !→ a, means a and b are &lt;strong&gt;concurrent&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;no one can tell whether a or b happened first!&lt;/p&gt;&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="lamport-clock" &gt;
+&lt;div&gt;
+&lt;a href="#lamport-clock"&gt;
+#
+&lt;/a&gt;
+Lamport clock
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;img src="logical-clock.png" alt="drawing" width="400"/&gt;
+&lt;p&gt;We can use clocks to implement a lock.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Our goals are:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Only one process can hold the lock at a time.&lt;/li&gt;
+&lt;li&gt;Grant the lock &lt;strong&gt;in request order&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Requesting processes &lt;strong&gt;eventually&lt;/strong&gt; get the lock.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Our assumptions are:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;In order&lt;/strong&gt; point-to-point message delivery.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No failures&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Implementation:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Each message carries a timestamp $T_m$&lt;/li&gt;
+&lt;li&gt;Three message types:
+&lt;ul&gt;
+&lt;li&gt;request&lt;/li&gt;
+&lt;li&gt;release&lt;/li&gt;
+&lt;li&gt;acknowledge&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Each node&amp;rsquo;s state:
+&lt;ul&gt;
+&lt;li&gt;A queue of requested messaged, ordered by $T_m$.&lt;/li&gt;
+&lt;li&gt;The latest timestamp it received from each node.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;On receiving&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;receiving a request
+&lt;ul&gt;
+&lt;li&gt;record the timestamp&lt;/li&gt;
+&lt;li&gt;add the request to the queue&lt;/li&gt;
+&lt;li&gt;send an acknowledge&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;receiving a release
+&lt;ul&gt;
+&lt;li&gt;record the timestamp&lt;/li&gt;
+&lt;li&gt;remove the request from the queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;receiving an acknowledge
+&lt;ul&gt;
+&lt;li&gt;record the timestamp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;To perform&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;To acquire a lock
+&lt;ul&gt;
+&lt;li&gt;send request to every node, including itself&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;To release a lock
+&lt;ul&gt;
+&lt;li&gt;send release to every node, including itself&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;The lock is acquired when&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;My request is at the head of the queue.&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;ve received higher timestamp &lt;strong&gt;from every node&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;So my request must be the earliest.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="vector-clock" &gt;
+&lt;div&gt;
+&lt;a href="#vector-clock"&gt;
+#
+&lt;/a&gt;
+Vector clock
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Clock is a vector C, length = # of nodes.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;(0, 0, 0) for a 3-node system&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;On node i, increment C[i] on each event.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;node 0 (3,5,2), after event: (4,5,2)&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;On node i, received a message, increment C[i], and take the max of each element.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;node 0 (4,5,2), received message (2,7,0): (4,7,2)&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;If Cx[i] &amp;lt; Cy[i] and Cx[j] &amp;gt; Cy[j] for some i, j&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cx and Cy are concurrent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;if Cx[i] &amp;lt;= Cy[i] for all i, and there exist j such that Cx[j] &amp;lt; Cy[j]&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cx happens before Cy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="vector-lock.jpg" width="400" alt="vector-lock" /&gt;
+&lt;h2 id="lab-1" &gt;
+&lt;div&gt;
+&lt;a href="#lab-1"&gt;
+#
+&lt;/a&gt;
+Lab 1
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;实现一个 at-most-once 的 KV Store&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;RPC 要么最多执行一次，要么不执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="reference" &gt;
+&lt;div&gt;
+&lt;a href="#reference"&gt;
+#
+&lt;/a&gt;
+Reference
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-1/</guid></item></channel></rss>

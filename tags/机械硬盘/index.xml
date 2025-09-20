@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 20 Mar 2021 20:41:30 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98/index.xml" rel="self" type="application/rss+xml"/><item><title>购买硬盘盒遇到的坑</title><link>https://www.junyi.dev/posts/thought-about-hdd-case/</link><pubDate>Sat, 20 Mar 2021 20:41:30 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+最近买了一块 4T 的机械硬盘，想再选购一个硬盘盒
+但是发现好多人吐槽「硬盘盒毁盘」「USB 硬盘盒容易掉盘」
+我就纳闷了，凭什么一个盒子就能毁盘？</description><content:encoded>&lt;p&gt;最近买了一块 4T 的机械硬盘，想再选购一个硬盘盒&lt;/p&gt;
+&lt;p&gt;但是发现好多人吐槽「硬盘盒毁盘」「USB 硬盘盒容易掉盘」&lt;/p&gt;
+&lt;p&gt;我就纳闷了，凭什么一个盒子就能毁盘？&lt;/p&gt;
+&lt;p&gt;后来做了多方面调查，得出结论：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;硬盘盒、USB 等毁硬盘的情况主要是供电不足导致的！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;（举个例子，比如这款自带 &lt;code&gt;12V 1A&lt;/code&gt; 电源的硬盘盒，就「可能」会毁掉你的硬盘）&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="fig1.png" alt="view-service" width="400" /&gt;
+&lt;figcaption&gt;Fig.1 - The HDD case with a builtin 12V 1A power supply.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="硬盘到底需要多强的供电能力" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%a1%ac%e7%9b%98%e5%88%b0%e5%ba%95%e9%9c%80%e8%a6%81%e5%a4%9a%e5%bc%ba%e7%9a%84%e4%be%9b%e7%94%b5%e8%83%bd%e5%8a%9b"&gt;
+#
+&lt;/a&gt;
+硬盘到底需要多强的供电能力？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="标签上写的供电需求" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%a0%87%e7%ad%be%e4%b8%8a%e5%86%99%e7%9a%84%e4%be%9b%e7%94%b5%e9%9c%80%e6%b1%82"&gt;
+##
+&lt;/a&gt;
+标签上写的供电需求
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;我们可以在硬盘上观察到 &lt;code&gt;5V 0.55A&lt;/code&gt;，&lt;code&gt;12V 0.37A&lt;/code&gt; 这样的标记（以 &lt;code&gt;SEAGATE ST4000VX007&lt;/code&gt; 举例）&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig2" src="fig2.jpg" alt="view-service" width="400" /&gt;
+&lt;figcaption&gt;Fig.2 - &lt;code&gt;ST4000VX007&lt;/code&gt; labels the operating power of &lt;code&gt;12V 0.37A&lt;/code&gt;.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;直观地说，我们会认为硬盘消耗 &lt;code&gt;12V 0.37A&lt;/code&gt;，电源有 &lt;code&gt;12V 1A&lt;/code&gt; 的供电能力，妥妥的够了呀，电流都多出来 2.7 倍了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;实际上并不够。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="硬盘实际的供电需求" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%a1%ac%e7%9b%98%e5%ae%9e%e9%99%85%e7%9a%84%e4%be%9b%e7%94%b5%e9%9c%80%e6%b1%82"&gt;
+##
+&lt;/a&gt;
+硬盘实际的供电需求
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;查阅&lt;a href="https://www.seagate.com/www-content/datasheets/pdfs/skyhawk-3-5-hddDS1902-6-1710US-en_US.pdf"&gt;官方手册&lt;/a&gt;我们可以发现，这块硬盘的「Average Operating Power」是「5.5W」，但是，还有一项非常重要的参数是&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;「Startup Current, Typical (12V, 1.8A) 」&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这个指的是硬盘刚开始工作时的瞬间电流，&lt;code&gt;ST4000VX007&lt;/code&gt; 这块硬盘的瞬间电流可以达到 &lt;code&gt;1.8A&lt;/code&gt;，其他型号的硬盘甚至瞬间电流可以达到 &lt;code&gt;2.0A&lt;/code&gt;&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig3" src="fig3.png" alt="view-service" width="500" /&gt;
+&lt;figcaption&gt;Fig.3 - &lt;code&gt;ST4000VX007&lt;/code&gt; consumes &lt;code&gt;1.8A&lt;/code&gt; when starting up.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;所以，硬盘盒提供的 &lt;code&gt;12V 1A&lt;/code&gt; 的供电能力是不足的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;并且，大多数时候我们会开启「自动休眠」功能，让硬盘电机自动停转。每次停转、起转的时候，都会让电源负载电流超过最大值，电源无法供给，长此以往导致「掉盘」、「毁盘」&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;解决方案是买个好点的电源。（&lt;code&gt;12V 2A&lt;/code&gt; 以上的电源）&lt;/p&gt;</content:encoded><category>MISC</category><category>机械硬盘</category><guid isPermaLink="true">https://www.junyi.dev/posts/thought-about-hdd-case/</guid></item></channel></rss>

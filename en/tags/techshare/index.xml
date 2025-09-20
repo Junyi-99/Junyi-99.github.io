@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 01 Aug 2025 01:16:29 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/techshare/index.xml" rel="self" type="application/rss+xml"/><item><title>MacBook Pro M1 Keycap Replacement Guide</title><link>https://www.junyi.dev/en/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded Shift and Space keys in the photo — they look terrible.)
+While some say you can go to an Apple Store to get them replaced1, it&amp;amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose entire keyboard is shiny, DIY replacement is clearly the more practical option.
+I&amp;amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online2 only show how to remove regular letter and number keys — they deliberately skip over the longer keys like Space, Caps Lock, ESC, and the arrow keys. These keys have different internal structures and require a different disassembly approach.</description><content:encoded>&lt;p&gt;As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded &lt;kbd&gt;Shift&lt;/kbd&gt; and &lt;kbd&gt;Space&lt;/kbd&gt; keys in the photo — they look terrible.)&lt;/p&gt;
+&lt;p&gt;While some say you can go to an Apple Store to get them replaced&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, it&amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose &lt;strong&gt;entire keyboard is shiny&lt;/strong&gt;, DIY replacement is clearly the more practical option.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; only show how to remove regular letter and number keys — they &lt;strong&gt;deliberately skip over&lt;/strong&gt; the longer keys like &lt;kbd&gt;Space&lt;/kbd&gt;, &lt;kbd&gt;Caps Lock&lt;/kbd&gt;, &lt;kbd&gt;ESC&lt;/kbd&gt;, and the arrow keys. These keys have different internal structures and require a different disassembly approach.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
+&lt;figcaption&gt;
+Keyboard before (top) and after (bottom) the keycap replacement
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;I bought a full set of replacement keycaps from Taobao for 85 RMB ($11.81 USD) and decided to do it myself:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/taobao.jpeg" style="border-radius:0.5rem; width: 256px"&gt;
+&lt;figcaption&gt;
+The full set of keycaps purchased from Taobao
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h2 id="removing-the-old-keycaps" &gt;
+&lt;div&gt;
+&lt;a href="#removing-the-old-keycaps"&gt;
+#
+&lt;/a&gt;
+Removing the Old Keycaps
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The MacBook Pro uses a scissor-switch keyboard mechanism, so we need to follow the correct disassembly procedure for scissor-switch keys.&lt;/p&gt;
+&lt;h3 id="regular-key-disassembly" &gt;
+&lt;div&gt;
+&lt;a href="#regular-key-disassembly"&gt;
+##
+&lt;/a&gt;
+Regular Key Disassembly
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Steps:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Locate the latches&lt;/strong&gt;: Each regular keycap has four clips, one at each corner.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Start at the bottom right&lt;/strong&gt;: Gently lift the bottom-right corner with a spudger. A soft “pop” sound means the latch has been released.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Then the bottom left&lt;/strong&gt;: Do the same for the bottom-left corner.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lift the keycap&lt;/strong&gt;: Once the bottom two clips are released, gently lift the entire keycap upward.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fully remove&lt;/strong&gt;: The top clips will naturally detach.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⚠️ Avoid applying excessive force — the scissor-switch mechanism is fragile.&lt;/li&gt;
+&lt;li&gt;⚠️ Never pull straight up — it may break the clips.&lt;/li&gt;
+&lt;li&gt;💡 Use a plastic spudger instead of metal tools to prevent scratches.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can refer to this video&lt;sup id="fnref1:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; — it clearly demonstrates how to remove regular keys.&lt;/p&gt;
+&lt;p&gt;To reinstall the keycap, reverse the removal steps: slide the keycap into the top clips first, then press down until it snaps into place.&lt;/p&gt;
+&lt;p&gt;⚠️ Be careful not to press too hard — the plastic components are delicate.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="long-key-disassembly-eg-shift-caps-lock-esc" &gt;
+&lt;div&gt;
+&lt;a href="#long-key-disassembly-eg-shift-caps-lock-esc"&gt;
+##
+&lt;/a&gt;
+Long Key Disassembly (e.g. Shift, Caps Lock, ESC)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;These larger keys usually contain one or two stabilizer wires (metal bars), making the structure more complex.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Removal Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Start from the bottom-right corner, then move to the bottom-left.&lt;/li&gt;
+&lt;li&gt;Do not use excessive force — &lt;strong&gt;avoid bending the metal stabilizer sockets&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Removed Caps Lock key (pointed to by tweezers) and the longer Shift key
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;Installation Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;For a single stabilizer wire&lt;/strong&gt;:&lt;br&gt;
+Attach the metal bar to the keycap first, slide it into the slot on the keyboard, then press down to install as usual.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;For two stabilizer wires&lt;/strong&gt;:&lt;br&gt;
+Mount the &lt;strong&gt;top stabilizer wire to the keycap&lt;/strong&gt;, and &lt;strong&gt;clip the bottom stabilizer wire into the keyboard&lt;/strong&gt;.&lt;br&gt;
+First align the keycap with the top clips and press gently, then push the bottom part into place.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/longkey.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Keycap with a single stabilizer wire: first secure the wire, then press the keycap into place
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h3 id="short-key-disassembly-arrow-keys" &gt;
+&lt;div&gt;
+&lt;a href="#short-key-disassembly-arrow-keys"&gt;
+##
+&lt;/a&gt;
+Short Key Disassembly (Arrow Keys)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Up Arrow&lt;/strong&gt;: First release the left-side clip, then &lt;strong&gt;slide the key to the right&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Left/Down/Right Arrows&lt;/strong&gt;: First release the right-side clip, then &lt;strong&gt;slide the key to the left&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(Before attempting this, refer to the structural images below.)&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkeys.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_side.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_top.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Arrow key structure diagram
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h2 id="summary" &gt;
+&lt;div&gt;
+&lt;a href="#summary"&gt;
+#
+&lt;/a&gt;
+Summary
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Be sure to check &lt;strong&gt;all removed keycaps&lt;/strong&gt; before finishing — I realized I had left two stabilizer wires behind only when I was nearly done.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/final.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+All the old keycaps after removal
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h3 id="troubleshooting" &gt;
+&lt;div&gt;
+&lt;a href="#troubleshooting"&gt;
+##
+&lt;/a&gt;
+Troubleshooting
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Key doesn’t feel right after reinstallation?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check if the stabilizer wire is properly clipped in.&lt;/li&gt;
+&lt;li&gt;Ensure the scissor switch isn’t bent or broken.&lt;/li&gt;
+&lt;li&gt;Remove the keycap and reinstall in the correct order.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Keycap easily falls off?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Make sure all four clips are secured.&lt;/li&gt;
+&lt;li&gt;Verify the stabilizer is installed in the correct direction.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Key feels stuck or unresponsive?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check for dust or debris underneath the cap.&lt;/li&gt;
+&lt;li&gt;Ensure the scissor switch is properly aligned.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="pro-tips" &gt;
+&lt;div&gt;
+&lt;a href="#pro-tips"&gt;
+##
+&lt;/a&gt;
+Pro Tips
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;re unsure about your dexterity or notice any broken clips or switch parts, it&amp;rsquo;s best to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Contact Apple’s official repair service;&lt;/li&gt;
+&lt;li&gt;Find a trustworthy third-party repair shop;&lt;/li&gt;
+&lt;li&gt;Watch more tutorial videos and practice before diving in.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank"&gt;What to do when MacBook Pro keycaps get shiny — can Apple Stores replace them for free?&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/"&gt;Bilibili: MacBook Scissor Key Keyboard Disassembly (Keycaps + Scissor Switch)&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/replace-keyboard/</guid></item><item><title>Hiding Sensitive Articles on Your GitHub Pages Blog</title><link>https://www.junyi.dev/en/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+# Background How can you prevent others from seeing certain articles in your blog that is hosted by GitHub Pages?
+This guide offers a strategy to host websites on GitHub Pages while keeping sensitive content private.</description><content:encoded>&lt;h2 id="background" &gt;
+&lt;div&gt;
+&lt;a href="#background"&gt;
+#
+&lt;/a&gt;
+Background
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;How can you &lt;strong&gt;prevent others from seeing certain articles&lt;/strong&gt; in your blog that is hosted by GitHub Pages?&lt;/p&gt;
+&lt;p&gt;This guide offers a strategy to host websites on GitHub Pages while keeping sensitive content private.&lt;/p&gt;
+&lt;p&gt;The solution involves using two separate GitHub repositories:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Private repo &lt;code&gt;blog-src&lt;/code&gt;: Holds the source code of your website.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Public repo &lt;code&gt;blog.github.io&lt;/code&gt;: For the generated static website.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This approach ensures sensitive content remains private in &lt;code&gt;blog-src&lt;/code&gt;. Upon each commit to &lt;code&gt;blog-src&lt;/code&gt;, an automated process builds the static site and pushes it to &lt;code&gt;blog.github.io&lt;/code&gt;, updating your public website without exposing restricted content (See &lt;a href="#fig1"&gt;Fig.1&lt;/a&gt;).&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/github-actions/fig1.png" alt="The Overview of using Github Actions to publish GitHub pages" width="500" /&gt;
+&lt;figcaption&gt;Fig.1 - Modifying &lt;code&gt;blog-src&lt;/code&gt; automatically builds the site and synchronizes it to &lt;code&gt;blog.github.io&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Let&amp;rsquo;s take a look at how to achieve this.&lt;/p&gt;
+&lt;h2 id="step-1-create-a-personal-access-token" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-create-a-personal-access-token"&gt;
+#
+&lt;/a&gt;
+Step 1. Create a personal access token
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Going to &lt;a href="https://github.com/settings/tokens"&gt;this page&lt;/a&gt; (Settings ➜ Developer Settings ➜ Personal access tokens)&lt;/p&gt;
+&lt;p&gt;Generate new token (classic)&lt;/p&gt;
+&lt;p&gt;Check all &amp;ldquo;repo&amp;rdquo; and &amp;ldquo;workflow&amp;rdquo;. (See &lt;a href="#fig2"&gt;Fig.2&lt;/a&gt;)&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/create-personal-key.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.2 - Create a personal token for our GitHub Action.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/created-token.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.3 - Example of the created token.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Copy the token, for example &lt;code&gt;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&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="step-2-create-a-repository-secret-in-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-create-a-repository-secret-in-blog-src"&gt;
+#
+&lt;/a&gt;
+Step 2. Create a repository secret in &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;This repository contains the source code of our website and a GitHub Action.&lt;/p&gt;
+&lt;p&gt;So we need to set our personal access token (generated from Step 1) as a repository secret, to support the GitHub Action procedure.&lt;/p&gt;
+&lt;p&gt;Go to &lt;code&gt;blog-src&lt;/code&gt; ➜ Settings ➜ Secrets and variables ➜ Actions ➜ New &lt;strong&gt;repository&lt;/strong&gt; secret&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/new-repo-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.4 - The entry for creating a new repository secret&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/add-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.5 - Create a new repository secret&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="step-3-set-up-a-workflow-for-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-set-up-a-workflow-for-blog-src"&gt;
+#
+&lt;/a&gt;
+Step 3. Set up a workflow for &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Repository ➜ Actions ➜ Set up a workflow yourself&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/setup-actions.png" alt="Setup Actions", width="500" /&gt;
+&lt;figcaption&gt;Fig.6 - Set up a workflow.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;You need to learn how to write a workflow, here are some documents you can read:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart"&gt;Quickstart for GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples"&gt;Example workflows&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Carefully design your workflow file, here we give you an example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# A Sample workflow for building and deploying a site to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy Website to Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;push&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;branches&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - main &lt;span style="color:#78787e"&gt;# Triggers this workflow whenever there&amp;#39;s a push to the `main` branch&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Allows you to run this workflow manually from the Actions tab&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;workflow_dispatch&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;schedule&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Runs at 00:00 UTC every day&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;cron&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;0 0 * * *&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;permissions&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;contents&lt;/span&gt;: read
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;pages&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;id-token&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;concurrency&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;group&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cancel-in-progress&lt;/span&gt;: &lt;span style="color:#ff6ac1"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Default to bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;defaults&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;shell&lt;/span&gt;: bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;jobs&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;build-and-deploy&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;runs-on&lt;/span&gt;: ubuntu-latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;env&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;YOUR_ENV_HERE&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0.1.2.3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;steps&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Checkout
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: actions/checkout@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;submodules&lt;/span&gt;: recursive
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;fetch-depth&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Build my website
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;: |&lt;span style="color:#5af78e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; echo &amp;#34;Building the website ... (Remember to replace it with the real command!!!)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy to GitHub Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: peaceiris/actions-gh-pages@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;personal_token&lt;/span&gt;: ${{ secrets.GH_PAGES_PAT }} &lt;span style="color:#78787e"&gt;# The pre-defined secret in Step 2.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;publish_dir&lt;/span&gt;: ./public &lt;span style="color:#78787e"&gt;# Content in this folder will be pushed to the target repo.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_name&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_email&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]@users.noreply.github.com&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;external_repository&lt;/span&gt;: Junyi-99/blog.github.io &lt;span style="color:#78787e"&gt;# Your GitHub Pages Repo (target repo)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;commit_message&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;Automated deployment from Repository blog-src&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-4-push-to-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#step-4-push-to-blog-src"&gt;
+#
+&lt;/a&gt;
+Step 4. Push to &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;All you need to do in this step is &lt;strong&gt;push&lt;/strong&gt; some commits to &lt;code&gt;blog-src&lt;/code&gt;, and if all goes well, your GitHub Actions will automatically execute, build your site, and push it to the &lt;code&gt;blog.github.io&lt;/code&gt; repository.&lt;/p&gt;
+&lt;p&gt;(END OF THE POST)&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/github-actions/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+git-crypt enables transparent encryption and decryption of files in a git repository.
+Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
+&lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/flow.svg" alt="BasicFlow"&gt;&lt;/p&gt;
+&lt;h2 id="step-1-install-git-crypt" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-install-git-crypt"&gt;
+#
+&lt;/a&gt;
+Step 1: Install git-crypt
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install git-crypt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git-crypt init &lt;span style="color:#78787e"&gt;# in an initialized git repository&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Specify files to encrypt by creating a .gitattributes file:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-gitattributes" data-lang="gitattributes"&gt;# The config is similar to .gitignore
+accounts/*.bean filter=git-crypt diff=git-crypt
+*.md filter=git-crypt diff=git-crypt
+*.png filter=git-crypt diff=git-crypt
+*.jpg filter=git-crypt diff=git-crypt
+*.excalidraw filter=git-crypt diff=git-crypt
+*.txt filter=git-crypt diff=git-crypt
+*.pdf filter=git-crypt diff=git-crypt
+*.json filter=git-crypt diff=git-crypt
+# Making sure that .gitattributes is never encrypted. DON&amp;#39;T TOUCH THAT LINE AND ONE BELOW
+.gitattributes !filter !diff
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="step-2-add-files" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-add-files"&gt;
+#
+&lt;/a&gt;
+Step 2: Add files
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git commit -m &lt;span style="color:#5af78e"&gt;&amp;#34;Add git-crypt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-3-check-git-crypt-status" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-check-git-crypt-status"&gt;
+#
+&lt;/a&gt;
+Step 3: Check git-crypt status
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -e&lt;/code&gt; Show encrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -u&lt;/code&gt; Show unencrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -f&lt;/code&gt; Fix problems with the repository&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="results" &gt;
+&lt;div&gt;
+&lt;a href="#results"&gt;
+#
+&lt;/a&gt;
+Results
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The beancount file is encrypted.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/image-1.png" alt="Alt text"&gt;&lt;/p&gt;
+&lt;h2 id="subsequent-updates" &gt;
+&lt;div&gt;
+&lt;a href="#subsequent-updates"&gt;
+#
+&lt;/a&gt;
+Subsequent Updates
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="update-on-january-30-fuck" &gt;
+&lt;div&gt;
+&lt;a href="#update-on-january-30-fuck"&gt;
+##
+&lt;/a&gt;
+Update on January 30, FUCK
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I messed around and locked myself out.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Detail&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This silly tool allows you to lock the repository &lt;strong&gt;even if you don&amp;rsquo;t export the symmetric key&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;And then, I locked myself out without exporting the symmetric key.&lt;/p&gt;
+&lt;p&gt;Because for &amp;ldquo;security&amp;rdquo;, I only kept the encrypted commits and deleted all previous commit logs.&lt;/p&gt;
+&lt;p&gt;So I fucked up.&lt;/p&gt;
+&lt;p&gt;😊 What a “pleasant day” it has been.&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/git-crypt/</guid></item></channel></rss>

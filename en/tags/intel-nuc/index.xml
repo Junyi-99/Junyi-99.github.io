@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 05 Sep 2025 13:07:09 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/intel-nuc/index.xml" rel="self" type="application/rss+xml"/><item><title>From Raspberry Pi to NUC: An Upgrade of My Toy</title><link>https://www.junyi.dev/en/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.</description><content:encoded>&lt;p&gt;My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.&lt;/p&gt;
+&lt;h2 id="raspberry-pi-pros-and-cons" &gt;
+&lt;div&gt;
+&lt;a href="#raspberry-pi-pros-and-cons"&gt;
+#
+&lt;/a&gt;
+Raspberry Pi: Pros and Cons
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The Raspberry Pi 4B used to be a key pillar of my digital life. It quietly ran various lightweight services: monitoring my home network traffic, running automation scripts, and even serving as a temporary dev/test environment. To keep it stable, I set up a cron job to automatically reboot every Sunday, which kept it fairly reliable most of the time.&lt;/p&gt;
+&lt;p&gt;But its shortcomings surfaced as I pushed it further. What worried me most was the reliability of TF‑card storage — even with so‑called “endurance” cards, you can’t fully avoid I/O risks. After I published the article on &lt;a href="http://localhost:1313/posts/k3s-101/"&gt;setting up k3s on a Raspberry Pi 5 cluster&lt;/a&gt;, my four‑node cluster ran stably for only a week before one node died due to a sudden flood of I/O errors. Ironically, that node was using a carefully chosen high‑endurance card, which ended up lasting even shorter than the ordinary card in the 4B.&lt;/p&gt;
+&lt;p&gt;Performance bottlenecks also became more evident under heavier workloads: compiling a slightly larger project meant a long progress‑bar crawl, and occasional stutters with multiple services running in parallel reminded me of the hardware’s limits. While attaching an external SSD can ease the storage issue, it undoubtedly increases complexity; at that point, it made more sense to upgrade to a more reliable platform.&lt;/p&gt;
+&lt;h2 id="unboxing-the-nuc-and-the-performance-leap" &gt;
+&lt;div&gt;
+&lt;a href="#unboxing-the-nuc-and-the-performance-leap"&gt;
+#
+&lt;/a&gt;
+Unboxing the NUC and the Performance Leap
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Unboxing the NUC, my first impression was: “too refined to be a mini PC.” The palm‑sized body isn’t much bigger than a Pi, but the hefty metal shell feels solid. I installed &lt;a href="https://ubuntu.com/download/desktop"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The performance gap is downright comforting: a Go project that took 3 minutes to compile on the Pi finishes in just 1 minute on the NUC.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
+&lt;figcaption&gt;Fig.1 - Compact yet powerful Intel NUC&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The NUC brings not just performance but peace of mind: the built‑in SSD eliminates the TF‑card read/write anxiety, and the extra memory plus x86 architecture make heavier tasks easy. I finally feel comfortable running a small database locally — I used to worry frequent writes would burn out the card.&lt;/p&gt;
+&lt;p&gt;As for the retired Raspberry Pis, they’ll pivot to edge‑computing nodes and keep contributing.&lt;/p&gt;
+&lt;h2 id="closing-thoughts" &gt;
+&lt;div&gt;
+&lt;a href="#closing-thoughts"&gt;
+#
+&lt;/a&gt;
+Closing Thoughts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Whenever I see the Pi’s LEDs blinking in rhythm, I remember the excitement of first unboxing it. The joy of tinkering was never about chasing the newest and the fastest, but about watching these devices find the right place at each stage — like tools slowly collecting stories of their own.&lt;/p&gt;</content:encoded><category>Linux</category><category>Raspberry Pi</category><category>Intel NUC</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item></channel></rss>

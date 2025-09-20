@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 27 Feb 2021 23:32:44 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/autotvm/index.xml" rel="self" type="application/rss+xml"/><item><title>TVM AutoTVM 多 GPU 加速 Tuning</title><link>https://www.junyi.dev/posts/tvm-autotvm-tuning/</link><pubDate>Sat, 27 Feb 2021 23:32:44 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+场景 双 NVIDIA 1080Ti, Linux 服务器
+需求 AutoTVM 的 Tuning 可以让两张 CUDA 显卡同时运行模型 （AMD 的没试过）</description><content:encoded>&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;
+双 NVIDIA 1080Ti, Linux 服务器&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;需求&lt;/strong&gt;
+AutoTVM 的 Tuning 可以让两张 CUDA 显卡同时运行模型 （AMD 的没试过）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;过程&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;当前场景为 tuner 和 runner 都跑在同一台机器上的情况
+如果需要一台跑 tuner，一台跑 runner，请配置好 tracker 和 server 的 IP
+tracker 和 server 都可以放在有显卡的机器里&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;首先查看一下 GPU 的 id，你可以通过这条命令来查看：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nvidia-smi -L
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;比如我这里输出的是 0 和 1：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;(&lt;/span&gt;base&lt;span style="color:#ff6ac1"&gt;)&lt;/span&gt; admin@deeplearning:~$ nvidia-smi -L
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;GPU 0: GeForce GTX &lt;span style="color:#ff9f43"&gt;1080&lt;/span&gt; Ti &lt;span style="color:#ff6ac1"&gt;(&lt;/span&gt;UUID: GPU-a4602aba-35cb-97cd-ef5a-f7d12aabdc88&lt;span style="color:#ff6ac1"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;GPU 1: GeForce GTX &lt;span style="color:#ff9f43"&gt;1080&lt;/span&gt; Ti &lt;span style="color:#ff6ac1"&gt;(&lt;/span&gt;UUID: GPU-92deed64-3b37-f0a4-1095-40f0f596d64b&lt;span style="color:#ff6ac1"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start="2"&gt;
+&lt;li&gt;用 screen 创建 1 个 rpc_tracker&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;screen -S tvm_tune_tracker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m tvm.exec.rpc_tracker --host&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;0.0.0.0 --port&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;9190&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;输入完之后，如果 tracker 运行成功，那就按下 CTRL+A 然后按下 CTRL+D，detach 当前的 screen&lt;/p&gt;
+&lt;ol start="3"&gt;
+&lt;li&gt;用 screen 创建 2 个 rpc_server（因为我有 2 个 GPU）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;还记得第一步查看的 GPU id 吗？下面的 `CUDA_VISIBLE_DEVICES`` 就要设置成刚才看的 GPU 的 id&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;screen -S tvm_tune_server0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;export&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;CUDA_VISIBLE_DEVICES&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m tvm.exec.rpc_server --tracker&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;127.0.0.1:9190 --key&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;1080ti
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;## 输入完之后，如果 server0 运行成功，那就按下 CTRL+A 然后按下 CTRL+D，detach 当前的 screen&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;screen -S tvm_tune_server1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;export&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;CUDA_VISIBLE_DEVICES&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m tvm.exec.rpc_server --tracker&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;127.0.0.1:9190 --key&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;1080ti
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;## 输入完之后，如果 server1 运行成功，那就按下 CTRL+A 然后按下 CTRL+D，detach 当前的 screen&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意，上面的 &lt;code&gt;export&lt;/code&gt; 是重点！
+如果在 shell 里直接不写 &lt;code&gt;export&lt;/code&gt; ，直接写 &lt;code&gt;CUDA_VISIBLE_DEVICES=0&lt;/code&gt; 是无效的！！！！
+尽管不写 &lt;code&gt;export&lt;/code&gt; 时，&lt;code&gt;echo $CUDA_VISIBLE_DEVICES&lt;/code&gt; 也会输出 1，但是实际上并没有设置环境变量。
+原因是 autotvm 会通过 python 的 &lt;code&gt;os.environ['CUDA_VISIBLE_DEVICES']&lt;/code&gt; 的值来决定使用哪一个 id 的 GPU。&lt;/p&gt;
+&lt;h2 id="检测效果" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%a3%80%e6%b5%8b%e6%95%88%e6%9e%9c"&gt;
+#
+&lt;/a&gt;
+检测效果
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;按照官方教程修改 device 为 1080ti，ip 地址和端口记得也要按照自己的实际情况进行修改，然后运行 tune_relay_cuda.py
+Extract tasks 之后，你应该可以通过 &lt;code&gt;nvidia-smi&lt;/code&gt; 看到 GPU 的利用情况：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;watch -n 0.5 nvidia-smi&lt;/code&gt; （意思是每隔 0.5s 运行 nvidia-smi 命令一次）&lt;/p&gt;
+&lt;img src="result.png" alt="drawing" width="800"/&gt;
+&lt;p&gt;可以看到两张显卡都已经利用起来了。&lt;/p&gt;
+&lt;p&gt;– END –&lt;/p&gt;
+&lt;h2 id="2023年8月23日-补充" &gt;
+&lt;div&gt;
+&lt;a href="#2023%e5%b9%b48%e6%9c%8823%e6%97%a5-%e8%a1%a5%e5%85%85"&gt;
+#
+&lt;/a&gt;
+2023年8月23日 补充
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;看到自己之前写的文章，感觉好幼稚啊哈哈哈哈&lt;/p&gt;</content:encoded><category>TVM</category><category>AutoTVM</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-autotvm-tuning/</guid></item><item><title>TVM AutoTVM 树莓派 4B 调优</title><link>https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</link><pubDate>Thu, 25 Feb 2021 17:52:38 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+细节请参阅官方文档，这里只作相关内容记录和踩坑记录而已。</description><content:encoded>&lt;p&gt;细节请参阅官方文档，这里只作相关内容记录和踩坑记录而已。&lt;/p&gt;
+&lt;h1 id="build-tvm-runtim-on-raspberry-pi-4b" &gt;
+&lt;div&gt;
+&lt;a href="#build-tvm-runtim-on-raspberry-pi-4b"&gt;
+##
+&lt;/a&gt;
+Build TVM Runtim on Raspberry Pi 4B
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;我们只用树莓派跑模型，所以只需要构建 Runtime&lt;/p&gt;
+&lt;p&gt;网络条件差的话记得更换 apt 的源&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone --recursive https://github.com/apache/tvm tvm
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; tvm
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mkdir build
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cp cmake/config.cmake build
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; build
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cmake ..
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;make runtime -j4
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果在 &lt;code&gt;cmake ..&lt;/code&gt; 的时候说找不到 cmake 那就&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install -y cmake
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果在 &lt;code&gt;cmake ..&lt;/code&gt; 的时候找不到 llvm 那就&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install -y llvm
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;我执行这条指令的时间是 2021 年 2 月 19 日，清华源 apt 给我装的是 llvm-7&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;编译好 runtime 之后，我们需要设置 &lt;code&gt;PYTHONPATH&lt;/code&gt; 环境变量（如果你用的是 bash，那你编辑 .bashrc，如果是 zsh，那你编辑 .zshrc）&lt;/p&gt;
+&lt;p&gt;(下面这条命令的 current working directory 为：&lt;code&gt;~&lt;/code&gt;，使用的是 &lt;code&gt;zsh&lt;/code&gt;)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;export PYTHONPATH=&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$PYTHONPATH&lt;/span&gt;&lt;span style="color:#5af78e"&gt;:~/tvm/python&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zshrc
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;source&lt;/span&gt; ~/.zshrc
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id="config-rpc-server-on-raspberry-pi-4b" &gt;
+&lt;div&gt;
+&lt;a href="#config-rpc-server-on-raspberry-pi-4b"&gt;
+##
+&lt;/a&gt;
+Config RPC Server on Raspberry Pi 4B
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;由于 Raspberry OS 里，python 默认是 python2.7 ，所以我们这里强制使用 python3&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 -m tvm.exec.rpc_server --host 0.0.0.0 --port&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;9090&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;（Tips：共建和谐未来，建议所有项目都是用 python3， 抛弃 python2 人人有责）&lt;/p&gt;
+&lt;p&gt;如果你看到了这样的字眼，说明你成功在树莓派上启动了 RPC 服务器：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;INFO:RPCServer:bind to 0.0.0.0:9090
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id="prepare-pre-trained-model" &gt;
+&lt;div&gt;
+&lt;a href="#prepare-pre-trained-model"&gt;
+##
+&lt;/a&gt;
+Prepare Pre-trained model
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;查看 target (-mtriple 的值)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;➜ ~ gcc -dumpmachine
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;aarch64-linux-gnu
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 通过 gcc -dumpmachine 即可了解到 -mtriple 要写的值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 这条指令是在树莓派上运行的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;target&lt;/span&gt; &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; tvm.target.Target&lt;span style="color:#ff6ac1"&gt;(&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#39;llvm -device=arm_cpu -model=bcm2711 -mtriple=aarch64-linux-gnu -mattr=+neon&amp;#39;&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 这个代码是在训练机上运行的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;树莓派的 CPU 为 bcm2711，mtriple 是 aarch64-linux-gnu，mattr 一律写 +neon&lt;/p&gt;
+&lt;h1 id="踩坑记录注意事项" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%b8%a9%e5%9d%91%e8%ae%b0%e5%bd%95%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9"&gt;
+##
+&lt;/a&gt;
+踩坑记录（注意事项）
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;RPC tracker - server 的模式，不能通过 frp 反代使用。&lt;/p&gt;
+&lt;p&gt;没有公网 IP 的话，必须 VPN 异地组网打洞才可以。&lt;/p&gt;
+&lt;p&gt;最终决定本地搭建一个 TVM 环境，用服务器进行 training，把模型下载到笔记本虚拟机，然后 tuning raspi&lt;/p&gt;</content:encoded><category>TVM</category><category>AutoTVM</category><category>Raspberry Pi</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</guid></item></channel></rss>

@@ -1,0 +1,118 @@
+<!doctype html><html lang=zh-cn data-theme><head><meta charset=utf-8><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><meta name=theme-name content="Anubis2"><meta name=theme-version content="1.5.0"><title>FEC - 前向纠错技术 - Junyi&rsquo;s Lab</title><meta name=description content="FEC：Forward Error Correction，前向纠错"><meta name=author content="map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]"><meta name=copyright content="map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]"><meta name=generator content="Hugo 0.150.0"><link rel=canonical href=https://www.junyi.dev/posts/fec/><link rel=icon type=image/x-icon href=https://www.junyi.dev/favicon.ico><link rel=apple-touch-icon-precomposed href=https://www.junyi.dev/apple-touch-icon.png><style>body{visibility:hidden;opacity:0}</style><noscript><style>body{visibility:visible;opacity:1}</style></noscript><link rel=stylesheet href=/css/style.min.2e506701090f041a4a0d2361b3d6b492d6d9a9db28723a0b29be41be210c7218.css integrity="sha256-LlBnAQkPBBpKDSNhs9a0ktbZqdsocjoLKb5BviEMchg="><link rel=stylesheet href=/css/style.min.c4c04b3ef88e3d619ad4c7ee5e03048422bc55c4fefdc1f07657c1133670aa22.css integrity="sha256-xMBLPviOPWGa1MfuXgMEhCK8VcT+/cHwdlfBEzZwqiI="><link rel=stylesheet href=/css/style.min.21c5d8fe0a79d623b0adc1ce4bd4f6dd2c05cd939c9aaaa966ba7186b1464f4d.css integrity="sha256-IcXY/gp51iOwrcHOS9T23SwFzZOcmqqpZrpxhrFGT00="><link rel=stylesheet href=/css/style.min.508bd813cbc27a3978d0cde578e221f3e6c83958ae6be174eaf93004b8ce8785.css integrity="sha256-UIvYE8vCejl40M3leOIh8+bIOViua+F06vkwBLjOh4U="><script src=/js/script.min.9752b2b06a7b85657fe0806a9d93413916c87001ca8a2885edc4328662fd7a85.js type=text/javascript integrity="sha256-l1KysGp7hWV/4IBqnZNBORbIcAHKiiiF7cQyhmL9eoU=" defer></script><script async defer data-website-id=dd99a470-c29d-4882-8c6a-89f1cec9045c data-cache=false data-do-not-track=false src=https://cloud.umami.is/script.js></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-QX2D9TH8CE"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-QX2D9TH8CE")</script></head><body><a class=skip-main href=#main>跳至内容</a><div class=container><header class=common-header><div class=header-top><div class=header-top-left><h1 class="site-title noselect"><a href=/>Junyi's Lab</a></h1><script>const STORAGE_KEY="user-color-scheme",defaultTheme="auto";let currentTheme,switchButton,autoDefinedScheme=window.matchMedia("(prefers-color-scheme: dark)");function switchTheme(){currentTheme=currentTheme==="dark"?"light":"dark",localStorage&&localStorage.setItem(STORAGE_KEY,currentTheme),document.documentElement.setAttribute("data-theme",currentTheme),changeGiscusTheme(currentTheme),document.body.dispatchEvent(new CustomEvent(currentTheme+"-theme-set"))}const autoChangeScheme=e=>{currentTheme=e.matches?"dark":"light",document.documentElement.setAttribute("data-theme",currentTheme),changeGiscusTheme(currentTheme),document.body.dispatchEvent(new CustomEvent(currentTheme+"-theme-set"))};document.addEventListener("DOMContentLoaded",function(){switchButton=document.querySelector("#theme-toggle"),currentTheme=detectCurrentScheme(),currentTheme==="auto"?(autoChangeScheme(autoDefinedScheme),typeof autoDefinedScheme.addEventListener=="function"?autoDefinedScheme.addEventListener("change",autoChangeScheme):typeof autoDefinedScheme.addListener=="function"&&autoDefinedScheme.addListener(autoChangeScheme)):document.documentElement.setAttribute("data-theme",currentTheme),switchButton&&switchButton.addEventListener("click",switchTheme,!1),showContent()});function detectCurrentScheme(){return localStorage!==null&&localStorage.getItem(STORAGE_KEY)?localStorage.getItem(STORAGE_KEY):defaultTheme?defaultTheme:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}function showContent(){document.body.style.visibility="visible",document.body.style.opacity=1}function changeGiscusTheme(e){function t(e){const t=document.querySelector("iframe.giscus-frame");if(!t)return;t.contentWindow.postMessage({giscus:e},"https://giscus.app")}t({setConfig:{theme:e}})}</script><ul class="social-icons noselect"><li><a href=# id=theme-toggle><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828A4 4 0 109.172 9.172a4 4 0 005.656 5.656z"/><path d="M6.343 17.657l-1.414 1.414"/><path d="M6.343 6.343 4.929 4.929"/><path d="M17.657 6.343l1.414-1.414"/><path d="M17.657 17.657l1.414 1.414"/><path d="M4 12H2"/><path d="M12 4V2"/><path d="M20 12h2"/><path d="M12 20v2"/></svg></span></a></li><li><a href=https://github.com/Junyi-99 title=Github aria-label=Github rel=me><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span></a></li><li><a href=/index.xml title=RSS aria-label=RSS rel=me><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rss"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 19m-1 0a1 1 0 102 0 1 1 0 10-2 0"/><path d="M4 4a16 16 0 0116 16"/><path d="M4 11a9 9 0 019 9"/></svg></span></a></li></ul></div><div class=header-top-right></div></div><nav class=noselect><a href=https://www.junyi.dev/ title>HOME</a>
+<a href=https://www.junyi.dev/tags/ title>TAGS</a>
+<a href=https://www.junyi.dev/posts/ title>ARCHIVE</a>
+<a href=https://www.junyi.dev/friends/ title>FRIENDS</a>
+<a href=https://www.junyi.dev/about/ title>ABOUT</a></nav></header><main id=main tabindex=-1><article class="post h-entry"><div class=post-header><header><h1 class="p-name post-title">FEC - 前向纠错技术</h1></header><div class="post-info noselect"><div class="post-date dt-published"><time datetime=2020-08-04>2020-08-04</time></div><a class="post-hidden-url u-url" href=/posts/fec/>/posts/fec/</a>
+<a href=https://www.junyi.dev/ class="p-name p-author post-hidden-author h-card" rel=me>map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]</a><div class=post-taxonomies><ul class=post-tags><li><a href=/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0>#技术文章</a></li><li><a href=/tags/fec>#FEC</a></li></ul></div></div></div><details class="toc noselect"><summary>Table of Contents</summary><div class=inner><nav id=TableOfContents><ul><li><a href=#reed-solomon-codes>Reed-Solomon Codes</a></li></ul><ul><li><a href=#11-奇偶校验码>1.1 奇偶校验码</a><ul><li><a href=#111-一维-parity-fec-protection>1.1.1 一维 Parity FEC Protection</a></li><li><a href=#112-二维-parity-fec-protection>1.1.2 二维 Parity FEC Protection</a></li><li><a href=#113-开销计算-overhead-computation>1.1.3 开销计算 Overhead Computation</a></li></ul></li></ul><ul><li><a href=#41-源包>4.1 源包</a></li><li><a href=#42-修复包>4.2 修复包</a></li></ul></nav></div></details><script>var toc=document.querySelector(".toc");toc&&toc.addEventListener("click",function(){event.target.tagName!=="A"&&(event.preventDefault(),this.open?(this.open=!1,this.classList.remove("expanded")):(this.open=!0,this.classList.add("expanded")))})</script><div class="content e-content"><p>FEC：Forward Error Correction，前向纠错</p><blockquote><p>FEC 是一种通过在网络传输中增加数据包的冗余信息，使得接收端能够在网络发生丢包后利用这些冗余信息直接恢复出丢失的数据包的一种方法。
+<a href=https://zhuanlan.zhihu.com/p/104579290>https://zhuanlan.zhihu.com/p/104579290</a></p></blockquote><h1 id=parity-check-奇偶校验><div><a href=#parity-check-%e5%a5%87%e5%81%b6%e6%a0%a1%e9%aa%8c>##
+</a>Parity Check 奇偶校验</div></h1><pre tabindex=0><code>// 例如：求 10100001 中 1 的数量是奇数还是偶数
+// 结果为 1 就是奇数个 1，结果为 0 就是偶数个 1
+1 ^ 0 ^ 1 ^ 0 ^ 0 ^ 0 ^ 0 ^ 1 = 1
+</code></pre><p>每个字节的数据都计算一个校验位，数据和校验位一起发送出去，这样接收方可以根据校验位粗略地判断接收到的数据是否有误。</p><h1 id=基于-xor-的-fec><div><a href=#%e5%9f%ba%e4%ba%8e-xor-%e7%9a%84-fec>##
+</a>基于 XOR 的 FEC</div></h1><p>假设网络通信有 N 个 packet 需要发送，那么可以每 2 个 packet 生成一个 FEC packet，这样，连续的 3 个 packet 的任意一个 packet 丢失，都能通过另外 2 个恢复出来。</p><p>但考虑到每 2 个 packet 就产生 1 个 fec packet，冗余度可能有点高（比较浪费带宽），我们能否每 3 个或者每 N 个 packet 再产生一个 fec packet 呢？当然可以，我们以每 3 个 packet（A、B、C） 产生 1 个 fec packet（D）为例来推导一下：</p><pre tabindex=0><code>d = a ^ b ^ c
+a = a ^ (b ^ b) ^ (c ^ c) = (b ^ c) ^ (a ^ b ^ c) = b ^ c ^ d
+b = (a ^ a) ^ b ^ (c ^ c) = (a ^ c) ^ (a ^ b ^ c) = a ^ c ^ d
+c = (a ^ a) ^ (b ^ b) ^ c = (a ^ b) ^ (a ^ b ^ c) = a ^ b ^ d
+</code></pre><p>由上述公式推导即可知道，这 4 个 packet，任意丢失 1 个 packet，均可以由其他 3 个 packet 恢复出来。</p><h1 id=对象存储---ec-纠删码><div><a href=#%e5%af%b9%e8%b1%a1%e5%ad%98%e5%82%a8---ec-%e7%ba%a0%e5%88%a0%e7%a0%81>##
+</a>对象存储 - EC 纠删码</div></h1><p>通过 K 个有效数据，产生 M 个 FEC 冗余包，这 K + M 个数据，任意丢失 M 个数据，都能把 K 个有效数据恢复出来。</p><h2 id=reed-solomon-codes><div><a href=#reed-solomon-codes>#
+</a>Reed-Solomon Codes</div></h2><h1 id=rfc-草案-payload-flexible-fec><div><a href=#rfc-%e8%8d%89%e6%a1%88-payload-flexible-fec>##
+</a>RFC 草案 Payload Flexible FEC</div></h1><h2 id=11-奇偶校验码><div><a href=#11-%e5%a5%87%e5%81%b6%e6%a0%a1%e9%aa%8c%e7%a0%81>#
+</a>1.1 奇偶校验码</div></h2><h3 id=111-一维-parity-fec-protection><div><a href=#111-%e4%b8%80%e7%bb%b4-parity-fec-protection>##
+</a>1.1.1 一维 Parity FEC Protection</div></h3><p>非交错，按行生成，一行里丢一个包可以，丢两个就没法恢复了（Burst Loss）</p><p>一维连续 FEC 保护</p><pre tabindex=0><code>+---+                +---+  +===+
+| 1 |    X      X    | 4 |  |R_1|
++---+                +---+  +===+
+
++---+  +---+  +---+  +---+  +===+
+| 5 |  | 6 |  | 7 |  | 8 |  |R_2|
++---+  +---+  +---+  +---+  +===+
+
++---+  +---+  +---+  +---+  +===+
+| 9 |  | 10|  | 11|  | 12|  |R_3|
++---+  +---+  +---+  +---+  +===+
+</code></pre><p>非交错，按列生成，一列里丢一个包可以，丢两个就没法恢复了（Periodic Loss）</p><p>一维隔行 FEC 保护</p><pre tabindex=0><code>+---+         +---+  +---+
+| 1 |    X    | 3 |  | 4 |
++---+         +---+  +---+
+
++---+         +---+  +---+
+| 5 |    X    | 7 |  | 8 |
++---+         +---+  +---+
+
++---+  +---+  +---+  +---+
+| 9 |  | 10|  | 11|  | 12|
++---+  +---+  +---+  +---+
+
++===+  +===+  +===+  +===+
+|C_1|  |C_2|  |C_3|  |C_4|
++===+  +===+  +===+  +===+
+</code></pre><h3 id=112-二维-parity-fec-protection><div><a href=#112-%e4%ba%8c%e7%bb%b4-parity-fec-protection>##
+</a>1.1.2 二维 Parity FEC Protection</div></h3><p>互联网丢包是随机的、爆发式的，发送端应该生成 non-interleaved 和 interleaved 前项纠错包（FEC packets）</p><p>这种 FEC 保护被称作 二维奇偶校验前向纠错保护</p><p>但是如果发生特定的 loss pattern，这种保护模式依然会失效，比如：</p><pre tabindex=0><code>+---+                +---+  +===+
+| 1 |    X      X    | 4 |  |R_1|
++---+                +---+  +===+
+
++---+  +---+  +---+  +---+  +===+
+| 5 |  | 6 |  | 7 |  | 8 |  |R_2|
++---+  +---+  +---+  +---+  +===+
+
++---+                +---+  +===+
+| 9 |    X      X    | 12|  |R_3|
++---+                +---+  +===+
+
++===+  +===+  +===+  +===+
+|C_1|  |C_2|  |C_3|  |C_4|
++===+  +===+  +===+  +===+
+</code></pre><pre tabindex=0><code>+---+  +---+         +---+
+| 1 |  | 2 |    X    | 4 |    X
++---+  +---+         +---+
+
++---+  +---+  +---+  +---+  +===+
+| 5 |  | 6 |  | 7 |  | 8 |  |R_2|
++---+  +---+  +---+  +---+  +===+
+
++---+  +---+         +---+
+| 9 |  | 10|    X    | 12|    X
++---+  +---+         +---+
+
++===+  +===+  +===+  +===+
+|C_1|  |C_2|  |C_3|  |C_4|
++===+  +===+  +===+  +===+
+</code></pre><h3 id=113-开销计算-overhead-computation><div><a href=#113-%e5%bc%80%e9%94%80%e8%ae%a1%e7%ae%97-overhead-computation>##
+</a>1.1.3 开销计算 Overhead Computation</div></h3><p>开销（overhead）被定义为：</p><p>修复包大小 / 源包大小</p><p>单位：Bytes</p><p>通常来说，修复包比源包更大。</p><p>如果我们假设每一个修复包携带与源包等量的 bytes，我们可以计算出每一个不同的 FEC 保护策略的开销：</p><p>一维连续 FEC 保护：开销 = 1/L</p><p>一维隔行 FEC 保护：开销 = 1/D</p><p>二维 FEC 保护：开销 = 1/L + 1/D</p><p>where L and D are the number of columns and rows in the source block, respectively.</p><h1 id=3-定义><div><a href=#3-%e5%ae%9a%e4%b9%89>##
+</a>3. 定义</div></h1><p>L：表示列</p><p>D：表示行</p><p>bitmask：由 FEC 包保护的包的运行长度编码。如果掩码中的位 i 被设置为 1，源数据包的编号 N + i 被这个 FEC 包保护。这里，N 是数基数，FEC 包中也有表示。</p><h1 id=4-包格式><div><a href=#4-%e5%8c%85%e6%a0%bc%e5%bc%8f>##
+</a>4. 包格式</div></h1><p>这一小节定义了源包和修复包的格式</p><h2 id=41-源包><div><a href=#41-%e6%ba%90%e5%8c%85>#
+</a>4.1 源包</div></h2><h2 id=42-修复包><div><a href=#42-%e4%bf%ae%e5%a4%8d%e5%8c%85>#
+</a>4.2 修复包</div></h2><p>修复包必须包含标识它们所属的源块的信息，以及包含的修复符号与原始源块之间的关系。为此，我们使用修复包的 RTP 报头以及 RTP 有效负载中的另一个报头，我们将其称为 FEC 报头，如图 9 所示。</p><p>（注意，受特定 FEC 包保护的所有源流包都需要在同一个 RTP 会话中。）</p><pre tabindex=0><code>+------------------------------+
+|          IP Header           |
++------------------------------+
+|       Transport Header       |
++------------------------------+
+|          RTP Header          | __
++------------------------------+   |
+|          FEC Header          |    \
++------------------------------+     &gt; RTP Payload
+|        Repair Symbols        |    /
++------------------------------+ __|
+</code></pre><p>Marker (M) Bit: 应该被设置成 0</p><pre tabindex=0><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|R|F| P|X|  CC   |M| PT recovery |         length recovery      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          TS recovery                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   SSRCCount   |                    reserved                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                             SSRC_i                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           SN base_i           |k|          Mask [0-14]        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|k|                   Mask [15-45] (optional)                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|k|                                                             |
++-+                   Mask [46-108] (optional)                  |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     ... next in SSRC_i ...                    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre><h1 id=8-拥塞控制考虑><div><a href=#8-%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e8%80%83%e8%99%91>##
+</a>8. 拥塞控制考虑</div></h1><p>in networks where the congestion is a major contributor to the packet loss, the potential impacts of using FEC SHOULD be considered carefully before injecting the repair flows into the network.</p><p>In particular, in bandwidth-limited networks, FEC repair flows may consume most or all of the available bandwidth and consequently may congest the network. In such cases, the applications MUST NOT arbitrarily increase the amount of FEC protection since doing so may lead to a congestion collapse. If desired, stronger FEC protection MAY be applied only after the source rate has been reduced.</p><h1 id=9-安全性考虑><div><a href=#9-%e5%ae%89%e5%85%a8%e6%80%a7%e8%80%83%e8%99%91>##
+</a>9. 安全性考虑</div></h1></div></article><h3 class="read-next-title noselect">继续阅读</h3><ul class="read-next-posts noselect"><li><a href=/posts/rfc8627-payload-flex-fec/>RFC8627 - Payload Flexible FEC</a></li><li><a href=/posts/rfc5389-stun/>RFC5389 - Session Traversal Utilities for NAT</a></li><li><a href=/posts/p2p/>P2P 技术</a></li></ul><script>function detectCurrentScheme2(){const e="auto";return localStorage!==null&&localStorage.getItem("user-color-scheme")?localStorage.getItem("user-color-scheme"):e==="dark"||e==="light"?e:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}let giscusTheme=detectCurrentScheme2(),giscusAttributes={src:"https://giscus.app/client.js","data-repo":"Junyi-99/Junyi-99.github.io","data-repo-id":"MDEwOlJlcG9zaXRvcnkzNDI4ODI3NzY=","data-category":"Announcements","data-category-id":"DIC_kwDOFG_52M4CZZZF","data-mapping":"url","data-strict":"0","data-reactions-enabled":"1","data-emit-metadata":"0","data-input-position":"bottom","data-theme":giscusTheme,"data-lang":"en",crossorigin:"anonymous",lazyload:"false",async:!0},main=document.querySelector("main"),giscusScript=document.createElement("script");Object.entries(giscusAttributes).forEach(([e,t])=>giscusScript.setAttribute(e,t)),main.appendChild(giscusScript)</script></main><footer class="common-footer noselect"><ul class=language-select><li>Simplified Chinese</li><li><a href=/en/>English</a></li></ul><div class=common-footer-bottom><div class=footer-meta>© Junyi Hou, 2025
+<a aria-label="Check statistics data" class=footer-stat-link href=https://eu.umami.is/share/2uUOpgCbx28B16Ro/www.junyi.dev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-report-analytics"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5H7A2 2 0 005 7v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><path d="M9 3m0 2a2 2 0 012-2h2a2 2 0 012 2v0a2 2 0 01-2 2h-2A2 2 0 019 5z"/><path d="M9 17v-5"/><path d="M12 17v-1"/><path d="M15 17v-3"/></svg></a></div><div class=footer-licenses></div><div>Powered by <a target=_blank rel="noopener noreferrer" href=https://gohugo.io/>Hugo</a>, theme <a target=_blank rel="noopener noreferrer" href=https://github.com/hugo-theme-anubis2/hugo-theme-anubis2>Anubis2</a>.<br></div></div></footer></div></body></html>

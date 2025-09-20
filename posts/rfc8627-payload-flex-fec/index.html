@@ -1,0 +1,203 @@
+<!doctype html><html lang=zh-cn data-theme><head><meta charset=utf-8><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><meta name=theme-name content="Anubis2"><meta name=theme-version content="1.5.0"><title>RFC8627 - Payload Flexible FEC - Junyi&rsquo;s Lab</title><meta name=description content="FEC 还蛮有意思的，这篇翻译的内容是 Payload Flexible FEC 的 RFC 细节
+（呕心沥血的翻译）"><meta name=author content="map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]"><meta name=copyright content="map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]"><meta name=generator content="Hugo 0.150.0"><link rel=canonical href=https://www.junyi.dev/posts/rfc8627-payload-flex-fec/><link rel=icon type=image/x-icon href=https://www.junyi.dev/favicon.ico><link rel=apple-touch-icon-precomposed href=https://www.junyi.dev/apple-touch-icon.png><style>body{visibility:hidden;opacity:0}</style><noscript><style>body{visibility:visible;opacity:1}</style></noscript><link rel=stylesheet href=/css/style.min.2e506701090f041a4a0d2361b3d6b492d6d9a9db28723a0b29be41be210c7218.css integrity="sha256-LlBnAQkPBBpKDSNhs9a0ktbZqdsocjoLKb5BviEMchg="><link rel=stylesheet href=/css/style.min.c4c04b3ef88e3d619ad4c7ee5e03048422bc55c4fefdc1f07657c1133670aa22.css integrity="sha256-xMBLPviOPWGa1MfuXgMEhCK8VcT+/cHwdlfBEzZwqiI="><link rel=stylesheet href=/css/style.min.21c5d8fe0a79d623b0adc1ce4bd4f6dd2c05cd939c9aaaa966ba7186b1464f4d.css integrity="sha256-IcXY/gp51iOwrcHOS9T23SwFzZOcmqqpZrpxhrFGT00="><link rel=stylesheet href=/css/style.min.508bd813cbc27a3978d0cde578e221f3e6c83958ae6be174eaf93004b8ce8785.css integrity="sha256-UIvYE8vCejl40M3leOIh8+bIOViua+F06vkwBLjOh4U="><script src=/js/script.min.9752b2b06a7b85657fe0806a9d93413916c87001ca8a2885edc4328662fd7a85.js type=text/javascript integrity="sha256-l1KysGp7hWV/4IBqnZNBORbIcAHKiiiF7cQyhmL9eoU=" defer></script><script async defer data-website-id=dd99a470-c29d-4882-8c6a-89f1cec9045c data-cache=false data-do-not-track=false src=https://cloud.umami.is/script.js></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-QX2D9TH8CE"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-QX2D9TH8CE")</script></head><body><a class=skip-main href=#main>跳至内容</a><div class=container><header class=common-header><div class=header-top><div class=header-top-left><h1 class="site-title noselect"><a href=/>Junyi's Lab</a></h1><script>const STORAGE_KEY="user-color-scheme",defaultTheme="auto";let currentTheme,switchButton,autoDefinedScheme=window.matchMedia("(prefers-color-scheme: dark)");function switchTheme(){currentTheme=currentTheme==="dark"?"light":"dark",localStorage&&localStorage.setItem(STORAGE_KEY,currentTheme),document.documentElement.setAttribute("data-theme",currentTheme),changeGiscusTheme(currentTheme),document.body.dispatchEvent(new CustomEvent(currentTheme+"-theme-set"))}const autoChangeScheme=e=>{currentTheme=e.matches?"dark":"light",document.documentElement.setAttribute("data-theme",currentTheme),changeGiscusTheme(currentTheme),document.body.dispatchEvent(new CustomEvent(currentTheme+"-theme-set"))};document.addEventListener("DOMContentLoaded",function(){switchButton=document.querySelector("#theme-toggle"),currentTheme=detectCurrentScheme(),currentTheme==="auto"?(autoChangeScheme(autoDefinedScheme),typeof autoDefinedScheme.addEventListener=="function"?autoDefinedScheme.addEventListener("change",autoChangeScheme):typeof autoDefinedScheme.addListener=="function"&&autoDefinedScheme.addListener(autoChangeScheme)):document.documentElement.setAttribute("data-theme",currentTheme),switchButton&&switchButton.addEventListener("click",switchTheme,!1),showContent()});function detectCurrentScheme(){return localStorage!==null&&localStorage.getItem(STORAGE_KEY)?localStorage.getItem(STORAGE_KEY):defaultTheme?defaultTheme:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}function showContent(){document.body.style.visibility="visible",document.body.style.opacity=1}function changeGiscusTheme(e){function t(e){const t=document.querySelector("iframe.giscus-frame");if(!t)return;t.contentWindow.postMessage({giscus:e},"https://giscus.app")}t({setConfig:{theme:e}})}</script><ul class="social-icons noselect"><li><a href=# id=theme-toggle><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828A4 4 0 109.172 9.172a4 4 0 005.656 5.656z"/><path d="M6.343 17.657l-1.414 1.414"/><path d="M6.343 6.343 4.929 4.929"/><path d="M17.657 6.343l1.414-1.414"/><path d="M17.657 17.657l1.414 1.414"/><path d="M4 12H2"/><path d="M12 4V2"/><path d="M20 12h2"/><path d="M12 20v2"/></svg></span></a></li><li><a href=https://github.com/Junyi-99 title=Github aria-label=Github rel=me><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span></a></li><li><a href=/index.xml title=RSS aria-label=RSS rel=me><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rss"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 19m-1 0a1 1 0 102 0 1 1 0 10-2 0"/><path d="M4 4a16 16 0 0116 16"/><path d="M4 11a9 9 0 019 9"/></svg></span></a></li></ul></div><div class=header-top-right></div></div><nav class=noselect><a href=https://www.junyi.dev/ title>HOME</a>
+<a href=https://www.junyi.dev/tags/ title>TAGS</a>
+<a href=https://www.junyi.dev/posts/ title>ARCHIVE</a>
+<a href=https://www.junyi.dev/friends/ title>FRIENDS</a>
+<a href=https://www.junyi.dev/about/ title>ABOUT</a></nav></header><main id=main tabindex=-1><article class="post h-entry"><div class=post-header><header><h1 class="p-name post-title">RFC8627 - Payload Flexible FEC</h1></header><div class="post-info noselect"><div class="post-date dt-published"><time datetime=2020-08-02>2020-08-02</time></div><a class="post-hidden-url u-url" href=/posts/rfc8627-payload-flex-fec/>/posts/rfc8627-payload-flex-fec/</a>
+<a href=https://www.junyi.dev/ class="p-name p-author post-hidden-author h-card" rel=me>map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]</a><div class=post-taxonomies><ul class=post-tags><li><a href=/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0>#技术文章</a></li><li><a href=/tags/fec>#FEC</a></li></ul></div></div></div><details class="toc noselect"><summary>Table of Contents</summary><div class=inner><nav id=TableOfContents><ul><li><a href=#41-source-packets-源包>4.1. Source Packets 源包</a></li><li><a href=#42-repair-packets-修复包>4.2. Repair Packets 修复包</a></li></ul><ul><li><a href=#51-media-type-registration---parity-codes-媒体类型注册---奇偶码>5.1. Media Type Registration - Parity Codes 媒体类型注册 - 奇偶码</a></li><li><a href=#52-mapping-to-sdp-parameters-到-sdp-参数的映射>5.2. Mapping to SDP Parameters 到 SDP 参数的映射</a><ul><li><a href=#521-offer-answer-model-considerations>5.2.1. Offer-Answer Model Considerations</a></li><li><a href=#522-declarative-considerations>5.2.2. Declarative Considerations</a></li></ul></li></ul><ul><li><a href=#61-overview-概览>6.1. Overview 概览</a></li><li><a href=#62-repair-packet-construction-修复包的构造>6.2. Repair Packet Construction 修复包的构造</a></li><li><a href=#63-source-packet-reconstruction-重建源包>6.3. Source Packet Reconstruction 重建源包</a><ul><li><a href=#631-associating-the-source-and-repair-packets-源包与修复包之间的关联>6.3.1. Associating the Source and Repair Packets 源包与修复包之间的关联</a></li><li><a href=#632-recovering-the-rtp-header-恢复-rtp-头>6.3.2. Recovering the RTP Header 恢复 RTP 头</a></li></ul></li></ul><ul><li><a href=#71-example-sdp-for-flexible-fec-protection-with-in-band-ssrc-mapping>7.1. Example SDP for Flexible FEC Protection with in-band SSRC mapping</a></li><li><a href=#72-example-sdp-for-flex-fec-protection-with-explicit-signalling-in-the-sdp>7.2. Example SDP for Flex FEC Protection with explicit signalling in the SDP</a></li></ul></nav></div></details><script>var toc=document.querySelector(".toc");toc&&toc.addEventListener("click",function(){event.target.tagName!=="A"&&(event.preventDefault(),this.open?(this.open=!1,this.classList.remove("expanded")):(this.open=!0,this.classList.add("expanded")))})</script><div class="content e-content"><p>FEC 还蛮有意思的，这篇翻译的内容是 Payload Flexible FEC 的 RFC 细节
+（呕心沥血的翻译）</p><h1 id=4-packet-formats-包格式><div><a href=#4-packet-formats-%e5%8c%85%e6%a0%bc%e5%bc%8f>##
+</a>4. Packet Formats 包格式</div></h1><p>这一节定义了源包和修复包的格式</p><h2 id=41-source-packets-源包><div><a href=#41-source-packets-%e6%ba%90%e5%8c%85>#
+</a>4.1. Source Packets 源包</div></h2><pre tabindex=0><code>The source packets MUST contain the information that identifies the
+source block and the position within the source block occupied by the
+packet.  Since the source packets that are carried within an RTP
+stream already contain unique sequence numbers in their RTP headers
+[RFC3550], we can identify the source packets in a straightforward
+manner and there is no need to append additional field(s).  The
+primary advantage of not modifying the source packets in any way is
+that it provides backward compatibility for the receivers that do not
+support FEC at all.  In multicast scenarios, this backward
+compatibility becomes quite useful as it allows the non-FEC-capable
+and FEC-capable receivers to receive and interpret the same source
+packets sent in the same multicast session.
+</code></pre><h2 id=42-repair-packets-修复包><div><a href=#42-repair-packets-%e4%bf%ae%e5%a4%8d%e5%8c%85>#
+</a>4.2. Repair Packets 修复包</div></h2><p>修复包中必须有能够区分 source block they pertain to 和 the relationship between the contained repair symbols and the original source block.</p><p>针对这个要求，修复包使用 RTP 的头，以及 RTP 载荷中的另一个头，我们把它叫做 FEC 头，具体请看 Figure 9</p><pre tabindex=0><code>+------------------------------+
+|          IP Header           |
++------------------------------+
+|       Transport Header       |
++------------------------------+
+|          RTP Header          | __
++------------------------------+   |
+|          FEC Header          |    \
++------------------------------+     &gt; RTP Payload
+|        Repair Symbols        |    /
++------------------------------+ __|
+
+        Figure 9: Format of repair packets
+</code></pre><p>注意，被 FEC 保护的所有 包，必须在同一个 RTP session 里</p><p>RTP 的头部根据 RFC3550 所定义，添加了进一步的 clarifications：</p><ul><li>Marker (M) Bit：这个 bit 不是给这个 payload type 用的，所以应该被设置成 0</li><li>Payload Type：修复包的 (动态) 载荷类型由带外方式确定。根据 RFC3550 中的定义，RTP 接受者收到不能识别的 PayloadType 包时，会将整个包丢掉。这个特点提供了后向兼容性。如果一个不支持 FEC 的接受者收到了修复包，它将不能识别修复包的 payload type，从而丢掉修复包</li><li>Sequence Number（SN）：序列号有一个标准的定义，它的值必须大于上次传输修复包所用的值。初始值应该是随机生成的（不可预测的）</li><li>Timestamp（TS）：是叫戳应该被设置成修复包被传输时的时间。这个时间戳不是用来给 FEC 做纠错用的，通常是给 jitter calculation 用的。</li><li>Synchronization Source（SSRC）：根据 RFC3550，这个 SSRC 值应该被随机分配。这允许发送者在同一个端口复用源包和修复包，或者在同一端口复用多个修复包。<strong>修复流</strong> SHOULD 使用 RTCP CNAME 字段把自己跟<strong>源流</strong>关联。在一些网络里，同时产生源包和修复包的 RTP 源可能不是同一个主机。在这个场景里，给源流和修复流使用同样的 CNAME 意味着 RTP 源和 FEC 源必须共享同一个 CNAME。基于一个已知的算法和 RTP、FEC 源，一个公共的 CNAME 可能被产生（RFC7022）。这个用法符合 RFC3550 中的定义。
+<span style=color:red><b>注意，由于是随机分配 SSRC，这里有可能会造成 SSRC 冲突。发生冲突时，必须按照 RFC3550 中的定义去解决冲突。</b></span></li></ul><pre tabindex=0><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|R|F| P|X|  CC   |M| PT recovery |         length recovery      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          TS recovery                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   SSRCCount   |                    reserved                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                             SSRC_i                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           SN base_i           |k|          Mask [0-14]        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|k|                   Mask [15-45] (optional)                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|k|                                                             |
++-+                   Mask [46-108] (optional)                  |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     ... next in SSRC_i ...                    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+             Figure 10: Format of the FEC header
+</code></pre><p>FEC 头部包含以下字段：</p><ul><li><p>R bit 去表示这是一个重传包的话必须设置成 1，<strong>对于修复包必须设置成</strong> 0</p></li><li><p>F 字段表示 mask 的类型：</p></li></ul><pre tabindex=0><code>+---------------+-------------------------------------+
+|     F bit     | Use                                 |
++---------------+-------------------------------------+
+|       0       | flexible mask                       |
+|       1       | packets indicated by offset M and N |
++---------------+-------------------------------------+
+
+
+                      Figure 11: F-bit values
+</code></pre><ul><li><p>P, X, CC, M 和 PT recovery 字段用户确定被恢复包的字段</p></li><li><p>Length Recovery （16-bit）字段被用来确定恢复包的长度</p></li><li><p>TS recovery（32-bit）字段被用来确定恢复包的时间戳</p></li><li><p>SSRC count（8-bit）字段描述了 FEC 包保护的 SSRC 的数量。0 不是一个有效值，并且这个包 MUST 被忽略。</p></li><li><p>Reserved（24-bit）为了未来的用途而被保留。它 MUST 被发送者设置成 0，并且被接受者忽略</p></li><li><p>SSRC_i（32-bit）字段描述了当前这个特定的 FEC 包保护了哪个 SSRC。如果 FEC 包保护了多个 SSRC（SSRC count > 1），那么这里将会有多个 blocks of data 包含 SSRC, SN base 和 Mask Fields.</p></li><li><p>SN base_i（16-bit）字段表示此修复包保护的特定 SSRC（在 SSRC_i 中指示）的源包的最低序号（考虑到回绕）【译者：我不知道什么是回绕 wrap around into account】</p></li><li><p>如果 F bit 被设置成 0，则表示这个特定的修复包所保护的源包的所有 SSRC 使用 flexible bitmask 来处理。对于一个被 FEC 保护的特定的 SSRC_i 包，mask 是一个游程编码（run-length encoding）。第 j 位设置成 1 表示 源包的序列号（SN base_i + j + 1）被这个 FEC 包所保护。</p></li><li><p>bitmask 中的 k-bit 表示这是一个 15-,46 - 或 109-bitmask。k=0 表示这里有一个以上的 k-bit set，k=1 表示这是 bit mask 中最后一个 block。当解析一个头的时候，当前的 k-bit 数量决定了 bit mask v 的大小：</p></li><li><p>$$</p></li></ul><p>size_of_next_bitmast = 2^{count(k)+3}-1
+$$</p><pre tabindex=0><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|0|0| P|X|  CC  |M| PT recovery |         length recovery       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          TS recovery                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   SSRCCount   |                    reserved                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                             SSRC_i                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           SN base_i           |k|          Mask [0-14]        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|k|                   Mask [15-45] (optional)                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|k|                                                             |
++-+                   Mask [46-108] (optional)
+|
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     ... next in SSRC_i ...                    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          Figure 12: Protocol format for F=0
+</code></pre><ul><li>如果 F-bit 被设置成 1，它表示被这个特定修复包所保护的源包中的所有 SSRC 使用固定 offset</li></ul><pre tabindex=0><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|1|0| P|X|  CC  |M| PT recovery |         length recovery       |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          TS recovery                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   SSRCCount   |                    reserved                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                             SSRC_i                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           SN base_i           |  M (columns)  |    N (rows)   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+             Figure 13: Protocol format for F=1
+</code></pre><pre tabindex=0><code>Consequently, the following conditions occur for M and N values:
+
+If M&gt;0, N=0,  is Row FEC, and no column FEC will follow
+            Hence, FEC = SN, SN+1, SN+2, ... , SN+(M-1), SN+M.
+
+If M&gt;0, N=1,  is Row FEC, and column FEC will follow.
+              Hence, FEC = SN, SN+1, SN+2, ... , SN+(M-1), SN+M.
+         and more to come
+
+If M&gt;0, N&gt;1,  indicates column FEC of every M packet
+                 in a group of N packets starting at SN base.
+              Hence, FEC = SN+(Mx0), SN+(Mx1), ... , SN+(MxN).
+
+          Figure 14: Interpreting the M and N field values
+</code></pre><ul><li>通过设置 R 为 1，F 为 1，这个 FEC 就只保护一个包了。比如，SN Base_i 表示了 FEC 载荷承载着的包，这是一种非常有效的重传包的方法。特别注意的是，解析这种包非常特别。序列号（SN base_i）替代了 FEC 包中 length recovery 字段。SSRC_count 应该为 1，M 和 N 应该为 0，并且 FEC 头的 reserved bits 也不复存在。通过这个方法我们可以省下 64 bits。</li></ul><pre tabindex=0><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|1|1| P|X|  CC  |M| PT recovery |        sequence number        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           timestamp                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              SSRC                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                         Retransmission                        |
+:                            payload                            :
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+        Figure 15: Protocol format for Retransmission
+</code></pre><p>在 Section 6.2 里描述了设置这些字段的细节</p><p>需要注意的是，mask-based 的方法（与 RFC2733 和 RFC5109 中很相似）可能不是非常有效的指明在当前 source block 中修复包与哪个源包关联。特别的是，对于想使用 large source block size 的应用程序来说，描述源包 - 修复包 的这个关联，所需的 mask 可能大的令人难以接受。</p><p>[SMPTE2022-1] 中提出的 8 位字段指示一种系统化的方法。 相反，本文档中的方法使用 8 位字段指示受 FEC 数据包保护的数据包偏移量。 [SMPTE2022-1] 中的方法本质上对于常规模式更有效，但不能提供表示其他保护模式的灵活性（比如：staircase）</p><h1 id=5-payload-format-parameters-载荷格式参数><div><a href=#5-payload-format-parameters-%e8%bd%bd%e8%8d%b7%e6%a0%bc%e5%bc%8f%e5%8f%82%e6%95%b0>##
+</a>5. Payload Format Parameters 载荷格式参数</div></h1><p>这一章节提供了对于非交错和交错的奇偶 FEC 的媒体子类型注册。这一章也通过这些参数配置 FEC 编码和解码。如果没有特定的 FEC code 被子类型所指明，那么 FEC code 默认是这一章里定义的奇偶码（parity code）。</p><h2 id=51-media-type-registration---parity-codes-媒体类型注册---奇偶码><div><a href=#51-media-type-registration---parity-codes-%e5%aa%92%e4%bd%93%e7%b1%bb%e5%9e%8b%e6%b3%a8%e5%86%8c---%e5%a5%87%e5%81%b6%e7%a0%81>#
+</a>5.1. Media Type Registration - Parity Codes 媒体类型注册 - 奇偶码</div></h2><h2 id=52-mapping-to-sdp-parameters-到-sdp-参数的映射><div><a href=#52-mapping-to-sdp-parameters-%e5%88%b0-sdp-%e5%8f%82%e6%95%b0%e7%9a%84%e6%98%a0%e5%b0%84>#
+</a>5.2. Mapping to SDP Parameters 到 SDP 参数的映射</div></h2><p>The mapping of the media type specification for “non-interleaved-parityfec” and “interleaved-parityfec” and their parameters in SDP is as follows:</p><ul><li>The media type (e.g., “application”) goes into the “m=” line as the media name.</li><li>The media subtype goes into the “a=rtpmap” line as the encoding name. The RTP clock rate parameter (“rate”) also goes into the “a=rtpmap” line as the clock rate.</li><li>The remaining required payload-format-specific parameters go into the “a=fmtp” line by copying them directly from the media type string as a semicolon-separated list of parameter=value pairs.</li></ul><p>有关 SDP 的例子请看 Section 7.</p><h3 id=521-offer-answer-model-considerations><div><a href=#521-offer-answer-model-considerations>##
+</a>5.2.1. Offer-Answer Model Considerations</div></h3><p>When offering 1-D interleaved parity FEC over RTP using SDP in an Offer/Answer model [RFC3264], the following considerations apply:</p><ul><li>不同 L 和 D 的组合会产生不同的 FEC 数据，并且无法与其它组合相互使用。发送者可能会想要提供多个有效的 L 和 D 的组合供接收者使用。接收者 SHOULD 正常选择有足够的 interleaving 的 offer。如果多个 offer 存在，接收者可能选择最低开小的或需要最小缓冲区的 offer。具体的选择跟场景要求有关</li><li>Repair-window 的值依赖于 L 和 D 的值，不能随便写。更具体的来讲，L 和 D 的值决定了 repair-window 大小的下限（最小值）。repair-window 的上限并不由 L 和 D 来决定。</li><li>在相同的 L 和 D 条件下，就算 repair-window 的值不同，也会产生相同的 FEC 数据，不过，不同的 repair-window 和 相同 L/D 的组合，仍然被视作不同的 offer。repair-window 会影响到传输源包的最大延迟，因为直接影响到了 receiver 的 buffering 的条件，所以在选择 offer 的时候 receiver 必须考虑延迟。</li><li>There are no optional format parameters defined for this payload. Any unknown option in the offer MUST be ignored and deleted from the answer. 如果客户端不想要 FEC，那么 answer 里就会把 FEC 去掉</li></ul><p>这里说的 offer 指的是 L、D 和 repair-window 的组合</p><h3 id=522-declarative-considerations><div><a href=#522-declarative-considerations>##
+</a>5.2.2. Declarative Considerations</div></h3><p>In declarative usage, like SDP in the Real-time Streaming Protocol (RTSP) [RFC2326] or the Session Announcement Protocol (SAP) [RFC2974], the following considerations apply:</p><ul><li>载荷的格式配置参数全都是声明的，参与者 MUST 使用在 session 中被提供的配置</li><li>通过声明多个 RTP 载荷类型，一个以上的配置可能被提供。在这种情况下，receivers 应当选择一个最适合的 repair flow</li></ul><h1 id=6-protection-and-recovery-procedures---parity-codes-保护和恢复过程---奇偶码><div><a href=#6-protection-and-recovery-procedures---parity-codes-%e4%bf%9d%e6%8a%a4%e5%92%8c%e6%81%a2%e5%a4%8d%e8%bf%87%e7%a8%8b---%e5%a5%87%e5%81%b6%e7%a0%81>##
+</a>6. Protection and Recovery Procedures - Parity Codes 保护和恢复过程 - 奇偶码</div></h1><p>这一章提供了对 1-D 和 2-D 奇偶码的完整定义和它们的 RTP 载荷格式</p><h2 id=61-overview-概览><div><a href=#61-overview-%e6%a6%82%e8%a7%88>#
+</a>6.1. Overview 概览</div></h2><p>下面的章节详细介绍了生成修复包、通过修复包重建源包的具体步骤。</p><h2 id=62-repair-packet-construction-修复包的构造><div><a href=#62-repair-packet-construction-%e4%bf%ae%e5%a4%8d%e5%8c%85%e7%9a%84%e6%9e%84%e9%80%a0>#
+</a>6.2. Repair Packet Construction 修复包的构造</div></h2><p>修复包的头部已经在 Section 4.2 有了详细说明</p><p>FEC 的头部包含 12 字节（有可能扩展到 28 字节）。通过对每个源包的每一位进行异或操作来生成特定的修复包。给你一个修复包，那么源包的集合，可以通过 Section 6.3.1 中的公式计算出来。</p><p>通过将每个源包按照以下字段的顺序拼接在一起，我们就可以生成 bit string。</p><ul><li><p>RTP 头部的前 64 bits</p></li><li><p>无符号网络序的 16-bit 源包字节大小除以 12（因为固定的 RTP 头）。说人话就是网络序的 uin16_t 的变量 = 源包字节数 / 12</p></li></ul><blockquote><p>比如以下参数的长度和（如果有的话）：CSRC list，extension header, RTP payload 和 RTP padding (16 bits).</p></blockquote><p><strong>通过对源包的 bit string 应用奇偶操作，我们就可以生成 FEC bit string。</strong></p><p>FEC 头是从 FEC bit string 按照以下结构生成的：</p><ul><li>忽略掉 FEC bit string 中的 2 bits 最高有效位。设置 FEC 头的 MSK bits 成合适的值，比如，它跟 bitmask 长度有关</li><li>FEC bit string 的下一位 被写入 FEC 头的 P recovery bit</li><li>下 1 位被写入 FEC 头的 X recovery bit</li><li>下 4 位被写入 FEC 头的 CC recovery field</li><li>下 1 位被写入 FEC 头的 M recovery bit</li><li>下 7 位被写入 FEC 头的 PT recovery field</li><li>下 16 位被跳过</li><li>下 32 位被写入 FEC 头的 TS recovery field</li><li>下 16 位被写入 FEC 头的 length recovery field</li><li>根据选择的 MSK 值， bit mask of appropriate length will be set to the appropriate values.</li></ul><p>就像 Section 4.2 中描述的那样，FEC 头部的 SN base field 必须设置成 the lowest sequence number of the source packets protected by this repair packet. 当 MSK 表示一个 bitmask（MSK=00,01,10）的时候，SN base field corresponds to the lowest sequence number indicated in the bitmask. 当 MSK=11，以下的情况：</p><ol><li>对于 interleaved FEC 包，这对应着源包的最低 sequence number，按照列进行构建</li><li>对于 non-interleaved FEC 包，SN base field 必须设置成源包的最低 sequence number，按照行进行构建。</li></ol><p>修复包的载荷数据包含了源包 XOR 之后的数据。如果源包的载荷长度各不相同，那么短的包必须补零补到长的包那么长。</p><p>由于这种可能的 padding 和 强制的 FEC 头，一个修复包的大小要比源包的大。<strong>这可能导致修复包的大小超过 MTU。</strong></p><h2 id=63-source-packet-reconstruction-重建源包><div><a href=#63-source-packet-reconstruction-%e9%87%8d%e5%bb%ba%e6%ba%90%e5%8c%85>#
+</a>6.3. Source Packet Reconstruction 重建源包</div></h2><p>这一小节描述了重建丢失源包的修复过程。</p><p>修复过程有两步：</p><ol><li>FEC decoder 决定应该使用哪一个源包和修复包来恢复丢失的包</li><li>decoder 修复丢失的包，包括 RTP 头部和 RTP 载荷</li></ol><p>在下面几个小节，我们描述了一些步骤一和步骤二的 RECOMMENDED 的算法。基于这个实现，某些算法可能会被抛弃使用。</p><p>然而，最终实现 MUST 与下面的描述一致。</p><p>注意，不管 FEC 保护应用在行还是列，1-D 奇偶码所使用的算法相同。而 2-D 奇偶码，通常需要多次迭代，这个迭代解码算法被 Section 6.3.4 进一步解释。</p><h3 id=631-associating-the-source-and-repair-packets-源包与修复包之间的关联><div><a href=#631-associating-the-source-and-repair-packets-%e6%ba%90%e5%8c%85%e4%b8%8e%e4%bf%ae%e5%a4%8d%e5%8c%85%e4%b9%8b%e9%97%b4%e7%9a%84%e5%85%b3%e8%81%94>##
+</a>6.3.1. Associating the Source and Repair Packets 源包与修复包之间的关联</div></h3><p>根据<strong>修复包</strong> p ，得出<strong>源包</strong>的集合 T (p)。</p><p>注意的是，对于 L 列、 D 行的 source block， 集合 T 包含了 D 个源包 + 一个列修复包，还有 L 个源包 + 一个行修复包</p><p>列修复包：通过一列源包计算出来的修复包</p><p>行修复包：通过一行源包计算出来的修复包</p><p>集合 T 中如果只丢了一个源包，那么数据可以被恢复。如果集合 T 中丢失超过一个源包，那么 1-D FEC protection 将失效。</p><h4 id=6311-signaled-in-sdp-在-sdp-中的交互><div><a href=#6311-signaled-in-sdp-%e5%9c%a8-sdp-%e4%b8%ad%e7%9a%84%e4%ba%a4%e4%ba%92>###
+</a>6.3.1.1. Signaled in SDP 在 SDP 中的交互</div></h4><p>第一步是关联源包和修复包。如果 endpoint 整个依赖 out-of-band signaling（MSK=11, M=N=0），可以从 SDP 描述的 media type parameters 推断出这个信息。进一步来讲，RTP 头部的 payload type field 可以辅助 receiver 去 distinguish 交错的或非交错的 FEC 包。</p><p>数学上来讲，对于接收到的任意的修复包 p， 我们可以确定出被保护的源包的 sequence number：
+$$
+p_snb + i \times {X_1} \left( modulo 65535 \right)
+$$
+p*_snb 表示 p* 的 FEC 头，里面的 SN base filed 的。</p><p>X_1，如果 FEC 包是交错式的，就被设置成 L，如果是非交错式的，那就是 1
+$$
+0 \le i \lt X_2
+$$
+X_2，如果 FEC 包是交错式的，就被设置成 D，如果是非交错式的，那就是 L</p><h4 id=6312-using-bitmasks><div><a href=#6312-using-bitmasks>###
+</a>6.3.1.2. Using bitmasks</div></h4><p>当使用固定大小的 bitmasks （16-, 48-, 122-bits）的时候，FEC 头部的 SN base field 表示 lowest sequence number of the 源包 that forms the FEC packet.</p><p>bitmask 中的 “1” 其实是从 SN base 开始的 offset，表示被 FEC 保护的剩余 packet。</p><p>bitmasks 有能力表示任意的 protection patterns，比如 1-D interleaved，1-D non-interleaved, 2-D, staircase。</p><h4 id=6313-using-m-and-offsets><div><a href=#6313-using-m-and-offsets>###
+</a>6.3.1.3. Using M and Offsets</div></h4><p>当 M 的值非零时，8-bit 的 field 表示由 interleaved（N>0） 或 non-interleaved（N=0） FEC 包所保护的数据包的 offset</p><p>通过组合 interleaved 和 non-interleaved FEC 包，我们可以组成 2-D protection patterns。</p><p>数学上来讲，对于任意接收到的修复包 p*，我们可以通过以下方式确定被保护的源包的 sequence number：</p><pre tabindex=0><code>When N = 0:
+  p*_snb, p*_snb+1,..., p*_snb+(M-1), p*_snb+M
+When N &gt; 0:
+  p*_snb, p*_snb+(Mx1), p*_snb+(Mx2),..., p*_snb+(Mx(N-1)), p*_snb+(MxN)
+</code></pre><h3 id=632-recovering-the-rtp-header-恢复-rtp-头><div><a href=#632-recovering-the-rtp-header-%e6%81%a2%e5%a4%8d-rtp-%e5%a4%b4>##
+</a>6.3.2. Recovering the RTP Header 恢复 RTP 头</div></h3><p>略过，因为不需要实现</p><h1 id=7-sdp-examples-有关-sdp-的例子><div><a href=#7-sdp-examples-%e6%9c%89%e5%85%b3-sdp-%e7%9a%84%e4%be%8b%e5%ad%90>##
+</a>7. SDP Examples 有关 SDP 的例子</div></h1><p>这一节，提供了两个 SDP 的例子。例子里使用了在 RFC5956 中定义的 FEC grouping 语义。</p><h2 id=71-example-sdp-for-flexible-fec-protection-with-in-band-ssrc-mapping><div><a href=#71-example-sdp-for-flexible-fec-protection-with-in-band-ssrc-mapping>#
+</a>7.1. Example SDP for Flexible FEC Protection with in-band SSRC mapping</div></h2><p>在这个例子里，我们有一个视频源流和一个 FEC 修复包流。源和修复包流被复用在不同的 SSRC 里。repair-window 被设置成 200ms</p><pre tabindex=0><code>v=0
+o=mo 1122334455 1122334466 IN IP4 fec.example.com
+s=FlexFEC minimal SDP signalling Example
+t=0 0
+m=video 30000 RTP/AVP 96 98
+c=IN IP4 143.163.151.157
+a=rtpmap:96 VP8/90000
+a=rtpmap:98 flexfec/90000
+a=fmtp:98; repair-window=200ms
+</code></pre><h2 id=72-example-sdp-for-flex-fec-protection-with-explicit-signalling-in-the-sdp><div><a href=#72-example-sdp-for-flex-fec-protection-with-explicit-signalling-in-the-sdp>#
+</a>7.2. Example SDP for Flex FEC Protection with explicit signalling in the SDP</div></h2><p>在这里例子里，我们有一个视频源流（ssrc：1234）和一个 FEC 修复包流（ssrc：2345）。</p><p>我们跟 <code>a=ssrc-group:FEC-FR 1234 2345</code> 构建一个 FEC groups。源和修复包流复用在不同的 SSRC 里。repair-window 被设置成 200ms</p><pre tabindex=0><code>v=0
+o=ali 1122334455 1122334466 IN IP4 fec.example.com
+s=2-D Parity FEC with no in band signalling Example
+t=0 0
+m=video 30000 RTP/AVP 100 110
+c=IN IP4 233.252.0.1/127
+a=rtpmap:100 MP2T/90000
+a=rtpmap:110 flexfec/90000
+a=fmtp:110 L:5; D:10; ToP:2; repair-window:200000
+a=ssrc:1234
+a=ssrc:2345
+a=ssrc-group:FEC-FR 1234 2345
+</code></pre><h1 id=8-congestion-control-considerations-拥塞控制的考虑><div><a href=#8-congestion-control-considerations-%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e7%9a%84%e8%80%83%e8%99%91>##
+</a>8. Congestion Control Considerations 拥塞控制的考虑</div></h1><p>FEC 为应用层对抗丢包提供了一种有效的方法。然而，如果在一个丢包是因为拥塞控制的网络中，那么在使用 FEC 之前，应该考虑到 FEC 注入到网络中潜在的影响。</p><p>特别的是，在带宽限制的网络中，FEC 修复包的流动，可能成为带宽消耗的罪魁祸首，有可能会堵塞网络。在这个情况里，应用程序 MUST NOT 随意增加 FEC 保护的次数，因为这么做会有可能导致拥塞崩溃（Congestion Collapse）。</p><p>Congestive collapse (or congestion collapse) is the condition in which congestionprevents or limits useful communication.</p><p>如果你真的很想要 FEC 保护，那么你或许可以在源码率降低的时候采用更强的 FEC 保护。</p><p>在一个网络友好的实现里，如果应用程序知道 发送 / 接受 FEC 修复流 并不能帮助恢复丢失的包的时候，应用程序 SHOULD NOT 发送 / 接收 FEC 修复流。然而，如果考虑用于带宽估计，而不是通过推测方式探寻额外的容量，应用程序 MAY still continue 去使用 FEC。这里 RECOMMENDED 去基于应用程序观察到的丢包率，动态地调整 FEC 保护。</p><p>在多播的情景里，为每一个接收端去优化 FEC 保护是非常困难的。如果你有一堆不同的接受者，并且这些接受者都要求使用不同的 FEC 保护级别的话，这里 RECOMMENDED 发送者提供多个修复流，每个修复流都是不同的 FEC 保护级别，让接受者加入对应的多播 session 去接收最适合他们的修复流。</p><p>编者注：2-D 的奇偶码应该也加入到 “多余的拥塞控制考虑” 里</p><p>（不是译者注）</p><h1 id=9-security-considerations-安全考虑><div><a href=#9-security-considerations-%e5%ae%89%e5%85%a8%e8%80%83%e8%99%91>##
+</a>9. Security Considerations 安全考虑</div></h1><h1 id=10-iana-considerations><div><a href=#10-iana-considerations>##
+</a>10. IANA Considerations</div></h1><pre tabindex=0><code>New media subtypes are subject to IANA registration.  For the
+registration of the payload formats and their parameters introduced
+in this document, refer to Section 5.
+</code></pre><h1 id=11-acknowledgements><div><a href=#11-acknowledgements>##
+</a>11. Acknowledgements</div></h1><pre tabindex=0><code>Some parts of this document are borrowed from [RFC5109].  Thus, the
+author would like to thank the editor of [RFC5109] and those who
+contributed to [RFC5109].
+
+Thanks to Bernard Aboba , Rasmus Brandt , Roni Even , Stefan Holmer ,
+Jonathan Lennox , and Magnus Westerlund for providing valuable
+feedback on earlier versions of this draft.
+</code></pre><p>剩下的我就不翻译了。
+转载请注明作者 Junyi 并且附带原文链接！</p><h1 id=2023年8月23日更新><div><a href=#2023%e5%b9%b48%e6%9c%8823%e6%97%a5%e6%9b%b4%e6%96%b0>##
+</a>2023年8月23日更新</div></h1><p>我靠，我当时怎么啃下来的这个？？？</p></div></article><h3 class="read-next-title noselect">继续阅读</h3><ul class="read-next-posts noselect"><li><a href=/posts/rfc5389-stun/>RFC5389 - Session Traversal Utilities for NAT</a></li><li><a href=/posts/p2p/>P2P 技术</a></li></ul><script>function detectCurrentScheme2(){const e="auto";return localStorage!==null&&localStorage.getItem("user-color-scheme")?localStorage.getItem("user-color-scheme"):e==="dark"||e==="light"?e:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}let giscusTheme=detectCurrentScheme2(),giscusAttributes={src:"https://giscus.app/client.js","data-repo":"Junyi-99/Junyi-99.github.io","data-repo-id":"MDEwOlJlcG9zaXRvcnkzNDI4ODI3NzY=","data-category":"Announcements","data-category-id":"DIC_kwDOFG_52M4CZZZF","data-mapping":"url","data-strict":"0","data-reactions-enabled":"1","data-emit-metadata":"0","data-input-position":"bottom","data-theme":giscusTheme,"data-lang":"en",crossorigin:"anonymous",lazyload:"false",async:!0},main=document.querySelector("main"),giscusScript=document.createElement("script");Object.entries(giscusAttributes).forEach(([e,t])=>giscusScript.setAttribute(e,t)),main.appendChild(giscusScript)</script></main><footer class="common-footer noselect"><ul class=language-select><li>Simplified Chinese</li><li><a href=/en/>English</a></li></ul><div class=common-footer-bottom><div class=footer-meta>© Junyi Hou, 2025
+<a aria-label="Check statistics data" class=footer-stat-link href=https://eu.umami.is/share/2uUOpgCbx28B16Ro/www.junyi.dev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-report-analytics"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5H7A2 2 0 005 7v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><path d="M9 3m0 2a2 2 0 012-2h2a2 2 0 012 2v0a2 2 0 01-2 2h-2A2 2 0 019 5z"/><path d="M9 17v-5"/><path d="M12 17v-1"/><path d="M15 17v-3"/></svg></a></div><div class=footer-licenses></div><div>Powered by <a target=_blank rel="noopener noreferrer" href=https://gohugo.io/>Hugo</a>, theme <a target=_blank rel="noopener noreferrer" href=https://github.com/hugo-theme-anubis2/hugo-theme-anubis2>Anubis2</a>.<br></div></div></footer></div></body></html>

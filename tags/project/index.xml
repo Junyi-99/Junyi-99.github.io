@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 29 Mar 2024 16:42:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/project/index.xml" rel="self" type="application/rss+xml"/><item><title>超低电压输入的升降压电路（0.3V 转 5V）</title><link>https://www.junyi.dev/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+图 1 - Ultra Boost Converter</description><content:encoded>&lt;figure&gt;
+&lt;img style="border-radius:0.5em; box-shadow: 0px 0px 5px rgba(0,0,0,0.2)" src="https://www.junyi.dev/posts/boost-converter/pic1.JPG" alt="Boost Converter by Junyi" width="500" /&gt;
+&lt;figcaption&gt;图 1 - Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="芯片选型" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%8a%af%e7%89%87%e9%80%89%e5%9e%8b"&gt;
+#
+&lt;/a&gt;
+芯片选型
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;接了一个很有挑战的需求，需要我把 0.5V 的电压转换到 2.0V。&lt;/p&gt;
+&lt;p&gt;传统的 Boost-Buck 电路无法实现这个需求，因为一个普通二极管的压降约为 0.7V，可是电源只能提供 0.5V 的电压。&lt;/p&gt;
+&lt;p&gt;大部分现有的电压转换芯片，需要 0.9V 的启动电压，电源不能满足这个要求。&lt;/p&gt;
+&lt;p&gt;找了很久，发现了 TPS61200 这款芯片，它支持 0.3V-5.5V 的输入，并且以 1.8V - 5.5V 的电压输出（可调且固定）&lt;/p&gt;
+&lt;h2 id="pcb-设计" &gt;
+&lt;div&gt;
+&lt;a href="#pcb-%e8%ae%be%e8%ae%a1"&gt;
+#
+&lt;/a&gt;
+PCB 设计
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;很好的 JYF 老师，指点我很多，使我的 PCB 旋转。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;没什么问题，就是有一些问题要改一下&lt;/p&gt;
+&lt;p&gt;—— JYF&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;然后 JYF 老师教了我很多关于电源电路设计的技巧，比如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;铺铜时使用“阻止区”避免产生“天线”&lt;/li&gt;
+&lt;li&gt;在“天线”的附近，打过孔，让干扰回流到地&lt;/li&gt;
+&lt;li&gt;画板子，把板子尺寸设置成 5mm 倍数，好做外壳&lt;/li&gt;
+&lt;li&gt;钢网在淘宝做更便宜&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;横着的座子不好用，换成罚站的好用&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;虽然 JYF 老师偶尔“内涵”我一下，但还是得感谢 JYF 老师，他的帮助这是让这个项目&lt;strong&gt;一次成功&lt;/strong&gt;的关键。&lt;/p&gt;
+&lt;!-- &lt;figure&gt;
+&lt;img style="border-radius: 8px; overflow: hidden; box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.05);" src="https://www.junyi.dev/posts/boost-converter/subtext.png" alt="Subtexted by JYF" width="50%" /&gt;
+&lt;figcaption&gt;图 2 - JYF 内涵我&lt;/figcaption&gt;
+&lt;/figure&gt; --&gt;
+&lt;p&gt;（顺便一提，我偷懒去掉了 MPP 电路，可能持续 20ms 对电源索取 1A 的电流，在某些燃料电池里相当于短路，从而影响电源寿命）&lt;/p&gt;
+&lt;h2 id="焊接" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%84%8a%e6%8e%a5"&gt;
+#
+&lt;/a&gt;
+焊接
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这是我第一次手工焊接 QFN 芯片，弄坏了一个 PCB 才焊接好。最后的成品质量很高。&lt;/p&gt;
+&lt;p&gt;之前焊接 0805 很丑，现在焊接 0603 封装现在也不在话下。&lt;del&gt;以后失业可以去工厂打螺丝了&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
+&lt;h2 id="成品图" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%88%90%e5%93%81%e5%9b%be"&gt;
+#
+&lt;/a&gt;
+成品图
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view1.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view2.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 2 - Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/onboard_LED.jpg" alt="Boost Converter by 3.0V battery" /&gt;
+&lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/by_battery.jpg" alt="Boost Converter by 1.5V battery"/&gt;
+&lt;figcaption&gt;(b) 使用 1.5V 电池&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 3 - 来自不同电压输入，输出 2.0V 稳压点亮 LED&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/new_version.jpg" alt="New Boost Converter" /&gt;
+&lt;!-- &lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt; --&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;p style="padding-left:1em"&gt;&lt;strong&gt;2024 年 6 月 15 日 更新内容：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;移除了排针&lt;/li&gt;
+&lt;li&gt;移除了纽扣电池座&lt;/li&gt;
+&lt;li&gt;移除了 POWERSAVE 选项（默认 enable）&lt;/li&gt;
+&lt;li&gt;可调输出电压从 0.5V~3.3V 改进到 0.5V~5.5V&lt;/li&gt;
+&lt;li&gt;更换为 3mm 电位器，反馈电路距离变短&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 4 - 升级之后的 Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;</content:encoded><category>Project</category><guid isPermaLink="true">https://www.junyi.dev/posts/boost-converter/</guid></item></channel></rss>

@@ -1,0 +1,27 @@
+/* @import 'subfolder/hello.scss'; */
+
+.footnotes {
+    font-size: 0.8em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.footnotes ol {
+    /* padding-left: 0; */
+    /* margin-left: 0; */
+}
+
+details {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    background-color: var(--card-color);
+    border-radius: 0.5em;
+    border: 1px solid var(--card-border-color);
+    padding: 1em;
+}
+
+
+summary {
+    cursor: pointer;
+    margin-right: 1em;
+}
