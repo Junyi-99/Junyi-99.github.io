@@ -3,7 +3,7 @@
 &lt;a href="#%e5%85%88%e8%af%b4%e7%bb%93%e8%ae%ba"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e5%85%88%e8%af%b4%e7%bb%93%e8%ae%ba" title="先说结论"&gt;&lt;/a&gt;先说结论
+&lt;a href="#%e5%85%88%e8%af%b4%e7%bb%93%e8%ae%ba" title="先说结论" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;先说结论
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;系统环境：Ubuntu 18.04 LTS&lt;/p&gt;
@@ -18,7 +18,7 @@
 &lt;a href="#%e9%97%ae%e9%a2%98%e7%bb%86%e8%8a%82"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e9%97%ae%e9%a2%98%e7%bb%86%e8%8a%82" title="问题细节"&gt;&lt;/a&gt;问题细节
+&lt;a href="#%e9%97%ae%e9%a2%98%e7%bb%86%e8%8a%82" title="问题细节" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;问题细节
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;h2 id="第一天-no-opencl-platform" &gt;
@@ -26,7 +26,7 @@
 &lt;a href="#%e7%ac%ac%e4%b8%80%e5%a4%a9-no-opencl-platform"&gt;
 #
 &lt;/a&gt;
-&lt;a href="#%e7%ac%ac%e4%b8%80%e5%a4%a9-No-OpenCL-platform" title="第一天 No OpenCL platform"&gt;&lt;/a&gt;第一天 No OpenCL platform
+&lt;a href="#%e7%ac%ac%e4%b8%80%e5%a4%a9-No-OpenCL-platform" title="第一天 No OpenCL platform" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;第一天 No OpenCL platform
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;遇到了一个错误：&lt;/p&gt;
@@ -71,7 +71,7 @@ ICD loader Profile OpenCL 2.1&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;CommandLine Error: Option ‘help-list’ registered more than once!&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;这个问题，淦！&lt;/p&gt;
 &lt;p&gt;.&lt;/p&gt;
-&lt;p&gt;搜了一会，发现了这样一篇文章：&lt;a href="https://discuss.tvm.ai/t/llvm-error-option-registered-more-than-once-while-loading-libtvm-so/269/10"&gt;https://discuss.tvm.ai/t/llvm-error-option-registered-more-than-once-while-loading-libtvm-so/269/10&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;搜了一会，发现了这样一篇文章：&lt;a href="https://discuss.tvm.ai/t/llvm-error-option-registered-more-than-once-while-loading-libtvm-so/269/10" target="_blank" rel="noopener noreferrer"&gt;https://discuss.tvm.ai/t/llvm-error-option-registered-more-than-once-while-loading-libtvm-so/269/10&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;其中有一段话：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This happens when you compile TVM runtime with both &lt;code&gt;set(USE_OPENCL ON)&lt;/code&gt; and &lt;code&gt;set(USE_LLVM ON)&lt;/code&gt;
@@ -86,7 +86,7 @@ You should enable only ONE option but not both.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;a href="#%e7%ac%ac%e4%ba%8c%e5%a4%a9-no-opencl-device"&gt;
 #
 &lt;/a&gt;
-&lt;a href="#%e7%ac%ac%e4%ba%8c%e5%a4%a9-No-OpenCL-device" title="第二天 No OpenCL device"&gt;&lt;/a&gt;第二天 No OpenCL device
+&lt;a href="#%e7%ac%ac%e4%ba%8c%e5%a4%a9-No-OpenCL-device" title="第二天 No OpenCL device" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;第二天 No OpenCL device
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;睡了一觉，第二天了，&lt;/p&gt;
@@ -96,10 +96,10 @@ You should enable only ONE option but not both.&lt;/p&gt;&lt;/blockquote&gt;
 No OpenCL device&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;按照 tqchen 的说法，make clean 然后 make&lt;/p&gt;
 &lt;p&gt;还是不行（我重装了llvm）&lt;/p&gt;
-&lt;p&gt;后来，在 &lt;a href="https://askubuntu.com/questions/809450/installing-opencl-for-svga-ii-adapter"&gt;https://askubuntu.com/questions/809450/installing-opencl-for-svga-ii-adapter&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;找到这么一段话：&lt;a href="https://askubuntu.com/posts/809481/timeline"&gt;https://askubuntu.com/posts/809481/timeline&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;后来，在 &lt;a href="https://askubuntu.com/questions/809450/installing-opencl-for-svga-ii-adapter" target="_blank" rel="noopener noreferrer"&gt;https://askubuntu.com/questions/809450/installing-opencl-for-svga-ii-adapter&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;找到这么一段话：&lt;a href="https://askubuntu.com/posts/809481/timeline" target="_blank" rel="noopener noreferrer"&gt;https://askubuntu.com/posts/809481/timeline&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;According to the top answer to &lt;a href="https://stackoverflow.com/questions/27996996/trying-to-install-opencl-on-vm"&gt;this question&lt;/a&gt;, the Intel SDK does not work on VMWare. It suggests instead trying to use the AMD APP SDK&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;According to the top answer to &lt;a href="https://stackoverflow.com/questions/27996996/trying-to-install-opencl-on-vm" target="_blank" rel="noopener noreferrer"&gt;this question&lt;/a&gt;, the Intel SDK does not work on VMWare. It suggests instead trying to use the AMD APP SDK&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;现在我还是反复遇到 bug，找到这样一段描述：&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;TVM DOES NOT SUPPORT openjdk-11 !!!&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;TVM DOES NOT SUPPORT openjdk-11 !!!&lt;/strong&gt;&lt;/p&gt;
@@ -112,7 +112,7 @@ No OpenCL device&lt;/p&gt;&lt;/blockquote&gt;
 &lt;a href="#%e7%ac%ac%e4%b8%89%e5%a4%a9-%e8%a7%a3%e5%86%b3"&gt;
 #
 &lt;/a&gt;
-&lt;a href="#%e7%ac%ac%e4%b8%89%e5%a4%a9-%e8%a7%a3%e5%86%b3" title="第三天 解决"&gt;&lt;/a&gt;第三天 解决
+&lt;a href="#%e7%ac%ac%e4%b8%89%e5%a4%a9-%e8%a7%a3%e5%86%b3" title="第三天 解决" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;第三天 解决
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;When you compile android_rpc, you &lt;strong&gt;HAVE TO&lt;/strong&gt; specify the libOpenCL.so in jni/config.mk, which pulled from your Android phone. Then, download CL-headers from github!&lt;/p&gt;
@@ -127,7 +127,7 @@ android:label=&amp;#34;@string/app\_name&amp;#34;
 ...
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;改成 false 也可以&lt;/p&gt;
 &lt;p&gt;原因是 Android 6.0 以后 so 文件不默认封装在 apk 里&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://testerhome.com/topics/18463"&gt;https://testerhome.com/topics/18463&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://testerhome.com/topics/18463" target="_blank" rel="noopener noreferrer"&gt;https://testerhome.com/topics/18463&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;，&lt;/p&gt;
 &lt;p&gt;具体注意事项看上面的链接！&lt;/p&gt;
 &lt;p&gt;具体注意事项看上面的链接！&lt;/p&gt;
@@ -145,7 +145,7 @@ android:label=&amp;#34;@string/app\_name&amp;#34;
 &lt;a href="#%e5%85%88%e8%af%b4%e7%bb%93%e8%ae%ba"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e5%85%88%e8%af%b4%e7%bb%93%e8%ae%ba" title="先说结论"&gt;&lt;/a&gt;先说结论
+&lt;a href="#%e5%85%88%e8%af%b4%e7%bb%93%e8%ae%ba" title="先说结论" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;先说结论
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;环境&lt;/strong&gt;：Ubuntu 18.04 LTS （非虚拟机）&lt;/p&gt;
@@ -159,7 +159,7 @@ android:label=&amp;#34;@string/app\_name&amp;#34;
 &lt;a href="#%e9%83%a8%e7%bd%b2-android_rpc"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e9%83%a8%e7%bd%b2-android-rpc" title="部署 android_rpc"&gt;&lt;/a&gt;部署 android_rpc
+&lt;a href="#%e9%83%a8%e7%bd%b2-android-rpc" title="部署 android_rpc" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;部署 android_rpc
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;按照官方教程来走，先是基于源代码安装 TVM 库，安装之前要把 LLVM 装好。&lt;/p&gt;
@@ -175,7 +175,7 @@ android:label=&amp;#34;@string/app\_name&amp;#34;
 &lt;a href="#%e8%b8%a9%e5%9d%91"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e8%b8%a9%e5%9d%91" title="踩坑"&gt;&lt;/a&gt;踩坑
+&lt;a href="#%e8%b8%a9%e5%9d%91" title="踩坑" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;踩坑
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;Gradle 版本不对，Ubuntu 18.04 默认给安装的是 3.x 版本，后来添加的源，upgrade 一下才可以。&lt;/p&gt;
@@ -207,7 +207,7 @@ android:label=&amp;#34;@string/app\_name&amp;#34;
 &lt;a href="#%e7%81%b5%e6%9c%ba%e4%b8%80%e5%8a%a8"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e7%81%b5%e6%9c%ba%e4%b8%80%e5%8a%a8" title="灵机一动"&gt;&lt;/a&gt;灵机一动
+&lt;a href="#%e7%81%b5%e6%9c%ba%e4%b8%80%e5%8a%a8" title="灵机一动" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;灵机一动
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;配置这么大型的项目，而且网上没有多少参考资料，搜索也几乎很难找到结果。手中的设备千差万别，想要真正部署起来真的太麻烦了。在我快疯了的时候，突然想到：&lt;strong&gt;草！我干嘛不看看他的脚本怎么写的呢？&lt;/strong&gt;&lt;/p&gt;
@@ -232,7 +232,7 @@ android:label=&amp;#34;@string/app\_name&amp;#34;
 &lt;a href="#%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3" title="问题解决"&gt;&lt;/a&gt;问题解决
+&lt;a href="#%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3" title="问题解决" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;问题解决
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;（上面的那些就是发发牢骚，这里才是解决问题的部分）&lt;/p&gt;
@@ -256,7 +256,7 @@ android:label=&amp;#34;@string/app\_name&amp;#34;
 &lt;a href="#%e6%80%bb%e7%bb%93"&gt;
 ##
 &lt;/a&gt;
-&lt;a href="#%e6%80%bb%e7%bb%93" title="总结"&gt;&lt;/a&gt;总结
+&lt;a href="#%e6%80%bb%e7%bb%93" title="总结" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;总结
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;其实一开始，在 android_rpc 这个目录里执行 &lt;code&gt;gradle clean build&lt;/code&gt; 是可以成功编译出文件的，但是在后面签名的时候给我报了个无法找到什么什么类的错误，然后我决定编译 android_deploy 试试，发现成功了，签名也正常，在 Android 10 手机上也可以正常运行，我就觉得肯定是这个项目的问题。&lt;/p&gt;

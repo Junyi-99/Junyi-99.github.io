@@ -170,13 +170,13 @@
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank"&gt;MacbookPRO键帽打油怎么办？据说天才吧可以免费更换，是吗？&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;MacbookPRO键帽打油怎么办？据说天才吧可以免费更换，是吗？&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/"&gt;哔哩哔哩：MacBook剪刀键盘拆装（键帽+剪刀支架）&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;哔哩哔哩：MacBook剪刀键盘拆装（键帽+剪刀支架）&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:3"&gt;
-&lt;p&gt;&lt;a href="https://post.smzdm.com/p/ao9wevx9/"&gt;什么值得买：Macbook Pro 键盘打油，键帽更换作业&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://post.smzdm.com/p/ao9wevx9/" target="_blank" rel="noopener noreferrer"&gt;什么值得买：Macbook Pro 键盘打油，键帽更换作业&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/posts/replace-keyboard/</guid></item><item><title>隐藏 GitHub Pages 里的敏感文章（GitHub Actions）</title><link>https://www.junyi.dev/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
@@ -217,7 +217,7 @@
 &lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;访问&lt;a href="https://github.com/settings/tokens"&gt;此页面&lt;/a&gt;（Settings ➜ Developer Settings ➜ Personal access tokens）&lt;/p&gt;
+&lt;p&gt;访问&lt;a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer"&gt;此页面&lt;/a&gt;（Settings ➜ Developer Settings ➜ Personal access tokens）&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Generate new token (classic)&lt;/p&gt;
@@ -270,8 +270,8 @@
 &lt;/figure&gt;
 &lt;p&gt;你需要学习如何编写工作流，以下是一些你可以阅读的文档：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart"&gt;GitHub Actions 快速入门&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples"&gt;工作流示例&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart" target="_blank" rel="noopener noreferrer"&gt;GitHub Actions 快速入门&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples" target="_blank" rel="noopener noreferrer"&gt;工作流示例&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;仔细设计你的 workflow 文件，这里是一个示例：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;

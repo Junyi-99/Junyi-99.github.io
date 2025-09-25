@@ -169,10 +169,10 @@ Pro Tips
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank"&gt;What to do when MacBook Pro keycaps get shiny — can Apple Stores replace them for free?&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;What to do when MacBook Pro keycaps get shiny — can Apple Stores replace them for free?&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/"&gt;Bilibili: MacBook Scissor Key Keyboard Disassembly (Keycaps + Scissor Switch)&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;Bilibili: MacBook Scissor Key Keyboard Disassembly (Keycaps + Scissor Switch)&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/replace-keyboard/</guid></item><item><title>Hiding Sensitive Articles on Your GitHub Pages Blog</title><link>https://www.junyi.dev/en/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
@@ -210,7 +210,7 @@ Background
 Step 1. Create a personal access token
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Going to &lt;a href="https://github.com/settings/tokens"&gt;this page&lt;/a&gt; (Settings ➜ Developer Settings ➜ Personal access tokens)&lt;/p&gt;
+&lt;p&gt;Going to &lt;a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer"&gt;this page&lt;/a&gt; (Settings ➜ Developer Settings ➜ Personal access tokens)&lt;/p&gt;
 &lt;p&gt;Generate new token (classic)&lt;/p&gt;
 &lt;p&gt;Check all &amp;ldquo;repo&amp;rdquo; and &amp;ldquo;workflow&amp;rdquo;. (See &lt;a href="#fig2"&gt;Fig.2&lt;/a&gt;)&lt;/p&gt;
 &lt;figure&gt;
@@ -256,8 +256,8 @@ Step 3. Set up a workflow for &lt;code&gt;blog-src&lt;/code&gt;
 &lt;/figure&gt;
 &lt;p&gt;You need to learn how to write a workflow, here are some documents you can read:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart"&gt;Quickstart for GitHub Actions&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples"&gt;Example workflows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart" target="_blank" rel="noopener noreferrer"&gt;Quickstart for GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples" target="_blank" rel="noopener noreferrer"&gt;Example workflows&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Carefully design your workflow file, here we give you an example:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;

@@ -248,7 +248,7 @@ Reference
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos" target="_blank" rel="noopener noreferrer"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-3/</guid></item><item><title>Distributed System: Consistency</title><link>https://www.junyi.dev/posts/paxos-review-2/</link><pubDate>Tue, 12 Sep 2023 14:06:01 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
@@ -282,7 +282,7 @@ Reference
 &lt;p&gt;如果一个问题被回答，显然问题本身得先在那里，因为给出答案的人必须已经看到这个问题，我们认为在问题和答案之间存在因果依赖。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;比如微信朋友圈需要服务器之间采用因果一致性，来保证用户刷朋友圈时不会看到评论所对应的答复而看不到对应的评论。&lt;/p&gt;
 &lt;img src="wechat-arch.png" alt="drawing" width="600" /&gt;
-&lt;p&gt;延伸阅读：怎么生成唯一且递增的 ID？&lt;a href="https://www.infoq.cn/article/wechat-serial-number-generator-architecture/"&gt;微信序列号生成器架构设计及演变&lt;/a&gt;&lt;a href="https://segmentfault.com/a/1190000040964518"&gt;雪花算法&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;延伸阅读：怎么生成唯一且递增的 ID？&lt;a href="https://www.infoq.cn/article/wechat-serial-number-generator-architecture/" target="_blank" rel="noopener noreferrer"&gt;微信序列号生成器架构设计及演变&lt;/a&gt;&lt;a href="https://segmentfault.com/a/1190000040964518" target="_blank" rel="noopener noreferrer"&gt;雪花算法&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id="序列一致性sequential-consistency" &gt;
 &lt;div&gt;
 &lt;a href="#%e5%ba%8f%e5%88%97%e4%b8%80%e8%87%b4%e6%80%a7sequential-consistency"&gt;
@@ -325,7 +325,7 @@ Lab 2
 &lt;/ol&gt;
 &lt;img src="pbr.png" alt="drawing" width="400"/&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-2/</guid></item><item><title>Distributed System: Ordering of events</title><link>https://www.junyi.dev/posts/paxos-review-1/</link><pubDate>Tue, 12 Sep 2023 11:32:04 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 上个学期的 CS5223 Distributed Systems ，Prof. Li 讲的蛮好，尽管实现了 Basic Paxos 和 Multi Paxos（多亏了 Junhui 的 cheatsheet1），但是耐不住时间的拷打，写的 Paxos 都快忘光了&amp;amp;hellip;
-所以，赶紧开一篇博客把想法都记录下来，以便之后的复习。</description><content:encoded>&lt;p&gt;上个学期的 &lt;a href="https://nusmods.com/courses/CS5223/distributed-systems"&gt;CS5223 Distributed Systems&lt;/a&gt; ，Prof. Li 讲的蛮好，尽管实现了 Basic Paxos 和 Multi Paxos（多亏了 Junhui 的 cheatsheet&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;），但是耐不住时间的拷打，写的 Paxos 都快忘光了&amp;hellip;&lt;/p&gt;
+所以，赶紧开一篇博客把想法都记录下来，以便之后的复习。</description><content:encoded>&lt;p&gt;上个学期的 &lt;a href="https://nusmods.com/courses/CS5223/distributed-systems" target="_blank" rel="noopener noreferrer"&gt;CS5223 Distributed Systems&lt;/a&gt; ，Prof. Li 讲的蛮好，尽管实现了 Basic Paxos 和 Multi Paxos（多亏了 Junhui 的 cheatsheet&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;），但是耐不住时间的拷打，写的 Paxos 都快忘光了&amp;hellip;&lt;/p&gt;
 &lt;!-- （而且没实现分布式事务） --&gt;
 &lt;p&gt;所以，赶紧开一篇博客把想法都记录下来，以便&lt;strong&gt;之后的复习&lt;/strong&gt;。&lt;/p&gt;
 &lt;hr&gt;
@@ -486,7 +486,7 @@ Reference
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos" target="_blank" rel="noopener noreferrer"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-1/</guid></item></channel></rss>

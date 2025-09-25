@@ -24,7 +24,7 @@ PCB Design
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;Big thanks to my mentor JYF, who gave me lots of guidance and turned my PCB around.&lt;/p&gt;
-&lt;p&gt;For the first revision, I followed these app notes: &lt;a href="https://www.ti.com/lit/pdf/slva345"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; and &lt;a href="https://www.ti.com/lit/pdf/slva364"&gt;Using TPS61200 as WLED Driver&lt;/a&gt;. JYF taught me many power-supply layout tips, such as:&lt;/p&gt;
+&lt;p&gt;For the first revision, I followed these app notes: &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; and &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt;. JYF taught me many power-supply layout tips, such as:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Use keep-out regions when copper-pouring to avoid creating “antennas”.&lt;/li&gt;
 &lt;li&gt;Near any “antenna,” add vias so interference returns cleanly to ground.&lt;/li&gt;
@@ -45,7 +45,7 @@ Soldering
 &lt;/h2&gt;
 &lt;p&gt;This was my first time hand-soldering a QFN. I ruined one PCB before getting it right, but the final result came out great.&lt;/p&gt;
 &lt;p&gt;My 0805 soldering used to look ugly; now 0603 is no problem either. &lt;del&gt;If I ever get laid off, I can go tighten screws in a factory.&lt;/del&gt;&lt;/p&gt;
-&lt;p&gt;Compared with before, I made a lot of progress this round (see my earlier board here: &lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy"&gt;Ultra‑mini ESP8266 dev board&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Compared with before, I made a lot of progress this round (see my earlier board here: &lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;Ultra‑mini ESP8266 dev board&lt;/a&gt;).&lt;/p&gt;
 &lt;h2 id="photos" &gt;
 &lt;div&gt;
 &lt;a href="#photos"&gt;

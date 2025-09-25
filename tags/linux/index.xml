@@ -9,7 +9,7 @@
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;树莓派 4B 曾是我数字生活的重要支柱。它安静地运行着各类轻量服务：从监控家庭网络流量，到跑一些自动化脚本，甚至充当临时的开发测试环境。为了保持稳定，我特意配置了&lt;strong&gt;每周日自动重启&lt;/strong&gt;的定时任务，这套机制让它在大多数时候都表现得相当可靠。&lt;/p&gt;
-&lt;p&gt;但树莓派的短板也随着使用深度逐渐暴露。最让我焦虑的是 TF 卡的存储可靠性——即便选用了号称&amp;quot;耐用级&amp;quot;的 Endurance 卡，也无法完全避免潜在的 I/O 风险。在上一篇关于&lt;a href="http://localhost:1313/posts/k3s-101/"&gt;树莓派 5 集群配置 k3s&lt;/a&gt;的文章发布后，我的四节点集群仅稳定运行了一周，就有一个节点因突发大量 &lt;strong&gt;I/O Error&lt;/strong&gt; 彻底挂掉，而它用的正是我精心挑选的高耐久卡，寿命甚至不如 4B 上的普通卡。&lt;/p&gt;
+&lt;p&gt;但树莓派的短板也随着使用深度逐渐暴露。最让我焦虑的是 TF 卡的存储可靠性——即便选用了号称&amp;quot;耐用级&amp;quot;的 Endurance 卡，也无法完全避免潜在的 I/O 风险。在上一篇关于&lt;a href="http://localhost:1313/posts/k3s-101/" target="_blank" rel="noopener noreferrer"&gt;树莓派 5 集群配置 k3s&lt;/a&gt;的文章发布后，我的四节点集群仅稳定运行了一周，就有一个节点因突发大量 &lt;strong&gt;I/O Error&lt;/strong&gt; 彻底挂掉，而它用的正是我精心挑选的高耐久卡，寿命甚至不如 4B 上的普通卡。&lt;/p&gt;
 &lt;p&gt;性能瓶颈则在复杂场景下愈发明显：编译稍大的项目时进度条会陷入漫长等待，多服务并行时偶尔出现的卡顿也提醒着我硬件的局限。虽然可以通过外接 SSD 缓解存储问题，但这无疑增加了设备的复杂度，与其如此，不如直接升级到更可靠的平台。&lt;/p&gt;
 &lt;h2 id="nuc-的开箱与性能跃升" &gt;
 &lt;div&gt;
@@ -19,7 +19,7 @@
 NUC 的开箱与性能跃升
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;拆开 NUC 包装时，第一感觉是 &amp;ldquo;精致得不像一台迷你主机&amp;rdquo;。巴掌大的机身比树莓派大不了多少，但沉甸甸的金属外壳透着一股扎实感。我给它装了 &lt;a href="https://ubuntu.com/download/desktop"&gt;Ubuntu Desktop 24.04&lt;/a&gt;。性能差距让我感到很舒适：之前在树莓派上编译一个 Go 项目需要 3 分钟，在 NUC 上居然 1 分钟就搞定了；&lt;/p&gt;
+&lt;p&gt;拆开 NUC 包装时，第一感觉是 &amp;ldquo;精致得不像一台迷你主机&amp;rdquo;。巴掌大的机身比树莓派大不了多少，但沉甸甸的金属外壳透着一股扎实感。我给它装了 &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;。性能差距让我感到很舒适：之前在树莓派上编译一个 Go 项目需要 3 分钟，在 NUC 上居然 1 分钟就搞定了；&lt;/p&gt;
 &lt;figure&gt;
 &lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
 &lt;figcaption&gt;Fig.1 - 小巧却强悍的 Intel NUC&lt;/figcaption&gt;
@@ -212,25 +212,25 @@ Step 2. 验证安装效果
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/" target="_blank" rel="noopener noreferrer"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;&lt;a href="https://tailscale.com/"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:3"&gt;
-&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314" target="_blank" rel="noopener noreferrer"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:4"&gt;
-&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278" target="_blank" rel="noopener noreferrer"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:5"&gt;
-&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:6"&gt;
-&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90" target="_blank" rel="noopener noreferrer"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:7"&gt;
-&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>Linux</category><category>k3s</category><category>Raspberry Pi 5</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>树莓派编译 RTL8812AU / RTL8814AU 网卡驱动</title><link>https://www.junyi.dev/posts/raspberrypi-usb-wifi/</link><pubDate>Tue, 30 Mar 2021 15:49:16 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>

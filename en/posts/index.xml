@@ -9,7 +9,7 @@ Raspberry Pi: Pros and Cons
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;The Raspberry Pi 4B used to be a key pillar of my digital life. It quietly ran various lightweight services: monitoring my home network traffic, running automation scripts, and even serving as a temporary dev/test environment. To keep it stable, I set up a cron job to automatically reboot every Sunday, which kept it fairly reliable most of the time.&lt;/p&gt;
-&lt;p&gt;But its shortcomings surfaced as I pushed it further. What worried me most was the reliability of TF‑card storage — even with so‑called “endurance” cards, you can’t fully avoid I/O risks. After I published the article on &lt;a href="http://localhost:1313/posts/k3s-101/"&gt;setting up k3s on a Raspberry Pi 5 cluster&lt;/a&gt;, my four‑node cluster ran stably for only a week before one node died due to a sudden flood of I/O errors. Ironically, that node was using a carefully chosen high‑endurance card, which ended up lasting even shorter than the ordinary card in the 4B.&lt;/p&gt;
+&lt;p&gt;But its shortcomings surfaced as I pushed it further. What worried me most was the reliability of TF‑card storage — even with so‑called “endurance” cards, you can’t fully avoid I/O risks. After I published the article on &lt;a href="http://localhost:1313/posts/k3s-101/" target="_blank" rel="noopener noreferrer"&gt;setting up k3s on a Raspberry Pi 5 cluster&lt;/a&gt;, my four‑node cluster ran stably for only a week before one node died due to a sudden flood of I/O errors. Ironically, that node was using a carefully chosen high‑endurance card, which ended up lasting even shorter than the ordinary card in the 4B.&lt;/p&gt;
 &lt;p&gt;Performance bottlenecks also became more evident under heavier workloads: compiling a slightly larger project meant a long progress‑bar crawl, and occasional stutters with multiple services running in parallel reminded me of the hardware’s limits. While attaching an external SSD can ease the storage issue, it undoubtedly increases complexity; at that point, it made more sense to upgrade to a more reliable platform.&lt;/p&gt;
 &lt;h2 id="unboxing-the-nuc-and-the-performance-leap" &gt;
 &lt;div&gt;
@@ -19,7 +19,7 @@ Raspberry Pi: Pros and Cons
 Unboxing the NUC and the Performance Leap
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Unboxing the NUC, my first impression was: “too refined to be a mini PC.” The palm‑sized body isn’t much bigger than a Pi, but the hefty metal shell feels solid. I installed &lt;a href="https://ubuntu.com/download/desktop"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The performance gap is downright comforting: a Go project that took 3 minutes to compile on the Pi finishes in just 1 minute on the NUC.&lt;/p&gt;
+&lt;p&gt;Unboxing the NUC, my first impression was: “too refined to be a mini PC.” The palm‑sized body isn’t much bigger than a Pi, but the hefty metal shell feels solid. I installed &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The performance gap is downright comforting: a Go project that took 3 minutes to compile on the Pi finishes in just 1 minute on the NUC.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
 &lt;figcaption&gt;Fig.1 - Compact yet powerful Intel NUC&lt;/figcaption&gt;
@@ -205,10 +205,10 @@ Pro Tips
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank"&gt;What to do when MacBook Pro keycaps get shiny — can Apple Stores replace them for free?&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;What to do when MacBook Pro keycaps get shiny — can Apple Stores replace them for free?&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/"&gt;Bilibili: MacBook Scissor Key Keyboard Disassembly (Keycaps + Scissor Switch)&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;Bilibili: MacBook Scissor Key Keyboard Disassembly (Keycaps + Scissor Switch)&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/replace-keyboard/</guid></item><item><title>Ultra-Low-Voltage Buck–Boost Converter (0.3 V to 5 V)</title><link>https://www.junyi.dev/en/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
@@ -237,7 +237,7 @@ PCB Design
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;Big thanks to my mentor JYF, who gave me lots of guidance and turned my PCB around.&lt;/p&gt;
-&lt;p&gt;For the first revision, I followed these app notes: &lt;a href="https://www.ti.com/lit/pdf/slva345"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; and &lt;a href="https://www.ti.com/lit/pdf/slva364"&gt;Using TPS61200 as WLED Driver&lt;/a&gt;. JYF taught me many power-supply layout tips, such as:&lt;/p&gt;
+&lt;p&gt;For the first revision, I followed these app notes: &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; and &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt;. JYF taught me many power-supply layout tips, such as:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Use keep-out regions when copper-pouring to avoid creating “antennas”.&lt;/li&gt;
 &lt;li&gt;Near any “antenna,” add vias so interference returns cleanly to ground.&lt;/li&gt;
@@ -258,7 +258,7 @@ Soldering
 &lt;/h2&gt;
 &lt;p&gt;This was my first time hand-soldering a QFN. I ruined one PCB before getting it right, but the final result came out great.&lt;/p&gt;
 &lt;p&gt;My 0805 soldering used to look ugly; now 0603 is no problem either. &lt;del&gt;If I ever get laid off, I can go tighten screws in a factory.&lt;/del&gt;&lt;/p&gt;
-&lt;p&gt;Compared with before, I made a lot of progress this round (see my earlier board here: &lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy"&gt;Ultra‑mini ESP8266 dev board&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Compared with before, I made a lot of progress this round (see my earlier board here: &lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;Ultra‑mini ESP8266 dev board&lt;/a&gt;).&lt;/p&gt;
 &lt;h2 id="photos" &gt;
 &lt;div&gt;
 &lt;a href="#photos"&gt;
@@ -340,7 +340,7 @@ Background
 Step 1. Create a personal access token
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Going to &lt;a href="https://github.com/settings/tokens"&gt;this page&lt;/a&gt; (Settings ➜ Developer Settings ➜ Personal access tokens)&lt;/p&gt;
+&lt;p&gt;Going to &lt;a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer"&gt;this page&lt;/a&gt; (Settings ➜ Developer Settings ➜ Personal access tokens)&lt;/p&gt;
 &lt;p&gt;Generate new token (classic)&lt;/p&gt;
 &lt;p&gt;Check all &amp;ldquo;repo&amp;rdquo; and &amp;ldquo;workflow&amp;rdquo;. (See &lt;a href="#fig2"&gt;Fig.2&lt;/a&gt;)&lt;/p&gt;
 &lt;figure&gt;
@@ -386,8 +386,8 @@ Step 3. Set up a workflow for &lt;code&gt;blog-src&lt;/code&gt;
 &lt;/figure&gt;
 &lt;p&gt;You need to learn how to write a workflow, here are some documents you can read:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart"&gt;Quickstart for GitHub Actions&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples"&gt;Example workflows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart" target="_blank" rel="noopener noreferrer"&gt;Quickstart for GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples" target="_blank" rel="noopener noreferrer"&gt;Example workflows&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Carefully design your workflow file, here we give you an example:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;

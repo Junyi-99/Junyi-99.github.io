@@ -1,4 +1,165 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 05 Sep 2025 13:07:09 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>从树莓派到 NUC：玩具的升级</title><link>https://www.junyi.dev/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Tue, 23 Sep 2025 13:02:12 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>容器化、开箱即用的 VSCode + TeX 环境：告别配置烦恼，专注写作本身</title><link>https://www.junyi.dev/posts/latex-dev-container/</link><pubDate>Tue, 23 Sep 2025 13:02:12 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+这篇文章为「有洁癖的程序员」和「不想折腾环境的写作者」，提供一套开箱即用的容器化 LaTeX 方案：用容器隔离环境，用 Git 同步项目，做到「拉仓库 → 打开容器 → 立即编译」，彻底告别环境配置焦虑。
+你可以随时随地使用 Git 同步你的项目，随用随走，无需担心环境问题。同时，你也可以放心大胆地让 Claude Code、Codex 帮你写 LaTeX 代码，不担心执行危险指令（请做好 git push protect）</description><content:encoded>&lt;p&gt;这篇文章为「&lt;strong&gt;有洁癖的程序员&lt;/strong&gt;」和「&lt;strong&gt;不想折腾环境的写作者&lt;/strong&gt;」，提供一套开箱即用的容器化 LaTeX 方案：用容器隔离环境，用 Git 同步项目，做到「&lt;strong&gt;拉仓库&lt;/strong&gt; → &lt;strong&gt;打开容器&lt;/strong&gt; → &lt;strong&gt;立即编译&lt;/strong&gt;」，彻底告别环境配置焦虑。&lt;/p&gt;
+&lt;p&gt;你可以随时随地使用 Git 同步你的项目，随用随走，无需担心环境问题。同时，你也可以放心大胆地让 Claude Code、Codex 帮你写 LaTeX 代码，不担心执行危险指令（请做好 git push protect）&lt;/p&gt;
+&lt;h2 id="你只需要准备-1-件事" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%bd%a0%e5%8f%aa%e9%9c%80%e8%a6%81%e5%87%86%e5%a4%87-1-%e4%bb%b6%e4%ba%8b"&gt;
+#
+&lt;/a&gt;
+你只需要准备 1 件事
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;无需安装复杂的 TeX 发行版、不用配置系统环境变量，唯一要做的就是：&lt;/p&gt;
+&lt;p&gt;在 &lt;strong&gt;Cursor&lt;/strong&gt; 或 &lt;strong&gt;VSCode&lt;/strong&gt; 中，安装官方扩展 &lt;code&gt;Dev Containers&lt;/code&gt;&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px; margin: 20px 0;"&gt;
+&lt;figure style="flex: 1; text-align: center;"&gt;
+&lt;img src="dev-container-cursor.png" alt="Cursor 中的 Dev Container" style="width: 100%; height: auto; border-radius: 8px;"&gt;
+&lt;figcaption&gt;Cursor 中的 Dev Container&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure style="flex: 1; text-align: center;"&gt;
+&lt;img src="dev-container-vscode.png" alt="VS Code 中的 Dev Container" style="width: 100%; height: auto; border-radius: 8px;"&gt;
+&lt;figcaption&gt;VS Code 中的 Dev Container&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="三个步骤从-0-到能写-latex" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%89%e4%b8%aa%e6%ad%a5%e9%aa%a4%e4%bb%8e-0-%e5%88%b0%e8%83%bd%e5%86%99-latex"&gt;
+#
+&lt;/a&gt;
+三个步骤，从 0 到能写 LaTeX
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;假设你已有一个 LaTeX 项目文件夹（新建空文件夹也可以），跟着做就能用：&lt;/p&gt;
+&lt;h3 id="step-1-引入" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-%e5%bc%95%e5%85%a5"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 1 引入 &lt;a href="https://github.com/paperdebugger-bot/latex-devcontainer" target="_blank" rel="noopener noreferrer"&gt;Dev Container 配置&lt;/a&gt;&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;打开项目的终端（VSCode/Cursor 内置终端即可），执行以下命令，将预配置好的容器环境作为「子模块」引入项目（子模块不干扰主项目文件，方便后续更新）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git submodule add https://github.com/paperdebugger-bot/latex-devcontainer.git .devcontainer
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你的项目还没初始化 Git（&lt;code&gt;git init&lt;/code&gt;），也可以直接下载配置文件解压到 &lt;code&gt;.devcontainer&lt;/code&gt; 文件夹：&lt;a href="https://github.com/paperdebugger-bot/latex-devcontainer/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer"&gt;latex-devcontainer.zip&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id="step-2-重载编辑器窗口" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-%e9%87%8d%e8%bd%bd%e7%bc%96%e8%be%91%e5%99%a8%e7%aa%97%e5%8f%a3"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 2 重载编辑器窗口&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;按下快捷键 &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;Shift&lt;/kbd&gt; + &lt;kbd&gt;P&lt;/kbd&gt;（macOS 是 &lt;kbd&gt;⌘&lt;/kbd&gt; + &lt;kbd&gt;⇧&lt;/kbd&gt; + &lt;kbd&gt;P&lt;/kbd&gt;），在弹出的命令面板中输入 &lt;code&gt;Reload Window&lt;/code&gt; 并执行，让编辑器识别新添加的容器配置。&lt;/p&gt;
+&lt;h3 id="step-3-启动容器并使用" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-%e5%90%af%e5%8a%a8%e5%ae%b9%e5%99%a8%e5%b9%b6%e4%bd%bf%e7%94%a8"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 3 启动容器并使用&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;重载后，编辑器会自动弹出提示「是否在 Dev Container 中打开项目」，点击 &lt;strong&gt;Reopen in Container&lt;/strong&gt;；&lt;/p&gt;
+&lt;p&gt;接下来会让你选择容器版本，直接选 &lt;strong&gt;full&lt;/strong&gt; 即可 —— 等待 3-5 分钟（首次构建需下载镜像，后续会快很多），环境就搭建完成了！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;🎉 完成后你会获得什么？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;预装 &lt;strong&gt;TeX Live Full 发行版&lt;/strong&gt;（几乎包含所有宏包，不用手动装）；&lt;/li&gt;
+&lt;li&gt;自带 &lt;strong&gt;LaTeX Workshop 插件&lt;/strong&gt;（VSCode 最好用的 LaTeX 插件，支持实时预览、一键编译）&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;；&lt;/li&gt;
+&lt;li&gt;配置好的 &lt;strong&gt;PDF 预览&lt;/strong&gt; 功能；&lt;/li&gt;
+&lt;li&gt;干净的终端环境（可直接用 &lt;code&gt;pdflatex&lt;/code&gt; &lt;code&gt;xelatex&lt;/code&gt; 等命令）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="进阶选择不同的容器版本怎么挑" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%bf%9b%e9%98%b6%e9%80%89%e6%8b%a9%e4%b8%8d%e5%90%8c%e7%9a%84%e5%ae%b9%e5%99%a8%e7%89%88%e6%9c%ac%e6%80%8e%e4%b9%88%e6%8c%91"&gt;
+#
+&lt;/a&gt;
+进阶选择：不同的容器版本怎么挑？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;上面推荐的 &lt;strong&gt;full&lt;/strong&gt; 版本是「省事优先」，但如果你的项目&lt;em&gt;轻量化&lt;/em&gt;、或想&lt;em&gt;节省磁盘空间&lt;/em&gt;，可以选其他版本。核心区别在于「预装的 TeX 发行版」不同：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;容器版本&lt;/th&gt;
+&lt;th&gt;核心 TeX 发行版&lt;/th&gt;
+&lt;th&gt;特点&lt;/th&gt;
+&lt;th&gt;适合场景&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;full&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;TeX Live Full&lt;/td&gt;
+&lt;td&gt;预装所有宏包（约 6GB），编译任何项目都不会缺包&lt;/td&gt;
+&lt;td&gt;复杂论文、自定义模板、不想处理宏包问题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;tiny&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;TinyTeX&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td&gt;轻量版（约 1GB），默认含 200+ 常用宏包&lt;/td&gt;
+&lt;td&gt;简单报告、常规学术论文（缺包时需手动 &lt;code&gt;tlmgr install 宏包名&lt;/code&gt;）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;nano&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Tectonic&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td&gt;零配置引擎，自动处理依赖&lt;/td&gt;
+&lt;td&gt;快速写 Demo、极简文档（兼容性略弱，复杂宏包可能不支持）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;💡 &lt;strong&gt;切换方法&lt;/strong&gt;：&lt;br&gt;
+在启动容器时，选择对应版本即可；如果已启动容器，可通过 &lt;strong&gt;Ctrl + Shift + P → Dev Containers: Rebuild Container&lt;/strong&gt; 重新选择版本。&lt;/p&gt;
+&lt;h2 id="为什么推荐用-dev-container" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%8e%a8%e8%8d%90%e7%94%a8-dev-container"&gt;
+#
+&lt;/a&gt;
+为什么推荐用 Dev Container&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;很多人会问：「我直接在本地装 TeX Live 不行吗？」&lt;/p&gt;
+&lt;p&gt;当然可以，但 Dev Container 解决了 3 个核心痛点：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 1：环境隔离，不污染系统&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;容器是独立的「沙盒」，所有 TeX 依赖、插件都装在容器里，不会修改你本地的系统配置（比如不会和 Python、Java 等环境冲突）。想删除环境？直接删除容器即可，不留任何残留。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 2：跨设备同步，随用随走&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;把项目和 &lt;code&gt;.devcontainer&lt;/code&gt; 文件夹一起用 Git 管理，换电脑时只需「拉取仓库 → 打开容器」，10 分钟内就能恢复一模一样的写作环境——再也不用在公司电脑配一次、家里电脑又配一次。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 3：安全可控，放心用 AI 辅助&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;现在很多人用 Claude Code、Codex 生成 LaTeX 代码，这些工具可能会输出 &lt;code&gt;sudo&lt;/code&gt; 等危险命令。而容器内的操作不会影响本地系统，相当于加了一层「安全防护」（注意：仍需做好 Git 提交保护，避免泄露敏感内容）。&lt;/p&gt;
+&lt;h2 id="常见问题-qa" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98-qa"&gt;
+#
+&lt;/a&gt;
+常见问题 Q&amp;amp;A
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Q1：构建容器时速度很慢？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A1：&lt;/strong&gt; 首次构建需下载大镜像，建议换国内 Docker 镜像源（比如阿里云、网易云镜像），或在网络较好的环境下操作。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Q2：编译中文文档乱码？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A2：&lt;/strong&gt; &lt;code&gt;full&lt;/code&gt; 和 &lt;code&gt;tiny&lt;/code&gt; 版本已预装 &lt;code&gt;xeCJK&lt;/code&gt; 宏包，编译时选择 &lt;code&gt;xelatex&lt;/code&gt; 引擎即可（LaTeX Workshop 已默认配置）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Q3：如何更新容器配置？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A3：&lt;/strong&gt; 如果远程仓库的 &lt;code&gt;latex-devcontainer&lt;/code&gt; 有更新，可在项目终端执行：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git pull --recurse-submodules
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git submodule update --recursive --remote
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后重建容器（&lt;strong&gt;Rebuild Container&lt;/strong&gt;）即可应用更新。&lt;/p&gt;
+&lt;p&gt;这套方案我自己用了半年，从写技术报告到学术论文，没再遇到过一次「环境报错」。如果你也厌倦了配置 LaTeX 环境，不妨试试。&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop" target="_blank" rel="noopener noreferrer"&gt;LaTeX Workshop 插件文档&lt;/a&gt;：掌握更多编译、预览技巧&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://yihui.org/tinytex/" target="_blank" rel="noopener noreferrer"&gt;TinyTeX 官方网站&lt;/a&gt;：轻量 TeX 发行版的使用指南&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/%e5%9f%ba%e4%ba%8etinytex%e7%9a%84%e4%b8%ad%e6%96%87%e6%9c%ac%e5%9c%b0tex%e7%8e%af%e5%a2%83/" target="_blank" rel="noopener noreferrer"&gt;基于 tinytex 的中文本地 TeX 环境&lt;/a&gt;：如何配置 tinytex 环境&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://code.visualstudio.com/docs/devcontainers/containers" target="_blank" rel="noopener noreferrer"&gt;Dev Containers 官方文档&lt;/a&gt;：了解容器配置的更多细节&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>LaTex</category><category>Dev Container</category><category>开发环境</category><guid isPermaLink="true">https://www.junyi.dev/posts/latex-dev-container/</guid></item><item><title>从树莓派到 NUC：玩具的升级</title><link>https://www.junyi.dev/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。</description><content:encoded>&lt;p&gt;陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。&lt;/p&gt;
 &lt;h2 id="树莓派的功与过" &gt;
 &lt;div&gt;
@@ -9,7 +170,7 @@
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;树莓派 4B 曾是我数字生活的重要支柱。它安静地运行着各类轻量服务：从监控家庭网络流量，到跑一些自动化脚本，甚至充当临时的开发测试环境。为了保持稳定，我特意配置了&lt;strong&gt;每周日自动重启&lt;/strong&gt;的定时任务，这套机制让它在大多数时候都表现得相当可靠。&lt;/p&gt;
-&lt;p&gt;但树莓派的短板也随着使用深度逐渐暴露。最让我焦虑的是 TF 卡的存储可靠性——即便选用了号称&amp;quot;耐用级&amp;quot;的 Endurance 卡，也无法完全避免潜在的 I/O 风险。在上一篇关于&lt;a href="http://localhost:1313/posts/k3s-101/"&gt;树莓派 5 集群配置 k3s&lt;/a&gt;的文章发布后，我的四节点集群仅稳定运行了一周，就有一个节点因突发大量 &lt;strong&gt;I/O Error&lt;/strong&gt; 彻底挂掉，而它用的正是我精心挑选的高耐久卡，寿命甚至不如 4B 上的普通卡。&lt;/p&gt;
+&lt;p&gt;但树莓派的短板也随着使用深度逐渐暴露。最让我焦虑的是 TF 卡的存储可靠性——即便选用了号称&amp;quot;耐用级&amp;quot;的 Endurance 卡，也无法完全避免潜在的 I/O 风险。在上一篇关于&lt;a href="http://localhost:1313/posts/k3s-101/" target="_blank" rel="noopener noreferrer"&gt;树莓派 5 集群配置 k3s&lt;/a&gt;的文章发布后，我的四节点集群仅稳定运行了一周，就有一个节点因突发大量 &lt;strong&gt;I/O Error&lt;/strong&gt; 彻底挂掉，而它用的正是我精心挑选的高耐久卡，寿命甚至不如 4B 上的普通卡。&lt;/p&gt;
 &lt;p&gt;性能瓶颈则在复杂场景下愈发明显：编译稍大的项目时进度条会陷入漫长等待，多服务并行时偶尔出现的卡顿也提醒着我硬件的局限。虽然可以通过外接 SSD 缓解存储问题，但这无疑增加了设备的复杂度，与其如此，不如直接升级到更可靠的平台。&lt;/p&gt;
 &lt;h2 id="nuc-的开箱与性能跃升" &gt;
 &lt;div&gt;
@@ -19,7 +180,7 @@
 NUC 的开箱与性能跃升
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;拆开 NUC 包装时，第一感觉是 &amp;ldquo;精致得不像一台迷你主机&amp;rdquo;。巴掌大的机身比树莓派大不了多少，但沉甸甸的金属外壳透着一股扎实感。我给它装了 &lt;a href="https://ubuntu.com/download/desktop"&gt;Ubuntu Desktop 24.04&lt;/a&gt;。性能差距让我感到很舒适：之前在树莓派上编译一个 Go 项目需要 3 分钟，在 NUC 上居然 1 分钟就搞定了；&lt;/p&gt;
+&lt;p&gt;拆开 NUC 包装时，第一感觉是 &amp;ldquo;精致得不像一台迷你主机&amp;rdquo;。巴掌大的机身比树莓派大不了多少，但沉甸甸的金属外壳透着一股扎实感。我给它装了 &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;。性能差距让我感到很舒适：之前在树莓派上编译一个 Go 项目需要 3 分钟，在 NUC 上居然 1 分钟就搞定了；&lt;/p&gt;
 &lt;figure&gt;
 &lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
 &lt;figcaption&gt;Fig.1 - 小巧却强悍的 Intel NUC&lt;/figcaption&gt;
@@ -206,13 +367,13 @@ NUC 的开箱与性能跃升
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank"&gt;MacbookPRO键帽打油怎么办？据说天才吧可以免费更换，是吗？&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;MacbookPRO键帽打油怎么办？据说天才吧可以免费更换，是吗？&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/"&gt;哔哩哔哩：MacBook剪刀键盘拆装（键帽+剪刀支架）&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;哔哩哔哩：MacBook剪刀键盘拆装（键帽+剪刀支架）&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:3"&gt;
-&lt;p&gt;&lt;a href="https://post.smzdm.com/p/ao9wevx9/"&gt;什么值得买：Macbook Pro 键盘打油，键帽更换作业&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://post.smzdm.com/p/ao9wevx9/" target="_blank" rel="noopener noreferrer"&gt;什么值得买：Macbook Pro 键盘打油，键帽更换作业&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/posts/replace-keyboard/</guid></item><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
@@ -393,25 +554,25 @@ Step 2. 验证安装效果
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/" target="_blank" rel="noopener noreferrer"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;&lt;a href="https://tailscale.com/"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:3"&gt;
-&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314" target="_blank" rel="noopener noreferrer"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:4"&gt;
-&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278" target="_blank" rel="noopener noreferrer"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:5"&gt;
-&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:6"&gt;
-&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90" target="_blank" rel="noopener noreferrer"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:7"&gt;
-&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>Linux</category><category>k3s</category><category>Raspberry Pi 5</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>超低电压输入的升降压电路（0.3V 转 5V）</title><link>https://www.junyi.dev/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
@@ -440,7 +601,7 @@ PCB 设计
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;很好的 JYF 老师，指点我很多，使我的 PCB 旋转。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
+&lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;没什么问题，就是有一些问题要改一下&lt;/p&gt;
 &lt;p&gt;—— JYF&lt;/p&gt;&lt;/blockquote&gt;
@@ -469,7 +630,7 @@ PCB 设计
 &lt;/h2&gt;
 &lt;p&gt;这是我第一次手工焊接 QFN 芯片，弄坏了一个 PCB 才焊接好。最后的成品质量很高。&lt;/p&gt;
 &lt;p&gt;之前焊接 0805 很丑，现在焊接 0603 封装现在也不在话下。&lt;del&gt;以后失业可以去工厂打螺丝了&lt;/del&gt;&lt;/p&gt;
-&lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
+&lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
 &lt;h2 id="成品图" &gt;
 &lt;div&gt;
 &lt;a href="#%e6%88%90%e5%93%81%e5%9b%be"&gt;
@@ -554,7 +715,7 @@ PCB 设计
 &lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;访问&lt;a href="https://github.com/settings/tokens"&gt;此页面&lt;/a&gt;（Settings ➜ Developer Settings ➜ Personal access tokens）&lt;/p&gt;
+&lt;p&gt;访问&lt;a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer"&gt;此页面&lt;/a&gt;（Settings ➜ Developer Settings ➜ Personal access tokens）&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Generate new token (classic)&lt;/p&gt;
@@ -607,8 +768,8 @@ PCB 设计
 &lt;/figure&gt;
 &lt;p&gt;你需要学习如何编写工作流，以下是一些你可以阅读的文档：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart"&gt;GitHub Actions 快速入门&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples"&gt;工作流示例&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart" target="_blank" rel="noopener noreferrer"&gt;GitHub Actions 快速入门&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples" target="_blank" rel="noopener noreferrer"&gt;工作流示例&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;仔细设计你的 workflow 文件，这里是一个示例：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;
@@ -1206,7 +1367,7 @@ Reference
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos" target="_blank" rel="noopener noreferrer"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-3/</guid></item><item><title>Distributed System: Consistency</title><link>https://www.junyi.dev/posts/paxos-review-2/</link><pubDate>Tue, 12 Sep 2023 14:06:01 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
@@ -1240,7 +1401,7 @@ Reference
 &lt;p&gt;如果一个问题被回答，显然问题本身得先在那里，因为给出答案的人必须已经看到这个问题，我们认为在问题和答案之间存在因果依赖。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;比如微信朋友圈需要服务器之间采用因果一致性，来保证用户刷朋友圈时不会看到评论所对应的答复而看不到对应的评论。&lt;/p&gt;
 &lt;img src="wechat-arch.png" alt="drawing" width="600" /&gt;
-&lt;p&gt;延伸阅读：怎么生成唯一且递增的 ID？&lt;a href="https://www.infoq.cn/article/wechat-serial-number-generator-architecture/"&gt;微信序列号生成器架构设计及演变&lt;/a&gt;&lt;a href="https://segmentfault.com/a/1190000040964518"&gt;雪花算法&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;延伸阅读：怎么生成唯一且递增的 ID？&lt;a href="https://www.infoq.cn/article/wechat-serial-number-generator-architecture/" target="_blank" rel="noopener noreferrer"&gt;微信序列号生成器架构设计及演变&lt;/a&gt;&lt;a href="https://segmentfault.com/a/1190000040964518" target="_blank" rel="noopener noreferrer"&gt;雪花算法&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id="序列一致性sequential-consistency" &gt;
 &lt;div&gt;
 &lt;a href="#%e5%ba%8f%e5%88%97%e4%b8%80%e8%87%b4%e6%80%a7sequential-consistency"&gt;
@@ -1281,170 +1442,4 @@ Lab 2
 &lt;li&gt;由一个 中央 view-server 决定谁是 primary 谁是 backup&lt;/li&gt;
 &lt;li&gt;primary 挂了，backup 顶上来&lt;/li&gt;
 &lt;/ol&gt;
-&lt;img src="pbr.png" alt="drawing" width="400"/&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-2/</guid></item><item><title>Distributed System: Ordering of events</title><link>https://www.junyi.dev/posts/paxos-review-1/</link><pubDate>Tue, 12 Sep 2023 11:32:04 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-上个学期的 CS5223 Distributed Systems ，Prof. Li 讲的蛮好，尽管实现了 Basic Paxos 和 Multi Paxos（多亏了 Junhui 的 cheatsheet1），但是耐不住时间的拷打，写的 Paxos 都快忘光了&amp;amp;hellip;
-所以，赶紧开一篇博客把想法都记录下来，以便之后的复习。</description><content:encoded>&lt;p&gt;上个学期的 &lt;a href="https://nusmods.com/courses/CS5223/distributed-systems"&gt;CS5223 Distributed Systems&lt;/a&gt; ，Prof. Li 讲的蛮好，尽管实现了 Basic Paxos 和 Multi Paxos（多亏了 Junhui 的 cheatsheet&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;），但是耐不住时间的拷打，写的 Paxos 都快忘光了&amp;hellip;&lt;/p&gt;
-&lt;!-- （而且没实现分布式事务） --&gt;
-&lt;p&gt;所以，赶紧开一篇博客把想法都记录下来，以便&lt;strong&gt;之后的复习&lt;/strong&gt;。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;首先简单过一下这些基础概念&lt;/p&gt;
-&lt;h2 id="happens-before-relationship" &gt;
-&lt;div&gt;
-&lt;a href="#happens-before-relationship"&gt;
-#
-&lt;/a&gt;
-Happens-before relationship
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Within a process, A comes before B then A→B, it also means&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;B &lt;strong&gt;could&lt;/strong&gt; have been influenced by A&lt;/p&gt;&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;If a → b, then b !→ a&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;What about a!→b, does that mean b→a? &lt;span style="color: white"&gt;&lt;strong&gt;NO&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;If a → b, and b → c, then a → c (transitivity)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;a !→ b and b !→ a, means a and b are &lt;strong&gt;concurrent&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;no one can tell whether a or b happened first!&lt;/p&gt;&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="lamport-clock" &gt;
-&lt;div&gt;
-&lt;a href="#lamport-clock"&gt;
-#
-&lt;/a&gt;
-Lamport clock
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;img src="logical-clock.png" alt="drawing" width="400"/&gt;
-&lt;p&gt;We can use clocks to implement a lock.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Our goals are:&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Only one process can hold the lock at a time.&lt;/li&gt;
-&lt;li&gt;Grant the lock &lt;strong&gt;in request order&lt;/strong&gt;.&lt;/li&gt;
-&lt;li&gt;Requesting processes &lt;strong&gt;eventually&lt;/strong&gt; get the lock.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;Our assumptions are:&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;In order&lt;/strong&gt; point-to-point message delivery.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;No failures&lt;/strong&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;Implementation:&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Each message carries a timestamp $T_m$&lt;/li&gt;
-&lt;li&gt;Three message types:
-&lt;ul&gt;
-&lt;li&gt;request&lt;/li&gt;
-&lt;li&gt;release&lt;/li&gt;
-&lt;li&gt;acknowledge&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Each node&amp;rsquo;s state:
-&lt;ul&gt;
-&lt;li&gt;A queue of requested messaged, ordered by $T_m$.&lt;/li&gt;
-&lt;li&gt;The latest timestamp it received from each node.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;On receiving&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;receiving a request
-&lt;ul&gt;
-&lt;li&gt;record the timestamp&lt;/li&gt;
-&lt;li&gt;add the request to the queue&lt;/li&gt;
-&lt;li&gt;send an acknowledge&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;receiving a release
-&lt;ul&gt;
-&lt;li&gt;record the timestamp&lt;/li&gt;
-&lt;li&gt;remove the request from the queue&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;receiving an acknowledge
-&lt;ul&gt;
-&lt;li&gt;record the timestamp&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;To perform&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;To acquire a lock
-&lt;ul&gt;
-&lt;li&gt;send request to every node, including itself&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;To release a lock
-&lt;ul&gt;
-&lt;li&gt;send release to every node, including itself&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;The lock is acquired when&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;My request is at the head of the queue.&lt;/li&gt;
-&lt;li&gt;I&amp;rsquo;ve received higher timestamp &lt;strong&gt;from every node&lt;/strong&gt;.&lt;/li&gt;
-&lt;li&gt;So my request must be the earliest.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id="vector-clock" &gt;
-&lt;div&gt;
-&lt;a href="#vector-clock"&gt;
-#
-&lt;/a&gt;
-Vector clock
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;Clock is a vector C, length = # of nodes.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;(0, 0, 0) for a 3-node system&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;On node i, increment C[i] on each event.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;node 0 (3,5,2), after event: (4,5,2)&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;On node i, received a message, increment C[i], and take the max of each element.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;node 0 (4,5,2), received message (2,7,0): (4,7,2)&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;If Cx[i] &amp;lt; Cy[i] and Cx[j] &amp;gt; Cy[j] for some i, j&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Cx and Cy are concurrent&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;if Cx[i] &amp;lt;= Cy[i] for all i, and there exist j such that Cx[j] &amp;lt; Cy[j]&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Cx happens before Cy&lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src="vector-lock.jpg" width="400" alt="vector-lock" /&gt;
-&lt;h2 id="lab-1" &gt;
-&lt;div&gt;
-&lt;a href="#lab-1"&gt;
-#
-&lt;/a&gt;
-Lab 1
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;实现一个 at-most-once 的 KV Store&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;RPC 要么最多执行一次，要么不执行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="reference" &gt;
-&lt;div&gt;
-&lt;a href="#reference"&gt;
-#
-&lt;/a&gt;
-Reference
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;div class="footnotes" role="doc-endnotes"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id="fn:1"&gt;
-&lt;p&gt;&lt;a href="https://jzhu.xyz/posts/paxos"&gt;https://jzhu.xyz/posts/paxos&lt;/a&gt; (Cheatsheet of MultiPaxos Impl)&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-1/</guid></item></channel></rss>
+&lt;img src="pbr.png" alt="drawing" width="400"/&gt;</content:encoded><category>技术文章</category><category>Distributed System</category><guid isPermaLink="true">https://www.junyi.dev/posts/paxos-review-2/</guid></item></channel></rss>

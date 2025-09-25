@@ -42,7 +42,7 @@
 硬盘实际的供电需求
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;查阅&lt;a href="https://www.seagate.com/www-content/datasheets/pdfs/skyhawk-3-5-hddDS1902-6-1710US-en_US.pdf"&gt;官方手册&lt;/a&gt;我们可以发现，这块硬盘的「Average Operating Power」是「5.5W」，但是，还有一项非常重要的参数是&lt;/p&gt;
+&lt;p&gt;查阅&lt;a href="https://www.seagate.com/www-content/datasheets/pdfs/skyhawk-3-5-hddDS1902-6-1710US-en_US.pdf" target="_blank" rel="noopener noreferrer"&gt;官方手册&lt;/a&gt;我们可以发现，这块硬盘的「Average Operating Power」是「5.5W」，但是，还有一项非常重要的参数是&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;「Startup Current, Typical (12V, 1.8A) 」&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;这个指的是硬盘刚开始工作时的瞬间电流，&lt;code&gt;ST4000VX007&lt;/code&gt; 这块硬盘的瞬间电流可以达到 &lt;code&gt;1.8A&lt;/code&gt;，其他型号的硬盘甚至瞬间电流可以达到 &lt;code&gt;2.0A&lt;/code&gt;&lt;/p&gt;
 &lt;figure&gt;

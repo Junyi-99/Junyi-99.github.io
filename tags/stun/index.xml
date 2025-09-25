@@ -25,7 +25,7 @@ STUN 本身不是一个 NAT 穿透的解决方案，而是一个 NAT 穿透条�
 &lt;li&gt;&lt;input disabled="" type="checkbox"&gt; 或、且，是否全都是左右两边加逗号&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;译者注：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;本翻译仅供参考，目的是让读者更好地理解 STUN 协议（&lt;a href=""&gt;RFC 5389&lt;/a&gt;）。&lt;/p&gt;
+&lt;p&gt;本翻译仅供参考，目的是让读者更好地理解 STUN 协议（&lt;a href="" target="_blank" rel="noopener noreferrer"&gt;RFC 5389&lt;/a&gt;）。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;我个人&lt;/strong&gt;对翻译的要求是逻辑严密准确，且文章&lt;strong&gt;核心内容&lt;/strong&gt;与英文原版一致。&lt;/p&gt;
 &lt;p&gt;为了更方便读者理解，本翻译 &lt;strong&gt;不保证&lt;/strong&gt; 部分措辞细节与英文原版一致。&lt;/p&gt;
 &lt;p&gt;为了保证文章的准确性，个别名词将不会进行翻译。&lt;/p&gt;
@@ -42,7 +42,7 @@ STUN
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;p&gt;STUN 全名叫 Session Traversal Utilities for NAT (STUN)&lt;/p&gt;
-&lt;p&gt;最新定义在 &lt;a href="https://datatracker.ietf.org/doc/rfc5389/"&gt;RFC 5389&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;最新定义在 &lt;a href="https://datatracker.ietf.org/doc/rfc5389/" target="_blank" rel="noopener noreferrer"&gt;RFC 5389&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;STUN 是一种协议，用于检查两个终端之间的连通性，可以工作在多种 NAT 之中，不需要 NAT 对其有任何行为。&lt;/p&gt;
 &lt;p&gt;STUN 本身不是一个 NAT 穿透的解决方案，而是一个 NAT 穿透条件检测工具。&lt;/p&gt;
 &lt;p&gt;STUN 最初定义在 RFC 3489，有时我们也说这个最初版本为 “经典 STUN” （classic STUN）&lt;/p&gt;
@@ -186,7 +186,7 @@ STUN
 &lt;a href="#4-%e6%9c%af%e8%af%ad-terminology"&gt;
 #
 &lt;/a&gt;
-&lt;a href="#4-%e6%9c%af%e8%af%ad-Terminology" title="4. 术语 Terminology"&gt;&lt;/a&gt;4. 术语 Terminology
+&lt;a href="#4-%e6%9c%af%e8%af%ad-Terminology" title="4. 术语 Terminology" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;4. 术语 Terminology
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;blockquote&gt;
@@ -198,7 +198,7 @@ STUN
 &lt;a href="#5-%e5%ae%9a%e4%b9%89-definitions"&gt;
 #
 &lt;/a&gt;
-&lt;a href="#5-%e5%ae%9a%e4%b9%89-Definitions" title="5. 定义 Definitions"&gt;&lt;/a&gt;5. 定义 Definitions
+&lt;a href="#5-%e5%ae%9a%e4%b9%89-Definitions" title="5. 定义 Definitions" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;5. 定义 Definitions
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;blockquote&gt;
@@ -248,7 +248,7 @@ STUN
 &lt;a href="#6-stun-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84-stun-message-structure"&gt;
 #
 &lt;/a&gt;
-&lt;a href="#6-STUN-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84-STUN-Message-Structure" title="6. STUN 消息结构 STUN Message Structure"&gt;&lt;/a&gt;6. STUN 消息结构 STUN Message Structure
+&lt;a href="#6-STUN-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84-STUN-Message-Structure" title="6. STUN 消息结构 STUN Message Structure" target="_blank" rel="noopener noreferrer"&gt;&lt;/a&gt;6. STUN 消息结构 STUN Message Structure
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;blockquote&gt;
@@ -316,7 +316,7 @@ Figure 3: Format of STUN Message Type Field
 &lt;p&gt;The magic cookie field MUST contain the fixed value 0x2112A442 in network byte order. In RFC 3489 [RFC3489], this field was part of the transaction ID; placing the magic cookie in this location allows a server to detect if the client will understand certain attributes that were added in this revised specification. In addition, it aids in distinguishing STUN packets from packets of other protocols when STUN is multiplexed with those other protocols on the same port.&lt;/p&gt;
 &lt;p&gt;[^1]: 还记得吗，事务ID是一个随机选择的 96位 的数字
 [^2]: 解多路复用就是与多路复用的作用相反的一个过程
-[^3]: In &lt;a href="https://en.wikipedia.org/wiki/Computer_networking"&gt;computer networking&lt;/a&gt;, &lt;strong&gt;out-of-band data&lt;/strong&gt; is the data transferred through a stream that is independent from the main &lt;em&gt;in-band&lt;/em&gt; data stream.
+[^3]: In &lt;a href="https://en.wikipedia.org/wiki/Computer_networking" target="_blank" rel="noopener noreferrer"&gt;computer networking&lt;/a&gt;, &lt;strong&gt;out-of-band data&lt;/strong&gt; is the data transferred through a stream that is independent from the main &lt;em&gt;in-band&lt;/em&gt; data stream.
 [^4]: 在資訊安全中，Nonce是一個在加密通訊只能使用一次的數字。在認證協定中，它往往是一個隨機或偽隨機數，以避免重送攻擊。
 [^5]: indicatino 在 indication transaction 中被发送。 指示 在 指示型事务 中被发送
 [^6]: The method indicates which of the various requests or indications this is. 方法表示这是哪种请求，或，这是哪种指示。

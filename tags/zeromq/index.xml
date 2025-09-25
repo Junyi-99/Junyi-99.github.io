@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 01 Jul 2021 09:48:45 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/zeromq/index.xml" rel="self" type="application/rss+xml"/><item><title>Zero Mq 注意事项</title><link>https://www.junyi.dev/posts/zero-mq/</link><pubDate>Thu, 01 Jul 2021 09:48:45 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 官方网站：ZeroMQ
 我用的实现版本：libzmq
-对我个人来说，ZMQ 可以免去我「维持 socket 通信可靠性」、「高性能并发」等任务。</description><content:encoded>&lt;p&gt;官方网站：&lt;a href="https://www.junyi.dev/2021/07/01/ZeroMQ%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/%5BZeroMQ%5D%28https://zeromq.org/%29"&gt;ZeroMQ&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;我用的实现版本：&lt;a href="https://github.com/zeromq/libzmq"&gt;libzmq&lt;/a&gt;&lt;/p&gt;
+对我个人来说，ZMQ 可以免去我「维持 socket 通信可靠性」、「高性能并发」等任务。</description><content:encoded>&lt;p&gt;官方网站：&lt;a href="https://www.junyi.dev/2021/07/01/ZeroMQ%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/%5BZeroMQ%5D%28https://zeromq.org/%29" target="_blank" rel="noopener noreferrer"&gt;ZeroMQ&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我用的实现版本：&lt;a href="https://github.com/zeromq/libzmq" target="_blank" rel="noopener noreferrer"&gt;libzmq&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;对我个人来说，ZMQ 可以免去我「维持 socket 通信可靠性」、「高性能并发」等任务。&lt;/p&gt;
 &lt;p&gt;（虽然之前自己也写了一整套）&lt;/p&gt;
 &lt;p&gt;ZMQ 的设计思路大体上跟我自己的想法很接近。&lt;/p&gt;

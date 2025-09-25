@@ -24,7 +24,7 @@ PCB 设计
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;很好的 JYF 老师，指点我很多，使我的 PCB 旋转。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
+&lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;没什么问题，就是有一些问题要改一下&lt;/p&gt;
 &lt;p&gt;—— JYF&lt;/p&gt;&lt;/blockquote&gt;
@@ -53,7 +53,7 @@ PCB 设计
 &lt;/h2&gt;
 &lt;p&gt;这是我第一次手工焊接 QFN 芯片，弄坏了一个 PCB 才焊接好。最后的成品质量很高。&lt;/p&gt;
 &lt;p&gt;之前焊接 0805 很丑，现在焊接 0603 封装现在也不在话下。&lt;del&gt;以后失业可以去工厂打螺丝了&lt;/del&gt;&lt;/p&gt;
-&lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
+&lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
 &lt;h2 id="成品图" &gt;
 &lt;div&gt;
 &lt;a href="#%e6%88%90%e5%93%81%e5%9b%be"&gt;
