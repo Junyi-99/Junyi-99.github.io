@@ -31,7 +31,8 @@
 &lt;/h2&gt;
 &lt;p&gt;遇到了一个错误：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;tvm/src/runtime/opencl/opencl_device_api.cc:263: No OpenCL platform matched given existing options …&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;tvm/src/runtime/opencl/opencl_device_api.cc:263: No OpenCL platform matched given existing options …&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;然后找了好多文章，找到了官方的文档，却发现2019年3月就提出了这个问题，是bug，并且被修复了。&lt;/p&gt;
 &lt;p&gt;现在是2020年3月7日，我不应该再遇到这个bug，于是看了看源代码，发现获取不到我的CL信息&lt;/p&gt;
 &lt;p&gt;终端里输入&lt;/p&gt;
@@ -65,17 +66,20 @@ clCreateContextFromType(NULL, CL_DEVICE_TYPE_ALL) No devices found in platform&l
 ICD loader Name OpenCL ICD Loader
 ICD loader Vendor OCL Icd free software
 ICD loader Version 2.2.11
-ICD loader Profile OpenCL 2.1&lt;/p&gt;&lt;/blockquote&gt;
+ICD loader Profile OpenCL 2.1&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;然后我用RPC跑GPU测试，又遇到了&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;CommandLine Error: Option ‘help-list’ registered more than once!&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;CommandLine Error: Option ‘help-list’ registered more than once!&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;这个问题，淦！&lt;/p&gt;
 &lt;p&gt;.&lt;/p&gt;
 &lt;p&gt;搜了一会，发现了这样一篇文章：&lt;a href="https://discuss.tvm.ai/t/llvm-error-option-registered-more-than-once-while-loading-libtvm-so/269/10" target="_blank" rel="noopener noreferrer"&gt;https://discuss.tvm.ai/t/llvm-error-option-registered-more-than-once-while-loading-libtvm-so/269/10&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;其中有一段话：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This happens when you compile TVM runtime with both &lt;code&gt;set(USE_OPENCL ON)&lt;/code&gt; and &lt;code&gt;set(USE_LLVM ON)&lt;/code&gt;
-You should enable only ONE option but not both.&lt;/p&gt;&lt;/blockquote&gt;
+You should enable only ONE option but not both.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;我试了一下，编译的时候开着OPENCL，LLVM关掉，发现错的更离谱了&lt;/p&gt;
 &lt;p&gt;然后我把OPENCL关掉，LLVM打开，Vulkan打开，还是出错&lt;/p&gt;
 &lt;p&gt;我试试LLVM打开，OPENCL关闭，Vulkan关闭&lt;/p&gt;
@@ -93,13 +97,15 @@ You should enable only ONE option but not both.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;遇到了新的错误：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Using CPU OpenCL device
-No OpenCL device&lt;/p&gt;&lt;/blockquote&gt;
+No OpenCL device&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;按照 tqchen 的说法，make clean 然后 make&lt;/p&gt;
 &lt;p&gt;还是不行（我重装了llvm）&lt;/p&gt;
 &lt;p&gt;后来，在 &lt;a href="https://askubuntu.com/questions/809450/installing-opencl-for-svga-ii-adapter" target="_blank" rel="noopener noreferrer"&gt;https://askubuntu.com/questions/809450/installing-opencl-for-svga-ii-adapter&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;找到这么一段话：&lt;a href="https://askubuntu.com/posts/809481/timeline" target="_blank" rel="noopener noreferrer"&gt;https://askubuntu.com/posts/809481/timeline&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;According to the top answer to &lt;a href="https://stackoverflow.com/questions/27996996/trying-to-install-opencl-on-vm" target="_blank" rel="noopener noreferrer"&gt;this question&lt;/a&gt;, the Intel SDK does not work on VMWare. It suggests instead trying to use the AMD APP SDK&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;According to the top answer to &lt;a href="https://stackoverflow.com/questions/27996996/trying-to-install-opencl-on-vm" target="_blank" rel="noopener noreferrer"&gt;this question&lt;/a&gt;, the Intel SDK does not work on VMWare. It suggests instead trying to use the AMD APP SDK&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;现在我还是反复遇到 bug，找到这样一段描述：&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;TVM DOES NOT SUPPORT openjdk-11 !!!&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;TVM DOES NOT SUPPORT openjdk-11 !!!&lt;/strong&gt;&lt;/p&gt;

@@ -76,7 +76,8 @@
 &lt;p&gt;&lt;strong&gt;看了上面的描述，感觉自己又行了，于是我设计出了下面的流程&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;系统刚开始，挑一个 primary-server，然后挑一个 backup-server，其它的都是 idle-server，然后开始工作。&lt;/p&gt;
-&lt;p&gt;primary 立马让 backup 成为新的 primary，从 idle 里面挑一个成为 backup，然后让这个新的 primary 把状态都发送给 backup&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;primary 立马让 backup 成为新的 primary，从 idle 里面挑一个成为 backup，然后让这个新的 primary 把状态都发送给 backup&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;很简单嘛！这能有什么问题？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;话音刚落，问题就来了。&lt;/p&gt;
 &lt;p&gt;请看下面这个情况：&lt;/p&gt;
@@ -131,7 +132,8 @@
 &lt;p&gt;这个词有点吓人。。。其实是在说：&lt;strong&gt;在网络故障时，两个及以上的节点都认为自己是 Leader (primary-server)。&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;View 1, primary=A, backup=B; 这时候 A 网络出故障无法连接到 view-server，B 成为新的 primary。
-View 2, primary=B, backup=_; B 是 新的 primary，但 A 也认为自己是 primary&lt;/p&gt;&lt;/blockquote&gt;
+View 2, primary=B, backup=_; B 是 新的 primary，但 A 也认为自己是 primary&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;在我们之前的规定里，只有 primary-server 会回复 client，但是脑裂的时候，两个节点都会回复 client，这就可能导致 client 收到的数据不一致。
 （破坏了 Linearzability）&lt;/p&gt;
 &lt;h2 id="系统卡住" &gt;
@@ -201,7 +203,8 @@ View 2, primary=B, backup=_; B 是 新的 primary，但 A 也认为自己是 pri
 &lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;状态机有一个特性：&lt;/strong&gt; 任何初始状态一样的状态机，如果执行的命令序列一样，则最终达到的状态也一样。&lt;/p&gt;
-&lt;p&gt;如果将此特性应用在多参与者进行协商共识上，可以理解为系统中存在多个具有完全相同的状态机（参与者），这些状态机能最终保持一致的关键就是起始状态完全一致和执行命令序列完全一致。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;如果将此特性应用在多参与者进行协商共识上，可以理解为系统中存在多个具有完全相同的状态机（参与者），这些状态机能最终保持一致的关键就是起始状态完全一致和执行命令序列完全一致。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;根据状态机的特性，要让多台机器的最终状态一致，只要确保它们的初始状态是一致的，并且接收到的操作指令序列也是一致的即可，无论这个操作指令是新增、修改、删除抑或是其他任何可能的程序行为，都可以理解为要将一连串的操作日志正确地广播给各个分布式节点。&lt;/p&gt;
 &lt;p&gt;我们并不要求所有节点的每一条指令都是同时开始、同步完成的，只要求在此期间的内部状态不能被外部观察到，且当操作指令序列执行完毕时，所有节点的最终的状态是一致的，这种模型就被称为状态机复制（State Machine Replication）。&lt;/p&gt;
 &lt;style&gt;
@@ -279,7 +282,8 @@ Reference
 &lt;blockquote&gt;
 &lt;p&gt;有因才有果，因在果之前&lt;/p&gt;
 &lt;p&gt;先看见因，再看见果&lt;/p&gt;
-&lt;p&gt;如果一个问题被回答，显然问题本身得先在那里，因为给出答案的人必须已经看到这个问题，我们认为在问题和答案之间存在因果依赖。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;如果一个问题被回答，显然问题本身得先在那里，因为给出答案的人必须已经看到这个问题，我们认为在问题和答案之间存在因果依赖。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;比如微信朋友圈需要服务器之间采用因果一致性，来保证用户刷朋友圈时不会看到评论所对应的答复而看不到对应的评论。&lt;/p&gt;
 &lt;img src="wechat-arch.png" alt="drawing" width="600" /&gt;
 &lt;p&gt;延伸阅读：怎么生成唯一且递增的 ID？&lt;a href="https://www.infoq.cn/article/wechat-serial-number-generator-architecture/" target="_blank" rel="noopener noreferrer"&gt;微信序列号生成器架构设计及演变&lt;/a&gt;&lt;a href="https://segmentfault.com/a/1190000040964518" target="_blank" rel="noopener noreferrer"&gt;雪花算法&lt;/a&gt;&lt;/p&gt;
@@ -342,12 +346,14 @@ Happens-before relationship
 &lt;li&gt;
 &lt;p&gt;Within a process, A comes before B then A→B, it also means&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;B &lt;strong&gt;could&lt;/strong&gt; have been influenced by A&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;B &lt;strong&gt;could&lt;/strong&gt; have been influenced by A&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;If a → b, then b !→ a&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;What about a!→b, does that mean b→a? &lt;span style="color: white"&gt;&lt;strong&gt;NO&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;What about a!→b, does that mean b→a? &lt;span style="color: white"&gt;&lt;strong&gt;NO&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;If a → b, and b → c, then a → c (transitivity)&lt;/p&gt;
@@ -355,7 +361,8 @@ Happens-before relationship
 &lt;li&gt;
 &lt;p&gt;a !→ b and b !→ a, means a and b are &lt;strong&gt;concurrent&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;no one can tell whether a or b happened first!&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;no one can tell whether a or b happened first!&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="lamport-clock" &gt;
@@ -446,13 +453,16 @@ Vector clock
 &lt;/h2&gt;
 &lt;p&gt;Clock is a vector C, length = # of nodes.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;(0, 0, 0) for a 3-node system&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;(0, 0, 0) for a 3-node system&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;On node i, increment C[i] on each event.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;node 0 (3,5,2), after event: (4,5,2)&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;node 0 (3,5,2), after event: (4,5,2)&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;On node i, received a message, increment C[i], and take the max of each element.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;node 0 (4,5,2), received message (2,7,0): (4,7,2)&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;node 0 (4,5,2), received message (2,7,0): (4,7,2)&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;If Cx[i] &amp;lt; Cy[i] and Cx[j] &amp;gt; Cy[j] for some i, j&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Cx and Cy are concurrent&lt;/li&gt;

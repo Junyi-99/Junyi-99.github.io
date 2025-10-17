@@ -155,7 +155,8 @@ Step 2. 验证安装效果
 &lt;p&gt;&lt;strong&gt;但是这个方案看起来特别奇怪。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;sup id="fnref:7"&gt;&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref"&gt;7&lt;/a&gt;&lt;/sup&gt; 里面提到&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;但是通过 &lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 的方式安装之后，并没有出现 &lt;code&gt;/etc/rancher/k3s/registries.yaml&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;那么它是怎么知道 registry 的 mirror 是谁呢？&lt;/p&gt;
 &lt;/details&gt;

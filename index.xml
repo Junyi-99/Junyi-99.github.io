@@ -533,7 +533,8 @@ Step 2. 验证安装效果
 &lt;p&gt;&lt;strong&gt;但是这个方案看起来特别奇怪。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;sup id="fnref:7"&gt;&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref"&gt;7&lt;/a&gt;&lt;/sup&gt; 里面提到&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;但是通过 &lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 的方式安装之后，并没有出现 &lt;code&gt;/etc/rancher/k3s/registries.yaml&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;那么它是怎么知道 registry 的 mirror 是谁呢？&lt;/p&gt;
 &lt;/details&gt;
@@ -604,7 +605,8 @@ PCB 设计
 &lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;没什么问题，就是有一些问题要改一下&lt;/p&gt;
-&lt;p&gt;—— JYF&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;—— JYF&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;然后 JYF 老师教了我很多关于电源电路设计的技巧，比如：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;铺铜时使用“阻止区”避免产生“天线”&lt;/li&gt;
@@ -974,7 +976,8 @@ PCB 设计
 &lt;figcaption&gt;Fig.1 - The most common comments at ICLR 2024, keywords extrated by GPT4.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;blockquote&gt;
-&lt;p&gt;I’m sure someone will ask “but won’t that get my idea stolen?”. I’ve heard anecdotally of that happening, but not to me or anyone I know in my field. Most likely because the idea is only the first tiny piece of the thesis: the idea is always followed by a significant investment of labor to execute and evaluate. The people you talk to are too busy with their own work to invest all that labor on your idea. But they’ll be happy to give you feedback on it.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;I’m sure someone will ask “but won’t that get my idea stolen?”. I’ve heard anecdotally of that happening, but not to me or anyone I know in my field. Most likely because the idea is only the first tiny piece of the thesis: the idea is always followed by a significant investment of labor to execute and evaluate. The people you talk to are too busy with their own work to invest all that labor on your idea. But they’ll be happy to give you feedback on it.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id="审-paper--写-review" &gt;
 &lt;div&gt;
 &lt;a href="#%e5%ae%a1-paper--%e5%86%99-review"&gt;
@@ -1195,7 +1198,8 @@ Results
 &lt;p&gt;&lt;strong&gt;看了上面的描述，感觉自己又行了，于是我设计出了下面的流程&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;系统刚开始，挑一个 primary-server，然后挑一个 backup-server，其它的都是 idle-server，然后开始工作。&lt;/p&gt;
-&lt;p&gt;primary 立马让 backup 成为新的 primary，从 idle 里面挑一个成为 backup，然后让这个新的 primary 把状态都发送给 backup&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;primary 立马让 backup 成为新的 primary，从 idle 里面挑一个成为 backup，然后让这个新的 primary 把状态都发送给 backup&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;很简单嘛！这能有什么问题？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;话音刚落，问题就来了。&lt;/p&gt;
 &lt;p&gt;请看下面这个情况：&lt;/p&gt;
@@ -1250,7 +1254,8 @@ Results
 &lt;p&gt;这个词有点吓人。。。其实是在说：&lt;strong&gt;在网络故障时，两个及以上的节点都认为自己是 Leader (primary-server)。&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;View 1, primary=A, backup=B; 这时候 A 网络出故障无法连接到 view-server，B 成为新的 primary。
-View 2, primary=B, backup=_; B 是 新的 primary，但 A 也认为自己是 primary&lt;/p&gt;&lt;/blockquote&gt;
+View 2, primary=B, backup=_; B 是 新的 primary，但 A 也认为自己是 primary&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;在我们之前的规定里，只有 primary-server 会回复 client，但是脑裂的时候，两个节点都会回复 client，这就可能导致 client 收到的数据不一致。
 （破坏了 Linearzability）&lt;/p&gt;
 &lt;h2 id="系统卡住" &gt;
@@ -1320,7 +1325,8 @@ View 2, primary=B, backup=_; B 是 新的 primary，但 A 也认为自己是 pri
 &lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;状态机有一个特性：&lt;/strong&gt; 任何初始状态一样的状态机，如果执行的命令序列一样，则最终达到的状态也一样。&lt;/p&gt;
-&lt;p&gt;如果将此特性应用在多参与者进行协商共识上，可以理解为系统中存在多个具有完全相同的状态机（参与者），这些状态机能最终保持一致的关键就是起始状态完全一致和执行命令序列完全一致。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;如果将此特性应用在多参与者进行协商共识上，可以理解为系统中存在多个具有完全相同的状态机（参与者），这些状态机能最终保持一致的关键就是起始状态完全一致和执行命令序列完全一致。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;根据状态机的特性，要让多台机器的最终状态一致，只要确保它们的初始状态是一致的，并且接收到的操作指令序列也是一致的即可，无论这个操作指令是新增、修改、删除抑或是其他任何可能的程序行为，都可以理解为要将一连串的操作日志正确地广播给各个分布式节点。&lt;/p&gt;
 &lt;p&gt;我们并不要求所有节点的每一条指令都是同时开始、同步完成的，只要求在此期间的内部状态不能被外部观察到，且当操作指令序列执行完毕时，所有节点的最终的状态是一致的，这种模型就被称为状态机复制（State Machine Replication）。&lt;/p&gt;
 &lt;style&gt;
@@ -1398,7 +1404,8 @@ Reference
 &lt;blockquote&gt;
 &lt;p&gt;有因才有果，因在果之前&lt;/p&gt;
 &lt;p&gt;先看见因，再看见果&lt;/p&gt;
-&lt;p&gt;如果一个问题被回答，显然问题本身得先在那里，因为给出答案的人必须已经看到这个问题，我们认为在问题和答案之间存在因果依赖。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;如果一个问题被回答，显然问题本身得先在那里，因为给出答案的人必须已经看到这个问题，我们认为在问题和答案之间存在因果依赖。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;比如微信朋友圈需要服务器之间采用因果一致性，来保证用户刷朋友圈时不会看到评论所对应的答复而看不到对应的评论。&lt;/p&gt;
 &lt;img src="wechat-arch.png" alt="drawing" width="600" /&gt;
 &lt;p&gt;延伸阅读：怎么生成唯一且递增的 ID？&lt;a href="https://www.infoq.cn/article/wechat-serial-number-generator-architecture/" target="_blank" rel="noopener noreferrer"&gt;微信序列号生成器架构设计及演变&lt;/a&gt;&lt;a href="https://segmentfault.com/a/1190000040964518" target="_blank" rel="noopener noreferrer"&gt;雪花算法&lt;/a&gt;&lt;/p&gt;

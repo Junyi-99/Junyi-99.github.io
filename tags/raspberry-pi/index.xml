@@ -175,7 +175,8 @@ Build TVM Runtim on Raspberry Pi 4B
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果在 &lt;code&gt;cmake ..&lt;/code&gt; 的时候找不到 llvm 那就&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install -y llvm
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;我执行这条指令的时间是 2021 年 2 月 19 日，清华源 apt 给我装的是 llvm-7&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;我执行这条指令的时间是 2021 年 2 月 19 日，清华源 apt 给我装的是 llvm-7&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;编译好 runtime 之后，我们需要设置 &lt;code&gt;PYTHONPATH&lt;/code&gt; 环境变量（如果你用的是 bash，那你编辑 .bashrc，如果是 zsh，那你编辑 .zshrc）&lt;/p&gt;
 &lt;p&gt;(下面这条命令的 current working directory 为：&lt;code&gt;~&lt;/code&gt;，使用的是 &lt;code&gt;zsh&lt;/code&gt;)&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;export PYTHONPATH=&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$PYTHONPATH&lt;/span&gt;&lt;span style="color:#5af78e"&gt;:~/tvm/python&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zshrc

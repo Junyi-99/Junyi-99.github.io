@@ -134,7 +134,8 @@
 &lt;figcaption&gt;Fig.1 - The most common comments at ICLR 2024, keywords extrated by GPT4.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;blockquote&gt;
-&lt;p&gt;I’m sure someone will ask “but won’t that get my idea stolen?”. I’ve heard anecdotally of that happening, but not to me or anyone I know in my field. Most likely because the idea is only the first tiny piece of the thesis: the idea is always followed by a significant investment of labor to execute and evaluate. The people you talk to are too busy with their own work to invest all that labor on your idea. But they’ll be happy to give you feedback on it.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;I’m sure someone will ask “but won’t that get my idea stolen?”. I’ve heard anecdotally of that happening, but not to me or anyone I know in my field. Most likely because the idea is only the first tiny piece of the thesis: the idea is always followed by a significant investment of labor to execute and evaluate. The people you talk to are too busy with their own work to invest all that labor on your idea. But they’ll be happy to give you feedback on it.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id="审-paper--写-review" &gt;
 &lt;div&gt;
 &lt;a href="#%e5%ae%a1-paper--%e5%86%99-review"&gt;
@@ -200,11 +201,14 @@
 在写技术博客的时候，难免会写到一些单词的中文版本，为了防止歧义，我们可以通过 &amp;amp;lt;ruby&amp;amp;gt; 标签把原始单词标注出来</description><content:encoded>&lt;p&gt;在写技术博客的时候，难免会写到一些单词的中文版本，为了防止歧义，我们可以通过 &lt;code&gt;&amp;lt;ruby&amp;gt;&lt;/code&gt; 标签把原始单词标注出来&lt;/p&gt;
 &lt;p&gt;下面是一些例子：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;近些年来，&lt;ruby&gt;容器&lt;rt&gt;Container&lt;/rt&gt;&lt;/ruby&gt;技术极大地降低了服务的部署成本&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;近些年来，&lt;ruby&gt;容器&lt;rt&gt;Container&lt;/rt&gt;&lt;/ruby&gt;技术极大地降低了服务的部署成本&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;blockquote&gt;
-&lt;p&gt;在 Linux 系统中，我们可以通过&lt;ruby&gt;定时任务&lt;rt&gt;cron job&lt;/rt&gt;&lt;/ruby&gt;功能进行系统管理&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在 Linux 系统中，我们可以通过&lt;ruby&gt;定时任务&lt;rt&gt;cron job&lt;/rt&gt;&lt;/ruby&gt;功能进行系统管理&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;blockquote&gt;
-&lt;p&gt;苹果的&lt;ruby&gt;隔空投送&lt;rt&gt;AirDrop&lt;/rt&gt;&lt;/ruby&gt;并没有那么可靠，丢失文件的情况经常发生&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;苹果的&lt;ruby&gt;隔空投送&lt;rt&gt;AirDrop&lt;/rt&gt;&lt;/ruby&gt;并没有那么可靠，丢失文件的情况经常发生&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;近些年来，&amp;lt;&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;容器&amp;lt;&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;Container&amp;lt;/&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;技术极大地降低了服务的部署成本
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt;在 Linux 系统中，我们可以通过&amp;lt;&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;定时任务&amp;lt;&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;cron job&amp;lt;/&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;功能进行系统管理
@@ -343,7 +347,8 @@
 &lt;/div&gt;
 &lt;/h1&gt;
 &lt;blockquote&gt;
-&lt;p&gt;“Ok, I know I don’t fell like studying right now. But, I’m going to get up, go to my desk, and work for 2 minutes. If I still don’t feel like it, I can stop working.”&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;“Ok, I know I don’t fell like studying right now. But, I’m going to get up, go to my desk, and work for 2 minutes. If I still don’t feel like it, I can stop working.”&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h1 id="13-exercise-and-come-back-to-work" &gt;
 &lt;div&gt;
 &lt;a href="#13-exercise-and-come-back-to-work"&gt;
