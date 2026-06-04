@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 26 Aug 2023 19:32:24 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/vfl/index.xml" rel="self" type="application/rss+xml"/><item><title>&lt;ruby&gt;垂直联邦学习&lt;rt&gt;Vertical Federated Learning (VFL)&lt;/rt&gt;&lt;/ruby&gt;</title><link>https://www.junyi.dev/posts/vfl-1/</link><pubDate>Sat, 26 Aug 2023 19:32:24 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 26 Aug 2023 19:32:24 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/vfl/index.xml" rel="self" type="application/rss+xml"/><item><title>&lt;ruby&gt;垂直联邦学习&lt;rt&gt;Vertical Federated Learning (VFL)&lt;/rt&gt;&lt;/ruby&gt;</title><link>https://www.junyi.dev/posts/vfl-1/</link><pubDate>Sat, 26 Aug 2023 19:32:24 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 这是一个科普性质的文章
 之前很抗拒做 VFL，因为我认为 VFL 只是一个训练模型的工作。
-但是，我刚刚意识到 VFL 不只是深度学习。（一种突然开窍的感觉）</description><guid isPermaLink="true">https://www.junyi.dev/posts/vfl-1/</guid></item></channel></rss>
+但是，我刚刚意识到 VFL 不只是深度学习。（一种突然开窍的感觉）</description><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;这是一个科普性质的文章&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;之前很抗拒做 VFL，因为我认为 VFL 只是一个训练模型的工作。&lt;/p&gt;
+&lt;p&gt;但是，我刚刚意识到 VFL 不只是深度学习。（一种突然开窍的感觉）&lt;/p&gt;
+&lt;p&gt;实际上，&lt;ruby&gt;垂直联邦学习&lt;rt&gt;Vertical Federated Learning&lt;/rt&gt;&lt;/ruby&gt; 在 &lt;ruby&gt;联邦学习&lt;rt&gt;Federated Learning&lt;/rt&gt;&lt;/ruby&gt; 领域里，研究的核心是 &lt;code&gt;Record Linkage&lt;/code&gt; / &lt;code&gt;Data Integration&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;这玩意被深度学习包装一下就变成了 VFL。&lt;/p&gt;
+&lt;p&gt;研究 HFL 的人比研究 VFL 的人多。因为 VFL 的数据太难获得了！&lt;/p&gt;
+&lt;figure&gt;
+&lt;div style="display: flex; align-items: end"&gt;
+&lt;div style=""&gt;
+&lt;img src="https://www.junyi.dev/posts/vfl-1/hfl.png" alt="Horizontal Federated Learning" /&gt;
+&lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;div style=""&gt;
+&lt;img src="https://www.junyi.dev/posts/vfl-1/vfl.png" alt="Vertical Federated Learning"/&gt;
+&lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 1 - HFL 和 VFL 的区别在于如何对待数据的 Column(Feature) &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;!-- &lt;figure&gt;
+&lt;img width="250" src="https://www.junyi.dev/posts/vfl-1/procedure.png" alt="Procedure of Vertical Federated Learning"/&gt;
+&lt;figcaption&gt;图 2 - VFL 的一般流程（SplitNN）&lt;/figcaption&gt;
+&lt;/figure&gt; --&gt;
+&lt;p&gt;想想看，什么样的场景需要用到 VFL 呢？&lt;/p&gt;
+&lt;p&gt;比如银行和医院可以合作训练一个模型，预测用户的健康状态 / 还款能力。&lt;/p&gt;
+&lt;p&gt;训练这样一个模型之前，我们应该先把银行和医院的数据对齐一下（做一下 Record Linkage）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Record Linkage&lt;/strong&gt;: the process of identifying and linking records that correspond to the same individual across different databases.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/vfl-1/rl.png" alt="Vertical Federated Learning"/&gt;
+&lt;figcaption&gt;图 2 - 经过 Record Linkage 过程，我们找到了银行和医院中的 Junyi Hou。&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/vfl-1/pprl.png" alt="Vertical Federated Learning"/&gt;
+&lt;figcaption&gt;图 3 - 在 Privacy Preserving (保护隐私) 的情况下，Record Linkage 变得困难。 &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;在 Privacy Preserving 的情况下，如何做 Record Linkage 呢？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一个方法是 &lt;a href="https://github.com/Xtra-Computing/FedSim" target="_blank" rel="noopener noreferrer"&gt;FedSim (NeurIPS2022)&lt;/a&gt;，取 TopK 个最相关的 record 做 linkage &amp;hellip;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;VFL 数据不够的情况下，我们怎么广泛评估算法好坏呢？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;大部分研究者手动切分数据集，要么随机切，要么平均切，要么看心情切。&lt;/p&gt;
+&lt;p&gt;比如数据集有 16 个 feature，我分成 2 个 party，partyA 有 9 个 feature，partyB 有 7 个 feature。&lt;/p&gt;
+&lt;p&gt;直到 &lt;a href="https://vertibench.xtra.science/" target="_blank" rel="noopener noreferrer"&gt;VertiBench (ICLR2024)&lt;/a&gt; 这篇工作，我们才有一个切分数据集的&lt;strong&gt;指导纲领&lt;/strong&gt;（两个指标）。&lt;/p&gt;</content:encoded><category>VFL</category><category>FL</category><category>Research</category><guid isPermaLink="true">https://www.junyi.dev/posts/vfl-1/</guid></item></channel></rss>

@@ -1,3 +1,162 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 06 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/tailscale/index.xml" rel="self" type="application/rss+xml"/><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 06 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/tailscale/index.xml" rel="self" type="application/rss+xml"/><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.
-This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;amp;rsquo;s what I ran into so others can avoid the same traps.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item></channel></rss>
+This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;amp;rsquo;s what I ran into so others can avoid the same traps.</description><content:encoded>&lt;p&gt;In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.&lt;/p&gt;
+&lt;p&gt;This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;rsquo;s what I ran into so others can avoid the same traps.&lt;/p&gt;
+&lt;h2 id="the-goal" &gt;
+&lt;div&gt;
+&lt;a href="#the-goal"&gt;
+#
+&lt;/a&gt;
+The Goal
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Route all outbound traffic from any container through a Tailscale sidecar, forwarding via a remote exit node:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/architecture.svg" alt="nerdctl &amp;#43; Tailscale Sidecar Architecture"&gt;&lt;/p&gt;
+&lt;p&gt;For verification, I used &lt;code&gt;nicolaka/netshoot&lt;/code&gt; as a test container — it comes with curl, dig, tcpdump, iperf, and a full suite of networking tools out of the box.&lt;/p&gt;
+&lt;h2 id="pitfall-1-nerdctl-compose-doesnt-support-network_mode-servicexxx" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-1-nerdctl-compose-doesnt-support-network_mode-servicexxx"&gt;
+#
+&lt;/a&gt;
+Pitfall 1: nerdctl compose doesn&amp;rsquo;t support &lt;code&gt;network_mode: service:xxx&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Docker Compose supports &lt;code&gt;network_mode: service:&amp;lt;service_name&amp;gt;&lt;/code&gt;, which automatically resolves the service name to the corresponding container&amp;rsquo;s network namespace. nerdctl compose hasn&amp;rsquo;t implemented this translation layer and throws an error:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;unsupported network_mode: service:tailscale-sidecar
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt; Use &lt;code&gt;network_mode: container:&amp;lt;container_name&amp;gt;&lt;/code&gt; instead, and pin the sidecar container&amp;rsquo;s name with &lt;code&gt;container_name&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar &lt;span style="color:#78787e"&gt;# Pin the name&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar &lt;span style="color:#78787e"&gt;# Use container name, not service name&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Without a fixed &lt;code&gt;container_name&lt;/code&gt;, nerdctl compose auto-generates names like &lt;code&gt;blockchain-tailscale-sidecar-1&lt;/code&gt;, causing reference mismatches.&lt;/p&gt;
+&lt;h2 id="pitfall-2-undefined-tag-in-tailscale-acl" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-2-undefined-tag-in-tailscale-acl"&gt;
+#
+&lt;/a&gt;
+Pitfall 2: Undefined tag in Tailscale ACL
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;After starting, the Tailscale container immediately exits with:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Received error: requested tags [tag:container] are invalid or not permitted
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt; Define the tag in your Tailscale admin console&amp;rsquo;s ACL policy and select it when generating the auth key:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;tagOwners&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;&amp;#34;tag:container&amp;#34;&lt;/span&gt;: [&lt;span style="color:#5af78e"&gt;&amp;#34;autogroup:admin&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="pitfall-3-missing-sys_module-capability" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-3-missing-sys_module-capability"&gt;
+#
+&lt;/a&gt;
+Pitfall 3: Missing &lt;code&gt;SYS_MODULE&lt;/code&gt; capability
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;This one is the sneakiest. The container joins the tailnet fine, &lt;code&gt;tailscale ping&lt;/code&gt; works, but after enabling the exit node, TCP traffic is completely broken — only ICMP gets through.&lt;/p&gt;
+&lt;p&gt;The root cause: kernel mode (&lt;code&gt;TS_USERSPACE=false&lt;/code&gt;) needs to load kernel modules like &lt;code&gt;xt_mark&lt;/code&gt; and &lt;code&gt;nf_nat&lt;/code&gt; to set up iptables forwarding rules. Without &lt;code&gt;SYS_MODULE&lt;/code&gt; capability, these modules can&amp;rsquo;t load. The iptables rules are written but don&amp;rsquo;t take effect, resulting in working ICMP but broken TCP.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE &lt;span style="color:#78787e"&gt;# Essential&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="pitfall-4-dns-failure-in-exit-node-mode" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-4-dns-failure-in-exit-node-mode"&gt;
+#
+&lt;/a&gt;
+Pitfall 4: DNS failure in exit node mode
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;With the exit node enabled, all outbound traffic goes through the WireGuard tunnel to the remote exit node. But &lt;code&gt;/etc/resolv.conf&lt;/code&gt; still points to local DNS servers (e.g., &lt;code&gt;10.0.2.3&lt;/code&gt;), which are unreachable from the exit node&amp;rsquo;s perspective. DNS queries naturally fail.&lt;/p&gt;
+&lt;p&gt;The symptom: &lt;code&gt;curl ifconfig.me&lt;/code&gt; reports &lt;code&gt;Could not resolve host&lt;/code&gt;, while direct IP access hangs or returns errors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt; Let Tailscale take over DNS so queries also go through the tunnel:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="final-working-composeyaml" &gt;
+&lt;div&gt;
+&lt;a href="#final-working-composeyaml"&gt;
+#
+&lt;/a&gt;
+Final Working compose.yaml
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: tailscale/tailscale:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;hostname&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_AUTHKEY=${TS_AUTHKEY}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_EXTRA_ARGS=--advertise-tags=tag:container --exit-node=${TS_EXITNODE}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_STATE_DIR=/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_USERSPACE=false
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;volumes&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - ${PWD}/tailscale-sidecar/state:/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;devices&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - /dev/net/tun:/dev/net/tun
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;restart&lt;/span&gt;: unless-stopped
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: nicolaka/netshoot
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;depends_on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;command&lt;/span&gt;: sleep infinity
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Prepare a &lt;code&gt;.env&lt;/code&gt; file in the same directory:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;TS_AUTHKEY=tskey-auth-xxxxx
+TS_EXITNODE=100.x.x.x
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="verification" &gt;
+&lt;div&gt;
+&lt;a href="#verification"&gt;
+#
+&lt;/a&gt;
+Verification
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;nicolaka/netshoot&lt;/code&gt; comes with plenty of network tools, perfect for validation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Check exit IP to confirm traffic goes through the exit node&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot curl ifconfig.me
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# DNS resolution test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot dig google.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# View routing table&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot ip route show table all
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Packet capture for debugging&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot tcpdump -i any -n
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Tailscale status checks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale exit-node status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale ping &amp;lt;exit-node-ip&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="debugging-methodology" &gt;
+&lt;div&gt;
+&lt;a href="#debugging-methodology"&gt;
+#
+&lt;/a&gt;
+Debugging Methodology
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The debugging process itself is worth reviewing. When facing a compound problem like &amp;ldquo;exit node doesn&amp;rsquo;t work&amp;rdquo;, the effective approach is to isolate layer by layer:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Verify tunnel connectivity first:&lt;/strong&gt; &lt;code&gt;tailscale ping&lt;/code&gt; confirms whether the WireGuard tunnel itself works.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Comparative testing:&lt;/strong&gt; Disable the exit node to determine if the issue is with the exit node or the underlying network.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Differentiate protocols:&lt;/strong&gt; ICMP works but TCP doesn&amp;rsquo;t — points to iptables/kernel module issues.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Separate DNS from connectivity:&lt;/strong&gt; Use direct IP access to bypass DNS and isolate each issue.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Compare against known-working configs:&lt;/strong&gt; Spotting that a previously working setup had &lt;code&gt;SYS_MODULE&lt;/code&gt; immediately pinpointed the problem.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Each step narrows the scope, avoiding wasted time in the wrong direction.&lt;/p&gt;
+&lt;h2 id="final-thoughts" &gt;
+&lt;div&gt;
+&lt;a href="#final-thoughts"&gt;
+#
+&lt;/a&gt;
+Final Thoughts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;nerdctl compose has matured as a Docker Compose alternative, but gaps remain in edge-case compatibility. The missing &lt;code&gt;network_mode: service:&lt;/code&gt; support and different container naming conventions are easy migration traps. For Tailscale in containers with exit node routing, &lt;code&gt;SYS_MODULE&lt;/code&gt; and &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; are two easily overlooked but essential configurations. Hope this write-up helps anyone hitting the same issues.&lt;/p&gt;</content:encoded><category>nerdctl</category><category>Tailscale</category><category>containerd</category><category>exit-node</category><category>sidecar</category><category>Docker Compose</category><category>WireGuard</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item></channel></rss>

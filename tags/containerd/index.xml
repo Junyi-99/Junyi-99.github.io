@@ -1,3 +1,162 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 06 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/containerd/index.xml" rel="self" type="application/rss+xml"/><item><title>用 nerdctl + Tailscale Sidecar 让容器流量走 Exit Node：踩坑全记录</title><link>https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 06 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/containerd/index.xml" rel="self" type="application/rss+xml"/><item><title>用 nerdctl + Tailscale Sidecar 让容器流量走 Exit Node：踩坑全记录</title><link>https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 在容器化部署中，有时候我们需要让容器的所有出站流量通过特定的网络出口。Tailscale 的 sidecar 模式可以做到这一点：用一个 Tailscale 容器作为 sidecar，其他容器共享它的网络命名空间，流量通过 WireGuard 隧道经由远端 exit node 出去。
-这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。</description><guid isPermaLink="true">https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item></channel></rss>
+这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。</description><content:encoded>&lt;p&gt;在容器化部署中，有时候我们需要让容器的所有出站流量通过特定的网络出口。Tailscale 的 sidecar 模式可以做到这一点：用一个 Tailscale 容器作为 sidecar，其他容器共享它的网络命名空间，流量通过 WireGuard 隧道经由远端 exit node 出去。&lt;/p&gt;
+&lt;p&gt;这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。&lt;/p&gt;
+&lt;h2 id="最终目标" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%bb%88%e7%9b%ae%e6%a0%87"&gt;
+#
+&lt;/a&gt;
+最终目标
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;让任意容器通过 Tailscale sidecar 接入 tailnet，所有出站流量经由远程 exit node 转发。架构如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/architecture.svg" alt="nerdctl &amp;#43; Tailscale Sidecar 架构图"&gt;&lt;/p&gt;
+&lt;p&gt;为了方便验证网络是否通畅，我用 &lt;code&gt;nicolaka/netshoot&lt;/code&gt; 作为测试容器——它自带 curl、dig、tcpdump、iperf 等一整套网络排查工具，比临时装工具方便得多。&lt;/p&gt;
+&lt;h2 id="坑-1nerdctl-compose-不支持-network_mode-servicexxx" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-1nerdctl-compose-%e4%b8%8d%e6%94%af%e6%8c%81-network_mode-servicexxx"&gt;
+#
+&lt;/a&gt;
+坑 1：nerdctl compose 不支持 &lt;code&gt;network_mode: service:xxx&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Docker Compose 支持 &lt;code&gt;network_mode: service:&amp;lt;service_name&amp;gt;&lt;/code&gt; 语法，它会自动把 service 名解析为对应容器的网络命名空间。但 nerdctl compose 没有实现这个翻译层，直接报错：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;unsupported network_mode: service:tailscale-sidecar
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 改用 &lt;code&gt;network_mode: container:&amp;lt;container_name&amp;gt;&lt;/code&gt;，并通过 &lt;code&gt;container_name&lt;/code&gt; 字段固定 sidecar 容器的名称。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar &lt;span style="color:#78787e"&gt;# 固定名称&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar &lt;span style="color:#78787e"&gt;# 用容器名而非服务名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果不固定 &lt;code&gt;container_name&lt;/code&gt;，nerdctl compose 会自动生成类似 &lt;code&gt;blockchain-tailscale-sidecar-1&lt;/code&gt; 的名称，导致引用不匹配。&lt;/p&gt;
+&lt;h2 id="坑-2tailscale-acl-中未定义-tag" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-2tailscale-acl-%e4%b8%ad%e6%9c%aa%e5%ae%9a%e4%b9%89-tag"&gt;
+#
+&lt;/a&gt;
+坑 2：Tailscale ACL 中未定义 tag
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;启动后 Tailscale 容器立即退出，日志显示：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Received error: requested tags [tag:container] are invalid or not permitted
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 在 Tailscale 管理后台的 ACL 策略中添加 tag 定义，并在生成 auth key 时勾选对应 tag：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;tagOwners&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;&amp;#34;tag:container&amp;#34;&lt;/span&gt;: [&lt;span style="color:#5af78e"&gt;&amp;#34;autogroup:admin&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="坑-3缺少-sys_module-capability" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-3%e7%bc%ba%e5%b0%91-sys_module-capability"&gt;
+#
+&lt;/a&gt;
+坑 3：缺少 &lt;code&gt;SYS_MODULE&lt;/code&gt; capability
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这个坑最隐蔽。容器能正常加入 tailnet，&lt;code&gt;tailscale ping&lt;/code&gt; 也通，但开启 exit node 后 TCP 流量完全不通，只有 ICMP 能过。&lt;/p&gt;
+&lt;p&gt;原因是内核模式（&lt;code&gt;TS_USERSPACE=false&lt;/code&gt;）需要加载 &lt;code&gt;xt_mark&lt;/code&gt;、&lt;code&gt;nf_nat&lt;/code&gt; 等内核模块来设置 iptables 转发规则。缺少 &lt;code&gt;SYS_MODULE&lt;/code&gt; capability 时，这些模块无法加载，iptables 规则写入但不生效，表现为 ICMP 正常而 TCP 断流。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE &lt;span style="color:#78787e"&gt;# 必须加上&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="坑-4exit-node-模式下-dns-失败" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-4exit-node-%e6%a8%a1%e5%bc%8f%e4%b8%8b-dns-%e5%a4%b1%e8%b4%a5"&gt;
+#
+&lt;/a&gt;
+坑 4：Exit Node 模式下 DNS 失败
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;开启 exit node 后，容器所有出站流量都走 WireGuard 隧道到远端 exit node 再出去。但 &lt;code&gt;/etc/resolv.conf&lt;/code&gt; 里的 DNS 服务器仍然是本地地址（如 &lt;code&gt;10.0.2.3&lt;/code&gt;），这些地址从 exit node 那端是不可达的，DNS 查询自然失败。&lt;/p&gt;
+&lt;p&gt;症状是 &lt;code&gt;curl ifconfig.me&lt;/code&gt; 报 &lt;code&gt;Could not resolve host&lt;/code&gt;，而直接用 IP 访问则卡住或返回异常。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 让 Tailscale 接管 DNS，查询也走隧道：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="最终可用的-composeyaml" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%bb%88%e5%8f%af%e7%94%a8%e7%9a%84-composeyaml"&gt;
+#
+&lt;/a&gt;
+最终可用的 compose.yaml
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: tailscale/tailscale:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;hostname&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_AUTHKEY=${TS_AUTHKEY}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_EXTRA_ARGS=--advertise-tags=tag:container --exit-node=${TS_EXITNODE}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_STATE_DIR=/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_USERSPACE=false
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;volumes&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - ${PWD}/tailscale-sidecar/state:/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;devices&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - /dev/net/tun:/dev/net/tun
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;restart&lt;/span&gt;: unless-stopped
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: nicolaka/netshoot
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;depends_on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;command&lt;/span&gt;: sleep infinity
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要在同目录下准备 &lt;code&gt;.env&lt;/code&gt; 文件：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;TS_AUTHKEY=tskey-auth-xxxxx
+TS_EXITNODE=100.x.x.x
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="验证方法" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%aa%8c%e8%af%81%e6%96%b9%e6%b3%95"&gt;
+#
+&lt;/a&gt;
+验证方法
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;nicolaka/netshoot&lt;/code&gt; 自带丰富的网络工具，非常适合验证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 检查出口 IP，确认流量是否走了 exit node&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot curl ifconfig.me
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# DNS 解析测试&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot dig google.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 查看路由表&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot ip route show table all
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 抓包排查&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot tcpdump -i any -n
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Tailscale 侧的状态检查&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale exit-node status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale ping &amp;lt;exit-node-ip&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="排查思路总结" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%8e%92%e6%9f%a5%e6%80%9d%e8%b7%af%e6%80%bb%e7%bb%93"&gt;
+#
+&lt;/a&gt;
+排查思路总结
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这次排查的过程本身也值得回顾。面对&amp;quot;exit node 不工作&amp;quot;这样的复合问题，有效的方法是逐层剥离：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;先确认隧道连通性：&lt;/strong&gt; &lt;code&gt;tailscale ping&lt;/code&gt; 验证 WireGuard 隧道本身是否通。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对比实验：&lt;/strong&gt; 关掉 exit node 测试，确认问题出在 exit node 还是基础网络。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区分协议：&lt;/strong&gt; ICMP 通但 TCP 不通，指向 iptables/内核模块问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区分 DNS 和连通性：&lt;/strong&gt; 用 IP 直连绕过 DNS，分别定位。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对比已知可用的配置：&lt;/strong&gt; 发现之前能用的命令多了 &lt;code&gt;SYS_MODULE&lt;/code&gt;，一下锁定问题。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;每一步缩小范围，避免在错误的方向上浪费时间。&lt;/p&gt;
+&lt;h2 id="写在最后" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%86%99%e5%9c%a8%e6%9c%80%e5%90%8e"&gt;
+#
+&lt;/a&gt;
+写在最后
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;nerdctl compose 作为 Docker Compose 的替代方案已经很成熟了，但在细节兼容性上仍有差距。&lt;code&gt;network_mode: service:&lt;/code&gt; 的缺失、容器名的自动生成规则不同，这些都是迁移时容易踩到的坑。而 Tailscale 在容器中使用 exit node 时，&lt;code&gt;SYS_MODULE&lt;/code&gt; 和 &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; 是两个容易被忽略但又不可或缺的配置。希望这篇记录能帮到遇到同样问题的人。&lt;/p&gt;</content:encoded><category>nerdctl</category><category>Tailscale</category><category>containerd</category><category>exit-node</category><category>sidecar</category><category>Docker Compose</category><category>WireGuard</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item></channel></rss>

@@ -1,4 +1,182 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 01 Aug 2025 01:16:29 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/categories/computer/index.xml" rel="self" type="application/rss+xml"/><item><title>MacBook Pro M1 键帽更换指南</title><link>https://www.junyi.dev/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 01 Aug 2025 01:16:29 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/categories/computer/index.xml" rel="self" type="application/rss+xml"/><item><title>MacBook Pro M1 键帽更换指南</title><link>https://www.junyi.dev/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 Shift 和 Space，外观变得非常难看）。
 虽然有人说可以去 Apple 直营店更换键帽1，但据说每次只能更换几个。对于我这种整块键盘都打油的情况，显然还是自己动手来得更实际。
-写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频2只演示了普通按键（字母键和数字键）的拆解，刻意跳过了长键帽（如 Space、Caps Lock、ESC）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。</description><guid isPermaLink="true">https://www.junyi.dev/posts/replace-keyboard/</guid></item></channel></rss>
+写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频2只演示了普通按键（字母键和数字键）的拆解，刻意跳过了长键帽（如 Space、Caps Lock、ESC）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。</description><content:encoded>&lt;p&gt;众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 &lt;kbd&gt;Shift&lt;/kbd&gt; 和 &lt;kbd&gt;Space&lt;/kbd&gt;，外观变得非常难看）。&lt;/p&gt;
+&lt;p&gt;虽然有人说可以去 Apple 直营店更换键帽&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，但据说每次只能更换几个。对于我这种&lt;strong&gt;整块键盘都打油&lt;/strong&gt;的情况，显然还是自己动手来得更实际。&lt;/p&gt;
+&lt;p&gt;写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;只演示了普通按键（字母键和数字键）的拆解，&lt;strong&gt;刻意跳过了&lt;/strong&gt;长键帽（如 &lt;kbd&gt;Space&lt;/kbd&gt;、&lt;kbd&gt;Caps Lock&lt;/kbd&gt;、&lt;kbd&gt;ESC&lt;/kbd&gt;）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
+&lt;figcaption&gt;
+换键帽前（上）和换键帽后（下）
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;我在淘宝上购买了全套键帽，花了 85 元，打算自己更换：&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/taobao.jpeg" style="border-radius:0.5rem; width: 256px"&gt;
+&lt;figcaption&gt;
+淘宝购买的全套键帽
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;（后来才看到，闲鱼全套键帽只要 ¥20 到 ¥40 之间每套&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;。。。）&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="拆掉旧键帽" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%8b%86%e6%8e%89%e6%97%a7%e9%94%ae%e5%b8%bd"&gt;
+#
+&lt;/a&gt;
+拆掉旧键帽
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;MacBook Pro 使用的是剪刀脚结构，因此我们必须遵循剪刀脚键盘的拆解方法。&lt;/p&gt;
+&lt;h3 id="普通按键拆装" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%99%ae%e9%80%9a%e6%8c%89%e9%94%ae%e6%8b%86%e8%a3%85"&gt;
+##
+&lt;/a&gt;
+普通按键拆装
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;操作步骤：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;定位卡扣&lt;/strong&gt;: 每个普通键帽都有四个卡扣，分别位于四个角&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;从右下角开始&lt;/strong&gt;: 用撬棒微微翘起键帽右下角，听到轻微的&amp;quot;啪&amp;quot;声表示卡扣已释放&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;接着左下角&lt;/strong&gt;: 重复同样操作释放左下角的卡扣&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提起键帽&lt;/strong&gt;: 当下方两个卡扣都释放后，轻轻向上提起整个键帽&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;完全取下&lt;/strong&gt;: 上方卡扣会自然脱离&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;注意事项：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⚠️ 不要用力过猛，剪刀脚结构比较脆弱&lt;/li&gt;
+&lt;li&gt;⚠️ 避免直接向上拉扯，可能会损坏卡扣&lt;/li&gt;
+&lt;li&gt;💡 建议使用塑料撬棒而不是金属工具，避免刮伤&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;你可以参考这个视频&lt;sup id="fnref1:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;，视频中演示了普通按键的拆解方法。&lt;/p&gt;
+&lt;p&gt;安装键帽与拆卸过程相反，首先把键帽从上方滑到卡槽里，然后按压键帽，直到键帽完全卡入卡槽。&lt;/p&gt;
+&lt;p&gt;⚠️ 注意不要大力按压键帽，因为键帽的塑料件非常脆弱。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="长键帽拆装如-shiftcaps-lockesc" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%95%bf%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e5%a6%82-shiftcaps-lockesc"&gt;
+##
+&lt;/a&gt;
+长键帽拆装（如 Shift、Caps Lock、ESC）
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;这类键帽内部通常带有一到两个平衡杆（铁丝），结构更复杂。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;拆卸建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同样从右下角开始，再拆左下角；&lt;/li&gt;
+&lt;li&gt;拆下时注意不要用力过猛，&lt;strong&gt;避免下方金属卡槽变形&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+拆下的 Caps Lock 键（镊子指着）和 Shift 键（较长）
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;安装建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果是 1 个平衡杆：&lt;br&gt;
+把铁丝先固定在键帽上，滑入键盘的缺口，再正常安装即可。&lt;/li&gt;
+&lt;li&gt;如果是 2 个平衡杆：&lt;br&gt;
+将&lt;strong&gt;上方平衡杆装在键帽上&lt;/strong&gt;，&lt;strong&gt;下方平衡杆卡在键盘上&lt;/strong&gt;。&lt;br&gt;
+安装时先对准上方卡槽，轻轻按入；再将下方卡扣压入孔位；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/longkey.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+只有一个平衡杆的键帽，先把平衡杆卡住缺口，然后再正常装
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="短键帽拆装方向键" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%9f%ad%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e6%96%b9%e5%90%91%e9%94%ae"&gt;
+##
+&lt;/a&gt;
+短键帽拆装（方向键）
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;上方向键：先撬开左侧卡扣，然后&lt;strong&gt;从左向右滑出&lt;/strong&gt;；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;左/下/右方向键：先撬开右侧卡扣，然后&lt;strong&gt;从右向左滑出&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;（在拆之前，请参考方向键构造图）&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkeys.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_side.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_top.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+方向键构造图
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="总结" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%80%bb%e7%bb%93"&gt;
+#
+&lt;/a&gt;
+总结
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;记得最后检查一下所有拆下来的键，防止有一些铁丝忘记取下来，我在装的最后就发现有两个铁丝忘记取出来。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/final.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+更换下来的旧键帽
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="常见问题解决" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3"&gt;
+##
+&lt;/a&gt;
+常见问题解决
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;键帽装回去后按压感觉不对怎么办？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查平衡杆是否正确卡入卡槽&lt;/li&gt;
+&lt;li&gt;确认剪刀脚支架没有变形或断裂&lt;/li&gt;
+&lt;li&gt;重新拆卸并按正确顺序安装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;键帽容易脱落？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查四个卡扣是否都正确扣入&lt;/li&gt;
+&lt;li&gt;平衡杆的安装方向是否正确&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;按键有卡顿现象？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查是否有灰尘或异物卡在键帽下方&lt;/li&gt;
+&lt;li&gt;确认剪刀脚支架安装位置正确&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="专业建议" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%93%e4%b8%9a%e5%bb%ba%e8%ae%ae"&gt;
+##
+&lt;/a&gt;
+专业建议
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;如果你对自己的动手能力不自信，或者已经有卡扣/剪刀脚损坏，建议：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;联系 Apple 官方维修点；&lt;/li&gt;
+&lt;li&gt;找可信的第三方维修；&lt;/li&gt;
+&lt;li&gt;观看更多视频教程练练手再动工。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;MacbookPRO键帽打油怎么办？据说天才吧可以免费更换，是吗？&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;哔哩哔哩：MacBook剪刀键盘拆装（键帽+剪刀支架）&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://post.smzdm.com/p/ao9wevx9/" target="_blank" rel="noopener noreferrer"&gt;什么值得买：Macbook Pro 键盘打油，键帽更换作业&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/posts/replace-keyboard/</guid></item></channel></rss>

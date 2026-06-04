@@ -1,3 +1,201 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 25 Dec 2024 13:07:09 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/k3s/index.xml" rel="self" type="application/rss+xml"/><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 25 Dec 2024 13:07:09 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/k3s/index.xml" rel="self" type="application/rss+xml"/><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。
-本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。</description><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item></channel></rss>
+本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。</description><content:encoded>&lt;p&gt;K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。&lt;/p&gt;
+&lt;p&gt;本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。&lt;/p&gt;
+&lt;h2 id="step-1-在-master-和-agent-节点分别执行命令" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-%e5%9c%a8-master-%e5%92%8c-agent-%e8%8a%82%e7%82%b9%e5%88%86%e5%88%ab%e6%89%a7%e8%a1%8c%e5%91%bd%e4%bb%a4"&gt;
+#
+&lt;/a&gt;
+Step 1. 在 Master 和 Agent 节点分别执行命令
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这部分参考了&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;的 &amp;ldquo;Setting Up with k3s&amp;rdquo; 章节&lt;/p&gt;
+&lt;h3 id="master-节点" &gt;
+&lt;div&gt;
+&lt;a href="#master-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Master 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-1&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="agent-节点" &gt;
+&lt;div&gt;
+&lt;a href="#agent-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Agent 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-2&lt;/code&gt;, &lt;code&gt;pi-3&lt;/code&gt;, &lt;code&gt;pi-4&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;K3S_URL&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://100.84.216.88:6443 &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;K3S_TOKEN&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;K10d0e1ccd102d3f60043941ab35d22f29ca15e0ecf48e138d502fd258ee232cb84::server:bc76905e2c32080b0c2a0501293876bd &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5&lt;/span&gt;&lt;span&gt; sh -s -
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3S_URL 和 K3S_TOKEN 请写你自己的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3s agent 节点不需要配置 `system-default-registry`。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;details&gt;
+&lt;summary&gt;为什么我的 &lt;code&gt;K3S_URL&lt;/code&gt; 是 &lt;code&gt;100.84.216.88&lt;/code&gt;&lt;/summary&gt;
+&lt;p&gt;因为我使用 tailscale &lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; 给树莓派集群构建了虚拟局域网。&lt;/p&gt;
+&lt;p&gt;请根据你的实际情况进行配置。&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;如何查看 &lt;code&gt;K3S_TOKEN&lt;/code&gt;&lt;/summary&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat /var/lib/rancher/k3s/server/node-token
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/details&gt;
+&lt;h2 id="step-2-验证安装效果" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-%e9%aa%8c%e8%af%81%e5%ae%89%e8%a3%85%e6%95%88%e6%9e%9c"&gt;
+#
+&lt;/a&gt;
+Step 2. 验证安装效果
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-5.png" alt="agent 已加入 master"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="其他k3s-在中国大陆地区的安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%85%b6%e4%bb%96k3s-%e5%9c%a8%e4%b8%ad%e5%9b%bd%e5%a4%a7%e9%99%86%e5%9c%b0%e5%8c%ba%e7%9a%84%e5%ae%89%e8%a3%85"&gt;
+#
+&lt;/a&gt;
+其他：K3s 在中国大陆地区的安装
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="方法一全新安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%b8%80%e5%85%a8%e6%96%b0%e5%ae%89%e8%a3%85"&gt;
+##
+&lt;/a&gt;
+方法一：全新安装
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 介绍了在安装时通过指定 &lt;code&gt;INSTALL_K3S_MIRROR=cn&lt;/code&gt; 和 &lt;code&gt;--system-default-registry&lt;/code&gt; 来更换 registry mirror。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 全新安装（master 节点）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image.png" alt="全新安装命令执行结果" /&gt;
+&lt;figcaption&gt;全新安装 - 命令执行结果&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="方法二换源" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%ba%8c%e6%8d%a2%e6%ba%90"&gt;
+##
+&lt;/a&gt;
+方法二：换源
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;这个方法适用于在国外配置好环境之后，设备迁移到中国大陆地区的无法访问默认源的用户。&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;我执行完 Rancher 的快速入门指南里提供的命令，发现 pods 根本没启动的&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Rancher 快速入门指南提供的代码（正常安装 k3s 但是无法启动 pod）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-2.png" alt="卡在 ContainerCreating 步骤" /&gt;
+&lt;figcaption&gt;卡在 ContainerCreating 步骤（黄色高亮部分）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;p&gt;在 &lt;code&gt;/etc/systemd/system/k3s.service&lt;/code&gt; 里面指定 &lt;code&gt;--system-default-registry&lt;/code&gt;，然后 &lt;code&gt;systemctl daemon-reload &amp;amp;&amp;amp; systemctl restart k3s&lt;/code&gt; 重启服务即可&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Unit&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 2&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Description&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;Lightweight Kubernetes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 3&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Documentation&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://k3s.io
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 4&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Wants&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 5&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;After&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Install&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;WantedBy&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;multi-user.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 9&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;10&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Service&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;11&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Type&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;notify
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;12&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/default/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;13&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/sysconfig/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;14&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/systemd/system/k3s.service.env
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;15&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;KillMode&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;process
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;16&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Delegate&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;17&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Having non-zero Limit*s causes performance problems due to accounting overhead&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;18&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# in the kernel. We recommend using cgroups to do container-local accounting.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;19&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNOFILE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;1048576&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;20&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNPROC&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;21&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitCORE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;22&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TasksMax&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;23&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TimeoutStartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;24&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Restart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;always
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;25&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;RestartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;5s
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;26&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/bin/sh -xc &lt;span style="color:#5af78e"&gt;&amp;#39;! /usr/bin/systemctl is-enabled --quiet nm-cloud-setup.service 2&amp;gt;/dev/null&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;27&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe br_netfilter
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;28&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe overlay
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;29&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/usr/local/bin/k3s &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;30&lt;/span&gt;&lt;span&gt; server &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;31&lt;/span&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;--system-default-registry&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;32&lt;/span&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;registry.cn-hangzhou.aliyuncs.com&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl restart k3s
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-3.png" alt="k3s正在重启服务" /&gt;
+&lt;figcaption&gt;k3s 正在重启服务，已经有一个服务就绪（黄色高亮）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-4.png" alt="Container 成功被创建" /&gt;
+&lt;figcaption&gt;稍等一会，全部的 Container 成功被创建&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;一些题外话&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt; 说通过 &lt;code&gt;crictl info&lt;/code&gt; 找到 &lt;code&gt;/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl&lt;/code&gt; 文件，然后修改这个文件中描述的 endpoint 地址&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;但是这个方案看起来特别奇怪。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;sup id="fnref:7"&gt;&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref"&gt;7&lt;/a&gt;&lt;/sup&gt; 里面提到&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;但是通过 &lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 的方式安装之后，并没有出现 &lt;code&gt;/etc/rancher/k3s/registries.yaml&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;那么它是怎么知道 registry 的 mirror 是谁呢？&lt;/p&gt;
+&lt;/details&gt;
+&lt;h3 id="安装后的验证" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%ae%89%e8%a3%85%e5%90%8e%e7%9a%84%e9%aa%8c%e8%af%81"&gt;
+##
+&lt;/a&gt;
+安装后的验证
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get pods -n kube-system
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-1.png" alt="alt text"&gt;&lt;/p&gt;
+&lt;style&gt;
+@import 'style.css';
+&lt;/style&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/" target="_blank" rel="noopener noreferrer"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314" target="_blank" rel="noopener noreferrer"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278" target="_blank" rel="noopener noreferrer"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90" target="_blank" rel="noopener noreferrer"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:7"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>Linux</category><category>k3s</category><category>Raspberry Pi 5</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item></channel></rss>

@@ -1,21 +1,1063 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 14 May 2026 00:00:00 Z</lastBuildDate><atom:link href="https://www.junyi.dev/en/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code Asks to Re-login in tmux? It's Probably macOS Keychain</title><link>https://www.junyi.dev/en/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-claude works fine in my terminal — Team Account, auth, everything. Open tmux, run claude, and it wants me to log in again. Took a bit of digging to figure out it&amp;amp;rsquo;s a macOS Security Session thing.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item><item><title>Agent Mesh: My Thoughts on Multi-AI Collaborative Workflows</title><link>https://www.junyi.dev/en/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 14 May 2026 00:00:00 Z</lastBuildDate><atom:link href="https://www.junyi.dev/en/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code Asks to Re-login in tmux? It's Probably macOS Keychain</title><link>https://www.junyi.dev/en/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+claude works fine in my terminal — Team Account, auth, everything. Open tmux, run claude, and it wants me to log in again. Took a bit of digging to figure out it&amp;amp;rsquo;s a macOS Security Session thing.</description><content:encoded>&lt;p&gt;&lt;code&gt;claude&lt;/code&gt; works fine in my terminal — Team Account, auth, everything. Open tmux, run &lt;code&gt;claude&lt;/code&gt;, and it wants me to log in again. Took a bit of digging to figure out it&amp;rsquo;s a macOS Security Session thing.&lt;/p&gt;
+&lt;h2 id="what-happens" &gt;
+&lt;div&gt;
+&lt;a href="#what-happens"&gt;
+#
+&lt;/a&gt;
+What happens
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;claude&lt;/code&gt; in Ghostty: works. &lt;code&gt;claude&lt;/code&gt; in tmux: asks to re-login.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;How I tracked it down (click to expand)&lt;/summary&gt;
+&lt;h3 id="environment-variables" &gt;
+&lt;div&gt;
+&lt;a href="#environment-variables"&gt;
+##
+&lt;/a&gt;
+Environment variables?
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;First thought: tmux has different env vars.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;env | grep -iE &lt;span style="color:#5af78e"&gt;&amp;#39;claude|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nothing on either side. Claude Code doesn&amp;rsquo;t store auth in env vars.&lt;/p&gt;
+&lt;h3 id="config-files" &gt;
+&lt;div&gt;
+&lt;a href="#config-files"&gt;
+##
+&lt;/a&gt;
+Config files?
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat ~/.claude/.credentials.json 2&amp;gt;/dev/null &lt;span style="color:#ff6ac1"&gt;||&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;no credentials file&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nope. Not on disk either.&lt;/p&gt;
+&lt;h3 id="keychain" &gt;
+&lt;div&gt;
+&lt;a href="#keychain"&gt;
+##
+&lt;/a&gt;
+Keychain
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security dump-keychain 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | grep -i -A3 &lt;span style="color:#5af78e"&gt;&amp;#39;claude\|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Found it — stored in macOS Keychain as &lt;code&gt;Claude Code-credentials&lt;/code&gt;:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;0x00000007 &amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+&amp;#34;acct&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;junyi&amp;#34;
+&amp;#34;svce&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+keychain: &amp;#34;/Users/junyi/Library/Keychains/login.keychain-db&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;junyi&amp;#34;&lt;/span&gt; -w
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Works in the terminal, errors in tmux. There it is.&lt;/p&gt;
+&lt;/details&gt;
+&lt;h2 id="why-this-happens" &gt;
+&lt;div&gt;
+&lt;a href="#why-this-happens"&gt;
+#
+&lt;/a&gt;
+Why this happens
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;macOS Keychain access is tied to a &lt;strong&gt;Security Session&lt;/strong&gt; (Bootstrap Namespace). When you open a terminal window, the process gets attached to your &lt;strong&gt;Aqua session&lt;/strong&gt;, which holds the Keychain unlock state.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tmux server&lt;/code&gt; is a long-running daemon — it starts on your first &lt;code&gt;tmux new&lt;/code&gt; and stays alive. When you &lt;code&gt;tmux attach&lt;/code&gt; later, shells forked inside tmux server inherit &lt;strong&gt;the server&amp;rsquo;s original session&lt;/strong&gt;, not your current Aqua session.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Normal terminal:
+Ghostty → fork shell → inherits Aqua session → ✅ Keychain works
+tmux:
+Ghostty → attach → tmux server (old process)
+→ fork shell → inherits old session
+→ ❌ Keychain blocked
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Same reason &lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; break inside tmux.&lt;/p&gt;
+&lt;h2 id="fix" &gt;
+&lt;div&gt;
+&lt;a href="#fix"&gt;
+#
+&lt;/a&gt;
+Fix
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Install &lt;code&gt;reattach-to-user-namespace&lt;/code&gt; to reconnect tmux processes to your Aqua session:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install reattach-to-user-namespace
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Add to &lt;code&gt;~/.tmux.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;set-option -g default-command &lt;span style="color:#5af78e"&gt;&amp;#34;reattach-to-user-namespace -l &lt;/span&gt;&lt;span style="color:#5af78e"&gt;${&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;SHELL&lt;/span&gt;&lt;span style="color:#5af78e"&gt;}&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then &lt;strong&gt;kill the entire tmux server&lt;/strong&gt; (kill-session won&amp;rsquo;t help — new windows still fork from the old server):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux kill-server
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux new -s main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Verify:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$USER&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt; -w 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | head -c &lt;span style="color:#ff9f43"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If it prints the token, you&amp;rsquo;re good.&lt;/p&gt;
+&lt;h2 id="while-youre-at-it" &gt;
+&lt;div&gt;
+&lt;a href="#while-youre-at-it"&gt;
+#
+&lt;/a&gt;
+While you&amp;rsquo;re at it
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;These tmux issues are probably the same root cause:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; broken&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ssh-agent&lt;/code&gt; inaccessible&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;osascript&lt;/code&gt; failing&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;, &lt;code&gt;op&lt;/code&gt;, and other Keychain-dependent CLI tools not working&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;reattach-to-user-namespace&lt;/code&gt; fixes all of them.&lt;/p&gt;</content:encoded><category>macOS</category><category>tmux</category><category>Claude Code</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item><item><title>Agent Mesh: My Thoughts on Multi-AI Collaborative Workflows</title><link>https://www.junyi.dev/en/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: no single Agent is the best at everything.
 I mainly use Claude Code, Google Gemini CLI, and Moonshot Kimi Code day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach Agent Mesh.
-Here are my observations and thoughts.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/agent-mesh/</guid></item><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Here are my observations and thoughts.</description><content:encoded>&lt;p&gt;AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: &lt;strong&gt;no single Agent is the best at everything.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I mainly use &lt;strong&gt;Claude Code&lt;/strong&gt;, &lt;strong&gt;Google Gemini CLI&lt;/strong&gt;, and &lt;strong&gt;Moonshot Kimi Code&lt;/strong&gt; day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach &lt;strong&gt;Agent Mesh&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Here are my observations and thoughts.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="core-roles-my-observations-and-real-experience" &gt;
+&lt;div&gt;
+&lt;a href="#core-roles-my-observations-and-real-experience"&gt;
+#
+&lt;/a&gt;
+Core Roles: My Observations and Real Experience
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="claude-code-top-tier-architect-and-execution-engine" &gt;
+&lt;div&gt;
+&lt;a href="#claude-code-top-tier-architect-and-execution-engine"&gt;
+##
+&lt;/a&gt;
+Claude Code: Top-Tier Architect and Execution Engine
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;In daily use, Claude Code feels like a &amp;ldquo;senior engineer.&amp;rdquo; Whether spinning up a new project from scratch or tackling a complex refactor, its architectural vision is the best of the bunch. And it doesn&amp;rsquo;t just plan — it executes: traversing files, running bash, fixing its own compile errors, driving the whole loop autonomously. I&amp;rsquo;ve installed Claude Code on all my servers. It has massively boosted my productivity and freed up a lot of my energy. The weakness is hallucinations — especially when generating large blocks of documentation or referencing large systems it hasn&amp;rsquo;t fully digested, it will make things up.&lt;/p&gt;
+&lt;h3 id="gemini-cli-large-context-consumer-and-hallucination-checker" &gt;
+&lt;div&gt;
+&lt;a href="#gemini-cli-large-context-consumer-and-hallucination-checker"&gt;
+##
+&lt;/a&gt;
+Gemini CLI: Large-Context Consumer and &amp;ldquo;Hallucination Checker&amp;rdquo;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Gemini&amp;rsquo;s biggest advantage is that 2-million-token context window. In practice, it really can swallow an entire repository or very long error logs (I&amp;rsquo;ve tested with logs of several hundred KB). Because it can hold the entire macro context in its head, it&amp;rsquo;s a natural auditor. When Claude Code produces a brilliant but potentially hallucinated code plan, you can call on Gemini for large-scale cross-file verification.&lt;/p&gt;
+&lt;h3 id="kimi-code-deep-reasoner-and-data-miner--pending-evaluation" &gt;
+&lt;div&gt;
+&lt;a href="#kimi-code-deep-reasoner-and-data-miner--pending-evaluation"&gt;
+##
+&lt;/a&gt;
+Kimi Code: Deep Reasoner and Data Miner (❓ Pending Evaluation)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Kimi Code takes a completely different path. Under the hood it runs K2.5&amp;rsquo;s &amp;ldquo;long thinking&amp;rdquo; model (k0), using explicit chain-of-thought (similar to OpenAI o1&amp;rsquo;s approach), plus an &amp;ldquo;Agentic Swarm&amp;rdquo; pattern that can theoretically spin up a swarm of sub-Agents for multi-hop document retrieval or grinding through deeply nested algorithmic problems. I do have a question mark here though: I use Claude and Gemini every day, so I have a solid feel for their capability boundaries, but how much better Kimi actually is at &amp;ldquo;data mining&amp;rdquo; and &amp;ldquo;deep reasoning&amp;rdquo; compared to the other two — honestly, I&amp;rsquo;m mostly going by its architectural claims and haven&amp;rsquo;t done rigorous head-to-head evaluations yet. So for now, its niche here is only a theoretical one.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="what-my-ideal-agent-mesh-looks-like" &gt;
+&lt;div&gt;
+&lt;a href="#what-my-ideal-agent-mesh-looks-like"&gt;
+#
+&lt;/a&gt;
+What My Ideal Agent Mesh Looks Like
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/agent-mesh/diagram.svg" alt="Agent Mesh Workflow Diagram"&gt;&lt;/p&gt;
+&lt;p&gt;Once you understand each Agent&amp;rsquo;s strengths and weaknesses, the natural next question is: can you have them collaborate, chaining tasks via prompts? That&amp;rsquo;s what I mean by Agent Mesh.&lt;/p&gt;
+&lt;p&gt;Most of the time, Claude Code is the workhorse — it writes the vast majority of the code. But when it hits a context ceiling, say I need to refactor a module but don&amp;rsquo;t know which parts of a 500K-line legacy codebase will be affected, I hand it off to Gemini — let it read the entire repo and report back the blast radius.&lt;/p&gt;
+&lt;p&gt;Conversely, after Claude executes a refactoring plan, I&amp;rsquo;ll have Gemini cross-reference it against the actual project files to catch hallucinations or broken dependencies. If Gemini encounters a particularly tough algorithmic problem during auditing, it can pass it to Kimi Code for extended reasoning.&lt;/p&gt;
+&lt;p&gt;After Kimi finishes thinking, it doesn&amp;rsquo;t touch files directly — it passes conclusions back to Claude Code for implementation. The whole flow is a loop: each does what it&amp;rsquo;s best at, and results flow between them.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="the-hidden-factor-agent-architecture-vs-base-model" &gt;
+&lt;div&gt;
+&lt;a href="#the-hidden-factor-agent-architecture-vs-base-model"&gt;
+#
+&lt;/a&gt;
+The Hidden Factor: Agent Architecture vs. Base Model
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;When trying to combine these Agents, I discovered a point that&amp;rsquo;s easy to overlook: &lt;strong&gt;the underlying base model is only half the equation — the &amp;ldquo;Agent architecture built around it&amp;rdquo; determines its actual capabilities.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The best example is Anthropic&amp;rsquo;s Claude 3.5 Sonnet. You can use this same base model in multiple environments:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;As a standard chat assistant in &lt;strong&gt;VS Code&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;As the driving engine inside &lt;strong&gt;Cursor IDE&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Through open-source Agent frameworks like &lt;strong&gt;OpenHands / Open Code&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Natively via the &lt;strong&gt;Claude Code CLI&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Despite sharing the exact same LLM DNA (Claude 3.5 Sonnet), their real-world capabilities differ dramatically. In demanding engineering workflows, native &lt;strong&gt;Claude Code&lt;/strong&gt; consistently outperforms the others in Agent execution. Why? Because the Agent architecture has been uniquely optimized by the model&amp;rsquo;s creators (including but not limited to: hidden loop mechanisms, error recovery strategies, and specific context engineering).&lt;/p&gt;
+&lt;p&gt;Even using excellent open-source alternatives like Open Code with the Claude model, the execution fluidity and architectural vision often falls short of Claude Code. This tells us that when choosing Agents for a Mesh, we&amp;rsquo;re not just picking a base model (like Sonnet or GPT-4o) — we&amp;rsquo;re picking the engineering scaffolding built around it.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="similar-explorations-in-the-community" &gt;
+&lt;div&gt;
+&lt;a href="#similar-explorations-in-the-community"&gt;
+#
+&lt;/a&gt;
+Similar Explorations in the Community
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;After writing this up, I found that others in the community are working on similar ideas. &lt;strong&gt;&lt;a href="https://github.com/humania-org/humanize" target="_blank" rel="noopener noreferrer"&gt;Humanize&lt;/a&gt;&lt;/strong&gt; is a Claude Code plugin that implements a workflow called &lt;strong&gt;RLCR&lt;/strong&gt; (Ralph-Loop with Codex Review): Claude writes the code, Codex independently reviews it, and if issues are found, it gets kicked back for rework, looping until everything passes. The core idea is the same as Agent Mesh: let architecturally different AIs each do what they&amp;rsquo;re best at, iterating through a work-feedback loop instead of expecting one model to nail everything in a single shot.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="final-thoughts" &gt;
+&lt;div&gt;
+&lt;a href="#final-thoughts"&gt;
+#
+&lt;/a&gt;
+Final Thoughts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I don&amp;rsquo;t think a single &amp;ldquo;do-it-all&amp;rdquo; model will emerge to handle everything. What&amp;rsquo;s truly interesting is &lt;strong&gt;orchestration&lt;/strong&gt; — having Agents with &lt;strong&gt;fundamentally different underlying architectures&lt;/strong&gt; each play to their strengths.&lt;/p&gt;
+&lt;p&gt;One view I&amp;rsquo;ve consistently held: when we say &amp;ldquo;different&amp;rdquo; agents, we do &lt;strong&gt;not&lt;/strong&gt; mean taking the same underlying model and wrapping it with different system prompts (e.g., role-playing &amp;ldquo;you are an architect&amp;rdquo; vs. &amp;ldquo;you are a tester&amp;rdquo;). True collaborative sparks only happen when agents have &lt;strong&gt;fundamental differences in how they process information at the architectural level&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;But how do you know whether two models are truly different, or just fine-tuned versions of the same base? This is where tools like &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt; (a research framework for analyzing evolutionary relationships and functional differences between language models, published in &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt;) become invaluable. By analyzing the &amp;ldquo;genetic&amp;rdquo; lineage and functional distance between models, we can deliberately select Agents from entirely different evolutionary branches, ensuring they don&amp;rsquo;t share the same blind spots.&lt;/p&gt;
+&lt;p&gt;My hands-on engineering experience tells me: &lt;strong&gt;the Claude Code + Gemini CLI synergy is currently the most powerful and intuitive combination.&lt;/strong&gt; Gemini CLI leverages its long context to swallow entire repos and stacks of logs, specializing in catching hallucinations and macro-level auditing. Claude Code focuses on what it does best — understanding code architecture and executing precisely in the local environment.&lt;/p&gt;
+&lt;p&gt;When you deliberately combine Agents with fundamentally different architectures, they stop overlapping and start complementing each other. That&amp;rsquo;s the Agent Mesh idea I wanted to share — hope it inspires some of you.&lt;/p&gt;</content:encoded><category>AI</category><category>Agent</category><category>Claude Code</category><category>Gemini</category><category>LLM</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/agent-mesh/</guid></item><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.
-This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;amp;rsquo;s what I ran into so others can avoid the same traps.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>From Pixel to Pigment: A Decade with Impressionism</title><link>https://www.junyi.dev/en/posts/into-the-modern/</link><pubDate>Wed, 07 Jan 2026 15:16:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;amp;rsquo;s what I ran into so others can avoid the same traps.</description><content:encoded>&lt;p&gt;In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.&lt;/p&gt;
+&lt;p&gt;This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;rsquo;s what I ran into so others can avoid the same traps.&lt;/p&gt;
+&lt;h2 id="the-goal" &gt;
+&lt;div&gt;
+&lt;a href="#the-goal"&gt;
+#
+&lt;/a&gt;
+The Goal
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Route all outbound traffic from any container through a Tailscale sidecar, forwarding via a remote exit node:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/architecture.svg" alt="nerdctl &amp;#43; Tailscale Sidecar Architecture"&gt;&lt;/p&gt;
+&lt;p&gt;For verification, I used &lt;code&gt;nicolaka/netshoot&lt;/code&gt; as a test container — it comes with curl, dig, tcpdump, iperf, and a full suite of networking tools out of the box.&lt;/p&gt;
+&lt;h2 id="pitfall-1-nerdctl-compose-doesnt-support-network_mode-servicexxx" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-1-nerdctl-compose-doesnt-support-network_mode-servicexxx"&gt;
+#
+&lt;/a&gt;
+Pitfall 1: nerdctl compose doesn&amp;rsquo;t support &lt;code&gt;network_mode: service:xxx&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Docker Compose supports &lt;code&gt;network_mode: service:&amp;lt;service_name&amp;gt;&lt;/code&gt;, which automatically resolves the service name to the corresponding container&amp;rsquo;s network namespace. nerdctl compose hasn&amp;rsquo;t implemented this translation layer and throws an error:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;unsupported network_mode: service:tailscale-sidecar
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt; Use &lt;code&gt;network_mode: container:&amp;lt;container_name&amp;gt;&lt;/code&gt; instead, and pin the sidecar container&amp;rsquo;s name with &lt;code&gt;container_name&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar &lt;span style="color:#78787e"&gt;# Pin the name&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar &lt;span style="color:#78787e"&gt;# Use container name, not service name&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Without a fixed &lt;code&gt;container_name&lt;/code&gt;, nerdctl compose auto-generates names like &lt;code&gt;blockchain-tailscale-sidecar-1&lt;/code&gt;, causing reference mismatches.&lt;/p&gt;
+&lt;h2 id="pitfall-2-undefined-tag-in-tailscale-acl" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-2-undefined-tag-in-tailscale-acl"&gt;
+#
+&lt;/a&gt;
+Pitfall 2: Undefined tag in Tailscale ACL
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;After starting, the Tailscale container immediately exits with:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Received error: requested tags [tag:container] are invalid or not permitted
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt; Define the tag in your Tailscale admin console&amp;rsquo;s ACL policy and select it when generating the auth key:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;tagOwners&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;&amp;#34;tag:container&amp;#34;&lt;/span&gt;: [&lt;span style="color:#5af78e"&gt;&amp;#34;autogroup:admin&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="pitfall-3-missing-sys_module-capability" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-3-missing-sys_module-capability"&gt;
+#
+&lt;/a&gt;
+Pitfall 3: Missing &lt;code&gt;SYS_MODULE&lt;/code&gt; capability
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;This one is the sneakiest. The container joins the tailnet fine, &lt;code&gt;tailscale ping&lt;/code&gt; works, but after enabling the exit node, TCP traffic is completely broken — only ICMP gets through.&lt;/p&gt;
+&lt;p&gt;The root cause: kernel mode (&lt;code&gt;TS_USERSPACE=false&lt;/code&gt;) needs to load kernel modules like &lt;code&gt;xt_mark&lt;/code&gt; and &lt;code&gt;nf_nat&lt;/code&gt; to set up iptables forwarding rules. Without &lt;code&gt;SYS_MODULE&lt;/code&gt; capability, these modules can&amp;rsquo;t load. The iptables rules are written but don&amp;rsquo;t take effect, resulting in working ICMP but broken TCP.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE &lt;span style="color:#78787e"&gt;# Essential&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="pitfall-4-dns-failure-in-exit-node-mode" &gt;
+&lt;div&gt;
+&lt;a href="#pitfall-4-dns-failure-in-exit-node-mode"&gt;
+#
+&lt;/a&gt;
+Pitfall 4: DNS failure in exit node mode
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;With the exit node enabled, all outbound traffic goes through the WireGuard tunnel to the remote exit node. But &lt;code&gt;/etc/resolv.conf&lt;/code&gt; still points to local DNS servers (e.g., &lt;code&gt;10.0.2.3&lt;/code&gt;), which are unreachable from the exit node&amp;rsquo;s perspective. DNS queries naturally fail.&lt;/p&gt;
+&lt;p&gt;The symptom: &lt;code&gt;curl ifconfig.me&lt;/code&gt; reports &lt;code&gt;Could not resolve host&lt;/code&gt;, while direct IP access hangs or returns errors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Fix:&lt;/strong&gt; Let Tailscale take over DNS so queries also go through the tunnel:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="final-working-composeyaml" &gt;
+&lt;div&gt;
+&lt;a href="#final-working-composeyaml"&gt;
+#
+&lt;/a&gt;
+Final Working compose.yaml
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: tailscale/tailscale:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;hostname&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_AUTHKEY=${TS_AUTHKEY}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_EXTRA_ARGS=--advertise-tags=tag:container --exit-node=${TS_EXITNODE}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_STATE_DIR=/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_USERSPACE=false
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;volumes&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - ${PWD}/tailscale-sidecar/state:/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;devices&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - /dev/net/tun:/dev/net/tun
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;restart&lt;/span&gt;: unless-stopped
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: nicolaka/netshoot
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;depends_on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;command&lt;/span&gt;: sleep infinity
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Prepare a &lt;code&gt;.env&lt;/code&gt; file in the same directory:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;TS_AUTHKEY=tskey-auth-xxxxx
+TS_EXITNODE=100.x.x.x
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="verification" &gt;
+&lt;div&gt;
+&lt;a href="#verification"&gt;
+#
+&lt;/a&gt;
+Verification
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;nicolaka/netshoot&lt;/code&gt; comes with plenty of network tools, perfect for validation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Check exit IP to confirm traffic goes through the exit node&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot curl ifconfig.me
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# DNS resolution test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot dig google.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# View routing table&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot ip route show table all
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Packet capture for debugging&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot tcpdump -i any -n
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Tailscale status checks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale exit-node status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale ping &amp;lt;exit-node-ip&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="debugging-methodology" &gt;
+&lt;div&gt;
+&lt;a href="#debugging-methodology"&gt;
+#
+&lt;/a&gt;
+Debugging Methodology
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The debugging process itself is worth reviewing. When facing a compound problem like &amp;ldquo;exit node doesn&amp;rsquo;t work&amp;rdquo;, the effective approach is to isolate layer by layer:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Verify tunnel connectivity first:&lt;/strong&gt; &lt;code&gt;tailscale ping&lt;/code&gt; confirms whether the WireGuard tunnel itself works.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Comparative testing:&lt;/strong&gt; Disable the exit node to determine if the issue is with the exit node or the underlying network.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Differentiate protocols:&lt;/strong&gt; ICMP works but TCP doesn&amp;rsquo;t — points to iptables/kernel module issues.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Separate DNS from connectivity:&lt;/strong&gt; Use direct IP access to bypass DNS and isolate each issue.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Compare against known-working configs:&lt;/strong&gt; Spotting that a previously working setup had &lt;code&gt;SYS_MODULE&lt;/code&gt; immediately pinpointed the problem.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Each step narrows the scope, avoiding wasted time in the wrong direction.&lt;/p&gt;
+&lt;h2 id="final-thoughts" &gt;
+&lt;div&gt;
+&lt;a href="#final-thoughts"&gt;
+#
+&lt;/a&gt;
+Final Thoughts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;nerdctl compose has matured as a Docker Compose alternative, but gaps remain in edge-case compatibility. The missing &lt;code&gt;network_mode: service:&lt;/code&gt; support and different container naming conventions are easy migration traps. For Tailscale in containers with exit node routing, &lt;code&gt;SYS_MODULE&lt;/code&gt; and &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; are two easily overlooked but essential configurations. Hope this write-up helps anyone hitting the same issues.&lt;/p&gt;</content:encoded><category>nerdctl</category><category>Tailscale</category><category>containerd</category><category>exit-node</category><category>sidecar</category><category>Docker Compose</category><category>WireGuard</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>From Pixel to Pigment: A Decade with Impressionism</title><link>https://www.junyi.dev/en/posts/into-the-modern/</link><pubDate>Wed, 07 Jan 2026 15:16:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 INTO THE MODERN In early 2026, at the &amp;amp;ldquo;INTO THE MODERN&amp;amp;rdquo; Impressionist exhibition in Singapore, I stood before an original Monet for the first time.
-Layers of pigment were stacked high, brushstrokes clearly visible, as if freezing a moment of shimmering dawn or fading dusk from a century ago. At that moment, my mind drifted back to a quiet Sunday exactly ten years prior (2016). I was sitting in front of a computer, flipping through images on the screen one by one, selecting paintings to present for my art class. The theme was &amp;amp;ldquo;From Tradition to Modernity.&amp;amp;rdquo; At that time, the word &amp;amp;ldquo;Impressionism&amp;amp;rdquo; was still foreign to me, and I could never have imagined that one day I would come face to face with these masterpieces that had once only existed for me as pixels.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/into-the-modern/</guid></item><item><title>From Raspberry Pi to NUC: An Upgrade of My Toy</title><link>https://www.junyi.dev/en/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 Keycap Replacement Guide</title><link>https://www.junyi.dev/en/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Layers of pigment were stacked high, brushstrokes clearly visible, as if freezing a moment of shimmering dawn or fading dusk from a century ago. At that moment, my mind drifted back to a quiet Sunday exactly ten years prior (2016). I was sitting in front of a computer, flipping through images on the screen one by one, selecting paintings to present for my art class. The theme was &amp;amp;ldquo;From Tradition to Modernity.&amp;amp;rdquo; At that time, the word &amp;amp;ldquo;Impressionism&amp;amp;rdquo; was still foreign to me, and I could never have imagined that one day I would come face to face with these masterpieces that had once only existed for me as pixels.</description><content:encoded>&lt;div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;"&gt;
+&lt;figure style="flex: 1; min-width: 280px; max-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1797.jpg" alt="into-the-modern" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption style="text-align: center;"&gt;INTO THE MODERN&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;In early 2026, at the &amp;ldquo;INTO THE MODERN&amp;rdquo; Impressionist exhibition in Singapore, I stood before an original Monet for the first time.&lt;/p&gt;
+&lt;p&gt;Layers of pigment were stacked high, brushstrokes clearly visible, as if freezing a moment of shimmering dawn or fading dusk from a century ago. At that moment, my mind drifted back to a quiet Sunday exactly ten years prior (2016). I was sitting in front of a computer, flipping through images on the screen one by one, selecting paintings to present for my art class. The theme was &amp;ldquo;From Tradition to Modernity.&amp;rdquo; At that time, the word &amp;ldquo;Impressionism&amp;rdquo; was still foreign to me, and I could never have imagined that one day I would come face to face with these masterpieces that had once only existed for me as pixels.&lt;/p&gt;
+&lt;p&gt;Although the exhibition did not feature Monet&amp;rsquo;s most famous works, it was unexpectedly comprehensive: Monet, Renoir, Sisley, and Cézanne. These four young men, who once studied together at Gleyre&amp;rsquo;s Studio, were now reunited through their paintings. Monet&amp;rsquo;s work featured paint as thick as relief sculpture; you could clearly see the brushstrokes piled into heavy clumps. Renoir bathed faces in soft light, luminous yet hazy. Sisley&amp;rsquo;s landscapes were tranquil and restrained. As for Cézanne, I didn&amp;rsquo;t have much of an impression of him&amp;hellip;&lt;/p&gt;
+&lt;div style="display: flex; gap: 1rem; flex-wrap: wrap;"&gt;
+&lt;figure style="flex: 1; min-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1785.jpg" alt="haystacks" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption&gt;&lt;em&gt;Haystacks&lt;/em&gt;, 1890 - Claude Monet&lt;br/&gt;(Paint as thick as relief sculpture; brushstrokes clearly visible in heavy clumps)&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;The biggest surprise of the exhibition for me was Paul Signac. While his colors retained the flavor of Impressionism, his technique was entirely different. There were no sweeping brushstrokes on the canvas, replaced instead by countless, meticulous tiny dots of color. Later, I learned that Paul Signac was a representative painter of &amp;ldquo;&lt;a href="https://en.wikipedia.org/wiki/Pointillism" target="_blank" rel="noopener noreferrer"&gt;Pointillism&lt;/a&gt;.&amp;rdquo;&lt;/p&gt;
+&lt;div style="display: flex; gap: 1rem; flex-wrap: wrap;"&gt;
+&lt;figure style="flex: 1; min-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1763.jpg" alt="View of the Seine at Herblay 1889, Paul Signac" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption&gt;&lt;em&gt;View of the Seine at Herblay&lt;/em&gt;, 1889 - Paul Signac&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure style="flex: 1; min-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1759.jpg" alt="IMG_1759" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption&gt;&lt;em&gt;Port of Saint-Cast&lt;/em&gt;, 1889 - Paul Signac&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;Standing in the gallery, my memory flowed back to that high school student trying to explain &amp;ldquo;From Tradition to Modernity&amp;rdquo; in a PowerPoint presentation. Back then, I understood these works solely through Wikipedia and a few images, easily applying a label to each movement:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Neoclassicism&lt;/strong&gt; pursued rigorous composition and scientific perspective, but later fell into empty, dogmatic forms;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Romanticism&lt;/strong&gt; sought the sublime in mythology and passion, eventually sliding into emotional exaggeration;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Realism&lt;/strong&gt; turned its gaze to the common people and daily life, yet failed to break through the framework of traditional narrative;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Impressionism&lt;/strong&gt; broke free from the studio to capture fleeting light and color, yet in its obsession with visual impressions, almost forgot the structure of form;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Post-Impressionism&lt;/strong&gt; turned completely inward: Van Gogh burned with inner fire, Gauguin fled to symbolic shores. They no longer sought &amp;ldquo;how the world looks,&amp;rdquo; but turned to &amp;ldquo;how I feel the world.&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The exploration of beauty never ceases. Ten years have passed, and I am no longer just reading a smoothed-over version of history across a screen. Now, standing before the originals, I truly felt that chaotic, intense, and uncertain process of creation. Beyond the shock of the color and brushwork, there was a deep historical resonance. &lt;strong&gt;I was not only conversing with the artists, but I was also conversing with myself.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The modern path of art is inherently a constant fission and recombination between reason and sensibility, order and freedom.&lt;/p&gt;
+&lt;p&gt;Behind the canvases are living, breathing people. Amidst doubt and loneliness, they still chose to believe their own eyes.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“There really is no such thing as Art. There are only artists.”&lt;br&gt;
+&amp;mdash; E. H. Gombrich, &lt;em&gt;The Story of Art&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</content:encoded><category>Impressionism</category><category>Arts</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/into-the-modern/</guid></item><item><title>From Raspberry Pi to NUC: An Upgrade of My Toy</title><link>https://www.junyi.dev/en/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.</description><content:encoded>&lt;p&gt;My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.&lt;/p&gt;
+&lt;h2 id="raspberry-pi-pros-and-cons" &gt;
+&lt;div&gt;
+&lt;a href="#raspberry-pi-pros-and-cons"&gt;
+#
+&lt;/a&gt;
+Raspberry Pi: Pros and Cons
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The Raspberry Pi 4B used to be a key pillar of my digital life. It quietly ran various lightweight services: monitoring my home network traffic, running automation scripts, and even serving as a temporary dev/test environment. To keep it stable, I set up a cron job to automatically reboot every Sunday, which kept it fairly reliable most of the time.&lt;/p&gt;
+&lt;p&gt;But its shortcomings surfaced as I pushed it further. What worried me most was the reliability of TF‑card storage — even with so‑called “endurance” cards, you can’t fully avoid I/O risks. After I published the article on &lt;a href="http://localhost:1313/posts/k3s-101/" target="_blank" rel="noopener noreferrer"&gt;setting up k3s on a Raspberry Pi 5 cluster&lt;/a&gt;, my four‑node cluster ran stably for only a week before one node died due to a sudden flood of I/O errors. Ironically, that node was using a carefully chosen high‑endurance card, which ended up lasting even shorter than the ordinary card in the 4B.&lt;/p&gt;
+&lt;p&gt;Performance bottlenecks also became more evident under heavier workloads: compiling a slightly larger project meant a long progress‑bar crawl, and occasional stutters with multiple services running in parallel reminded me of the hardware’s limits. While attaching an external SSD can ease the storage issue, it undoubtedly increases complexity; at that point, it made more sense to upgrade to a more reliable platform.&lt;/p&gt;
+&lt;h2 id="unboxing-the-nuc-and-the-performance-leap" &gt;
+&lt;div&gt;
+&lt;a href="#unboxing-the-nuc-and-the-performance-leap"&gt;
+#
+&lt;/a&gt;
+Unboxing the NUC and the Performance Leap
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Unboxing the NUC, my first impression was: “too refined to be a mini PC.” The palm‑sized body isn’t much bigger than a Pi, but the hefty metal shell feels solid. I installed &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The performance gap is downright comforting: a Go project that took 3 minutes to compile on the Pi finishes in just 1 minute on the NUC.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
+&lt;figcaption&gt;Fig.1 - Compact yet powerful Intel NUC&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The NUC brings not just performance but peace of mind: the built‑in SSD eliminates the TF‑card read/write anxiety, and the extra memory plus x86 architecture make heavier tasks easy. I finally feel comfortable running a small database locally — I used to worry frequent writes would burn out the card.&lt;/p&gt;
+&lt;p&gt;As for the retired Raspberry Pis, they’ll pivot to edge‑computing nodes and keep contributing.&lt;/p&gt;
+&lt;h2 id="closing-thoughts" &gt;
+&lt;div&gt;
+&lt;a href="#closing-thoughts"&gt;
+#
+&lt;/a&gt;
+Closing Thoughts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Whenever I see the Pi’s LEDs blinking in rhythm, I remember the excitement of first unboxing it. The joy of tinkering was never about chasing the newest and the fastest, but about watching these devices find the right place at each stage — like tools slowly collecting stories of their own.&lt;/p&gt;</content:encoded><category>Linux</category><category>Raspberry Pi</category><category>Intel NUC</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 Keycap Replacement Guide</title><link>https://www.junyi.dev/en/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded Shift and Space keys in the photo — they look terrible.)
 While some say you can go to an Apple Store to get them replaced1, it&amp;amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose entire keyboard is shiny, DIY replacement is clearly the more practical option.
-I&amp;amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online2 only show how to remove regular letter and number keys — they deliberately skip over the longer keys like Space, Caps Lock, ESC, and the arrow keys. These keys have different internal structures and require a different disassembly approach.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/replace-keyboard/</guid></item><item><title>Ultra-Low-Voltage Buck–Boost Converter (0.3 V to 5 V)</title><link>https://www.junyi.dev/en/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-Figure 1 – Ultra Boost Converter</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/boost-converter/</guid></item><item><title>Hiding Sensitive Articles on Your GitHub Pages Blog</title><link>https://www.junyi.dev/en/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+I&amp;amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online2 only show how to remove regular letter and number keys — they deliberately skip over the longer keys like Space, Caps Lock, ESC, and the arrow keys. These keys have different internal structures and require a different disassembly approach.</description><content:encoded>&lt;p&gt;As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded &lt;kbd&gt;Shift&lt;/kbd&gt; and &lt;kbd&gt;Space&lt;/kbd&gt; keys in the photo — they look terrible.)&lt;/p&gt;
+&lt;p&gt;While some say you can go to an Apple Store to get them replaced&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, it&amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose &lt;strong&gt;entire keyboard is shiny&lt;/strong&gt;, DIY replacement is clearly the more practical option.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; only show how to remove regular letter and number keys — they &lt;strong&gt;deliberately skip over&lt;/strong&gt; the longer keys like &lt;kbd&gt;Space&lt;/kbd&gt;, &lt;kbd&gt;Caps Lock&lt;/kbd&gt;, &lt;kbd&gt;ESC&lt;/kbd&gt;, and the arrow keys. These keys have different internal structures and require a different disassembly approach.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
+&lt;figcaption&gt;
+Keyboard before (top) and after (bottom) the keycap replacement
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;I bought a full set of replacement keycaps from Taobao for 85 RMB ($11.81 USD) and decided to do it myself:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/taobao.jpeg" style="border-radius:0.5rem; width: 256px"&gt;
+&lt;figcaption&gt;
+The full set of keycaps purchased from Taobao
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h2 id="removing-the-old-keycaps" &gt;
+&lt;div&gt;
+&lt;a href="#removing-the-old-keycaps"&gt;
+#
+&lt;/a&gt;
+Removing the Old Keycaps
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The MacBook Pro uses a scissor-switch keyboard mechanism, so we need to follow the correct disassembly procedure for scissor-switch keys.&lt;/p&gt;
+&lt;h3 id="regular-key-disassembly" &gt;
+&lt;div&gt;
+&lt;a href="#regular-key-disassembly"&gt;
+##
+&lt;/a&gt;
+Regular Key Disassembly
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Steps:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Locate the latches&lt;/strong&gt;: Each regular keycap has four clips, one at each corner.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Start at the bottom right&lt;/strong&gt;: Gently lift the bottom-right corner with a spudger. A soft “pop” sound means the latch has been released.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Then the bottom left&lt;/strong&gt;: Do the same for the bottom-left corner.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lift the keycap&lt;/strong&gt;: Once the bottom two clips are released, gently lift the entire keycap upward.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fully remove&lt;/strong&gt;: The top clips will naturally detach.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⚠️ Avoid applying excessive force — the scissor-switch mechanism is fragile.&lt;/li&gt;
+&lt;li&gt;⚠️ Never pull straight up — it may break the clips.&lt;/li&gt;
+&lt;li&gt;💡 Use a plastic spudger instead of metal tools to prevent scratches.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can refer to this video&lt;sup id="fnref1:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; — it clearly demonstrates how to remove regular keys.&lt;/p&gt;
+&lt;p&gt;To reinstall the keycap, reverse the removal steps: slide the keycap into the top clips first, then press down until it snaps into place.&lt;/p&gt;
+&lt;p&gt;⚠️ Be careful not to press too hard — the plastic components are delicate.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="long-key-disassembly-eg-shift-caps-lock-esc" &gt;
+&lt;div&gt;
+&lt;a href="#long-key-disassembly-eg-shift-caps-lock-esc"&gt;
+##
+&lt;/a&gt;
+Long Key Disassembly (e.g. Shift, Caps Lock, ESC)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;These larger keys usually contain one or two stabilizer wires (metal bars), making the structure more complex.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Removal Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Start from the bottom-right corner, then move to the bottom-left.&lt;/li&gt;
+&lt;li&gt;Do not use excessive force — &lt;strong&gt;avoid bending the metal stabilizer sockets&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Removed Caps Lock key (pointed to by tweezers) and the longer Shift key
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;Installation Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;For a single stabilizer wire&lt;/strong&gt;:&lt;br&gt;
+Attach the metal bar to the keycap first, slide it into the slot on the keyboard, then press down to install as usual.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;For two stabilizer wires&lt;/strong&gt;:&lt;br&gt;
+Mount the &lt;strong&gt;top stabilizer wire to the keycap&lt;/strong&gt;, and &lt;strong&gt;clip the bottom stabilizer wire into the keyboard&lt;/strong&gt;.&lt;br&gt;
+First align the keycap with the top clips and press gently, then push the bottom part into place.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/longkey.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Keycap with a single stabilizer wire: first secure the wire, then press the keycap into place
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h3 id="short-key-disassembly-arrow-keys" &gt;
+&lt;div&gt;
+&lt;a href="#short-key-disassembly-arrow-keys"&gt;
+##
+&lt;/a&gt;
+Short Key Disassembly (Arrow Keys)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Up Arrow&lt;/strong&gt;: First release the left-side clip, then &lt;strong&gt;slide the key to the right&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Left/Down/Right Arrows&lt;/strong&gt;: First release the right-side clip, then &lt;strong&gt;slide the key to the left&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(Before attempting this, refer to the structural images below.)&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkeys.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_side.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_top.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Arrow key structure diagram
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h2 id="summary" &gt;
+&lt;div&gt;
+&lt;a href="#summary"&gt;
+#
+&lt;/a&gt;
+Summary
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Be sure to check &lt;strong&gt;all removed keycaps&lt;/strong&gt; before finishing — I realized I had left two stabilizer wires behind only when I was nearly done.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/final.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+All the old keycaps after removal
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h3 id="troubleshooting" &gt;
+&lt;div&gt;
+&lt;a href="#troubleshooting"&gt;
+##
+&lt;/a&gt;
+Troubleshooting
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Key doesn’t feel right after reinstallation?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check if the stabilizer wire is properly clipped in.&lt;/li&gt;
+&lt;li&gt;Ensure the scissor switch isn’t bent or broken.&lt;/li&gt;
+&lt;li&gt;Remove the keycap and reinstall in the correct order.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Keycap easily falls off?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Make sure all four clips are secured.&lt;/li&gt;
+&lt;li&gt;Verify the stabilizer is installed in the correct direction.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Key feels stuck or unresponsive?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check for dust or debris underneath the cap.&lt;/li&gt;
+&lt;li&gt;Ensure the scissor switch is properly aligned.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="pro-tips" &gt;
+&lt;div&gt;
+&lt;a href="#pro-tips"&gt;
+##
+&lt;/a&gt;
+Pro Tips
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;re unsure about your dexterity or notice any broken clips or switch parts, it&amp;rsquo;s best to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Contact Apple’s official repair service;&lt;/li&gt;
+&lt;li&gt;Find a trustworthy third-party repair shop;&lt;/li&gt;
+&lt;li&gt;Watch more tutorial videos and practice before diving in.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;What to do when MacBook Pro keycaps get shiny — can Apple Stores replace them for free?&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;Bilibili: MacBook Scissor Key Keyboard Disassembly (Keycaps + Scissor Switch)&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/replace-keyboard/</guid></item><item><title>Ultra-Low-Voltage Buck–Boost Converter (0.3 V to 5 V)</title><link>https://www.junyi.dev/en/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Figure 1 – Ultra Boost Converter</description><content:encoded>&lt;figure&gt;
+&lt;img style="border-radius:0.5em; box-shadow: 0px 0px 5px rgba(0,0,0,0.2)" src="https://www.junyi.dev/posts/boost-converter/pic1.JPG" alt="Boost Converter by Junyi" width="500" /&gt;
+&lt;figcaption&gt;Figure 1 – Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="chip-selection" &gt;
+&lt;div&gt;
+&lt;a href="#chip-selection"&gt;
+#
+&lt;/a&gt;
+Chip Selection
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I took on a challenging requirement: convert 0.5 V to 2.0 V.&lt;/p&gt;
+&lt;p&gt;A conventional boost–buck approach couldn’t meet this because a typical diode drop is about 0.7V while the source only provides 0.5V.&lt;/p&gt;
+&lt;p&gt;Most converter ICs on the market need around 0.9V to start up, which this source doesn’t meet.&lt;/p&gt;
+&lt;p&gt;After quite a bit of searching, I found the &lt;code&gt;TPS61200&lt;/code&gt;, which supports 0.3–5.5V input and can output 1.8–5.5V (adjustable or fixed).&lt;/p&gt;
+&lt;h2 id="pcb-design" &gt;
+&lt;div&gt;
+&lt;a href="#pcb-design"&gt;
+#
+&lt;/a&gt;
+PCB Design
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Big thanks to my mentor JYF, who gave me lots of guidance and turned my PCB around.&lt;/p&gt;
+&lt;p&gt;For the first revision, I followed these app notes: &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; and &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt;. JYF taught me many power-supply layout tips, such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use keep-out regions when copper-pouring to avoid creating “antennas”.&lt;/li&gt;
+&lt;li&gt;Near any “antenna,” add vias so interference returns cleanly to ground.&lt;/li&gt;
+&lt;li&gt;Size the PCB in 5 mm increments to make enclosures easier.&lt;/li&gt;
+&lt;li&gt;Stencils are cheaper to order on Taobao.&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;Horizontal sockets are awkward; vertical ones work better.&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;His help was key to making this project succeed on the first try.&lt;/p&gt;
+&lt;p&gt;(By the way, I skipped the MPP circuit. That can demand about 1A from the source for up to 20ms, which is effectively a short for some fuel cells and can shorten their lifespan.)&lt;/p&gt;
+&lt;h2 id="soldering" &gt;
+&lt;div&gt;
+&lt;a href="#soldering"&gt;
+#
+&lt;/a&gt;
+Soldering
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;This was my first time hand-soldering a QFN. I ruined one PCB before getting it right, but the final result came out great.&lt;/p&gt;
+&lt;p&gt;My 0805 soldering used to look ugly; now 0603 is no problem either. &lt;del&gt;If I ever get laid off, I can go tighten screws in a factory.&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;Compared with before, I made a lot of progress this round (see my earlier board here: &lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;Ultra‑mini ESP8266 dev board&lt;/a&gt;).&lt;/p&gt;
+&lt;h2 id="photos" &gt;
+&lt;div&gt;
+&lt;a href="#photos"&gt;
+#
+&lt;/a&gt;
+Photos
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view1.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view2.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;Figure 2 – Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/onboard_LED.jpg" alt="Boost Converter by 3.0V battery" /&gt;
+&lt;figcaption&gt;(a) Using a 3.0V coin cell to light the 2.0V LED&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/by_battery.jpg" alt="Boost Converter by 1.5V battery"/&gt;
+&lt;figcaption&gt;(b) Using a 1.5V battery to light the 2.0V LED&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;Figure 3 – 2.0V regulated output lighting the LED from different inputs&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/new_version.jpg" alt="New Boost Converter" /&gt;
+&lt;!-- &lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt; --&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;p style="padding-left:1em"&gt;&lt;strong&gt;Update on 2024‑06‑15:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Removed the pin header&lt;/li&gt;
+&lt;li&gt;Removed the coin‑cell holder&lt;/li&gt;
+&lt;li&gt;Removed the POWERSAVE option (enabled by default)&lt;/li&gt;
+&lt;li&gt;Improved adjustable output range from 0.5–3.3V to 0.5–5.5V&lt;/li&gt;
+&lt;li&gt;Switched to a 3mm potentiometer; shorter feedback path&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;Figure 4 – Updated Ultra Boost Converter (Top), Original (Bottom)&lt;/figcaption&gt;
+&lt;/figure&gt;</content:encoded><category>Projects</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/boost-converter/</guid></item><item><title>Hiding Sensitive Articles on Your GitHub Pages Blog</title><link>https://www.junyi.dev/en/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 # Background How can you prevent others from seeing certain articles in your blog that is hosted by GitHub Pages?
-This guide offers a strategy to host websites on GitHub Pages while keeping sensitive content private.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/github-actions/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+This guide offers a strategy to host websites on GitHub Pages while keeping sensitive content private.</description><content:encoded>&lt;h2 id="background" &gt;
+&lt;div&gt;
+&lt;a href="#background"&gt;
+#
+&lt;/a&gt;
+Background
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;How can you &lt;strong&gt;prevent others from seeing certain articles&lt;/strong&gt; in your blog that is hosted by GitHub Pages?&lt;/p&gt;
+&lt;p&gt;This guide offers a strategy to host websites on GitHub Pages while keeping sensitive content private.&lt;/p&gt;
+&lt;p&gt;The solution involves using two separate GitHub repositories:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Private repo &lt;code&gt;blog-src&lt;/code&gt;: Holds the source code of your website.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Public repo &lt;code&gt;blog.github.io&lt;/code&gt;: For the generated static website.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This approach ensures sensitive content remains private in &lt;code&gt;blog-src&lt;/code&gt;. Upon each commit to &lt;code&gt;blog-src&lt;/code&gt;, an automated process builds the static site and pushes it to &lt;code&gt;blog.github.io&lt;/code&gt;, updating your public website without exposing restricted content (See &lt;a href="#fig1"&gt;Fig.1&lt;/a&gt;).&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/github-actions/fig1.png" alt="The Overview of using Github Actions to publish GitHub pages" width="500" /&gt;
+&lt;figcaption&gt;Fig.1 - Modifying &lt;code&gt;blog-src&lt;/code&gt; automatically builds the site and synchronizes it to &lt;code&gt;blog.github.io&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Let&amp;rsquo;s take a look at how to achieve this.&lt;/p&gt;
+&lt;h2 id="step-1-create-a-personal-access-token" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-create-a-personal-access-token"&gt;
+#
+&lt;/a&gt;
+Step 1. Create a personal access token
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Going to &lt;a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer"&gt;this page&lt;/a&gt; (Settings ➜ Developer Settings ➜ Personal access tokens)&lt;/p&gt;
+&lt;p&gt;Generate new token (classic)&lt;/p&gt;
+&lt;p&gt;Check all &amp;ldquo;repo&amp;rdquo; and &amp;ldquo;workflow&amp;rdquo;. (See &lt;a href="#fig2"&gt;Fig.2&lt;/a&gt;)&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/create-personal-key.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.2 - Create a personal token for our GitHub Action.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/created-token.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.3 - Example of the created token.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Copy the token, for example &lt;code&gt;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&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="step-2-create-a-repository-secret-in-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-create-a-repository-secret-in-blog-src"&gt;
+#
+&lt;/a&gt;
+Step 2. Create a repository secret in &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;This repository contains the source code of our website and a GitHub Action.&lt;/p&gt;
+&lt;p&gt;So we need to set our personal access token (generated from Step 1) as a repository secret, to support the GitHub Action procedure.&lt;/p&gt;
+&lt;p&gt;Go to &lt;code&gt;blog-src&lt;/code&gt; ➜ Settings ➜ Secrets and variables ➜ Actions ➜ New &lt;strong&gt;repository&lt;/strong&gt; secret&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/new-repo-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.4 - The entry for creating a new repository secret&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/add-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;Fig.5 - Create a new repository secret&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="step-3-set-up-a-workflow-for-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-set-up-a-workflow-for-blog-src"&gt;
+#
+&lt;/a&gt;
+Step 3. Set up a workflow for &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Repository ➜ Actions ➜ Set up a workflow yourself&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/setup-actions.png" alt="Setup Actions", width="500" /&gt;
+&lt;figcaption&gt;Fig.6 - Set up a workflow.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;You need to learn how to write a workflow, here are some documents you can read:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart" target="_blank" rel="noopener noreferrer"&gt;Quickstart for GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples" target="_blank" rel="noopener noreferrer"&gt;Example workflows&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Carefully design your workflow file, here we give you an example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# A Sample workflow for building and deploying a site to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy Website to Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;push&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;branches&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - main &lt;span style="color:#78787e"&gt;# Triggers this workflow whenever there&amp;#39;s a push to the `main` branch&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Allows you to run this workflow manually from the Actions tab&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;workflow_dispatch&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;schedule&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Runs at 00:00 UTC every day&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;cron&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;0 0 * * *&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;permissions&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;contents&lt;/span&gt;: read
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;pages&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;id-token&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;concurrency&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;group&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cancel-in-progress&lt;/span&gt;: &lt;span style="color:#ff6ac1"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Default to bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;defaults&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;shell&lt;/span&gt;: bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;jobs&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;build-and-deploy&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;runs-on&lt;/span&gt;: ubuntu-latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;env&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;YOUR_ENV_HERE&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0.1.2.3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;steps&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Checkout
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: actions/checkout@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;submodules&lt;/span&gt;: recursive
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;fetch-depth&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Build my website
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;: |&lt;span style="color:#5af78e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; echo &amp;#34;Building the website ... (Remember to replace it with the real command!!!)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy to GitHub Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: peaceiris/actions-gh-pages@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;personal_token&lt;/span&gt;: ${{ secrets.GH_PAGES_PAT }} &lt;span style="color:#78787e"&gt;# The pre-defined secret in Step 2.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;publish_dir&lt;/span&gt;: ./public &lt;span style="color:#78787e"&gt;# Content in this folder will be pushed to the target repo.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_name&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_email&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]@users.noreply.github.com&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;external_repository&lt;/span&gt;: Junyi-99/blog.github.io &lt;span style="color:#78787e"&gt;# Your GitHub Pages Repo (target repo)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;commit_message&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;Automated deployment from Repository blog-src&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-4-push-to-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#step-4-push-to-blog-src"&gt;
+#
+&lt;/a&gt;
+Step 4. Push to &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;All you need to do in this step is &lt;strong&gt;push&lt;/strong&gt; some commits to &lt;code&gt;blog-src&lt;/code&gt;, and if all goes well, your GitHub Actions will automatically execute, build your site, and push it to the &lt;code&gt;blog.github.io&lt;/code&gt; repository.&lt;/p&gt;
+&lt;p&gt;(END OF THE POST)&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/github-actions/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 git-crypt enables transparent encryption and decryption of files in a git repository.
-Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/git-crypt/</guid></item><item><title>Compile RTL8812AU / RTL8814AU for Raspberry Pi 4B</title><link>https://www.junyi.dev/en/posts/raspberrypi-usb-wifi/</link><pubDate>Tue, 30 Mar 2021 15:49:16 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
+&lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/flow.svg" alt="BasicFlow"&gt;&lt;/p&gt;
+&lt;h2 id="step-1-install-git-crypt" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-install-git-crypt"&gt;
+#
+&lt;/a&gt;
+Step 1: Install git-crypt
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install git-crypt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git-crypt init &lt;span style="color:#78787e"&gt;# in an initialized git repository&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Specify files to encrypt by creating a .gitattributes file:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-gitattributes" data-lang="gitattributes"&gt;# The config is similar to .gitignore
+accounts/*.bean filter=git-crypt diff=git-crypt
+*.md filter=git-crypt diff=git-crypt
+*.png filter=git-crypt diff=git-crypt
+*.jpg filter=git-crypt diff=git-crypt
+*.excalidraw filter=git-crypt diff=git-crypt
+*.txt filter=git-crypt diff=git-crypt
+*.pdf filter=git-crypt diff=git-crypt
+*.json filter=git-crypt diff=git-crypt
+# Making sure that .gitattributes is never encrypted. DON&amp;#39;T TOUCH THAT LINE AND ONE BELOW
+.gitattributes !filter !diff
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="step-2-add-files" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-add-files"&gt;
+#
+&lt;/a&gt;
+Step 2: Add files
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git commit -m &lt;span style="color:#5af78e"&gt;&amp;#34;Add git-crypt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-3-check-git-crypt-status" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-check-git-crypt-status"&gt;
+#
+&lt;/a&gt;
+Step 3: Check git-crypt status
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -e&lt;/code&gt; Show encrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -u&lt;/code&gt; Show unencrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -f&lt;/code&gt; Fix problems with the repository&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="results" &gt;
+&lt;div&gt;
+&lt;a href="#results"&gt;
+#
+&lt;/a&gt;
+Results
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The beancount file is encrypted.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/image-1.png" alt="Alt text"&gt;&lt;/p&gt;
+&lt;h2 id="subsequent-updates" &gt;
+&lt;div&gt;
+&lt;a href="#subsequent-updates"&gt;
+#
+&lt;/a&gt;
+Subsequent Updates
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="update-on-january-30-fuck" &gt;
+&lt;div&gt;
+&lt;a href="#update-on-january-30-fuck"&gt;
+##
+&lt;/a&gt;
+Update on January 30, FUCK
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I messed around and locked myself out.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Detail&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This silly tool allows you to lock the repository &lt;strong&gt;even if you don&amp;rsquo;t export the symmetric key&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;And then, I locked myself out without exporting the symmetric key.&lt;/p&gt;
+&lt;p&gt;Because for &amp;ldquo;security&amp;rdquo;, I only kept the encrypted commits and deleted all previous commit logs.&lt;/p&gt;
+&lt;p&gt;So I fucked up.&lt;/p&gt;
+&lt;p&gt;😊 What a “pleasant day” it has been.&lt;/p&gt;</content:encoded><category>git-crypt</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/git-crypt/</guid></item><item><title>Compile RTL8812AU / RTL8814AU for Raspberry Pi 4B</title><link>https://www.junyi.dev/en/posts/raspberrypi-usb-wifi/</link><pubDate>Tue, 30 Mar 2021 15:49:16 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 This article is solely for recording the successful configuration processes for Raspberry Pi 4B.
 The environment is only applicable to Raspberry Pi OS.
-Other environments have not been tested!</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/raspberrypi-usb-wifi/</guid></item></channel></rss>
+Other environments have not been tested!</description><content:encoded>&lt;p&gt;This article is solely for recording the successful configuration processes for &lt;code&gt;Raspberry Pi 4B&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The environment is only applicable to &lt;code&gt;Raspberry Pi OS&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Other environments have not been tested!&lt;/p&gt;
+&lt;h2 id="install-rtl8812au-driver" &gt;
+&lt;div&gt;
+&lt;a href="#install-rtl8812au-driver"&gt;
+#
+&lt;/a&gt;
+Install &lt;code&gt;RTL8812AU&lt;/code&gt; Driver
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install raspberrypi-kernel-headers build-essential dkms
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone https://github.com/gnab/rtl8812au.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; rtl8812au
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sed -i &lt;span style="color:#5af78e"&gt;&amp;#39;s/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g&amp;#39;&lt;/span&gt; Makefile
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sed -i &lt;span style="color:#5af78e"&gt;&amp;#39;s/CONFIG_POWER_SAVING = y/CONFIG_POWER_SAVING = n/g&amp;#39;&lt;/span&gt; Makefile
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sed -i &lt;span style="color:#5af78e"&gt;&amp;#39;s/CONFIG_PLATFORM_ARM_RPI = n/CONFIG_PLATFORM_ARM_RPI = y/g&amp;#39;&lt;/span&gt; Makefile
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo chmod +x install.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo ./install.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo reboot &lt;span style="color:#78787e"&gt;# Reboot your system&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="install-rtl8814au-driver" &gt;
+&lt;div&gt;
+&lt;a href="#install-rtl8814au-driver"&gt;
+#
+&lt;/a&gt;
+Install &lt;code&gt;RTL8814AU&lt;/code&gt; Driver
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt-get install -y raspberrypi-kernel-headers bc build-essential dkms git
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone https://github.com/morrownr/8814au.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; 8814au
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo ./raspi32.sh &lt;span style="color:#78787e"&gt;# for 32-bit operating system only&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo ./install-driver.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo reboot
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="install-docker" &gt;
+&lt;div&gt;
+&lt;a href="#install-docker"&gt;
+#
+&lt;/a&gt;
+Install Docker
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget https://get.docker.com/ -O getdocker.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;bash getdocker.sh --mirror&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;Aliyun
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo groupadd docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo usermod -aG docker &lt;span style="color:#ff5c57"&gt;$USER&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;newgrp docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Logout, then login your current session&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker run hello-world
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install python3-pip
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo pip3 install docker-compose
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker-compose --version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="set-up-bluetooth-auto-connect" &gt;
+&lt;div&gt;
+&lt;a href="#set-up-bluetooth-auto-connect"&gt;
+#
+&lt;/a&gt;
+Set up Bluetooth auto-connect
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I need to automatically connect my Bluetooth keyboard, hence the following steps.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;～# sudo bluetoothctl &lt;span style="color:#78787e"&gt;# Entering bluetooth mode&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;bluetooth&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;&lt;span style="color:#78787e"&gt;# power on&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;bluetooth&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;&lt;span style="color:#78787e"&gt;# agent on&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;bluetooth&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;&lt;span style="color:#78787e"&gt;# pairable on&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;bluetooth&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;&lt;span style="color:#78787e"&gt;# scan on&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;bluetooth&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;&lt;span style="color:#78787e"&gt;# pair 34:88:5D:67:38:DF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo nano /etc/init.d/keyboard
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;#!/bin/sh
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo hcitool spinq &lt;span style="color:#78787e"&gt;# Start periodic inquiry&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;exit&lt;/span&gt; &lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Set up auto-start on system boots.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo chmod +x /etc/init.d/keyboard
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo update-rc.d keyboard defaults
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo service keyboard start
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="setup-wireless-connection" &gt;
+&lt;div&gt;
+&lt;a href="#setup-wireless-connection"&gt;
+#
+&lt;/a&gt;
+Setup wireless connection
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Skipped.&lt;/p&gt;
+&lt;h2 id="install-the-latest-smart-monitoring-tools" &gt;
+&lt;div&gt;
+&lt;a href="#install-the-latest-smart-monitoring-tools"&gt;
+#
+&lt;/a&gt;
+Install the latest SMART Monitoring Tools
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tar zxvf smartmontools-7.2.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; smartmontools-7.2
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mkdir build &lt;span style="color:#ff6ac1"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; build
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;../configure
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;make
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo make install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="mounting-disks" &gt;
+&lt;div&gt;
+&lt;a href="#mounting-disks"&gt;
+#
+&lt;/a&gt;
+Mounting Disks
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;blkid
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ls -l /dev/disk/by-uuid/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo mount -t ext4 -U YOUR_UUID_HERE /mnt/seagate/storage
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded><category>Raspberry Pi</category><category>Linux</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/raspberrypi-usb-wifi/</guid></item></channel></rss>

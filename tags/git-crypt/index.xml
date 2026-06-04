@@ -1,3 +1,82 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Tue, 30 Jan 2024 13:12:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/git-crypt/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 git-crypt 加密你的仓库</title><link>https://www.junyi.dev/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Tue, 30 Jan 2024 13:12:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/git-crypt/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 git-crypt 加密你的仓库</title><link>https://www.junyi.dev/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 git-crypt enables transparent encryption and decryption of files in a git repository.
-Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><guid isPermaLink="true">https://www.junyi.dev/posts/git-crypt/</guid></item></channel></rss>
+Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
+&lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/flow.svg" alt="BasicFlow"&gt;&lt;/p&gt;
+&lt;h2 id="step-1-install-git-crypt" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-install-git-crypt"&gt;
+#
+&lt;/a&gt;
+Step 1: Install git-crypt
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install git-crypt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git-crypt init &lt;span style="color:#78787e"&gt;# in an initialized git repository&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Specify files to encrypt by creating a .gitattributes file:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-gitattributes" data-lang="gitattributes"&gt;# The config is similar to .gitignore
+accounts/*.bean filter=git-crypt diff=git-crypt
+*.md filter=git-crypt diff=git-crypt
+*.png filter=git-crypt diff=git-crypt
+*.jpg filter=git-crypt diff=git-crypt
+*.excalidraw filter=git-crypt diff=git-crypt
+*.txt filter=git-crypt diff=git-crypt
+*.pdf filter=git-crypt diff=git-crypt
+*.json filter=git-crypt diff=git-crypt
+# Making sure that .gitattributes is never encrypted. DON&amp;#39;T TOUCH THAT LINE AND ONE BELOW
+.gitattributes !filter !diff
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="step-2-add-files" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-add-files"&gt;
+#
+&lt;/a&gt;
+Step 2: Add files
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git commit -m &lt;span style="color:#5af78e"&gt;&amp;#34;Add git-crypt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-3-check-git-crypt-status" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-check-git-crypt-status"&gt;
+#
+&lt;/a&gt;
+Step 3: Check git-crypt status
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -e&lt;/code&gt; Show encrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -u&lt;/code&gt; Show unencrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -f&lt;/code&gt; Fix problems with the repository&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="results" &gt;
+&lt;div&gt;
+&lt;a href="#results"&gt;
+#
+&lt;/a&gt;
+Results
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The beancount file is encrypted.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/image-1.png" alt="Alt text"&gt;&lt;/p&gt;
+&lt;h2 id="后续更新" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%90%8e%e7%bb%ad%e6%9b%b4%e6%96%b0"&gt;
+#
+&lt;/a&gt;
+后续更新
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="1-月-30-日更新" &gt;
+&lt;div&gt;
+&lt;a href="#1-%e6%9c%88-30-%e6%97%a5%e6%9b%b4%e6%96%b0"&gt;
+##
+&lt;/a&gt;
+1 月 30 日更新
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;我乱玩，把自己锁死了。&lt;/p&gt;
+&lt;p&gt;这个傻逼工具，是可以在你不 export symmetric key 的情况下，允许你 lock 仓库的。&lt;/p&gt;
+&lt;p&gt;然后我就在没有 export symmetric key 的情况下，把自己锁死了。&lt;/p&gt;
+&lt;p&gt;文件没有备份，因为我为了“安全”，只保留了加密后的 commit，历史的提交日志都删了。&lt;/p&gt;
+&lt;p&gt;😊 真是愉快的一天呢&lt;/p&gt;</content:encoded><category>git-crypt</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/git-crypt/</guid></item></channel></rss>

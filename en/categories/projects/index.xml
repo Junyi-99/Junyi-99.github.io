@@ -1,2 +1,95 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 29 Mar 2024 16:42:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/categories/projects/index.xml" rel="self" type="application/rss+xml"/><item><title>Ultra-Low-Voltage Buck–Boost Converter (0.3 V to 5 V)</title><link>https://www.junyi.dev/en/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-Figure 1 – Ultra Boost Converter</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/boost-converter/</guid></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 29 Mar 2024 16:42:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/categories/projects/index.xml" rel="self" type="application/rss+xml"/><item><title>Ultra-Low-Voltage Buck–Boost Converter (0.3 V to 5 V)</title><link>https://www.junyi.dev/en/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Figure 1 – Ultra Boost Converter</description><content:encoded>&lt;figure&gt;
+&lt;img style="border-radius:0.5em; box-shadow: 0px 0px 5px rgba(0,0,0,0.2)" src="https://www.junyi.dev/posts/boost-converter/pic1.JPG" alt="Boost Converter by Junyi" width="500" /&gt;
+&lt;figcaption&gt;Figure 1 – Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="chip-selection" &gt;
+&lt;div&gt;
+&lt;a href="#chip-selection"&gt;
+#
+&lt;/a&gt;
+Chip Selection
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I took on a challenging requirement: convert 0.5 V to 2.0 V.&lt;/p&gt;
+&lt;p&gt;A conventional boost–buck approach couldn’t meet this because a typical diode drop is about 0.7V while the source only provides 0.5V.&lt;/p&gt;
+&lt;p&gt;Most converter ICs on the market need around 0.9V to start up, which this source doesn’t meet.&lt;/p&gt;
+&lt;p&gt;After quite a bit of searching, I found the &lt;code&gt;TPS61200&lt;/code&gt;, which supports 0.3–5.5V input and can output 1.8–5.5V (adjustable or fixed).&lt;/p&gt;
+&lt;h2 id="pcb-design" &gt;
+&lt;div&gt;
+&lt;a href="#pcb-design"&gt;
+#
+&lt;/a&gt;
+PCB Design
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Big thanks to my mentor JYF, who gave me lots of guidance and turned my PCB around.&lt;/p&gt;
+&lt;p&gt;For the first revision, I followed these app notes: &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; and &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt;. JYF taught me many power-supply layout tips, such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use keep-out regions when copper-pouring to avoid creating “antennas”.&lt;/li&gt;
+&lt;li&gt;Near any “antenna,” add vias so interference returns cleanly to ground.&lt;/li&gt;
+&lt;li&gt;Size the PCB in 5 mm increments to make enclosures easier.&lt;/li&gt;
+&lt;li&gt;Stencils are cheaper to order on Taobao.&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;Horizontal sockets are awkward; vertical ones work better.&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;His help was key to making this project succeed on the first try.&lt;/p&gt;
+&lt;p&gt;(By the way, I skipped the MPP circuit. That can demand about 1A from the source for up to 20ms, which is effectively a short for some fuel cells and can shorten their lifespan.)&lt;/p&gt;
+&lt;h2 id="soldering" &gt;
+&lt;div&gt;
+&lt;a href="#soldering"&gt;
+#
+&lt;/a&gt;
+Soldering
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;This was my first time hand-soldering a QFN. I ruined one PCB before getting it right, but the final result came out great.&lt;/p&gt;
+&lt;p&gt;My 0805 soldering used to look ugly; now 0603 is no problem either. &lt;del&gt;If I ever get laid off, I can go tighten screws in a factory.&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;Compared with before, I made a lot of progress this round (see my earlier board here: &lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;Ultra‑mini ESP8266 dev board&lt;/a&gt;).&lt;/p&gt;
+&lt;h2 id="photos" &gt;
+&lt;div&gt;
+&lt;a href="#photos"&gt;
+#
+&lt;/a&gt;
+Photos
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view1.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view2.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;Figure 2 – Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/onboard_LED.jpg" alt="Boost Converter by 3.0V battery" /&gt;
+&lt;figcaption&gt;(a) Using a 3.0V coin cell to light the 2.0V LED&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/by_battery.jpg" alt="Boost Converter by 1.5V battery"/&gt;
+&lt;figcaption&gt;(b) Using a 1.5V battery to light the 2.0V LED&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;Figure 3 – 2.0V regulated output lighting the LED from different inputs&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/new_version.jpg" alt="New Boost Converter" /&gt;
+&lt;!-- &lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt; --&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;p style="padding-left:1em"&gt;&lt;strong&gt;Update on 2024‑06‑15:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Removed the pin header&lt;/li&gt;
+&lt;li&gt;Removed the coin‑cell holder&lt;/li&gt;
+&lt;li&gt;Removed the POWERSAVE option (enabled by default)&lt;/li&gt;
+&lt;li&gt;Improved adjustable output range from 0.5–3.3V to 0.5–5.5V&lt;/li&gt;
+&lt;li&gt;Switched to a 3mm potentiometer; shorter feedback path&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;Figure 4 – Updated Ultra Boost Converter (Top), Original (Bottom)&lt;/figcaption&gt;
+&lt;/figure&gt;</content:encoded><category>Projects</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/boost-converter/</guid></item></channel></rss>

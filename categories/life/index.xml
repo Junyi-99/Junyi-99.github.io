@@ -1,19 +1,502 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Mon, 04 Mar 2024 13:02:12 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/categories/life/index.xml" rel="self" type="application/rss+xml"/><item><title>科研路上的思考与实践</title><link>https://www.junyi.dev/posts/research-101/</link><pubDate>Mon, 04 Mar 2024 13:02:12 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Mon, 04 Mar 2024 13:02:12 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/categories/life/index.xml" rel="self" type="application/rss+xml"/><item><title>科研路上的思考与实践</title><link>https://www.junyi.dev/posts/research-101/</link><pubDate>Mon, 04 Mar 2024 13:02:12 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 # 引言 本文整理自每周组会的讨论内容，涵盖了科研工作的全流程经验与思考。从阅读论文到撰写研究，从方法论设计到实验执行，这些内容旨在为科研新手提供实用的指导，帮助建立正确的科研思维和工作方法。
 # 读 Paper 看 paper 解决什么问题，比看它用什么方法要更重要
-有创新吗？如果大家都是这么做的，就不算创新。（如果要其他人做这个事情，其他人也会这么做）</description><guid isPermaLink="true">https://www.junyi.dev/posts/research-101/</guid></item><item><title>一个标注名词的方式</title><link>https://www.junyi.dev/posts/a-writing-trick/</link><pubDate>Fri, 17 Dec 2021 21:13:48 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-在写技术博客的时候，难免会写到一些单词的中文版本，为了防止歧义，我们可以通过 &amp;amp;lt;ruby&amp;amp;gt; 标签把原始单词标注出来</description><guid isPermaLink="true">https://www.junyi.dev/posts/a-writing-trick/</guid></item><item><title>How to get motivated</title><link>https://www.junyi.dev/posts/how-to-get-motivated/</link><pubDate>Thu, 13 May 2021 13:17:34 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-最近发现了一个关于如何让自己 motivated 的方法视频，整理了一下 PPT 里的内容，感觉部分方法确实适合我自己。在这里分享给大家。</description><guid isPermaLink="true">https://www.junyi.dev/posts/how-to-get-motivated/</guid></item><item><title>Unity 开发学习(一)</title><link>https://www.junyi.dev/posts/unity-learning-1/</link><pubDate>Thu, 13 May 2021 01:47:05 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-今天跟 YZX 学了 Unity 的基本开发</description><guid isPermaLink="true">https://www.junyi.dev/posts/unity-learning-1/</guid></item><item><title>整理了一下博客</title><link>https://www.junyi.dev/posts/blog-organization/</link><pubDate>Sun, 09 May 2021 02:45:33 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-稍微整理了一下博客，有 29 篇文章没有发出来。</description><guid isPermaLink="true">https://www.junyi.dev/posts/blog-organization/</guid></item><item><title>耶，吃到了 Pokémon 联名的麦当劳</title><link>https://www.junyi.dev/posts/mcdonalds/</link><pubDate>Fri, 30 Apr 2021 19:30:07 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-耶，吃到了 Pokémon 联名的麦当劳</description><guid isPermaLink="true">https://www.junyi.dev/posts/mcdonalds/</guid></item><item><title>购买硬盘盒遇到的坑</title><link>https://www.junyi.dev/posts/thought-about-hdd-case/</link><pubDate>Sat, 20 Mar 2021 20:41:30 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+有创新吗？如果大家都是这么做的，就不算创新。（如果要其他人做这个事情，其他人也会这么做）</description><content:encoded>&lt;h2 id="引言" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%bc%95%e8%a8%80"&gt;
+#
+&lt;/a&gt;
+引言
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;本文整理自每周组会的讨论内容，涵盖了科研工作的全流程经验与思考。从阅读论文到撰写研究，从方法论设计到实验执行，这些内容旨在为科研新手提供实用的指导，帮助建立正确的科研思维和工作方法。&lt;/p&gt;
+&lt;h2 id="读-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%af%bb-paper"&gt;
+#
+&lt;/a&gt;
+读 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;看 paper 解决什么问题，比看它用什么方法要更重要&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;有创新吗？如果大家都是这么做的，就不算创新。（如果要其他人做这个事情，其他人也会这么做）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;回答下面三个问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;这个 paper 的 contribution 是什么？&lt;/li&gt;
+&lt;li&gt;为什么这个 paper 可以中？&lt;/li&gt;
+&lt;li&gt;这个 paper 的 weakness 在哪里？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;思考一下，如果让你跟这篇 paper 做 exactly 一样的工作，你会跟他用一样的方法吗？&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="想-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%83%b3-paper"&gt;
+#
+&lt;/a&gt;
+想 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;我们的工作要吸引真正的用户使用，在过程中发现参数设置是否合理。要仔细考虑怎么去 incentive 其他人去使用我们的项目，来探索领域内的相关场景。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果有1000人用你的项目，这是个什么样的项目呢？怎么让他们心甘情愿为社区做贡献？&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;ruby&gt;Re-search&lt;rt&gt;重新-找&lt;/rt&gt;&lt;/ruby&gt;，在你想问题的时候得问自己：&lt;/p&gt;
+&lt;p&gt;“paper 想全了吗？”&lt;/p&gt;
+&lt;p&gt;“feature 都找出来了吗？”&lt;/p&gt;
+&lt;p&gt;”为什么有这么多 feature ?“&lt;/p&gt;
+&lt;p&gt;“这些 feature 是可以拍脑袋想的吗？”&lt;/p&gt;
+&lt;p&gt;“时刻记着 garbage in garbage out.”&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当你看到一个 metric 的时候：&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s important to have a methodology to analysis.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="讲-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%ae%b2-paper"&gt;
+#
+&lt;/a&gt;
+讲 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;不要只讲他怎么做的，要用自己的语言 summarize 它&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;（告诉一些新人）我们应当关注以下问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;what&amp;rsquo;s the problem?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;what&amp;rsquo;s the solution?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;what&amp;rsquo;s the key message in your slides? (为了xxx，你到底想说啥？)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当老师给你说一件事的时候，你 24 小时之内应该去做，不要想那么多。或者给老师一个 timing 的回复。
+「比如让你 “联系 XX 老师” 的时候，最好 24 小时内就去联系」&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="写-paper" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%86%99-paper"&gt;
+#
+&lt;/a&gt;
+写 Paper
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;写 paper 的时候自己觉得 exciting 才能写得好！&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;思考自己的 Research contribution 在什么地方？ &lt;strong&gt;What&amp;rsquo;s new here？&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;别人读完你的 paper，学到了什么（比如你可以在 conclusion 写一段话，表示自己在这个领域有什么贡献）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;reviewer 读这一段的时候，会想得到什么信息？&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;流程创新的，需要在流程里的有个核心步骤，并且说出来创新点在哪里。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我这篇paper为什么被拒？想一下为什么 reviewer 说我 novelty 不够？没事，很多paper都可以被说 novelty 不够 (&lt;a href="#fig1"&gt;Fig.1&lt;/a&gt;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选数据是一个非常慎重的事情&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="fig1.png" alt="view-service" width="400" /&gt;
+&lt;figcaption&gt;Fig.1 - The most common comments at ICLR 2024, keywords extrated by GPT4.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I’m sure someone will ask “but won’t that get my idea stolen?”. I’ve heard anecdotally of that happening, but not to me or anyone I know in my field. Most likely because the idea is only the first tiny piece of the thesis: the idea is always followed by a significant investment of labor to execute and evaluate. The people you talk to are too busy with their own work to invest all that labor on your idea. But they’ll be happy to give you feedback on it.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="审-paper--写-review" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%ae%a1-paper--%e5%86%99-review"&gt;
+#
+&lt;/a&gt;
+审 Paper / 写 Review
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;一个 Review 要有一段话对这个工作做总结，并且整理出这个工作的 contribution：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;contribution 1&lt;/li&gt;
+&lt;li&gt;contribution 2&lt;/li&gt;
+&lt;li&gt;contribution 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;（关注一下，方法和实验是否说明有 contribution）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Strengths&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Strength 1&lt;/li&gt;
+&lt;li&gt;Strength 2&lt;/li&gt;
+&lt;li&gt;Strength 3&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Weakness&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Weakness 1&lt;/li&gt;
+&lt;li&gt;Weakness 2&lt;/li&gt;
+&lt;li&gt;Weakness 3&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Minor Components&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一个paper也就4、5个 findings&lt;/p&gt;
+&lt;h2 id="方法论--做实验" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e8%ae%ba--%e5%81%9a%e5%ae%9e%e9%aa%8c"&gt;
+#
+&lt;/a&gt;
+方法论 &amp;amp; 做实验
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;想明白 methodology 再做实验。而不是做实验再想 methodology。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Experiment 做完之前就可以写 paper 了&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;大家都知道的信息&lt;strong&gt;不代表没用&lt;/strong&gt;，你可以用数据做 confirm。&lt;/p&gt;
+&lt;p&gt;Methodology 应该都想好了，正好有 XXX paper 所以你这么多。&lt;/p&gt;
+&lt;p&gt;你一定要把数据的 methodology 讲清楚（怎么收集的数据）。因为你有 X goal 所以有 Y metric。
+你应该定义一个 metric：goal是什么。你定义的 metric，和用什么来做，是两回事。
+注意：定义 metric 和 用什么数据集 是没关系的。&lt;/p&gt;
+&lt;p&gt;整个paper应该围绕一个图/table 去铺开，作为整个 paper 的精华。先把结果写清楚，再美化结果。
+一般来说 table 比 figure 更有信息量。&lt;/p&gt;
+&lt;p&gt;注意：这个paper不会因为你把table换成图，从拒绝变为接受，当然有一个好看的图会觉得很酷。&lt;/p&gt;
+&lt;p&gt;Coefficient？&lt;/p&gt;
+&lt;p&gt;XX 写 paper 很快。但是你喜欢把东西揉在一起。&lt;/p&gt;
+&lt;p&gt;prof：没 ai 之前，一天写 2 页论文，现在 idea 想明白了写 paper 就一天&lt;/p&gt;
+&lt;p&gt;prof：structure 应该理清楚，然后再写 paper。&lt;/p&gt;
+&lt;p&gt;prof：我发现你喜欢把 实现 和 methodology 混在一起。&lt;/p&gt;
+&lt;p&gt;prof: 你应该把这两个解耦。design 和 methodology 放前面，implementation 放后面。&lt;/p&gt;
+&lt;p&gt;prof：我要做什么事，遇到什么问题，怎么解决的。数据那边（finetune），实现（用什么数据finetune、怎么finetune）&lt;/p&gt;
+&lt;p&gt;prof：读paper最怕 “读一个methodology，用 arxiv 数据集实现，所以怎么样” 这个时候读者就会 question 你为啥要用 arxiv 为啥不用别的啊？ 所以我们要把 methodology 和 implementation 分开。&lt;/p&gt;
+&lt;p&gt;junyi：这个跟软件工程很像，解耦 interface 和 impl&lt;/p&gt;
+&lt;p&gt;prof：你得有一个逻辑让别人知道你为什么这么写。如果你写“我们每个section都按照 methodology，implementation，methodology，implement”&lt;/p&gt;
+&lt;p&gt;prof：顶层设计要做好，后面的实现是另外一个部分。用 iclr 2024 数据集，用 iclr 2023 做 cross validation。&lt;/p&gt;
+&lt;p&gt;prof: ai 领域的审稿，会带来很多噪声。&lt;/p&gt;
+&lt;p&gt;prof: 实验本身没有价值，只有当你能把它 转化为结论、并且解释“为什么”时，它才变成论文的一部分。&lt;/p&gt;
+&lt;p&gt;prof: 除了展示你的结果图表，还要进一步分析你的图表。&lt;/p&gt;
+&lt;p&gt;prof: 要 跳出 本科、硕士 的 思维模式，要 try to make a paper 出来。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;你和 SOTA 的 finding 有什么区别？&lt;/p&gt;
+&lt;p&gt;你的 finding 和之前 paper 的 finding 有什么不一样？&lt;/p&gt;
+&lt;p&gt;要说清楚为什么不一样&lt;/p&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/research-101/</guid></item><item><title>一个标注名词的方式</title><link>https://www.junyi.dev/posts/a-writing-trick/</link><pubDate>Fri, 17 Dec 2021 21:13:48 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+在写技术博客的时候，难免会写到一些单词的中文版本，为了防止歧义，我们可以通过 &amp;amp;lt;ruby&amp;amp;gt; 标签把原始单词标注出来</description><content:encoded>&lt;p&gt;在写技术博客的时候，难免会写到一些单词的中文版本，为了防止歧义，我们可以通过 &lt;code&gt;&amp;lt;ruby&amp;gt;&lt;/code&gt; 标签把原始单词标注出来&lt;/p&gt;
+&lt;p&gt;下面是一些例子：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;近些年来，&lt;ruby&gt;容器&lt;rt&gt;Container&lt;/rt&gt;&lt;/ruby&gt;技术极大地降低了服务的部署成本&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在 Linux 系统中，我们可以通过&lt;ruby&gt;定时任务&lt;rt&gt;cron job&lt;/rt&gt;&lt;/ruby&gt;功能进行系统管理&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;苹果的&lt;ruby&gt;隔空投送&lt;rt&gt;AirDrop&lt;/rt&gt;&lt;/ruby&gt;并没有那么可靠，丢失文件的情况经常发生&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;近些年来，&amp;lt;&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;容器&amp;lt;&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;Container&amp;lt;/&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;技术极大地降低了服务的部署成本
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt;在 Linux 系统中，我们可以通过&amp;lt;&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;定时任务&amp;lt;&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;cron job&amp;lt;/&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;功能进行系统管理
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5&lt;/span&gt;&lt;span&gt;苹果的&amp;lt;&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;隔空投送&amp;lt;&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;AirDrop&amp;lt;/&lt;span style="color:#ff6ac1"&gt;rt&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style="color:#ff6ac1"&gt;ruby&lt;/span&gt;&amp;gt;并没有那么可靠，丢失文件的情况经常发生
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/a-writing-trick/</guid></item><item><title>How to get motivated</title><link>https://www.junyi.dev/posts/how-to-get-motivated/</link><pubDate>Thu, 13 May 2021 13:17:34 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+最近发现了一个关于如何让自己 motivated 的方法视频，整理了一下 PPT 里的内容，感觉部分方法确实适合我自己。在这里分享给大家。</description><content:encoded>&lt;p&gt;最近发现了一个关于如何让自己 motivated 的方法视频，整理了一下 PPT 里的内容，感觉部分方法确实适合我自己。在这里分享给大家。&lt;/p&gt;
+&lt;h1 id="1-get-ready-the-night-before" &gt;
+&lt;div&gt;
+&lt;a href="#1-get-ready-the-night-before"&gt;
+##
+&lt;/a&gt;
+1. Get ready the night before
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Clean your desk&lt;/li&gt;
+&lt;li&gt;Get everything that you need within reach pens, paper, charges …&lt;/li&gt;
+&lt;li&gt;Make a to-do list&lt;/li&gt;
+&lt;li&gt;Choose your clothes for the next day.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="2-write-a-to-do-list-everyday" &gt;
+&lt;div&gt;
+&lt;a href="#2-write-a-to-do-list-everyday"&gt;
+##
+&lt;/a&gt;
+2. Write a to-do list everyday
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Have a clear plan of what you need to do&lt;/li&gt;
+&lt;li&gt;Spread out your tasks over the week to have realistic expectations&lt;/li&gt;
+&lt;li&gt;Easy, difficult, long, short tasks to keep totivation throughout the day&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Using what works best for you:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Microsoft To-Do&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="3-block-your-time-in-your-calendar" &gt;
+&lt;div&gt;
+&lt;a href="#3-block-your-time-in-your-calendar"&gt;
+##
+&lt;/a&gt;
+3. Block your time in your calendar
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;h1 id="4-use-the-pomodoro-method-to-manage-your-time--tasks" &gt;
+&lt;div&gt;
+&lt;a href="#4-use-the-pomodoro-method-to-manage-your-time--tasks"&gt;
+##
+&lt;/a&gt;
+4. Use the Pomodoro method to manage your time &amp;amp; tasks
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;Pick a task&lt;/li&gt;
+&lt;li&gt;Start a 25-minutes timer - FOCUS TIME&lt;/li&gt;
+&lt;li&gt;Take a 5 minutes break - you just finished 1 pomodoro session&lt;/li&gt;
+&lt;li&gt;After 4 pomodoros, take a longer 15 - 30 min break&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Choose your &lt;strong&gt;personal session and breaks&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id="5-using-virtual-study-group" &gt;
+&lt;div&gt;
+&lt;a href="#5-using-virtual-study-group"&gt;
+##
+&lt;/a&gt;
+5. Using virtual study group
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;h1 id="6-use-time-tracking" &gt;
+&lt;div&gt;
+&lt;a href="#6-use-time-tracking"&gt;
+##
+&lt;/a&gt;
+6. Use time tracking
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;To motivate you as see how much work you did.&lt;/p&gt;
+&lt;h1 id="7-start-your-day-with-an-easy-task-that-you-want-to-do" &gt;
+&lt;div&gt;
+&lt;a href="#7-start-your-day-with-an-easy-task-that-you-want-to-do"&gt;
+##
+&lt;/a&gt;
+7. Start your day with an easy task that you WANT to do
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;h1 id="8-create-a-study-routine-and-build-habits" &gt;
+&lt;div&gt;
+&lt;a href="#8-create-a-study-routine-and-build-habits"&gt;
+##
+&lt;/a&gt;
+8. Create a study routine and build habits
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;When motivation is low, your routine and habits hat you’ve built will come to the rescue.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create a story routine&lt;/li&gt;
+&lt;li&gt;Iteratively improve it + make it realistic for you&lt;/li&gt;
+&lt;li&gt;Then it will less be anout motivation.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="9-remember-why-you-want-to-get-these-tasks-done" &gt;
+&lt;div&gt;
+&lt;a href="#9-remember-why-you-want-to-get-these-tasks-done"&gt;
+##
+&lt;/a&gt;
+9. Remember WHY you want to get these tasks done
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;Write it down, and go back to the note when you’re lacking motivation&lt;/p&gt;
+&lt;h1 id="10-create-a-motivating-poster-in-front-of-your-desk" &gt;
+&lt;div&gt;
+&lt;a href="#10-create-a-motivating-poster-in-front-of-your-desk"&gt;
+##
+&lt;/a&gt;
+10. Create a motivating poster in front of your desk
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;h1 id="11-make-studying-fun" &gt;
+&lt;div&gt;
+&lt;a href="#11-make-studying-fun"&gt;
+##
+&lt;/a&gt;
+11. Make studying fun
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Create flashcards -&amp;gt; Quizlet&lt;/li&gt;
+&lt;li&gt;Watch online videos&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="12-trick-your-brain-with-the-2-minute-rule" &gt;
+&lt;div&gt;
+&lt;a href="#12-trick-your-brain-with-the-2-minute-rule"&gt;
+##
+&lt;/a&gt;
+12. Trick your brain with the 2 minute rule
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“Ok, I know I don’t fell like studying right now. But, I’m going to get up, go to my desk, and work for 2 minutes. If I still don’t feel like it, I can stop working.”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id="13-exercise-and-come-back-to-work" &gt;
+&lt;div&gt;
+&lt;a href="#13-exercise-and-come-back-to-work"&gt;
+##
+&lt;/a&gt;
+13. Exercise and come back to work
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;h1 id="14-join-a-study-discord-community" &gt;
+&lt;div&gt;
+&lt;a href="#14-join-a-study-discord-community"&gt;
+##
+&lt;/a&gt;
+14. Join a study Discord community
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;h1 id="15-still-cant-find-motivation-take-a-productive-break" &gt;
+&lt;div&gt;
+&lt;a href="#15-still-cant-find-motivation-take-a-productive-break"&gt;
+##
+&lt;/a&gt;
+15. Still can’t find motivation? Take a productive break
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;h1 id="reference" &gt;
+&lt;div&gt;
+&lt;a href="#reference"&gt;
+##
+&lt;/a&gt;
+Reference
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;Marine. &lt;a href="https://m.twitch.tv/videos/934263167" target="_blank" rel="noopener noreferrer"&gt;https://m.twitch.tv/videos/934263167&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id="2023年8月23日-补充" &gt;
+&lt;div&gt;
+&lt;a href="#2023%e5%b9%b48%e6%9c%8823%e6%97%a5-%e8%a1%a5%e5%85%85"&gt;
+##
+&lt;/a&gt;
+2023年8月23日 补充
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;没想到已经过去了这么久，可惜自己好像从未尝试过文中的方法&lt;/p&gt;
+&lt;p&gt;目前又遇到了让自己焦虑的事情，这次准备把文中的方法执行一遍，而不是让它停留在纸上&lt;/p&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/how-to-get-motivated/</guid></item><item><title>Unity 开发学习(一)</title><link>https://www.junyi.dev/posts/unity-learning-1/</link><pubDate>Thu, 13 May 2021 01:47:05 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+今天跟 YZX 学了 Unity 的基本开发</description><content:encoded>&lt;p&gt;今天跟 YZX 学了 Unity 的基本开发&lt;/p&gt;
+&lt;p&gt;内容包括：&lt;/p&gt;
+&lt;p&gt;场景创建与 Object 布局，Prefab，Material，Physics
+实现 WASD 移动角色
+Collision 检测
+Scripts 编写
+最后还弄明白了 Unity C# 的 public attribute 与 Object 的关系&lt;/p&gt;
+&lt;p&gt;即函数 &lt;code&gt;GameObject.GetComponent&amp;lt;Type&amp;gt;()&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="2023年8月23日更新" &gt;
+&lt;div&gt;
+&lt;a href="#2023%e5%b9%b48%e6%9c%8823%e6%97%a5%e6%9b%b4%e6%96%b0"&gt;
+#
+&lt;/a&gt;
+2023年8月23日更新
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;我已经忘了自己学过这些了&lt;/p&gt;</content:encoded><category>Unity</category><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/unity-learning-1/</guid></item><item><title>整理了一下博客</title><link>https://www.junyi.dev/posts/blog-organization/</link><pubDate>Sun, 09 May 2021 02:45:33 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+稍微整理了一下博客，有 29 篇文章没有发出来。</description><content:encoded>&lt;p&gt;稍微整理了一下博客，有 29 篇文章没有发出来。&lt;/p&gt;
+&lt;p&gt;这些文章都是我写了好久的。&lt;/p&gt;
+&lt;p&gt;里面有一部分是对生活的感悟，还有一部分不方便发出来。&lt;/p&gt;
+&lt;h2 id="2023年8月23日更新" &gt;
+&lt;div&gt;
+&lt;a href="#2023%e5%b9%b48%e6%9c%8823%e6%97%a5%e6%9b%b4%e6%96%b0"&gt;
+#
+&lt;/a&gt;
+2023年8月23日更新
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;所以到底是哪29篇文章没更新出来，我已经不记得了，似乎写博客这件事情已经离我很远很远&amp;hellip;&lt;/p&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/blog-organization/</guid></item><item><title>耶，吃到了 Pokémon 联名的麦当劳</title><link>https://www.junyi.dev/posts/mcdonalds/</link><pubDate>Fri, 30 Apr 2021 19:30:07 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+耶，吃到了 Pokémon 联名的麦当劳</description><content:encoded>&lt;figure&gt;
+&lt;img src="md1.png" alt="McDonald's" width="500" /&gt;
+&lt;figcaption&gt;耶，吃到了 Pokémon 联名的麦当劳&lt;/figcaption&gt;
+&lt;/figure&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/mcdonalds/</guid></item><item><title>购买硬盘盒遇到的坑</title><link>https://www.junyi.dev/posts/thought-about-hdd-case/</link><pubDate>Sat, 20 Mar 2021 20:41:30 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 最近买了一块 4T 的机械硬盘，想再选购一个硬盘盒
 但是发现好多人吐槽「硬盘盒毁盘」「USB 硬盘盒容易掉盘」
-我就纳闷了，凭什么一个盒子就能毁盘？</description><guid isPermaLink="true">https://www.junyi.dev/posts/thought-about-hdd-case/</guid></item><item><title>太好了，偷我电瓶车的小偷被抓到了</title><link>https://www.junyi.dev/posts/thief-get-caught/</link><pubDate>Fri, 15 Jan 2021 11:08:57 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-发篇博客纪念一下</description><guid isPermaLink="true">https://www.junyi.dev/posts/thief-get-caught/</guid></item><item><title>他妈的！不到一个月！电动自行车又被偷了！</title><link>https://www.junyi.dev/posts/thief-again/</link><pubDate>Mon, 16 Nov 2020 15:13:53 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+我就纳闷了，凭什么一个盒子就能毁盘？</description><content:encoded>&lt;p&gt;最近买了一块 4T 的机械硬盘，想再选购一个硬盘盒&lt;/p&gt;
+&lt;p&gt;但是发现好多人吐槽「硬盘盒毁盘」「USB 硬盘盒容易掉盘」&lt;/p&gt;
+&lt;p&gt;我就纳闷了，凭什么一个盒子就能毁盘？&lt;/p&gt;
+&lt;p&gt;后来做了多方面调查，得出结论：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;硬盘盒、USB 等毁硬盘的情况主要是供电不足导致的！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;（举个例子，比如这款自带 &lt;code&gt;12V 1A&lt;/code&gt; 电源的硬盘盒，就「可能」会毁掉你的硬盘）&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="fig1.png" alt="view-service" width="400" /&gt;
+&lt;figcaption&gt;Fig.1 - The HDD case with a builtin 12V 1A power supply.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="硬盘到底需要多强的供电能力" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%a1%ac%e7%9b%98%e5%88%b0%e5%ba%95%e9%9c%80%e8%a6%81%e5%a4%9a%e5%bc%ba%e7%9a%84%e4%be%9b%e7%94%b5%e8%83%bd%e5%8a%9b"&gt;
+#
+&lt;/a&gt;
+硬盘到底需要多强的供电能力？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="标签上写的供电需求" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%a0%87%e7%ad%be%e4%b8%8a%e5%86%99%e7%9a%84%e4%be%9b%e7%94%b5%e9%9c%80%e6%b1%82"&gt;
+##
+&lt;/a&gt;
+标签上写的供电需求
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;我们可以在硬盘上观察到 &lt;code&gt;5V 0.55A&lt;/code&gt;，&lt;code&gt;12V 0.37A&lt;/code&gt; 这样的标记（以 &lt;code&gt;SEAGATE ST4000VX007&lt;/code&gt; 举例）&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig2" src="fig2.jpg" alt="view-service" width="400" /&gt;
+&lt;figcaption&gt;Fig.2 - &lt;code&gt;ST4000VX007&lt;/code&gt; labels the operating power of &lt;code&gt;12V 0.37A&lt;/code&gt;.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;直观地说，我们会认为硬盘消耗 &lt;code&gt;12V 0.37A&lt;/code&gt;，电源有 &lt;code&gt;12V 1A&lt;/code&gt; 的供电能力，妥妥的够了呀，电流都多出来 2.7 倍了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;实际上并不够。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="硬盘实际的供电需求" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%a1%ac%e7%9b%98%e5%ae%9e%e9%99%85%e7%9a%84%e4%be%9b%e7%94%b5%e9%9c%80%e6%b1%82"&gt;
+##
+&lt;/a&gt;
+硬盘实际的供电需求
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;查阅&lt;a href="https://www.seagate.com/www-content/datasheets/pdfs/skyhawk-3-5-hddDS1902-6-1710US-en_US.pdf" target="_blank" rel="noopener noreferrer"&gt;官方手册&lt;/a&gt;我们可以发现，这块硬盘的「Average Operating Power」是「5.5W」，但是，还有一项非常重要的参数是&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;「Startup Current, Typical (12V, 1.8A) 」&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这个指的是硬盘刚开始工作时的瞬间电流，&lt;code&gt;ST4000VX007&lt;/code&gt; 这块硬盘的瞬间电流可以达到 &lt;code&gt;1.8A&lt;/code&gt;，其他型号的硬盘甚至瞬间电流可以达到 &lt;code&gt;2.0A&lt;/code&gt;&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig3" src="fig3.png" alt="view-service" width="500" /&gt;
+&lt;figcaption&gt;Fig.3 - &lt;code&gt;ST4000VX007&lt;/code&gt; consumes &lt;code&gt;1.8A&lt;/code&gt; when starting up.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;所以，硬盘盒提供的 &lt;code&gt;12V 1A&lt;/code&gt; 的供电能力是不足的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;并且，大多数时候我们会开启「自动休眠」功能，让硬盘电机自动停转。每次停转、起转的时候，都会让电源负载电流超过最大值，电源无法供给，长此以往导致「掉盘」、「毁盘」&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;解决方案是买个好点的电源。（&lt;code&gt;12V 2A&lt;/code&gt; 以上的电源）&lt;/p&gt;</content:encoded><category>机械硬盘</category><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/thought-about-hdd-case/</guid></item><item><title>太好了，偷我电瓶车的小偷被抓到了</title><link>https://www.junyi.dev/posts/thief-get-caught/</link><pubDate>Fri, 15 Jan 2021 11:08:57 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+发篇博客纪念一下</description><content:encoded>&lt;p&gt;发篇博客纪念一下&lt;/p&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/thief-get-caught/</guid></item><item><title>他妈的！不到一个月！电动自行车又被偷了！</title><link>https://www.junyi.dev/posts/thief-again/</link><pubDate>Mon, 16 Nov 2020 15:13:53 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 WDNMD，小偷 NM$L
 9 月 28 日电动车被偷
 10 月 1 日买了新的电动车
-11 月 11 日又 tm 被偷了</description><guid isPermaLink="true">https://www.junyi.dev/posts/thief-again/</guid></item><item><title>他妈的！电动自行车被偷了！</title><link>https://www.junyi.dev/posts/thief-first/</link><pubDate>Mon, 28 Sep 2020 01:11:23 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+11 月 11 日又 tm 被偷了</description><content:encoded>&lt;p&gt;WDNMD，小偷 NM$L&lt;/p&gt;
+&lt;p&gt;9 月 28 日电动车被偷&lt;/p&gt;
+&lt;p&gt;10 月 1 日买了新的电动车&lt;/p&gt;
+&lt;p&gt;11 月 11 日又 tm 被偷了&lt;/p&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/thief-again/</guid></item><item><title>他妈的！电动自行车被偷了！</title><link>https://www.junyi.dev/posts/thief-first/</link><pubDate>Mon, 28 Sep 2020 01:11:23 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 今天他妈的电动自行车被人偷了！
-艹！</description><guid isPermaLink="true">https://www.junyi.dev/posts/thief-first/</guid></item></channel></rss>
+艹！</description><content:encoded>&lt;p&gt;今天他妈的电动自行车被人偷了！&lt;/p&gt;
+&lt;p&gt;艹！&lt;/p&gt;
+&lt;p&gt;跟朋友一起上下学，三个人把三辆电动车都放在了横琴口岸&lt;/p&gt;
+&lt;p&gt;舍友 A：电动滑板车&lt;/p&gt;
+&lt;p&gt;舍友 B 和 我：同一品牌的电动车&lt;/p&gt;
+&lt;p&gt;然后我的被偷了&lt;/p&gt;
+&lt;p&gt;虽然第一时间联系了朋友，并且另一位跟我一起回来的朋友帮我找了一圈电动车，没有找到。然后我报了警。警察说你可以去做一下笔录，但是帮助不大，&lt;/p&gt;
+&lt;p&gt;估计是找不到了。&lt;/p&gt;
+&lt;p&gt;妈的，傻逼小偷！&lt;/p&gt;</content:encoded><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/posts/thief-first/</guid></item></channel></rss>

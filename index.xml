@@ -1,19 +1,1246 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 14 May 2026 00:00:00 Z</lastBuildDate><atom:link href="https://www.junyi.dev/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 在 tmux 里要求重新登录？八成是 macOS Keychain 的锅</title><link>https://www.junyi.dev/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-终端里 claude 好好的，Team Account 也认得，进了 tmux 就让我重新登录。折腾了一会儿才发现是 macOS Security Session 的老问题。</description><guid isPermaLink="true">https://www.junyi.dev/posts/tmux-keychain/</guid></item><item><title>Agent Mesh：聊聊我对多 AI 协同工作流的一些想法</title><link>https://www.junyi.dev/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 14 May 2026 00:00:00 Z</lastBuildDate><atom:link href="https://www.junyi.dev/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 在 tmux 里要求重新登录？八成是 macOS Keychain 的锅</title><link>https://www.junyi.dev/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+终端里 claude 好好的，Team Account 也认得，进了 tmux 就让我重新登录。折腾了一会儿才发现是 macOS Security Session 的老问题。</description><content:encoded>&lt;p&gt;终端里 &lt;code&gt;claude&lt;/code&gt; 好好的，Team Account 也认得，进了 tmux 就让我重新登录。折腾了一会儿才发现是 macOS Security Session 的老问题。&lt;/p&gt;
+&lt;h2 id="现象" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%8e%b0%e8%b1%a1"&gt;
+#
+&lt;/a&gt;
+现象
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Ghostty 里直接跑 &lt;code&gt;claude&lt;/code&gt;，没问题。tmux 里跑，要求登录。&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;排查过程（点击展开）&lt;/summary&gt;
+&lt;h3 id="环境变量" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f"&gt;
+##
+&lt;/a&gt;
+环境变量？
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;第一反应是 tmux 里环境变量不一样。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;env | grep -iE &lt;span style="color:#5af78e"&gt;&amp;#39;claude|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;两边都没有。Claude Code 认证不存环境变量。&lt;/p&gt;
+&lt;h3 id="配置文件" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6"&gt;
+##
+&lt;/a&gt;
+配置文件？
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat ~/.claude/.credentials.json 2&amp;gt;/dev/null &lt;span style="color:#ff6ac1"&gt;||&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;no credentials file&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;也没有。不在文件系统里。&lt;/p&gt;
+&lt;h3 id="keychain" &gt;
+&lt;div&gt;
+&lt;a href="#keychain"&gt;
+##
+&lt;/a&gt;
+Keychain
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security dump-keychain 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | grep -i -A3 &lt;span style="color:#5af78e"&gt;&amp;#39;claude\|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;找到了，存在 macOS Keychain 里，service name 是 &lt;code&gt;Claude Code-credentials&lt;/code&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;0x00000007 &amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+&amp;#34;acct&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;junyi&amp;#34;
+&amp;#34;svce&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+keychain: &amp;#34;/Users/junyi/Library/Keychains/login.keychain-db&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后试了下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;junyi&amp;#34;&lt;/span&gt; -w
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;终端里能输出 token，tmux 里报错。问题在这。&lt;/p&gt;
+&lt;/details&gt;
+&lt;h2 id="为什么" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88"&gt;
+#
+&lt;/a&gt;
+为什么
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;macOS 的 Keychain 访问绑在 &lt;strong&gt;Security Session&lt;/strong&gt; 上，底层对应的是 Bootstrap Namespace。你开终端窗口的时候，进程会挂到当前用户的 &lt;strong&gt;Aqua session&lt;/strong&gt;，Keychain 就是通过这个 session 解锁的。&lt;/p&gt;
+&lt;p&gt;但 &lt;code&gt;tmux server&lt;/code&gt; 是个常驻后台进程，第一次 &lt;code&gt;tmux new&lt;/code&gt; 的时候启动，之后就一直活着。你后面 &lt;code&gt;tmux attach&lt;/code&gt; 的时候，tmux server fork 出来的 shell 继承的是 &lt;strong&gt;server 启动时的那个旧 session&lt;/strong&gt;，不是你当前的 Aqua session。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;正常终端:
+Ghostty → fork shell → 继承 Aqua session → ✅ 能读 Keychain
+tmux:
+Ghostty → attach → tmux server (旧进程)
+→ fork shell → 继承旧 session
+→ ❌ 读不了 Keychain
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; 在 tmux 里挂掉也是这个原因。&lt;/p&gt;
+&lt;h2 id="修复" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%bf%ae%e5%a4%8d"&gt;
+#
+&lt;/a&gt;
+修复
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;装 &lt;code&gt;reattach-to-user-namespace&lt;/code&gt;，让 tmux 里的进程重新接入当前用户的 Aqua session：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install reattach-to-user-namespace
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.tmux.conf&lt;/code&gt; 加一行：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;set-option -g default-command &lt;span style="color:#5af78e"&gt;&amp;#34;reattach-to-user-namespace -l &lt;/span&gt;&lt;span style="color:#5af78e"&gt;${&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;SHELL&lt;/span&gt;&lt;span style="color:#5af78e"&gt;}&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后&lt;strong&gt;杀掉整个 tmux server 重开&lt;/strong&gt;。kill-session 没用，新 window 也没用，都还是从旧 server fork 的：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux kill-server
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux new -s main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;验证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$USER&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt; -w 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | head -c &lt;span style="color:#ff9f43"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;能输出 token 就说明通了。&lt;/p&gt;
+&lt;h2 id="顺带一提" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%a1%ba%e5%b8%a6%e4%b8%80%e6%8f%90"&gt;
+#
+&lt;/a&gt;
+顺带一提
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;tmux 里这些问题多半也是同一个原因：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; 不工作&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ssh-agent&lt;/code&gt; 访问不了&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;osascript&lt;/code&gt; 执行失败&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;、&lt;code&gt;op&lt;/code&gt; 等 CLI 工具认证挂了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;都是 &lt;code&gt;reattach-to-user-namespace&lt;/code&gt; 一把搞定。&lt;/p&gt;</content:encoded><category>macOS</category><category>tmux</category><category>Claude Code</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/posts/tmux-keychain/</guid></item><item><title>Agent Mesh：聊聊我对多 AI 协同工作流的一些想法</title><link>https://www.junyi.dev/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 现在 AI 编程助手越来越多，从聊天框一路卷到了命令行 Agent（CLI）。用了一圈下来，我最大的感受是：没有哪个 Agent 能在所有方面都做到最好。
 我日常主要在用 Claude Code、Google Gemini CLI 和 Moonshot Kimi Code。一开始也是把它们当独立工具用，后来发现这样太浪费了，因为它们各有各的长板，如果让它们根据各自的优势互相配合、互相委派任务，效果会好很多。我把这个思路叫做 Agent Mesh。
-下面展开聊聊我的观察和想法。</description><guid isPermaLink="true">https://www.junyi.dev/posts/agent-mesh/</guid></item><item><title>用 nerdctl + Tailscale Sidecar 让容器流量走 Exit Node：踩坑全记录</title><link>https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+下面展开聊聊我的观察和想法。</description><content:encoded>&lt;p&gt;现在 AI 编程助手越来越多，从聊天框一路卷到了命令行 Agent（CLI）。用了一圈下来，我最大的感受是：&lt;strong&gt;没有哪个 Agent 能在所有方面都做到最好。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;我日常主要在用 &lt;strong&gt;Claude Code&lt;/strong&gt;、&lt;strong&gt;Google Gemini CLI&lt;/strong&gt; 和 &lt;strong&gt;Moonshot Kimi Code&lt;/strong&gt;。一开始也是把它们当独立工具用，后来发现这样太浪费了，因为它们各有各的长板，如果让它们根据各自的优势互相配合、互相委派任务，效果会好很多。我把这个思路叫做 &lt;strong&gt;Agent Mesh&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;下面展开聊聊我的观察和想法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="核心角色我的观察和真实体验" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%a0%b8%e5%bf%83%e8%a7%92%e8%89%b2%e6%88%91%e7%9a%84%e8%a7%82%e5%af%9f%e5%92%8c%e7%9c%9f%e5%ae%9e%e4%bd%93%e9%aa%8c"&gt;
+#
+&lt;/a&gt;
+核心角色：我的观察和真实体验
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="claude-code顶级架构师与执行引擎" &gt;
+&lt;div&gt;
+&lt;a href="#claude-code%e9%a1%b6%e7%ba%a7%e6%9e%b6%e6%9e%84%e5%b8%88%e4%b8%8e%e6%89%a7%e8%a1%8c%e5%bc%95%e6%93%8e"&gt;
+##
+&lt;/a&gt;
+Claude Code：顶级架构师与执行引擎
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;日常用下来，Claude Code 给我的感觉就是一个&amp;quot;资深工程师&amp;quot;。不管是从零起一个新项目，还是啃一坨复杂的重构，它出的方案在架构层面的眼光是最好的。而且它不只是出方案——它自己就能跑起来：遍历文件、跑 bash、编译报错了自己改，整个循环它能自己转。我已经在所有的服务器上安装了 Claude Code，它大大提高了我的生产力，解放了我的很多精力。短板是幻觉，尤其是在生成大段文档、或者引用它没吃透的大型系统时，它会编东西出来。&lt;/p&gt;
+&lt;h3 id="gemini-cli大数据吞吐者与幻觉检查员" &gt;
+&lt;div&gt;
+&lt;a href="#gemini-cli%e5%a4%a7%e6%95%b0%e6%8d%ae%e5%90%9e%e5%90%90%e8%80%85%e4%b8%8e%e5%b9%bb%e8%a7%89%e6%a3%80%e6%9f%a5%e5%91%98"&gt;
+##
+&lt;/a&gt;
+Gemini CLI：大数据吞吐者与“幻觉检查员”
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Gemini 最大的优势是那个 200 万 Token 的上下文窗口。实测下来，它真的能一口气吞掉整个仓库、很长很长的错误日志（我试过几百K的）。正因为它能把整个宏观上下文都装进脑子里，它天然就是比较好的审计者。当 Claude Code 生成了一个出色但可能存在幻觉的代码方案时，可以调用 Gemini 进行大规模跨文件验证。&lt;/p&gt;
+&lt;h3 id="kimi-code深度推理者与数据挖掘者-待评估" &gt;
+&lt;div&gt;
+&lt;a href="#kimi-code%e6%b7%b1%e5%ba%a6%e6%8e%a8%e7%90%86%e8%80%85%e4%b8%8e%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98%e8%80%85-%e5%be%85%e8%af%84%e4%bc%b0"&gt;
+##
+&lt;/a&gt;
+Kimi Code：深度推理者与数据挖掘者（❓ 待评估）
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Kimi Code 走的是一条完全不同的路。它底层是 K2.5 的&amp;quot;长思考&amp;quot;模型（k0），走显式思维链（类似 OpenAI o1 的路子），再加上&amp;quot;Agentic Swarm&amp;quot;的玩法，理论上可以拉起一堆子 Agent 去网上多跳检索文档，或者死磕那种深度嵌套的算法难题。不过我得打个问号：Claude 和 Gemini 我是每天在用的，它们的能力边界我心里有数，但 Kimi 在&amp;quot;数据挖掘&amp;quot;和&amp;quot;深度推理&amp;quot;上到底比其他两个强多少，说实话我目前主要是看它架构上的宣称，还没做过严格的对比评估。所以目前它在这块只能说占了一个理论上的生态位。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="我理想中的-agent-mesh-长什么样" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%88%91%e7%90%86%e6%83%b3%e4%b8%ad%e7%9a%84-agent-mesh-%e9%95%bf%e4%bb%80%e4%b9%88%e6%a0%b7"&gt;
+#
+&lt;/a&gt;
+我理想中的 Agent Mesh 长什么样
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/agent-mesh/diagram.svg" alt="Agent Mesh 工作流示意图"&gt;&lt;/p&gt;
+&lt;p&gt;搞清楚了每个 Agent 的长板和短板之后，自然就会想：能不能让它们互相配合，用 Prompt 把活儿串起来？这就是我说的 Agent Mesh。&lt;/p&gt;
+&lt;p&gt;大部分时候 Claude Code 是干活的主力，代码基本都是它在写。但它遇到吃不下的大上下文时，比如我要重构一个模块但不知道会影响那 50 万行老代码的哪些地方，就丢给 Gemini——让它把整个仓库读一遍，告诉我影响范围。&lt;/p&gt;
+&lt;p&gt;反过来，Claude 执行完一份重构计划，我也会让 Gemini 拿着去跟实际项目文件交叉比对，看看有没有幻觉或坏掉的依赖。如果 Gemini 在审计过程中碰到特别硬的算法问题，还可以转手给 Kimi Code 去长考。&lt;/p&gt;
+&lt;p&gt;Kimi 想完之后也不直接改文件，而是把结论交回给 Claude Code，让 Claude 去落地执行。整个流程就是这样一个环：各自干各自最擅长的，结果互相流转。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="隐形因素agent-架构-vs-基座模型" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%9a%90%e5%bd%a2%e5%9b%a0%e7%b4%a0agent-%e6%9e%b6%e6%9e%84-vs-%e5%9f%ba%e5%ba%a7%e6%a8%a1%e5%9e%8b"&gt;
+#
+&lt;/a&gt;
+隐形因素：Agent 架构 vs 基座模型
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;在尝试把这些 Agent 组合起来的时候，我发现了一个很容易被忽视的点：&lt;strong&gt;底层基座模型只是等式的一半，“围绕它构建的 Agent 架构”决定了它的实际能力。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;最好的例子就是 Anthropic 的 Claude 3.5 Sonnet。你可以在多个环境中使用这同一个基座模型：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;作为 &lt;strong&gt;VS Code&lt;/strong&gt; 里的标准聊天助手。&lt;/li&gt;
+&lt;li&gt;作为 &lt;strong&gt;Cursor IDE&lt;/strong&gt; 内部的驱动引擎。&lt;/li&gt;
+&lt;li&gt;通过 &lt;strong&gt;OpenHands / Open Code&lt;/strong&gt; 这样的开源 Agent 框架。&lt;/li&gt;
+&lt;li&gt;原生通过 &lt;strong&gt;Claude Code CLI&lt;/strong&gt; 使用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;尽管共享完全相同的 LLM DNA（Claude 3.5 Sonnet），它们的实际能力却大相径庭。在严苛的工程流中，原生 &lt;strong&gt;Claude Code&lt;/strong&gt; 在 Agent 执行方面始终优于其他方式。为什么？因为 Agent 架构都由模型的创造者进行了独特的优化（包括但不限于：隐藏的循环机制、错误恢复策略，以及特定的上下文工程）。&lt;/p&gt;
+&lt;p&gt;即使使用像 Open Code 这样优秀的开源替代方案搭配 Claude 模型，其执行流畅度和架构视野也往往不及 Claude Code。这告诉我们，当我们为 Mesh 选择 Agent 时，我们选择的不仅仅是一个基座模型（如 Sonnet 或 GPT-4o），更是围绕它构建的工程脚手架。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="社区里的类似探索" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%a4%be%e5%8c%ba%e9%87%8c%e7%9a%84%e7%b1%bb%e4%bc%bc%e6%8e%a2%e7%b4%a2"&gt;
+#
+&lt;/a&gt;
+社区里的类似探索
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;写完这篇之后，我发现社区里已经有人在做类似的事情。&lt;strong&gt;&lt;a href="https://github.com/humania-org/humanize" target="_blank" rel="noopener noreferrer"&gt;Humanize&lt;/a&gt;&lt;/strong&gt; 是一个 Claude Code 插件，它实现了一个叫 &lt;strong&gt;RLCR&lt;/strong&gt;（Ralph-Loop with Codex Review）的工作流：Claude 负责写代码，Codex 独立审查，发现问题就打回去重做，循环往复直到通过为止。核心思路和 Agent Mesh 一样，让架构上不同的 AI 各司其职，通过 work-feedback loop 不断迭代，而不是指望一个模型一次搞定所有事。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="写在最后" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%86%99%e5%9c%a8%e6%9c%80%e5%90%8e"&gt;
+#
+&lt;/a&gt;
+写在最后
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;我不觉得未来会出现一个“万能模型”把所有事都干了。真正有意思的是&lt;strong&gt;编排&lt;/strong&gt;——让&lt;strong&gt;底层架构上有本质不同&lt;/strong&gt;的 Agent 各司其职。&lt;/p&gt;
+&lt;p&gt;我一直坚持的一个观点是：当我们说“不同”的智能体时，我们指的&lt;strong&gt;不是&lt;/strong&gt;拿同一个底层模型给它套上不同的系统提示词（比如玩“你是架构师”对“你是测试员”的角色扮演）。只有当智能体在&lt;strong&gt;处理信息的底层架构上存在根本差异&lt;/strong&gt;时，才能碰撞出真正的协同火花。&lt;/p&gt;
+&lt;p&gt;但是，你如何知道两个模型是真正不同的，还是只是同一个基础模型的微调版本？这时候，像 &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt;（一个分析语言模型之间进化关系和功能差异的研究框架，已在 &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt; 以 Oral 形式发表）这样的工具就变得无比重要了。通过分析模型之间的“基因”谱系和功能距离，我们可以有意地选择那些属于完全不同进化分支的 Agent，从而确保它们不会拥有相同的盲区。&lt;/p&gt;
+&lt;p&gt;我的实际工程经验告诉我：&lt;strong&gt;Claude Code 与 Gemini CLI 的协同目前是最强大、最直观的组合。&lt;/strong&gt; Gemini CLI 靠长上下文，把整个仓库和一堆日志全吞进去，专门负责抓幻觉、做宏观审计。Claude Code 则专注在它最擅长的事上——理解代码架构、在本地系统里精准执行。&lt;/p&gt;
+&lt;p&gt;当你有意识地把架构上截然不同的 Agent 组合在一起时，它们不再互相重叠，而是开始互补。这就是我想分享的 Agent Mesh 思路，希望对大家有启发。&lt;/p&gt;</content:encoded><category>AI</category><category>Agent</category><category>Claude Code</category><category>Gemini</category><category>LLM</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/agent-mesh/</guid></item><item><title>用 nerdctl + Tailscale Sidecar 让容器流量走 Exit Node：踩坑全记录</title><link>https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 在容器化部署中，有时候我们需要让容器的所有出站流量通过特定的网络出口。Tailscale 的 sidecar 模式可以做到这一点：用一个 Tailscale 容器作为 sidecar，其他容器共享它的网络命名空间，流量通过 WireGuard 隧道经由远端 exit node 出去。
-这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。</description><guid isPermaLink="true">https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>从像素到笔触：跨越十年的凝视</title><link>https://www.junyi.dev/posts/into-the-modern/</link><pubDate>Wed, 07 Jan 2026 15:16:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-INTO THE MODERN 2026 年初，我在新加坡 “INTO THE MODERN” 印象派画展中，第一次站在莫奈Monet的原作前。</description><guid isPermaLink="true">https://www.junyi.dev/posts/into-the-modern/</guid></item><item><title>容器化、开箱即用的 VSCode + TeX 环境：告别配置烦恼，专注写作本身</title><link>https://www.junyi.dev/posts/latex-dev-container/</link><pubDate>Tue, 23 Sep 2025 13:02:12 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。</description><content:encoded>&lt;p&gt;在容器化部署中，有时候我们需要让容器的所有出站流量通过特定的网络出口。Tailscale 的 sidecar 模式可以做到这一点：用一个 Tailscale 容器作为 sidecar，其他容器共享它的网络命名空间，流量通过 WireGuard 隧道经由远端 exit node 出去。&lt;/p&gt;
+&lt;p&gt;这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。&lt;/p&gt;
+&lt;h2 id="最终目标" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%bb%88%e7%9b%ae%e6%a0%87"&gt;
+#
+&lt;/a&gt;
+最终目标
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;让任意容器通过 Tailscale sidecar 接入 tailnet，所有出站流量经由远程 exit node 转发。架构如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/architecture.svg" alt="nerdctl &amp;#43; Tailscale Sidecar 架构图"&gt;&lt;/p&gt;
+&lt;p&gt;为了方便验证网络是否通畅，我用 &lt;code&gt;nicolaka/netshoot&lt;/code&gt; 作为测试容器——它自带 curl、dig、tcpdump、iperf 等一整套网络排查工具，比临时装工具方便得多。&lt;/p&gt;
+&lt;h2 id="坑-1nerdctl-compose-不支持-network_mode-servicexxx" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-1nerdctl-compose-%e4%b8%8d%e6%94%af%e6%8c%81-network_mode-servicexxx"&gt;
+#
+&lt;/a&gt;
+坑 1：nerdctl compose 不支持 &lt;code&gt;network_mode: service:xxx&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Docker Compose 支持 &lt;code&gt;network_mode: service:&amp;lt;service_name&amp;gt;&lt;/code&gt; 语法，它会自动把 service 名解析为对应容器的网络命名空间。但 nerdctl compose 没有实现这个翻译层，直接报错：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;unsupported network_mode: service:tailscale-sidecar
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 改用 &lt;code&gt;network_mode: container:&amp;lt;container_name&amp;gt;&lt;/code&gt;，并通过 &lt;code&gt;container_name&lt;/code&gt; 字段固定 sidecar 容器的名称。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar &lt;span style="color:#78787e"&gt;# 固定名称&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar &lt;span style="color:#78787e"&gt;# 用容器名而非服务名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果不固定 &lt;code&gt;container_name&lt;/code&gt;，nerdctl compose 会自动生成类似 &lt;code&gt;blockchain-tailscale-sidecar-1&lt;/code&gt; 的名称，导致引用不匹配。&lt;/p&gt;
+&lt;h2 id="坑-2tailscale-acl-中未定义-tag" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-2tailscale-acl-%e4%b8%ad%e6%9c%aa%e5%ae%9a%e4%b9%89-tag"&gt;
+#
+&lt;/a&gt;
+坑 2：Tailscale ACL 中未定义 tag
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;启动后 Tailscale 容器立即退出，日志显示：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Received error: requested tags [tag:container] are invalid or not permitted
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 在 Tailscale 管理后台的 ACL 策略中添加 tag 定义，并在生成 auth key 时勾选对应 tag：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;tagOwners&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;&amp;#34;tag:container&amp;#34;&lt;/span&gt;: [&lt;span style="color:#5af78e"&gt;&amp;#34;autogroup:admin&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="坑-3缺少-sys_module-capability" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-3%e7%bc%ba%e5%b0%91-sys_module-capability"&gt;
+#
+&lt;/a&gt;
+坑 3：缺少 &lt;code&gt;SYS_MODULE&lt;/code&gt; capability
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这个坑最隐蔽。容器能正常加入 tailnet，&lt;code&gt;tailscale ping&lt;/code&gt; 也通，但开启 exit node 后 TCP 流量完全不通，只有 ICMP 能过。&lt;/p&gt;
+&lt;p&gt;原因是内核模式（&lt;code&gt;TS_USERSPACE=false&lt;/code&gt;）需要加载 &lt;code&gt;xt_mark&lt;/code&gt;、&lt;code&gt;nf_nat&lt;/code&gt; 等内核模块来设置 iptables 转发规则。缺少 &lt;code&gt;SYS_MODULE&lt;/code&gt; capability 时，这些模块无法加载，iptables 规则写入但不生效，表现为 ICMP 正常而 TCP 断流。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE &lt;span style="color:#78787e"&gt;# 必须加上&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="坑-4exit-node-模式下-dns-失败" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-4exit-node-%e6%a8%a1%e5%bc%8f%e4%b8%8b-dns-%e5%a4%b1%e8%b4%a5"&gt;
+#
+&lt;/a&gt;
+坑 4：Exit Node 模式下 DNS 失败
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;开启 exit node 后，容器所有出站流量都走 WireGuard 隧道到远端 exit node 再出去。但 &lt;code&gt;/etc/resolv.conf&lt;/code&gt; 里的 DNS 服务器仍然是本地地址（如 &lt;code&gt;10.0.2.3&lt;/code&gt;），这些地址从 exit node 那端是不可达的，DNS 查询自然失败。&lt;/p&gt;
+&lt;p&gt;症状是 &lt;code&gt;curl ifconfig.me&lt;/code&gt; 报 &lt;code&gt;Could not resolve host&lt;/code&gt;，而直接用 IP 访问则卡住或返回异常。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 让 Tailscale 接管 DNS，查询也走隧道：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="最终可用的-composeyaml" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%bb%88%e5%8f%af%e7%94%a8%e7%9a%84-composeyaml"&gt;
+#
+&lt;/a&gt;
+最终可用的 compose.yaml
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: tailscale/tailscale:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;hostname&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_AUTHKEY=${TS_AUTHKEY}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_EXTRA_ARGS=--advertise-tags=tag:container --exit-node=${TS_EXITNODE}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_STATE_DIR=/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_USERSPACE=false
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;volumes&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - ${PWD}/tailscale-sidecar/state:/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;devices&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - /dev/net/tun:/dev/net/tun
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;restart&lt;/span&gt;: unless-stopped
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: nicolaka/netshoot
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;depends_on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;command&lt;/span&gt;: sleep infinity
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要在同目录下准备 &lt;code&gt;.env&lt;/code&gt; 文件：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;TS_AUTHKEY=tskey-auth-xxxxx
+TS_EXITNODE=100.x.x.x
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="验证方法" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%aa%8c%e8%af%81%e6%96%b9%e6%b3%95"&gt;
+#
+&lt;/a&gt;
+验证方法
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;nicolaka/netshoot&lt;/code&gt; 自带丰富的网络工具，非常适合验证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 检查出口 IP，确认流量是否走了 exit node&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot curl ifconfig.me
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# DNS 解析测试&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot dig google.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 查看路由表&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot ip route show table all
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 抓包排查&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot tcpdump -i any -n
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Tailscale 侧的状态检查&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale exit-node status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale ping &amp;lt;exit-node-ip&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="排查思路总结" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%8e%92%e6%9f%a5%e6%80%9d%e8%b7%af%e6%80%bb%e7%bb%93"&gt;
+#
+&lt;/a&gt;
+排查思路总结
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这次排查的过程本身也值得回顾。面对&amp;quot;exit node 不工作&amp;quot;这样的复合问题，有效的方法是逐层剥离：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;先确认隧道连通性：&lt;/strong&gt; &lt;code&gt;tailscale ping&lt;/code&gt; 验证 WireGuard 隧道本身是否通。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对比实验：&lt;/strong&gt; 关掉 exit node 测试，确认问题出在 exit node 还是基础网络。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区分协议：&lt;/strong&gt; ICMP 通但 TCP 不通，指向 iptables/内核模块问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区分 DNS 和连通性：&lt;/strong&gt; 用 IP 直连绕过 DNS，分别定位。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对比已知可用的配置：&lt;/strong&gt; 发现之前能用的命令多了 &lt;code&gt;SYS_MODULE&lt;/code&gt;，一下锁定问题。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;每一步缩小范围，避免在错误的方向上浪费时间。&lt;/p&gt;
+&lt;h2 id="写在最后" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%86%99%e5%9c%a8%e6%9c%80%e5%90%8e"&gt;
+#
+&lt;/a&gt;
+写在最后
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;nerdctl compose 作为 Docker Compose 的替代方案已经很成熟了，但在细节兼容性上仍有差距。&lt;code&gt;network_mode: service:&lt;/code&gt; 的缺失、容器名的自动生成规则不同，这些都是迁移时容易踩到的坑。而 Tailscale 在容器中使用 exit node 时，&lt;code&gt;SYS_MODULE&lt;/code&gt; 和 &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; 是两个容易被忽略但又不可或缺的配置。希望这篇记录能帮到遇到同样问题的人。&lt;/p&gt;</content:encoded><category>nerdctl</category><category>Tailscale</category><category>containerd</category><category>exit-node</category><category>sidecar</category><category>Docker Compose</category><category>WireGuard</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>从像素到笔触：跨越十年的凝视</title><link>https://www.junyi.dev/posts/into-the-modern/</link><pubDate>Wed, 07 Jan 2026 15:16:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+INTO THE MODERN 2026 年初，我在新加坡 “INTO THE MODERN” 印象派画展中，第一次站在莫奈Monet的原作前。</description><content:encoded>&lt;div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;"&gt;
+&lt;figure style="flex: 1; min-width: 280px; max-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1797.jpg" alt="into-the-modern" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption style="text-align: center;"&gt;INTO THE MODERN&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;2026 年初，我在新加坡 “INTO THE MODERN” 印象派画展中，第一次站在&lt;ruby&gt;莫奈&lt;rt&gt;Monet&lt;/rt&gt;&lt;/ruby&gt;的原作前。&lt;/p&gt;
+&lt;p&gt;颜料层层堆叠，笔触清晰可见，仿佛凝固了百年前某个晨光熹微或日暮西沉的瞬间。那一刻，我想起整整十年前（2016 年）的一个寂静的周日，我坐在电脑前，对着屏幕一页页翻找图片，为美术课挑选自己要介绍的画，主题是《从传统走向现代》。那时的我，连“&lt;ruby&gt;印象派&lt;rt&gt;Impressionism&lt;/rt&gt;&lt;/ruby&gt;”三个字都还陌生，更无法想象未来某天，竟能与这些曾只存在于像素中的杰作面对面。&lt;/p&gt;
+&lt;p&gt;展览虽未展出莫奈最著名的作品，却意外地完整：&lt;ruby&gt;莫奈&lt;rt&gt;Monet&lt;/rt&gt;&lt;/ruby&gt;、&lt;ruby&gt;雷诺阿&lt;rt&gt;Renoir&lt;/rt&gt;&lt;/ruby&gt;、&lt;ruby&gt;西斯莱&lt;rt&gt;Sisley&lt;/rt&gt;&lt;/ruby&gt;、&lt;ruby&gt;塞尚&lt;rt&gt;Cézanne&lt;/rt&gt;&lt;/ruby&gt;。这四位曾同窗于&lt;ruby&gt;格莱尔画室&lt;rt&gt;Gleyre&amp;rsquo;s Studio&lt;/rt&gt;&lt;/ruby&gt;的青年，如今以画作重聚。莫奈的画，颜料厚重如浮雕，可以清楚地看到笔触堆叠成厚厚的一团。雷诺阿用柔光晕染人脸，明亮却朦胧。西斯莱的风景静谧而克制。而塞尚，我对他没有太多的印象&amp;hellip;&lt;/p&gt;
+&lt;div style="display: flex; gap: 1rem; flex-wrap: wrap;"&gt;
+&lt;figure style="flex: 1; min-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1785.jpg" alt="haystacks" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption&gt;&lt;em&gt;Haystacks&lt;/em&gt; 干草堆, 1890 - Claude Monet&lt;br/&gt;（颜料厚重如浮雕，可以清楚地看到笔触堆叠成厚厚的一团）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;这次展览最令我惊喜的是&lt;ruby&gt;保罗·西涅克&lt;rt&gt;Paul Signac&lt;/rt&gt;&lt;/ruby&gt;，他的画，色彩上保留了印象派的味道，但技法上却截然不同。画布上没有挥洒的笔触，取而代之的是无数细密的色点。后来我才知道，保罗·西涅克是“&lt;a href="https://en.wikipedia.org/wiki/Pointillism" target="_blank" rel="noopener noreferrer"&gt;点彩派&lt;/a&gt;”的代表画家。&lt;/p&gt;
+&lt;div style="display: flex; gap: 1rem; flex-wrap: wrap;"&gt;
+&lt;figure style="flex: 1; min-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1763.jpg" alt="View of the Seine at Herblay 1889, Paul Signac" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption&gt;&lt;em&gt;View of the Seine at Herblay&lt;/em&gt; 埃尔布莱的塞纳河景, 1889 - Paul Signac&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure style="flex: 1; min-width: 280px; margin: 0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/into-the-modern/IMG_1759.jpg" alt="IMG_1759" style="width: 280px; border-radius: 10px;" /&gt;
+&lt;figcaption&gt;&lt;em&gt;Port of Saint-Cast&lt;/em&gt; 圣卡斯特港, 1889 - Paul Signac&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;p&gt;站在展厅中，记忆倒流回那个试图在 PPT 里讲清楚 “从传统走向现代” 的高中生。那时的我，仅仅通过维基百科和一些图片来了解这些画作，并且轻易为每个流派贴上标签：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;新古典主义追求严谨构图与科学透视，后期却流于空洞的教条形式；&lt;/li&gt;
+&lt;li&gt;浪漫主义在神话与激情中寻找崇高，最终却滑向情绪的浮夸；&lt;/li&gt;
+&lt;li&gt;写实主义将目光投向平民与日常，却仍未突破传统叙事的框架；&lt;/li&gt;
+&lt;li&gt;印象派挣脱画室，捕捉瞬息光色，却在对视觉印象的迷恋中，几乎遗忘了形体的结构；&lt;/li&gt;
+&lt;li&gt;后印象派彻底转身向内：梵高燃烧内心的火焰，高更逃向象征的彼岸。他们不再追求 “世界看起来如何”，而转向 “我如何感受世界”。&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;美的探索从未停歇。十年过去，我不再只是隔着屏幕，阅读那段被平滑叙述后的历史。如今站在原作前，我真正感受到了那场混乱、激烈、充满不确定性的创造过程。除了色彩与笔触的震撼，更有一种深沉的历史回响。&lt;strong&gt;与其说我在和艺术家对话，不如说我在和自己对话。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;艺术的现代之路，本就是在理性与感性、秩序与自由之间，不断裂变与重组。&lt;/p&gt;
+&lt;p&gt;画布背后，都是一个个活生生的人。他们在质疑与孤独中，依然选择相信自己的眼睛。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“There really is no such thing as Art. There are only artists.”&lt;br&gt;
+&amp;mdash; E. H. Gombrich, &lt;em&gt;The Story of Art&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;</content:encoded><category>Impressionism</category><category>Arts</category><guid isPermaLink="true">https://www.junyi.dev/posts/into-the-modern/</guid></item><item><title>容器化、开箱即用的 VSCode + TeX 环境：告别配置烦恼，专注写作本身</title><link>https://www.junyi.dev/posts/latex-dev-container/</link><pubDate>Tue, 23 Sep 2025 13:02:12 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 这篇文章为「有洁癖的程序员」和「不想折腾环境的写作者」，提供一套开箱即用的容器化 LaTeX 方案：用容器隔离环境，用 Git 同步项目，做到「拉仓库 → 打开容器 → 立即编译」，彻底告别环境配置焦虑。
-你可以随时随地使用 Git 同步你的项目，随用随走，无需担心环境问题。同时，你也可以放心大胆地让 Claude Code、Codex 帮你写 LaTeX 代码，不担心执行危险指令（请做好 git push protect）</description><guid isPermaLink="true">https://www.junyi.dev/posts/latex-dev-container/</guid></item><item><title>从树莓派到 NUC：玩具的升级</title><link>https://www.junyi.dev/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。</description><guid isPermaLink="true">https://www.junyi.dev/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 键帽更换指南</title><link>https://www.junyi.dev/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+你可以随时随地使用 Git 同步你的项目，随用随走，无需担心环境问题。同时，你也可以放心大胆地让 Claude Code、Codex 帮你写 LaTeX 代码，不担心执行危险指令（请做好 git push protect）</description><content:encoded>&lt;p&gt;这篇文章为「&lt;strong&gt;有洁癖的程序员&lt;/strong&gt;」和「&lt;strong&gt;不想折腾环境的写作者&lt;/strong&gt;」，提供一套开箱即用的容器化 LaTeX 方案：用容器隔离环境，用 Git 同步项目，做到「&lt;strong&gt;拉仓库&lt;/strong&gt; → &lt;strong&gt;打开容器&lt;/strong&gt; → &lt;strong&gt;立即编译&lt;/strong&gt;」，彻底告别环境配置焦虑。&lt;/p&gt;
+&lt;p&gt;你可以随时随地使用 Git 同步你的项目，随用随走，无需担心环境问题。同时，你也可以放心大胆地让 Claude Code、Codex 帮你写 LaTeX 代码，不担心执行危险指令（请做好 git push protect）&lt;/p&gt;
+&lt;h2 id="你只需要准备-1-件事" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%bd%a0%e5%8f%aa%e9%9c%80%e8%a6%81%e5%87%86%e5%a4%87-1-%e4%bb%b6%e4%ba%8b"&gt;
+#
+&lt;/a&gt;
+你只需要准备 1 件事
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;无需安装复杂的 TeX 发行版、不用配置系统环境变量，唯一要做的就是：&lt;/p&gt;
+&lt;p&gt;在 &lt;strong&gt;Cursor&lt;/strong&gt; 或 &lt;strong&gt;VSCode&lt;/strong&gt; 中，安装官方扩展 &lt;code&gt;Dev Containers&lt;/code&gt;&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px; margin: 20px 0;"&gt;
+&lt;figure style="flex: 1; text-align: center;"&gt;
+&lt;img src="dev-container-cursor.png" alt="Cursor 中的 Dev Container" style="width: 100%; height: auto; border-radius: 8px;"&gt;
+&lt;figcaption&gt;Cursor 中的 Dev Container&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure style="flex: 1; text-align: center;"&gt;
+&lt;img src="dev-container-vscode.png" alt="VS Code 中的 Dev Container" style="width: 100%; height: auto; border-radius: 8px;"&gt;
+&lt;figcaption&gt;VS Code 中的 Dev Container&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="三个步骤从-0-到能写-latex" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%89%e4%b8%aa%e6%ad%a5%e9%aa%a4%e4%bb%8e-0-%e5%88%b0%e8%83%bd%e5%86%99-latex"&gt;
+#
+&lt;/a&gt;
+三个步骤，从 0 到能写 LaTeX
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;假设你已有一个 LaTeX 项目文件夹（新建空文件夹也可以），跟着做就能用：&lt;/p&gt;
+&lt;h3 id="step-1-引入" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-%e5%bc%95%e5%85%a5"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 1 引入 &lt;a href="https://github.com/paperdebugger-bot/latex-devcontainer" target="_blank" rel="noopener noreferrer"&gt;Dev Container 配置&lt;/a&gt;&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;打开项目的终端（VSCode/Cursor 内置终端即可），执行以下命令，将预配置好的容器环境作为「子模块」引入项目（子模块不干扰主项目文件，方便后续更新）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git submodule add https://github.com/paperdebugger-bot/latex-devcontainer.git .devcontainer
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你的项目还没初始化 Git（&lt;code&gt;git init&lt;/code&gt;），也可以直接下载配置文件解压到 &lt;code&gt;.devcontainer&lt;/code&gt; 文件夹：&lt;a href="https://github.com/paperdebugger-bot/latex-devcontainer/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer"&gt;latex-devcontainer.zip&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id="step-2-重载编辑器窗口" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-%e9%87%8d%e8%bd%bd%e7%bc%96%e8%be%91%e5%99%a8%e7%aa%97%e5%8f%a3"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 2 重载编辑器窗口&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;按下快捷键 &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;Shift&lt;/kbd&gt; + &lt;kbd&gt;P&lt;/kbd&gt;（macOS 是 &lt;kbd&gt;⌘&lt;/kbd&gt; + &lt;kbd&gt;⇧&lt;/kbd&gt; + &lt;kbd&gt;P&lt;/kbd&gt;），在弹出的命令面板中输入 &lt;code&gt;Reload Window&lt;/code&gt; 并执行，让编辑器识别新添加的容器配置。&lt;/p&gt;
+&lt;h3 id="step-3-启动容器并使用" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-%e5%90%af%e5%8a%a8%e5%ae%b9%e5%99%a8%e5%b9%b6%e4%bd%bf%e7%94%a8"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 3 启动容器并使用&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;重载后，编辑器会自动弹出提示「是否在 Dev Container 中打开项目」，点击 &lt;strong&gt;Reopen in Container&lt;/strong&gt;；&lt;/p&gt;
+&lt;p&gt;接下来会让你选择容器版本，直接选 &lt;strong&gt;full&lt;/strong&gt; 即可 —— 等待 3-5 分钟（首次构建需下载镜像，后续会快很多），环境就搭建完成了！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;🎉 完成后你会获得什么？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;预装 &lt;strong&gt;TeX Live Full 发行版&lt;/strong&gt;（几乎包含所有宏包，不用手动装）；&lt;/li&gt;
+&lt;li&gt;自带 &lt;strong&gt;LaTeX Workshop 插件&lt;/strong&gt;（VSCode 最好用的 LaTeX 插件，支持实时预览、一键编译）&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;；&lt;/li&gt;
+&lt;li&gt;配置好的 &lt;strong&gt;PDF 预览&lt;/strong&gt; 功能；&lt;/li&gt;
+&lt;li&gt;干净的终端环境（可直接用 &lt;code&gt;pdflatex&lt;/code&gt; &lt;code&gt;xelatex&lt;/code&gt; 等命令）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="进阶选择不同的容器版本怎么挑" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%bf%9b%e9%98%b6%e9%80%89%e6%8b%a9%e4%b8%8d%e5%90%8c%e7%9a%84%e5%ae%b9%e5%99%a8%e7%89%88%e6%9c%ac%e6%80%8e%e4%b9%88%e6%8c%91"&gt;
+#
+&lt;/a&gt;
+进阶选择：不同的容器版本怎么挑？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;上面推荐的 &lt;strong&gt;full&lt;/strong&gt; 版本是「省事优先」，但如果你的项目&lt;em&gt;轻量化&lt;/em&gt;、或想&lt;em&gt;节省磁盘空间&lt;/em&gt;，可以选其他版本。核心区别在于「预装的 TeX 发行版」不同：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;容器版本&lt;/th&gt;
+&lt;th&gt;核心 TeX 发行版&lt;/th&gt;
+&lt;th&gt;特点&lt;/th&gt;
+&lt;th&gt;适合场景&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;full&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;TeX Live Full&lt;/td&gt;
+&lt;td&gt;预装所有宏包（约 6GB），编译任何项目都不会缺包&lt;/td&gt;
+&lt;td&gt;复杂论文、自定义模板、不想处理宏包问题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;tiny&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;TinyTeX&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td&gt;轻量版（约 1GB），默认含 200+ 常用宏包&lt;/td&gt;
+&lt;td&gt;简单报告、常规学术论文（缺包时需手动 &lt;code&gt;tlmgr install 宏包名&lt;/code&gt;）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;nano&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Tectonic&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td&gt;零配置引擎，自动处理依赖&lt;/td&gt;
+&lt;td&gt;快速写 Demo、极简文档（兼容性略弱，复杂宏包可能不支持）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;💡 &lt;strong&gt;切换方法&lt;/strong&gt;：&lt;br&gt;
+在启动容器时，选择对应版本即可；如果已启动容器，可通过 &lt;strong&gt;Ctrl + Shift + P → Dev Containers: Rebuild Container&lt;/strong&gt; 重新选择版本。&lt;/p&gt;
+&lt;h2 id="为什么推荐用-dev-container" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%8e%a8%e8%8d%90%e7%94%a8-dev-container"&gt;
+#
+&lt;/a&gt;
+为什么推荐用 Dev Container&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;很多人会问：「我直接在本地装 TeX Live 不行吗？」&lt;/p&gt;
+&lt;p&gt;当然可以，但 Dev Container 解决了 3 个核心痛点：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 1：环境隔离，不污染系统&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;容器是独立的「沙盒」，所有 TeX 依赖、插件都装在容器里，不会修改你本地的系统配置（比如不会和 Python、Java 等环境冲突）。想删除环境？直接删除容器即可，不留任何残留。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 2：跨设备同步，随用随走&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;把项目和 &lt;code&gt;.devcontainer&lt;/code&gt; 文件夹一起用 Git 管理，换电脑时只需「拉取仓库 → 打开容器」，10 分钟内就能恢复一模一样的写作环境——再也不用在公司电脑配一次、家里电脑又配一次。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 3：安全可控，放心用 AI 辅助&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;现在很多人用 Claude Code、Codex 生成 LaTeX 代码，这些工具可能会输出 &lt;code&gt;sudo&lt;/code&gt; 等危险命令。而容器内的操作不会影响本地系统，相当于加了一层「安全防护」（注意：仍需做好 Git 提交保护，避免泄露敏感内容）。&lt;/p&gt;
+&lt;h2 id="常见问题-qa" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98-qa"&gt;
+#
+&lt;/a&gt;
+常见问题 Q&amp;amp;A
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Q1：构建容器时速度很慢？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A1：&lt;/strong&gt; 首次构建需下载大镜像，建议换国内 Docker 镜像源（比如阿里云、网易云镜像），或在网络较好的环境下操作。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Q2：编译中文文档乱码？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A2：&lt;/strong&gt; &lt;code&gt;full&lt;/code&gt; 和 &lt;code&gt;tiny&lt;/code&gt; 版本已预装 &lt;code&gt;xeCJK&lt;/code&gt; 宏包，编译时选择 &lt;code&gt;xelatex&lt;/code&gt; 引擎即可（LaTeX Workshop 已默认配置）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Q3：如何更新容器配置？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A3：&lt;/strong&gt; 如果远程仓库的 &lt;code&gt;latex-devcontainer&lt;/code&gt; 有更新，可在项目终端执行：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git pull --recurse-submodules
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git submodule update --recursive --remote
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后重建容器（&lt;strong&gt;Rebuild Container&lt;/strong&gt;）即可应用更新。&lt;/p&gt;
+&lt;p&gt;这套方案我自己用了半年，从写技术报告到学术论文，没再遇到过一次「环境报错」。如果你也厌倦了配置 LaTeX 环境，不妨试试。&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop" target="_blank" rel="noopener noreferrer"&gt;LaTeX Workshop 插件文档&lt;/a&gt;：掌握更多编译、预览技巧&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://yihui.org/tinytex/" target="_blank" rel="noopener noreferrer"&gt;TinyTeX 官方网站&lt;/a&gt;：轻量 TeX 发行版的使用指南&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/%e5%9f%ba%e4%ba%8etinytex%e7%9a%84%e4%b8%ad%e6%96%87%e6%9c%ac%e5%9c%b0tex%e7%8e%af%e5%a2%83/" target="_blank" rel="noopener noreferrer"&gt;基于 tinytex 的中文本地 TeX 环境&lt;/a&gt;：如何配置 tinytex 环境&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://code.visualstudio.com/docs/devcontainers/containers" target="_blank" rel="noopener noreferrer"&gt;Dev Containers 官方文档&lt;/a&gt;：了解容器配置的更多细节&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>LaTex</category><category>DevContainer</category><category>Development</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/latex-dev-container/</guid></item><item><title>从树莓派到 NUC：玩具的升级</title><link>https://www.junyi.dev/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。</description><content:encoded>&lt;p&gt;陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。&lt;/p&gt;
+&lt;h2 id="树莓派的功与过" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%a0%91%e8%8e%93%e6%b4%be%e7%9a%84%e5%8a%9f%e4%b8%8e%e8%bf%87"&gt;
+#
+&lt;/a&gt;
+树莓派的功与过
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;树莓派 4B 曾是我数字生活的重要支柱。它安静地运行着各类轻量服务：从监控家庭网络流量，到跑一些自动化脚本，甚至充当临时的开发测试环境。为了保持稳定，我特意配置了&lt;strong&gt;每周日自动重启&lt;/strong&gt;的定时任务，这套机制让它在大多数时候都表现得相当可靠。&lt;/p&gt;
+&lt;p&gt;但树莓派的短板也随着使用深度逐渐暴露。最让我焦虑的是 TF 卡的存储可靠性——即便选用了号称&amp;quot;耐用级&amp;quot;的 Endurance 卡，也无法完全避免潜在的 I/O 风险。在上一篇关于&lt;a href="http://localhost:1313/posts/k3s-101/" target="_blank" rel="noopener noreferrer"&gt;树莓派 5 集群配置 k3s&lt;/a&gt;的文章发布后，我的四节点集群仅稳定运行了一周，就有一个节点因突发大量 &lt;strong&gt;I/O Error&lt;/strong&gt; 彻底挂掉，而它用的正是我精心挑选的高耐久卡，寿命甚至不如 4B 上的普通卡。&lt;/p&gt;
+&lt;p&gt;性能瓶颈则在复杂场景下愈发明显：编译稍大的项目时进度条会陷入漫长等待，多服务并行时偶尔出现的卡顿也提醒着我硬件的局限。虽然可以通过外接 SSD 缓解存储问题，但这无疑增加了设备的复杂度，与其如此，不如直接升级到更可靠的平台。&lt;/p&gt;
+&lt;h2 id="nuc-的开箱与性能跃升" &gt;
+&lt;div&gt;
+&lt;a href="#nuc-%e7%9a%84%e5%bc%80%e7%ae%b1%e4%b8%8e%e6%80%a7%e8%83%bd%e8%b7%83%e5%8d%87"&gt;
+#
+&lt;/a&gt;
+NUC 的开箱与性能跃升
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;拆开 NUC 包装时，第一感觉是 &amp;ldquo;精致得不像一台迷你主机&amp;rdquo;。巴掌大的机身比树莓派大不了多少，但沉甸甸的金属外壳透着一股扎实感。我给它装了 &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;。性能差距让我感到很舒适：之前在树莓派上编译一个 Go 项目需要 3 分钟，在 NUC 上居然 1 分钟就搞定了；&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
+&lt;figcaption&gt;Fig.1 - 小巧却强悍的 Intel NUC&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;NUC 带来的不仅是性能提升，更是心理上的踏实感（内置 SSD 彻底告别了 TF 卡的读写焦虑，更充足的内存和 x86 架构让它能轻松应对更复杂的任务）。现在我终于敢本地跑一个小型数据库了（以前总担心频繁读写会烧卡）。&lt;/p&gt;
+&lt;p&gt;至于退役的树莓派？它们会转型为边缘计算节点，继续发挥余热。&lt;/p&gt;
+&lt;h2 id="结语" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%bb%93%e8%af%ad"&gt;
+#
+&lt;/a&gt;
+结语
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;偶尔看到树莓派的指示灯还在规律闪烁，会想起刚拿到它时的兴奋。其实折腾这些设备的乐趣，从来不是追求最新最强，而是看着它们在不同阶段找到合适的位置，就像看着自己用过的工具慢慢有了属于自己的故事。&lt;/p&gt;</content:encoded><category>Linux</category><category>Raspberry Pi</category><category>Intel NUC</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 键帽更换指南</title><link>https://www.junyi.dev/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 Shift 和 Space，外观变得非常难看）。
 虽然有人说可以去 Apple 直营店更换键帽1，但据说每次只能更换几个。对于我这种整块键盘都打油的情况，显然还是自己动手来得更实际。
-写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频2只演示了普通按键（字母键和数字键）的拆解，刻意跳过了长键帽（如 Space、Caps Lock、ESC）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。</description><guid isPermaLink="true">https://www.junyi.dev/posts/replace-keyboard/</guid></item><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频2只演示了普通按键（字母键和数字键）的拆解，刻意跳过了长键帽（如 Space、Caps Lock、ESC）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。</description><content:encoded>&lt;p&gt;众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 &lt;kbd&gt;Shift&lt;/kbd&gt; 和 &lt;kbd&gt;Space&lt;/kbd&gt;，外观变得非常难看）。&lt;/p&gt;
+&lt;p&gt;虽然有人说可以去 Apple 直营店更换键帽&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，但据说每次只能更换几个。对于我这种&lt;strong&gt;整块键盘都打油&lt;/strong&gt;的情况，显然还是自己动手来得更实际。&lt;/p&gt;
+&lt;p&gt;写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;只演示了普通按键（字母键和数字键）的拆解，&lt;strong&gt;刻意跳过了&lt;/strong&gt;长键帽（如 &lt;kbd&gt;Space&lt;/kbd&gt;、&lt;kbd&gt;Caps Lock&lt;/kbd&gt;、&lt;kbd&gt;ESC&lt;/kbd&gt;）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
+&lt;figcaption&gt;
+换键帽前（上）和换键帽后（下）
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;我在淘宝上购买了全套键帽，花了 85 元，打算自己更换：&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/taobao.jpeg" style="border-radius:0.5rem; width: 256px"&gt;
+&lt;figcaption&gt;
+淘宝购买的全套键帽
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;（后来才看到，闲鱼全套键帽只要 ¥20 到 ¥40 之间每套&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;。。。）&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="拆掉旧键帽" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%8b%86%e6%8e%89%e6%97%a7%e9%94%ae%e5%b8%bd"&gt;
+#
+&lt;/a&gt;
+拆掉旧键帽
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;MacBook Pro 使用的是剪刀脚结构，因此我们必须遵循剪刀脚键盘的拆解方法。&lt;/p&gt;
+&lt;h3 id="普通按键拆装" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%99%ae%e9%80%9a%e6%8c%89%e9%94%ae%e6%8b%86%e8%a3%85"&gt;
+##
+&lt;/a&gt;
+普通按键拆装
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;操作步骤：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;定位卡扣&lt;/strong&gt;: 每个普通键帽都有四个卡扣，分别位于四个角&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;从右下角开始&lt;/strong&gt;: 用撬棒微微翘起键帽右下角，听到轻微的&amp;quot;啪&amp;quot;声表示卡扣已释放&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;接着左下角&lt;/strong&gt;: 重复同样操作释放左下角的卡扣&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提起键帽&lt;/strong&gt;: 当下方两个卡扣都释放后，轻轻向上提起整个键帽&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;完全取下&lt;/strong&gt;: 上方卡扣会自然脱离&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;注意事项：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⚠️ 不要用力过猛，剪刀脚结构比较脆弱&lt;/li&gt;
+&lt;li&gt;⚠️ 避免直接向上拉扯，可能会损坏卡扣&lt;/li&gt;
+&lt;li&gt;💡 建议使用塑料撬棒而不是金属工具，避免刮伤&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;你可以参考这个视频&lt;sup id="fnref1:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;，视频中演示了普通按键的拆解方法。&lt;/p&gt;
+&lt;p&gt;安装键帽与拆卸过程相反，首先把键帽从上方滑到卡槽里，然后按压键帽，直到键帽完全卡入卡槽。&lt;/p&gt;
+&lt;p&gt;⚠️ 注意不要大力按压键帽，因为键帽的塑料件非常脆弱。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="长键帽拆装如-shiftcaps-lockesc" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%95%bf%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e5%a6%82-shiftcaps-lockesc"&gt;
+##
+&lt;/a&gt;
+长键帽拆装（如 Shift、Caps Lock、ESC）
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;这类键帽内部通常带有一到两个平衡杆（铁丝），结构更复杂。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;拆卸建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同样从右下角开始，再拆左下角；&lt;/li&gt;
+&lt;li&gt;拆下时注意不要用力过猛，&lt;strong&gt;避免下方金属卡槽变形&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+拆下的 Caps Lock 键（镊子指着）和 Shift 键（较长）
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;安装建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果是 1 个平衡杆：&lt;br&gt;
+把铁丝先固定在键帽上，滑入键盘的缺口，再正常安装即可。&lt;/li&gt;
+&lt;li&gt;如果是 2 个平衡杆：&lt;br&gt;
+将&lt;strong&gt;上方平衡杆装在键帽上&lt;/strong&gt;，&lt;strong&gt;下方平衡杆卡在键盘上&lt;/strong&gt;。&lt;br&gt;
+安装时先对准上方卡槽，轻轻按入；再将下方卡扣压入孔位；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/longkey.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+只有一个平衡杆的键帽，先把平衡杆卡住缺口，然后再正常装
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="短键帽拆装方向键" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%9f%ad%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e6%96%b9%e5%90%91%e9%94%ae"&gt;
+##
+&lt;/a&gt;
+短键帽拆装（方向键）
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;上方向键：先撬开左侧卡扣，然后&lt;strong&gt;从左向右滑出&lt;/strong&gt;；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;左/下/右方向键：先撬开右侧卡扣，然后&lt;strong&gt;从右向左滑出&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;（在拆之前，请参考方向键构造图）&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkeys.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_side.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_top.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+方向键构造图
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="总结" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%80%bb%e7%bb%93"&gt;
+#
+&lt;/a&gt;
+总结
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;记得最后检查一下所有拆下来的键，防止有一些铁丝忘记取下来，我在装的最后就发现有两个铁丝忘记取出来。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/final.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+更换下来的旧键帽
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="常见问题解决" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3"&gt;
+##
+&lt;/a&gt;
+常见问题解决
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;键帽装回去后按压感觉不对怎么办？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查平衡杆是否正确卡入卡槽&lt;/li&gt;
+&lt;li&gt;确认剪刀脚支架没有变形或断裂&lt;/li&gt;
+&lt;li&gt;重新拆卸并按正确顺序安装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;键帽容易脱落？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查四个卡扣是否都正确扣入&lt;/li&gt;
+&lt;li&gt;平衡杆的安装方向是否正确&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;按键有卡顿现象？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查是否有灰尘或异物卡在键帽下方&lt;/li&gt;
+&lt;li&gt;确认剪刀脚支架安装位置正确&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="专业建议" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%93%e4%b8%9a%e5%bb%ba%e8%ae%ae"&gt;
+##
+&lt;/a&gt;
+专业建议
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;如果你对自己的动手能力不自信，或者已经有卡扣/剪刀脚损坏，建议：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;联系 Apple 官方维修点；&lt;/li&gt;
+&lt;li&gt;找可信的第三方维修；&lt;/li&gt;
+&lt;li&gt;观看更多视频教程练练手再动工。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;MacbookPRO键帽打油怎么办？据说天才吧可以免费更换，是吗？&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;哔哩哔哩：MacBook剪刀键盘拆装（键帽+剪刀支架）&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://post.smzdm.com/p/ao9wevx9/" target="_blank" rel="noopener noreferrer"&gt;什么值得买：Macbook Pro 键盘打油，键帽更换作业&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TechShare</category><category>computer</category><category>keyboard</category><guid isPermaLink="true">https://www.junyi.dev/posts/replace-keyboard/</guid></item><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。
-本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。</description><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>超低电压输入的升降压电路（0.3V 转 5V）</title><link>https://www.junyi.dev/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-图 1 - Ultra Boost Converter</description><guid isPermaLink="true">https://www.junyi.dev/posts/boost-converter/</guid></item><item><title>隐藏 GitHub Pages 里的敏感文章（GitHub Actions）</title><link>https://www.junyi.dev/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。</description><content:encoded>&lt;p&gt;K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。&lt;/p&gt;
+&lt;p&gt;本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。&lt;/p&gt;
+&lt;h2 id="step-1-在-master-和-agent-节点分别执行命令" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-%e5%9c%a8-master-%e5%92%8c-agent-%e8%8a%82%e7%82%b9%e5%88%86%e5%88%ab%e6%89%a7%e8%a1%8c%e5%91%bd%e4%bb%a4"&gt;
+#
+&lt;/a&gt;
+Step 1. 在 Master 和 Agent 节点分别执行命令
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这部分参考了&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;的 &amp;ldquo;Setting Up with k3s&amp;rdquo; 章节&lt;/p&gt;
+&lt;h3 id="master-节点" &gt;
+&lt;div&gt;
+&lt;a href="#master-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Master 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-1&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="agent-节点" &gt;
+&lt;div&gt;
+&lt;a href="#agent-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Agent 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-2&lt;/code&gt;, &lt;code&gt;pi-3&lt;/code&gt;, &lt;code&gt;pi-4&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;K3S_URL&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://100.84.216.88:6443 &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;K3S_TOKEN&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;K10d0e1ccd102d3f60043941ab35d22f29ca15e0ecf48e138d502fd258ee232cb84::server:bc76905e2c32080b0c2a0501293876bd &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5&lt;/span&gt;&lt;span&gt; sh -s -
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3S_URL 和 K3S_TOKEN 请写你自己的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3s agent 节点不需要配置 `system-default-registry`。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;details&gt;
+&lt;summary&gt;为什么我的 &lt;code&gt;K3S_URL&lt;/code&gt; 是 &lt;code&gt;100.84.216.88&lt;/code&gt;&lt;/summary&gt;
+&lt;p&gt;因为我使用 tailscale &lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; 给树莓派集群构建了虚拟局域网。&lt;/p&gt;
+&lt;p&gt;请根据你的实际情况进行配置。&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;如何查看 &lt;code&gt;K3S_TOKEN&lt;/code&gt;&lt;/summary&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat /var/lib/rancher/k3s/server/node-token
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/details&gt;
+&lt;h2 id="step-2-验证安装效果" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-%e9%aa%8c%e8%af%81%e5%ae%89%e8%a3%85%e6%95%88%e6%9e%9c"&gt;
+#
+&lt;/a&gt;
+Step 2. 验证安装效果
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-5.png" alt="agent 已加入 master"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="其他k3s-在中国大陆地区的安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%85%b6%e4%bb%96k3s-%e5%9c%a8%e4%b8%ad%e5%9b%bd%e5%a4%a7%e9%99%86%e5%9c%b0%e5%8c%ba%e7%9a%84%e5%ae%89%e8%a3%85"&gt;
+#
+&lt;/a&gt;
+其他：K3s 在中国大陆地区的安装
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="方法一全新安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%b8%80%e5%85%a8%e6%96%b0%e5%ae%89%e8%a3%85"&gt;
+##
+&lt;/a&gt;
+方法一：全新安装
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 介绍了在安装时通过指定 &lt;code&gt;INSTALL_K3S_MIRROR=cn&lt;/code&gt; 和 &lt;code&gt;--system-default-registry&lt;/code&gt; 来更换 registry mirror。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 全新安装（master 节点）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image.png" alt="全新安装命令执行结果" /&gt;
+&lt;figcaption&gt;全新安装 - 命令执行结果&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="方法二换源" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%ba%8c%e6%8d%a2%e6%ba%90"&gt;
+##
+&lt;/a&gt;
+方法二：换源
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;这个方法适用于在国外配置好环境之后，设备迁移到中国大陆地区的无法访问默认源的用户。&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;我执行完 Rancher 的快速入门指南里提供的命令，发现 pods 根本没启动的&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Rancher 快速入门指南提供的代码（正常安装 k3s 但是无法启动 pod）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-2.png" alt="卡在 ContainerCreating 步骤" /&gt;
+&lt;figcaption&gt;卡在 ContainerCreating 步骤（黄色高亮部分）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;p&gt;在 &lt;code&gt;/etc/systemd/system/k3s.service&lt;/code&gt; 里面指定 &lt;code&gt;--system-default-registry&lt;/code&gt;，然后 &lt;code&gt;systemctl daemon-reload &amp;amp;&amp;amp; systemctl restart k3s&lt;/code&gt; 重启服务即可&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Unit&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 2&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Description&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;Lightweight Kubernetes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 3&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Documentation&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://k3s.io
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 4&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Wants&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 5&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;After&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Install&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;WantedBy&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;multi-user.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 9&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;10&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Service&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;11&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Type&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;notify
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;12&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/default/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;13&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/sysconfig/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;14&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/systemd/system/k3s.service.env
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;15&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;KillMode&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;process
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;16&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Delegate&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;17&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Having non-zero Limit*s causes performance problems due to accounting overhead&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;18&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# in the kernel. We recommend using cgroups to do container-local accounting.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;19&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNOFILE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;1048576&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;20&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNPROC&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;21&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitCORE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;22&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TasksMax&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;23&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TimeoutStartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;24&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Restart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;always
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;25&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;RestartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;5s
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;26&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/bin/sh -xc &lt;span style="color:#5af78e"&gt;&amp;#39;! /usr/bin/systemctl is-enabled --quiet nm-cloud-setup.service 2&amp;gt;/dev/null&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;27&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe br_netfilter
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;28&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe overlay
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;29&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/usr/local/bin/k3s &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;30&lt;/span&gt;&lt;span&gt; server &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;31&lt;/span&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;--system-default-registry&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;32&lt;/span&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;registry.cn-hangzhou.aliyuncs.com&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl restart k3s
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-3.png" alt="k3s正在重启服务" /&gt;
+&lt;figcaption&gt;k3s 正在重启服务，已经有一个服务就绪（黄色高亮）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-4.png" alt="Container 成功被创建" /&gt;
+&lt;figcaption&gt;稍等一会，全部的 Container 成功被创建&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;一些题外话&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt; 说通过 &lt;code&gt;crictl info&lt;/code&gt; 找到 &lt;code&gt;/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl&lt;/code&gt; 文件，然后修改这个文件中描述的 endpoint 地址&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;但是这个方案看起来特别奇怪。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;sup id="fnref:7"&gt;&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref"&gt;7&lt;/a&gt;&lt;/sup&gt; 里面提到&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;但是通过 &lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 的方式安装之后，并没有出现 &lt;code&gt;/etc/rancher/k3s/registries.yaml&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;那么它是怎么知道 registry 的 mirror 是谁呢？&lt;/p&gt;
+&lt;/details&gt;
+&lt;h3 id="安装后的验证" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%ae%89%e8%a3%85%e5%90%8e%e7%9a%84%e9%aa%8c%e8%af%81"&gt;
+##
+&lt;/a&gt;
+安装后的验证
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get pods -n kube-system
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-1.png" alt="alt text"&gt;&lt;/p&gt;
+&lt;style&gt;
+@import 'style.css';
+&lt;/style&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/" target="_blank" rel="noopener noreferrer"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314" target="_blank" rel="noopener noreferrer"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278" target="_blank" rel="noopener noreferrer"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90" target="_blank" rel="noopener noreferrer"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:7"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>Linux</category><category>k3s</category><category>Raspberry Pi 5</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>超低电压输入的升降压电路（0.3V 转 5V）</title><link>https://www.junyi.dev/posts/boost-converter/</link><pubDate>Fri, 29 Mar 2024 16:42:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+图 1 - Ultra Boost Converter</description><content:encoded>&lt;figure&gt;
+&lt;img style="border-radius:0.5em; box-shadow: 0px 0px 5px rgba(0,0,0,0.2)" src="https://www.junyi.dev/posts/boost-converter/pic1.JPG" alt="Boost Converter by Junyi" width="500" /&gt;
+&lt;figcaption&gt;图 1 - Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="芯片选型" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%8a%af%e7%89%87%e9%80%89%e5%9e%8b"&gt;
+#
+&lt;/a&gt;
+芯片选型
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;接了一个很有挑战的需求，需要我把 0.5V 的电压转换到 2.0V。&lt;/p&gt;
+&lt;p&gt;传统的 Boost-Buck 电路无法实现这个需求，因为一个普通二极管的压降约为 0.7V，可是电源只能提供 0.5V 的电压。&lt;/p&gt;
+&lt;p&gt;大部分现有的电压转换芯片，需要 0.9V 的启动电压，电源不能满足这个要求。&lt;/p&gt;
+&lt;p&gt;找了很久，发现了 TPS61200 这款芯片，它支持 0.3V-5.5V 的输入，并且以 1.8V - 5.5V 的电压输出（可调且固定）&lt;/p&gt;
+&lt;h2 id="pcb-设计" &gt;
+&lt;div&gt;
+&lt;a href="#pcb-%e8%ae%be%e8%ae%a1"&gt;
+#
+&lt;/a&gt;
+PCB 设计
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;很好的 JYF 老师，指点我很多，使我的 PCB 旋转。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一开始，我参考了 &lt;a href="https://www.ti.com/lit/pdf/slva345" target="_blank" rel="noopener noreferrer"&gt;Supplying TPS61200 With a Single Solar Cell&lt;/a&gt; 和 &lt;a href="https://www.ti.com/lit/pdf/slva364" target="_blank" rel="noopener noreferrer"&gt;Using TPS61200 as WLED Driver&lt;/a&gt; 作出第一版设计，拿给 JYF 老师看：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;没什么问题，就是有一些问题要改一下&lt;/p&gt;
+&lt;p&gt;—— JYF&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;然后 JYF 老师教了我很多关于电源电路设计的技巧，比如：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;铺铜时使用“阻止区”避免产生“天线”&lt;/li&gt;
+&lt;li&gt;在“天线”的附近，打过孔，让干扰回流到地&lt;/li&gt;
+&lt;li&gt;画板子，把板子尺寸设置成 5mm 倍数，好做外壳&lt;/li&gt;
+&lt;li&gt;钢网在淘宝做更便宜&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;横着的座子不好用，换成罚站的好用&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;虽然 JYF 老师偶尔“内涵”我一下，但还是得感谢 JYF 老师，他的帮助这是让这个项目&lt;strong&gt;一次成功&lt;/strong&gt;的关键。&lt;/p&gt;
+&lt;!-- &lt;figure&gt;
+&lt;img style="border-radius: 8px; overflow: hidden; box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.05);" src="https://www.junyi.dev/posts/boost-converter/subtext.png" alt="Subtexted by JYF" width="50%" /&gt;
+&lt;figcaption&gt;图 2 - JYF 内涵我&lt;/figcaption&gt;
+&lt;/figure&gt; --&gt;
+&lt;p&gt;（顺便一提，我偷懒去掉了 MPP 电路，可能持续 20ms 对电源索取 1A 的电流，在某些燃料电池里相当于短路，从而影响电源寿命）&lt;/p&gt;
+&lt;h2 id="焊接" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%84%8a%e6%8e%a5"&gt;
+#
+&lt;/a&gt;
+焊接
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这是我第一次手工焊接 QFN 芯片，弄坏了一个 PCB 才焊接好。最后的成品质量很高。&lt;/p&gt;
+&lt;p&gt;之前焊接 0805 很丑，现在焊接 0603 封装现在也不在话下。&lt;del&gt;以后失业可以去工厂打螺丝了&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
+&lt;h2 id="成品图" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%88%90%e5%93%81%e5%9b%be"&gt;
+#
+&lt;/a&gt;
+成品图
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view1.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/view2.jpg" alt="Boost Converter by Junyi" width="50%" /&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 2 - Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/onboard_LED.jpg" alt="Boost Converter by 3.0V battery" /&gt;
+&lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/by_battery.jpg" alt="Boost Converter by 1.5V battery"/&gt;
+&lt;figcaption&gt;(b) 使用 1.5V 电池&lt;/figcaption&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 3 - 来自不同电压输入，输出 2.0V 稳压点亮 LED&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;div style="display: flex"&gt;
+&lt;div style="width:50%"&gt;
+&lt;img src="https://www.junyi.dev/posts/boost-converter/new_version.jpg" alt="New Boost Converter" /&gt;
+&lt;!-- &lt;figcaption&gt;(a) 使用 3.0V 纽扣电池&lt;/figcaption&gt; --&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;p style="padding-left:1em"&gt;&lt;strong&gt;2024 年 6 月 15 日 更新内容：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;移除了排针&lt;/li&gt;
+&lt;li&gt;移除了纽扣电池座&lt;/li&gt;
+&lt;li&gt;移除了 POWERSAVE 选项（默认 enable）&lt;/li&gt;
+&lt;li&gt;可调输出电压从 0.5V~3.3V 改进到 0.5V~5.5V&lt;/li&gt;
+&lt;li&gt;更换为 3mm 电位器，反馈电路距离变短&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;图 4 - 升级之后的 Ultra Boost Converter&lt;/figcaption&gt;
+&lt;/figure&gt;</content:encoded><category>Projects</category><guid isPermaLink="true">https://www.junyi.dev/posts/boost-converter/</guid></item><item><title>隐藏 GitHub Pages 里的敏感文章（GitHub Actions）</title><link>https://www.junyi.dev/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 # 背景 如何防止他人看到你托管在 GitHub Pages 上的某些文章？
-这篇指南提供了一种在 GitHub Pages 上托管网站同时保持敏感内容私密的策略。</description><guid isPermaLink="true">https://www.junyi.dev/posts/github-actions/</guid></item></channel></rss>
+这篇指南提供了一种在 GitHub Pages 上托管网站同时保持敏感内容私密的策略。</description><content:encoded>&lt;h2 id="背景" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%83%8c%e6%99%af"&gt;
+#
+&lt;/a&gt;
+背景
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;如何&lt;strong&gt;防止他人看到你&lt;/strong&gt;托管在 GitHub Pages 上的某些文章？&lt;/p&gt;
+&lt;p&gt;这篇指南提供了一种在 GitHub Pages 上托管网站同时保持敏感内容私密的策略。&lt;/p&gt;
+&lt;p&gt;这个解决方案涉及到使用两个独立的 GitHub 仓库：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;私有仓库 &lt;code&gt;blog-src&lt;/code&gt;: 存放你的网站源代码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公开仓库 &lt;code&gt;blog.github.io&lt;/code&gt;: 用于生成的静态网站。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个方法确保敏感内容在 &lt;code&gt;blog-src&lt;/code&gt; 中保持私密。&lt;/p&gt;
+&lt;p&gt;每次对 &lt;code&gt;blog-src&lt;/code&gt; 进行提交时，一个自动化过程会构建静态网站并将其推送到 &lt;code&gt;blog.github.io&lt;/code&gt;（参见&lt;a href="#fig1"&gt;图 1&lt;/a&gt;）。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img id="fig1" src="https://www.junyi.dev/posts/github-actions/fig1.png" alt="The Overview of using Github Actions to publish GitHub pages" width="500" /&gt;
+&lt;figcaption&gt;图 1 - 修改 &lt;code&gt;blog-src&lt;/code&gt; 时，自动构建网站并同步到 &lt;code&gt;blog.github.io&lt;/code&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;让我们看看如何实现这个功能！&lt;/p&gt;
+&lt;h2 id="第一步创建一个-personal-access-token" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-personal-access-token"&gt;
+#
+&lt;/a&gt;
+第一步，创建一个 personal access token
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;访问&lt;a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer"&gt;此页面&lt;/a&gt;（Settings ➜ Developer Settings ➜ Personal access tokens）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Generate new token (classic)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;勾选所有的 &amp;ldquo;repo&amp;rdquo; 和 &amp;ldquo;workflow&amp;rdquo;。（参见&lt;a href="#fig2"&gt;图 2&lt;/a&gt;）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/create-personal-key.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 2 - 给 GitHub Action 创建一个 personal access token&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/created-token.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 3 - 创建好的 personal access token&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;复制你生成的 Token，比如我的是 &lt;code&gt;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&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;（此 Token 仅用作演示，实际已失效）&lt;/p&gt;
+&lt;h2 id="第二步给-blog-src-创建一个-repository-secret" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e7%bb%99-blog-src-%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-repository-secret"&gt;
+#
+&lt;/a&gt;
+第二步，给 &lt;code&gt;blog-src&lt;/code&gt; 创建一个 repository secret
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这个仓库包含我们网站的源代码，和一个 GitHub Action。&lt;/p&gt;
+&lt;p&gt;因此，我们需要把 personal access token（从第一步生成）放到 repository secret 里，以支持 GitHub Action 过程。&lt;/p&gt;
+&lt;p&gt;转到 &lt;code&gt;blog-src&lt;/code&gt; ➜ Settings ➜ Secrets and variables ➜ Actions ➜ New &lt;strong&gt;repository&lt;/strong&gt; secret&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/new-repo-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 4 - 创建 repository secret 的入口&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/add-secret.png" alt="View Service" width="500" /&gt;
+&lt;figcaption&gt;图 5 - 创建一个 repository secret&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="第三步给-blog-src-设置一个-workflow" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e4%b8%89%e6%ad%a5%e7%bb%99-blog-src-%e8%ae%be%e7%bd%ae%e4%b8%80%e4%b8%aa-workflow"&gt;
+#
+&lt;/a&gt;
+第三步，给 &lt;code&gt;blog-src&lt;/code&gt; 设置一个 workflow
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Repository ➜ Actions ➜ Set up a workflow yourself&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/github-actions/setup-actions.png" alt="Setup Actions", width="500" /&gt;
+&lt;figcaption&gt;图 6 - 设置一个 workflow.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;你需要学习如何编写工作流，以下是一些你可以阅读的文档：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart" target="_blank" rel="noopener noreferrer"&gt;GitHub Actions 快速入门&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples" target="_blank" rel="noopener noreferrer"&gt;工作流示例&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;仔细设计你的 workflow 文件，这里是一个示例：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# A Sample workflow for building and deploying a site to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy Website to Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;push&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;branches&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - main &lt;span style="color:#78787e"&gt;# Triggers this workflow whenever there&amp;#39;s a push to the `main` branch&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Allows you to run this workflow manually from the Actions tab&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;workflow_dispatch&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;schedule&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Runs at 00:00 UTC every day&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;cron&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;0 0 * * *&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;permissions&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;contents&lt;/span&gt;: read
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;pages&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;id-token&lt;/span&gt;: write
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;concurrency&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;group&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cancel-in-progress&lt;/span&gt;: &lt;span style="color:#ff6ac1"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Default to bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;defaults&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;shell&lt;/span&gt;: bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;jobs&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;build-and-deploy&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;runs-on&lt;/span&gt;: ubuntu-latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;env&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;YOUR_ENV_HERE&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0.1.2.3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;steps&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Checkout
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: actions/checkout@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;submodules&lt;/span&gt;: recursive
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;fetch-depth&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Build my website
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;: |&lt;span style="color:#5af78e"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; echo &amp;#34;Building the website ... (Remember to replace it with the real command!!!)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy to GitHub Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: peaceiris/actions-gh-pages@v3
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;personal_token&lt;/span&gt;: ${{ secrets.GH_PAGES_PAT }} &lt;span style="color:#78787e"&gt;# The pre-defined secret in Step 2.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;publish_dir&lt;/span&gt;: ./public &lt;span style="color:#78787e"&gt;# Content in this folder will be pushed to the target repo.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_name&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_email&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]@users.noreply.github.com&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;external_repository&lt;/span&gt;: Junyi-99/blog.github.io &lt;span style="color:#78787e"&gt;# Your GitHub Pages Repo (target repo)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;commit_message&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;Automated deployment from Repository blog-src&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第四步推送到-blog-src" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%ac%ac%e5%9b%9b%e6%ad%a5%e6%8e%a8%e9%80%81%e5%88%b0-blog-src"&gt;
+#
+&lt;/a&gt;
+第四步，推送到 &lt;code&gt;blog-src&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;在这个步骤中，你需要做的就是向 &lt;code&gt;blog-src&lt;/code&gt; &lt;strong&gt;推送&lt;/strong&gt; 一些提交，如果一切顺利的话，你的 GitHub Actions 将会自动执行，构建你的网站，并将其推送到 &lt;code&gt;blog.github.io&lt;/code&gt; 仓库。&lt;/p&gt;
+&lt;p&gt;（文章结束）&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/posts/github-actions/</guid></item></channel></rss>

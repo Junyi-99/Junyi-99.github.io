@@ -1,2 +1,103 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 03 Apr 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/keychain/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code Asks to Re-login in tmux? It's Probably macOS Keychain</title><link>https://www.junyi.dev/en/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-claude works fine in my terminal — Team Account, auth, everything. Open tmux, run claude, and it wants me to log in again. Took a bit of digging to figure out it&amp;amp;rsquo;s a macOS Security Session thing.</description><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 03 Apr 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/keychain/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code Asks to Re-login in tmux? It's Probably macOS Keychain</title><link>https://www.junyi.dev/en/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+claude works fine in my terminal — Team Account, auth, everything. Open tmux, run claude, and it wants me to log in again. Took a bit of digging to figure out it&amp;amp;rsquo;s a macOS Security Session thing.</description><content:encoded>&lt;p&gt;&lt;code&gt;claude&lt;/code&gt; works fine in my terminal — Team Account, auth, everything. Open tmux, run &lt;code&gt;claude&lt;/code&gt;, and it wants me to log in again. Took a bit of digging to figure out it&amp;rsquo;s a macOS Security Session thing.&lt;/p&gt;
+&lt;h2 id="what-happens" &gt;
+&lt;div&gt;
+&lt;a href="#what-happens"&gt;
+#
+&lt;/a&gt;
+What happens
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;claude&lt;/code&gt; in Ghostty: works. &lt;code&gt;claude&lt;/code&gt; in tmux: asks to re-login.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;How I tracked it down (click to expand)&lt;/summary&gt;
+&lt;h3 id="environment-variables" &gt;
+&lt;div&gt;
+&lt;a href="#environment-variables"&gt;
+##
+&lt;/a&gt;
+Environment variables?
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;First thought: tmux has different env vars.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;env | grep -iE &lt;span style="color:#5af78e"&gt;&amp;#39;claude|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nothing on either side. Claude Code doesn&amp;rsquo;t store auth in env vars.&lt;/p&gt;
+&lt;h3 id="config-files" &gt;
+&lt;div&gt;
+&lt;a href="#config-files"&gt;
+##
+&lt;/a&gt;
+Config files?
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat ~/.claude/.credentials.json 2&amp;gt;/dev/null &lt;span style="color:#ff6ac1"&gt;||&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;no credentials file&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nope. Not on disk either.&lt;/p&gt;
+&lt;h3 id="keychain" &gt;
+&lt;div&gt;
+&lt;a href="#keychain"&gt;
+##
+&lt;/a&gt;
+Keychain
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security dump-keychain 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | grep -i -A3 &lt;span style="color:#5af78e"&gt;&amp;#39;claude\|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Found it — stored in macOS Keychain as &lt;code&gt;Claude Code-credentials&lt;/code&gt;:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;0x00000007 &amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+&amp;#34;acct&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;junyi&amp;#34;
+&amp;#34;svce&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+keychain: &amp;#34;/Users/junyi/Library/Keychains/login.keychain-db&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;junyi&amp;#34;&lt;/span&gt; -w
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Works in the terminal, errors in tmux. There it is.&lt;/p&gt;
+&lt;/details&gt;
+&lt;h2 id="why-this-happens" &gt;
+&lt;div&gt;
+&lt;a href="#why-this-happens"&gt;
+#
+&lt;/a&gt;
+Why this happens
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;macOS Keychain access is tied to a &lt;strong&gt;Security Session&lt;/strong&gt; (Bootstrap Namespace). When you open a terminal window, the process gets attached to your &lt;strong&gt;Aqua session&lt;/strong&gt;, which holds the Keychain unlock state.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tmux server&lt;/code&gt; is a long-running daemon — it starts on your first &lt;code&gt;tmux new&lt;/code&gt; and stays alive. When you &lt;code&gt;tmux attach&lt;/code&gt; later, shells forked inside tmux server inherit &lt;strong&gt;the server&amp;rsquo;s original session&lt;/strong&gt;, not your current Aqua session.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Normal terminal:
+Ghostty → fork shell → inherits Aqua session → ✅ Keychain works
+tmux:
+Ghostty → attach → tmux server (old process)
+→ fork shell → inherits old session
+→ ❌ Keychain blocked
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Same reason &lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; break inside tmux.&lt;/p&gt;
+&lt;h2 id="fix" &gt;
+&lt;div&gt;
+&lt;a href="#fix"&gt;
+#
+&lt;/a&gt;
+Fix
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Install &lt;code&gt;reattach-to-user-namespace&lt;/code&gt; to reconnect tmux processes to your Aqua session:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install reattach-to-user-namespace
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Add to &lt;code&gt;~/.tmux.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;set-option -g default-command &lt;span style="color:#5af78e"&gt;&amp;#34;reattach-to-user-namespace -l &lt;/span&gt;&lt;span style="color:#5af78e"&gt;${&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;SHELL&lt;/span&gt;&lt;span style="color:#5af78e"&gt;}&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then &lt;strong&gt;kill the entire tmux server&lt;/strong&gt; (kill-session won&amp;rsquo;t help — new windows still fork from the old server):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux kill-server
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux new -s main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Verify:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$USER&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt; -w 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | head -c &lt;span style="color:#ff9f43"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If it prints the token, you&amp;rsquo;re good.&lt;/p&gt;
+&lt;h2 id="while-youre-at-it" &gt;
+&lt;div&gt;
+&lt;a href="#while-youre-at-it"&gt;
+#
+&lt;/a&gt;
+While you&amp;rsquo;re at it
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;These tmux issues are probably the same root cause:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; broken&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ssh-agent&lt;/code&gt; inaccessible&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;osascript&lt;/code&gt; failing&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;, &lt;code&gt;op&lt;/code&gt;, and other Keychain-dependent CLI tools not working&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;reattach-to-user-namespace&lt;/code&gt; fixes all of them.&lt;/p&gt;</content:encoded><category>macOS</category><category>tmux</category><category>Claude Code</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item></channel></rss>
