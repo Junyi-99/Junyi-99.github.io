@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Tue, 09 Jun 2026 00:00:00 Z</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/research-method/index.xml" rel="self" type="application/rss+xml"/><item><title>Betting on methods that scale</title><link>https://www.junyi.dev/en/ideas/bitter-lesson/</link><pubDate>Tue, 09 Jun 2026 00:00:00 Z</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+confused I read The Bitter Lesson and I buy it: in the long run, general methods that use more compute beat clever hand-built ones. But in my own work, I can&amp;amp;rsquo;t say what it actually means to bet on learning, search, and compute that scale. rough view Something like: write fewer hard rules, throw more data and compute at it. But that&amp;amp;rsquo;s too vague to help me pick anything. asked AI What does the bitter lesson mean in practice, and how do I tell if a method follows it?</description><content:encoded>&lt;div class="idea-step idea-step--confused"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;confused&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+I read &lt;a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank" rel="noopener noreferrer"&gt;The Bitter Lesson&lt;/a&gt; and I buy it: in the long run, general methods that use more compute beat clever hand-built ones. But in my own work, I can&amp;rsquo;t say what it actually means to bet on learning, search, and compute that scale.
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--rough-view"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;rough view&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+Something like: write fewer hard rules, throw more data and compute at it. But that&amp;rsquo;s too vague to help me pick anything.
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--asked-ai"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;asked AI&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+&lt;p&gt;What does the bitter lesson mean in practice, and how do I tell if a method follows it?&lt;/p&gt;
+&lt;details class="idea-ai-full"&gt;
+&lt;summary&gt;&amp;rsaquo; show full response&lt;/summary&gt;
+&lt;div class="idea-ai-full__body"&gt;
+&lt;p&gt;In one line: hardcode less of your own judgment, and build something that gets better on its own when you give it more data, more compute, longer training, and a bigger search budget.&lt;/p&gt;
+&lt;p&gt;Three layers. Learning: let the model work out its own features and strategies from data, instead of you hand-coding them. Search: spit out options, score them, keep the good ones, repeat. You set the goal and how to grade it, not every step. Compute: the method has to batch, run across many chips, stay cheap to talk between them, and read memory in order, so it gets faster for free as the hardware grows.&lt;/p&gt;
+&lt;p&gt;Put what you know into the goal, the data, the environment, and the metrics, not into a pile of fragile if-else. Tell the model what a good answer looks like and give it lots of data and a verifier, instead of writing rules to fake being smart.&lt;/p&gt;
+&lt;p&gt;The test is simple. 10x the data, does it get better? 10x the model? 10x the training time? If the answer is mostly &amp;ldquo;no, not unless I keep tuning by hand,&amp;rdquo; it doesn&amp;rsquo;t scale well enough.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;div class="idea-step__ai-excerpt"&gt;&amp;rarr; three layers &amp;#43; one test&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--what-stuck"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;what stuck&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+I didn&amp;rsquo;t push back. I read it, it made sense, I took it. Two things stuck. One, the test: does it get better on its own with 10x the data, 10x the model, 10x the training time? Two, where my own knowledge goes: into the goal, the data, the environment, and the metrics, not into a pile of fragile if-else. Tell the model what a good answer is, give it data and a verifier, don&amp;rsquo;t hand-write rules to fake being smart.
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--the-unease"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;the unease&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+Once again I asked AI before I had a view of my own. Same problem as my earlier card on outsourcing thinking to AI. I believe the idea, but right now it&amp;rsquo;s AI&amp;rsquo;s call, not mine. To make it mine I have to take a few real ideas I&amp;rsquo;m sitting on, run them through the test, and see if it kills something I was about to build.
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content:encoded><category>AI</category><category>research method</category><category>compute</category><category>metacognition</category><guid isPermaLink="true">https://www.junyi.dev/en/ideas/bitter-lesson/</guid></item></channel></rss>

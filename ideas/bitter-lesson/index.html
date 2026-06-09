@@ -1,0 +1,74 @@
+<!doctype html><html lang=zh-cn data-theme><head><meta charset=utf-8><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><meta name=theme-name content="Anubis2"><meta name=theme-version content="1.7.2"><title>如何把重点放在可扩展的方法上 - Junyi&rsquo;s Lab</title><meta name=description content="
+  
+  
+    困惑
+    
+      读 The Bitter Lesson，道理我认：长期看，肯花算力的通用方法会赢过人手工调出来的巧法。但落到我自己手上，到底怎么才算把重点放在能扩展的学习、搜索和算力上，我说不清。
+    
+  
+
+
+
+  
+  
+    初步想法
+    
+      大概就是少写死规则，多喂数据和算力。但这话太空，帮不了我做具体选择。
+    
+  
+
+
+
+  
+  
+    问 AI
+    
+      Bitter lesson 在实践里到底意味着什么？怎么判断一个方法符不符合？
+
+  &#8250; show full response
+  
+    一句话：少把自己的判断写死进系统，多搭一套机制，让它在更多数据、更多算力、更长训练、更大搜索预算下自己变强。
+分三层。学习：让模型自己从数据里学特征和策略，人少插手。搜索：生成一批候选，打分，留下好的，再来一轮，人只定目标和打分方式，不管每一步怎么走。算力：方法得能 batch、能拆到很多块芯片上跑、芯片之间通信便宜、内存按顺序读，这样硬件一变强它就白捡速度。
+自己懂的东西，放进目标、数据、环境和指标，别堆成一大坨容易碎的 if-else。告诉模型什么是好答案，给它一堆数据和一个 verifier，别手写规则去装聪明。
+判断很简单：数据扩 10 倍它会变强吗？模型扩 10 倍呢？训练时间扩 10 倍呢？要是答案大多是「不会，除非人接着手工调」，那它就不够能扩展。
+  
+
+
+        &rarr; 三层 + 一个判断标准
+    
+  
+
+
+
+  
+  
+    留下了什么
+    
+      我没跟它争，看完觉得有道理就收下了。真正留下来的是两条。一是筛方法那组问题：数据扩 10 倍它会自己变强吗，模型扩 10 倍呢，训练时间扩 10 倍呢。二是自己懂的东西该放哪：放进目标、数据、环境和指标，别写成一堆容易碎的 if-else。告诉模型什么是好答案，给它数据和一个 verifier，别手写规则去装聪明。
+    
+  
+
+
+
+  
+  
+    一点别扭
+    
+      这次又是还没自己的看法就先问了 AI，跟我之前那张「把思考外包给 AI」一个毛病。这道理我信，但现在它是 AI 的判断，不是我的。想变成我的，得拿它去筛几个我手上真在琢磨的 idea，看它会不会反手把我原本想做的东西毙掉。
+    
+  
+"><meta name=author content="map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]"><meta name=copyright content="map[email:junyi.h@comp.nus.edu.sg name:Junyi Hou]"><meta name=generator content="Hugo 0.163.0"><link rel=canonical href=https://www.junyi.dev/ideas/bitter-lesson/><link rel=icon type=image/x-icon href=https://www.junyi.dev/favicon.ico><link rel=apple-touch-icon-precomposed href=https://www.junyi.dev/apple-touch-icon.png><script>(function(){var e,n="user-color-scheme",t="auto";try{e=localStorage.getItem(n)}catch{}e||(e=t&&t!=="auto"?t:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.setAttribute("data-theme",e)})()</script><link rel=stylesheet href=/css/style.min.2bb41e9f4fe0bb8b75df12caa8924e4f5ec5dab63819fe4439f873d1b8ece2f5.css integrity="sha256-K7Qen0/gu4t13xLKqJJOT17F2rY4Gf5EOfhz0bjs4vU="><link rel=stylesheet href=/css/style.min.36237d613e2f5010b19cb88e7d856f3dc9dac9756ac478a7d22e91f314e6c510.css integrity="sha256-NiN9YT4vUBCxnLiOfYVvPcnayXVqxHin0i6R8xTmxRA="><link rel=stylesheet href=/css/style.min.61294ff271d5e5c5f4702643f2c1c8b4917fe0a4638dcc5f1611fa695d14e916.css integrity="sha256-YSlP8nHV5cX0cCZD8sHItJF/4KRjjcxfFhH6aV0U6RY="><link rel=stylesheet href=/css/style.min.508bd813cbc27a3978d0cde578e221f3e6c83958ae6be174eaf93004b8ce8785.css integrity="sha256-UIvYE8vCejl40M3leOIh8+bIOViua+F06vkwBLjOh4U="><link rel=stylesheet href=/css/style.min.5e912c44779593b31e6b6cfe458754fe87704de3fea46150d3fdb0199a6064b0.css integrity="sha256-XpEsRHeVk7Mea2z+RYdU/odwTeP+pGFQ0/2wGZpgZLA="><script src=/js/script.min.9752b2b06a7b85657fe0806a9d93413916c87001ca8a2885edc4328662fd7a85.js type=text/javascript integrity="sha256-l1KysGp7hWV/4IBqnZNBORbIcAHKiiiF7cQyhmL9eoU=" defer></script><script async defer data-website-id=dd99a470-c29d-4882-8c6a-89f1cec9045c data-cache=false data-do-not-track=false src=https://cloud.umami.is/script.js></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-QX2D9TH8CE"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-QX2D9TH8CE")</script></head><body><a class=skip-main href=#main>跳至内容</a><div class=container><header class=common-header><div class=header-top><div class=header-top-left><h1 class="site-title noselect"><a href=/>Junyi's Lab</a></h1><script>const STORAGE_KEY="user-color-scheme",defaultTheme="auto";let currentTheme,switchButton,autoDefinedScheme=window.matchMedia("(prefers-color-scheme: dark)");function switchTheme(){currentTheme=currentTheme==="dark"?"light":"dark",localStorage&&localStorage.setItem(STORAGE_KEY,currentTheme),document.documentElement.setAttribute("data-theme",currentTheme),changeGiscusTheme(currentTheme),document.body.dispatchEvent(new CustomEvent(currentTheme+"-theme-set"))}const autoChangeScheme=e=>{currentTheme=e.matches?"dark":"light",document.documentElement.setAttribute("data-theme",currentTheme),changeGiscusTheme(currentTheme),document.body.dispatchEvent(new CustomEvent(currentTheme+"-theme-set"))};document.addEventListener("DOMContentLoaded",function(){switchButton=document.querySelector("#theme-toggle"),currentTheme=detectCurrentScheme(),currentTheme==="auto"?(autoChangeScheme(autoDefinedScheme),typeof autoDefinedScheme.addEventListener=="function"?autoDefinedScheme.addEventListener("change",autoChangeScheme):typeof autoDefinedScheme.addListener=="function"&&autoDefinedScheme.addListener(autoChangeScheme)):document.documentElement.setAttribute("data-theme",currentTheme),switchButton&&switchButton.addEventListener("click",switchTheme,!1),showContent()});function detectCurrentScheme(){return localStorage!==null&&localStorage.getItem(STORAGE_KEY)?localStorage.getItem(STORAGE_KEY):defaultTheme?defaultTheme:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}function showContent(){document.body.style.visibility="visible",document.body.style.opacity=1}function changeGiscusTheme(e){function t(e){const t=document.querySelector("iframe.giscus-frame");if(!t)return;t.contentWindow.postMessage({giscus:e},"https://giscus.app")}t({setConfig:{theme:e}})}</script><ul class="social-icons noselect"><li><button id=theme-toggle type=button aria-label=切换主题>
+<span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sun-high"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.828 14.828A4 4 0 109.172 9.172a4 4 0 005.656 5.656z"/><path d="M6.343 17.657l-1.414 1.414"/><path d="M6.343 6.343 4.929 4.929"/><path d="M17.657 6.343l1.414-1.414"/><path d="M17.657 17.657l1.414 1.414"/><path d="M4 12H2"/><path d="M12 4V2"/><path d="M20 12h2"/><path d="M12 20v2"/></svg></span></button></li><li><a href=https://github.com/Junyi-99 title=Github aria-label=Github rel=me><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span></a></li><li><a href=/index.xml title=RSS aria-label=RSS rel=me><span class=inline-svg><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-rss"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 19m-1 0a1 1 0 102 0 1 1 0 10-2 0"/><path d="M4 4a16 16 0 0116 16"/><path d="M4 11a9 9 0 019 9"/></svg></span></a></li></ul></div><div class=header-top-right></div></div><nav class=noselect><a href=https://www.junyi.dev/ title>HOME</a>
+<a href=https://www.junyi.dev/posts/ title>ARCHIVE</a>
+<a href=https://www.junyi.dev/ideas/ title>IDEAS</a>
+<a href=https://www.junyi.dev/friends/ title>FRIENDS</a>
+<a href=https://www.junyi.dev/about/ title>ABOUT</a></nav></header><main id=main tabindex=-1><article class="idea-card h-entry"><header class=idea-card__header><div class=idea-card__title-row><h1 class="idea-card__title p-name">如何把重点放在可扩展的方法上</h1><span><ul class=post-translations><li><a href=/en/ideas/bitter-lesson/>EN</a></li><li>ZH-CN</li></ul></span></div><div class=idea-card__meta><time class=dt-published datetime=2026-06-09>2026-06-09</time>
+<span class=idea-card__meta-sep>&#183;</span>
+<span class=idea-card__primary-tag>AI</span>
+<span class=idea-card__meta-sep>&#183;</span>
+<span class="idea-card__status idea-card__status--raw">raw</span></div></header><section class=idea-card__question><span class=idea-card__question-glyph aria-hidden=true>?</span><p>读完 Bitter Lesson，怎么把重点真正放在可扩展的学习、搜索和算力上？</p></section><section class=idea-card__timeline><div class="idea-step idea-step--%E5%9B%B0%E6%83%91"><div class=idea-step__marker aria-hidden=true></div><div class=idea-step__body><div class=idea-step__name>困惑</div><div class=idea-step__prose>读 <a href=http://www.incompleteideas.net/IncIdeas/BitterLesson.html target=_blank rel="noopener noreferrer">The Bitter Lesson</a>，道理我认：长期看，肯花算力的通用方法会赢过人手工调出来的巧法。但落到我自己手上，到底怎么才算把重点放在能扩展的学习、搜索和算力上，我说不清。</div></div></div><div class="idea-step idea-step--%E5%88%9D%E6%AD%A5%E6%83%B3%E6%B3%95"><div class=idea-step__marker aria-hidden=true></div><div class=idea-step__body><div class=idea-step__name>初步想法</div><div class=idea-step__prose>大概就是少写死规则，多喂数据和算力。但这话太空，帮不了我做具体选择。</div></div></div><div class="idea-step idea-step--%E9%97%AE-ai"><div class=idea-step__marker aria-hidden=true></div><div class=idea-step__body><div class=idea-step__name>问 AI</div><div class=idea-step__prose><p>Bitter lesson 在实践里到底意味着什么？怎么判断一个方法符不符合？</p><details class=idea-ai-full><summary>&#8250; show full response</summary><div class=idea-ai-full__body><p>一句话：少把自己的判断写死进系统，多搭一套机制，让它在更多数据、更多算力、更长训练、更大搜索预算下自己变强。</p><p>分三层。学习：让模型自己从数据里学特征和策略，人少插手。搜索：生成一批候选，打分，留下好的，再来一轮，人只定目标和打分方式，不管每一步怎么走。算力：方法得能 batch、能拆到很多块芯片上跑、芯片之间通信便宜、内存按顺序读，这样硬件一变强它就白捡速度。</p><p>自己懂的东西，放进目标、数据、环境和指标，别堆成一大坨容易碎的 if-else。告诉模型什么是好答案，给它一堆数据和一个 verifier，别手写规则去装聪明。</p><p>判断很简单：数据扩 10 倍它会变强吗？模型扩 10 倍呢？训练时间扩 10 倍呢？要是答案大多是「不会，除非人接着手工调」，那它就不够能扩展。</p></div></details><div class=idea-step__ai-excerpt>&rarr; 三层 + 一个判断标准</div></div></div></div><div class="idea-step idea-step--%E7%95%99%E4%B8%8B%E4%BA%86%E4%BB%80%E4%B9%88"><div class=idea-step__marker aria-hidden=true></div><div class=idea-step__body><div class=idea-step__name>留下了什么</div><div class=idea-step__prose>我没跟它争，看完觉得有道理就收下了。真正留下来的是两条。一是筛方法那组问题：数据扩 10 倍它会自己变强吗，模型扩 10 倍呢，训练时间扩 10 倍呢。二是自己懂的东西该放哪：放进目标、数据、环境和指标，别写成一堆容易碎的 if-else。告诉模型什么是好答案，给它数据和一个 verifier，别手写规则去装聪明。</div></div></div><div class="idea-step idea-step--%E4%B8%80%E7%82%B9%E5%88%AB%E6%89%AD"><div class=idea-step__marker aria-hidden=true></div><div class=idea-step__body><div class=idea-step__name>一点别扭</div><div class=idea-step__prose>这次又是还没自己的看法就先问了 AI，跟我之前那张「把思考外包给 AI」一个毛病。这道理我信，但现在它是 AI 的判断，不是我的。想变成我的，得拿它去筛几个我手上真在琢磨的 idea，看它会不会反手把我原本想做的东西毙掉。</div></div></div></section><section class=idea-card__takeaway><div class=idea-card__takeaway-label>key takeaway</div><p class=idea-card__takeaway-text>两条留下来了：拿 10 倍数据、模型、训练时间能不能自己变强来筛方法；自己懂的东西放进目标、数据、环境和指标，别写成一堆容易碎的规则。</p></section><footer class=idea-card__tags><span class=idea-card__tags-label>tags</span>
+<a class="idea-card__tag p-category" href=/tags/ai/>#AI</a>
+<a class="idea-card__tag p-category" href=/tags/%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/>#研究方法</a>
+<a class="idea-card__tag p-category" href=/tags/%E7%AE%97%E5%8A%9B/>#算力</a>
+<a class="idea-card__tag p-category" href=/tags/%E5%85%83%E8%AE%A4%E7%9F%A5/>#元认知</a></footer></article></main><footer class="common-footer noselect"><ul class=language-select><li><a href=/en/ideas/bitter-lesson/>English</a></li><li>Simplified Chinese</li></ul><div class=common-footer-bottom><div class=footer-meta>© Junyi Hou, 2026
+<a aria-label="Check statistics data" class=footer-stat-link href=https://eu.umami.is/share/2uUOpgCbx28B16Ro/www.junyi.dev><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-report-analytics"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5H7A2 2 0 005 7v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><path d="M9 3m0 2a2 2 0 012-2h2a2 2 0 012 2v0a2 2 0 01-2 2h-2A2 2 0 019 5z"/><path d="M9 17v-5"/><path d="M12 17v-1"/><path d="M15 17v-3"/></svg></a></div><div class=footer-licenses></div><div>Powered by <a target=_blank rel="noopener noreferrer" href=https://gohugo.io/>Hugo</a>, theme <a target=_blank rel="noopener noreferrer" href=https://github.com/hugo-theme-anubis2/hugo-theme-anubis2>Anubis2</a>.<br></div></div></footer></div></body></html>

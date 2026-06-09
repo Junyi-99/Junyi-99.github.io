@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Tue, 09 Jun 2026 00:00:00 Z</lastBuildDate><atom:link href="https://www.junyi.dev/tags/%E7%AE%97%E5%8A%9B/index.xml" rel="self" type="application/rss+xml"/><item><title>如何把重点放在可扩展的方法上</title><link>https://www.junyi.dev/ideas/bitter-lesson/</link><pubDate>Tue, 09 Jun 2026 00:00:00 Z</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+困惑 读 The Bitter Lesson，道理我认：长期看，肯花算力的通用方法会赢过人手工调出来的巧法。但落到我自己手上，到底怎么才算把重点放在能扩展的学习、搜索和算力上，我说不清。 初步想法 大概就是少写死规则，多喂数据和算力。但这话太空，帮不了我做具体选择。 问 AI Bitter lesson 在实践里到底意味着什么？怎么判断一个方法符不符合？
+&amp;amp;rsaquo; show full response 一句话：少把自己的判断写死进系统，多搭一套机制，让它在更多数据、更多算力、更长训练、更大搜索预算下自己变强。
+分三层。学习：让模型自己从数据里学特征和策略，人少插手。搜索：生成一批候选，打分，留下好的，再来一轮，人只定目标和打分方式，不管每一步怎么走。算力：方法得能 batch、能拆到很多块芯片上跑、芯片之间通信便宜、内存按顺序读，这样硬件一变强它就白捡速度。
+自己懂的东西，放进目标、数据、环境和指标，别堆成一大坨容易碎的 if-else。告诉模型什么是好答案，给它一堆数据和一个 verifier，别手写规则去装聪明。
+判断很简单：数据扩 10 倍它会变强吗？模型扩 10 倍呢？训练时间扩 10 倍呢？要是答案大多是「不会，除非人接着手工调」，那它就不够能扩展。
+&amp;amp;rarr; 三层 &amp;amp;#43; 一个判断标准 留下了什么 我没跟它争，看完觉得有道理就收下了。真正留下来的是两条。一是筛方法那组问题：数据扩 10 倍它会自己变强吗，模型扩 10 倍呢，训练时间扩 10 倍呢。二是自己懂的东西该放哪：放进目标、数据、环境和指标，别写成一堆容易碎的 if-else。告诉模型什么是好答案，给它数据和一个 verifier，别手写规则去装聪明。 一点别扭 这次又是还没自己的看法就先问了 AI，跟我之前那张「把思考外包给 AI」一个毛病。这道理我信，但现在它是 AI 的判断，不是我的。想变成我的，得拿它去筛几个我手上真在琢磨的 idea，看它会不会反手把我原本想做的东西毙掉。</description><content:encoded>&lt;div class="idea-step idea-step--%E5%9B%B0%E6%83%91"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;困惑&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+读 &lt;a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank" rel="noopener noreferrer"&gt;The Bitter Lesson&lt;/a&gt;，道理我认：长期看，肯花算力的通用方法会赢过人手工调出来的巧法。但落到我自己手上，到底怎么才算把重点放在能扩展的学习、搜索和算力上，我说不清。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--%E5%88%9D%E6%AD%A5%E6%83%B3%E6%B3%95"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;初步想法&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+大概就是少写死规则，多喂数据和算力。但这话太空，帮不了我做具体选择。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--%E9%97%AE-ai"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;问 AI&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+&lt;p&gt;Bitter lesson 在实践里到底意味着什么？怎么判断一个方法符不符合？&lt;/p&gt;
+&lt;details class="idea-ai-full"&gt;
+&lt;summary&gt;&amp;rsaquo; show full response&lt;/summary&gt;
+&lt;div class="idea-ai-full__body"&gt;
+&lt;p&gt;一句话：少把自己的判断写死进系统，多搭一套机制，让它在更多数据、更多算力、更长训练、更大搜索预算下自己变强。&lt;/p&gt;
+&lt;p&gt;分三层。学习：让模型自己从数据里学特征和策略，人少插手。搜索：生成一批候选，打分，留下好的，再来一轮，人只定目标和打分方式，不管每一步怎么走。算力：方法得能 batch、能拆到很多块芯片上跑、芯片之间通信便宜、内存按顺序读，这样硬件一变强它就白捡速度。&lt;/p&gt;
+&lt;p&gt;自己懂的东西，放进目标、数据、环境和指标，别堆成一大坨容易碎的 if-else。告诉模型什么是好答案，给它一堆数据和一个 verifier，别手写规则去装聪明。&lt;/p&gt;
+&lt;p&gt;判断很简单：数据扩 10 倍它会变强吗？模型扩 10 倍呢？训练时间扩 10 倍呢？要是答案大多是「不会，除非人接着手工调」，那它就不够能扩展。&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;div class="idea-step__ai-excerpt"&gt;&amp;rarr; 三层 &amp;#43; 一个判断标准&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--%E7%95%99%E4%B8%8B%E4%BA%86%E4%BB%80%E4%B9%88"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;留下了什么&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+我没跟它争，看完觉得有道理就收下了。真正留下来的是两条。一是筛方法那组问题：数据扩 10 倍它会自己变强吗，模型扩 10 倍呢，训练时间扩 10 倍呢。二是自己懂的东西该放哪：放进目标、数据、环境和指标，别写成一堆容易碎的 if-else。告诉模型什么是好答案，给它数据和一个 verifier，别手写规则去装聪明。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="idea-step idea-step--%E4%B8%80%E7%82%B9%E5%88%AB%E6%89%AD"&gt;
+&lt;div class="idea-step__marker" aria-hidden="true"&gt;&lt;/div&gt;
+&lt;div class="idea-step__body"&gt;
+&lt;div class="idea-step__name"&gt;一点别扭&lt;/div&gt;
+&lt;div class="idea-step__prose"&gt;
+这次又是还没自己的看法就先问了 AI，跟我之前那张「把思考外包给 AI」一个毛病。这道理我信，但现在它是 AI 的判断，不是我的。想变成我的，得拿它去筛几个我手上真在琢磨的 idea，看它会不会反手把我原本想做的东西毙掉。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content:encoded><category>AI</category><category>研究方法</category><category>算力</category><category>元认知</category><guid isPermaLink="true">https://www.junyi.dev/ideas/bitter-lesson/</guid></item></channel></rss>
