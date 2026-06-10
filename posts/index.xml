@@ -1,4 +1,144 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 03 Apr 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 在 tmux 里要求重新登录？八成是 macOS Keychain 的锅</title><link>https://www.junyi.dev/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 10 Jun 2026 15:26:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>拆穿 introl 和 ainewshub，TPU 比 GPU 便宜 4 倍是 AI 编的幻觉</title><link>https://www.junyi.dev/posts/tpu-tco/</link><pubDate>Wed, 10 Jun 2026 15:26:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Artificial Analysis 最近放出一组硬件基准测试1，以 Llama 3.3 70B、vLLM、每查询 30 output tokens/s 的参考速度计算每百万输入输出 token 的成本，NVIDIA 对 TPU v6e (Trillium) 有大约 5 倍的每美元 token 优势，对 AMD MI300X 有大约 2 倍优势2。
+Artificial Analysis 在 X 上公布的硬件基准结论，NVIDIA 对 TPU v6e 有约 5 倍每美元 token 优势，对 MI300X 约 2 倍，H100 是 1.06 美元，MI300X 是 2.24 美元，TPU v6e 是 5.13 美元。
+跟这些能复现的数据一起在网上传的，还有另一类东西。
+# 一篇高调的对比文 introl 有一篇文章，标题叫 Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar3。核心论点是 TPU 每美元性能比 H100 好 4 倍，TPU 在推理经济性上全面压过 NVIDIA。它的关键数据来自另一篇文章，ainewshub.org 的 Nvidia vs Google TPU 2025 Cost Comparison4。顺着这条引用链往下看，会发现两篇都是 AI 生成的，数据是编的。</description><content:encoded>&lt;p&gt;Artificial Analysis 最近放出一组硬件基准测试&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，以 Llama 3.3 70B、vLLM、每查询 30 output tokens/s 的参考速度计算每百万输入输出 token 的成本，NVIDIA 对 TPU v6e (Trillium) 有大约 5 倍的每美元 token 优势，对 AMD MI300X 有大约 2 倍优势&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-twitter.png"
+alt="Artificial Analysis 在 X 上公布的硬件基准结论" width="430"&gt;&lt;figcaption&gt;
+&lt;p&gt;Artificial Analysis 在 X 上公布的硬件基准结论，NVIDIA 对 TPU v6e 有约 5 倍每美元 token 优势，对 MI300X 约 2 倍，H100 是 1.06 美元，MI300X 是 2.24 美元，TPU v6e 是 5.13 美元。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;跟这些能复现的数据一起在网上传的，还有另一类东西。&lt;/p&gt;
+&lt;h2 id="一篇高调的对比文" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%80%e7%af%87%e9%ab%98%e8%b0%83%e7%9a%84%e5%af%b9%e6%af%94%e6%96%87"&gt;
+#
+&lt;/a&gt;
+一篇高调的对比文
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;introl 有一篇文章，标题叫 Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;。核心论点是 TPU 每美元性能比 H100 好 4 倍，TPU 在推理经济性上全面压过 NVIDIA。它的关键数据来自另一篇文章，ainewshub.org 的 Nvidia vs Google TPU 2025 Cost Comparison&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;。顺着这条引用链往下看，会发现两篇都是 AI 生成的，数据是编的。&lt;/p&gt;
+&lt;h2 id="锤点一核心引用指向一份不存在的数据" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%94%a4%e7%82%b9%e4%b8%80%e6%a0%b8%e5%bf%83%e5%bc%95%e7%94%a8%e6%8c%87%e5%90%91%e4%b8%80%e4%bb%bd%e4%b8%8d%e5%ad%98%e5%9c%a8%e7%9a%84%e6%95%b0%e6%8d%ae"&gt;
+#
+&lt;/a&gt;
+锤点一，核心引用指向一份不存在的数据
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;ainewshub 那篇最核心的一句话是这样写的。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/hallucination-1.png"
+alt="ainewshub 文章里的核心论断和它声称的来源"&gt;&lt;figcaption&gt;
+&lt;p&gt;ainewshub 文章里的核心论断，4.7 倍每美元性能，来源标的却是&lt;strong&gt;并不存在的&lt;/strong&gt; MLPerf v4.1 LLM 推理结果。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;“4.7× better performance-per-dollar on LLM inference than Nvidia H100/H200”，来源标的是 Google Cloud MLPerf Inference v4.1 results + customer case studies, October 2025。&lt;/p&gt;
+&lt;p&gt;但其实，MLPerf Inference v4.1 里，Google 的 TPU 提交项只有 stable-diffusion-xl 一个模型。我去 MLCommons 的官方结果&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;里按 Google 加 TPU 筛，v4.1 Closed Datacenter 下只有两条记录，tpu-v5e-4 和 tpu-v6-4，跑的都是 stable-diffusion-xl。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/mlperf-for-tpu-1.png"
+alt="MLPerf v4.1 里筛出 Google TPU，只有 stable-diffusion-xl 一项"&gt;&lt;figcaption&gt;
+&lt;p&gt;在 MLPerf v4.1 Closed Datacenter 里筛 Google TPU，只有 tpu-v5e-4 和 tpu-v6-4 两条，跑的都是 stable-diffusion-xl，没有任何 LLM 推理项。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;没有任何 LLM 推理项！这篇文章引用的所谓 MLPerf v4.1 的 LLM 推理每美元性能 4.7 倍，&lt;strong&gt;在它声称的来源里根本不存在&lt;/strong&gt;。数字是凭空生成的，然后挂了一个看起来权威的出处。&lt;/p&gt;
+&lt;p&gt;其次，&lt;strong&gt;MLPerf 压根不报每美元性能&lt;/strong&gt;。它报的是吞吐，samples/s 和 queries/s，里面没有价格。所以那 4.7 倍&lt;strong&gt;根本不可能&lt;/strong&gt;是从 MLPerf 算出来的。&lt;/p&gt;
+&lt;h2 id="锤点二数字在转载之间漂移" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%94%a4%e7%82%b9%e4%ba%8c%e6%95%b0%e5%ad%97%e5%9c%a8%e8%bd%ac%e8%bd%bd%e4%b9%8b%e9%97%b4%e6%bc%82%e7%a7%bb"&gt;
+#
+&lt;/a&gt;
+锤点二，数字在转载之间漂移
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;把 introl&lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 ainewshub&lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 两篇放一起时，数字对不上（而且有虚假陈述）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每美元性能倍数，introl 写 4 倍，ainewshub 写 4.7 倍。（这条纯骗人，见上文）&lt;/li&gt;
+&lt;li&gt;MLPerf 版本，introl 引 v3.1，ainewshub 引 v4.1。（不知道 introl 从哪哪来的数据）&lt;/li&gt;
+&lt;li&gt;Midjourney 案例，introl 写月支出从 200 万美元降到 70 万美元，ainewshub 写从 210 万美元降到 70 万美元。（这条我没仔细核查，大概率也是幻觉出来的）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;转载来转载去，每复述一次就变一点。他妈的，模型每生成一次，就重编一个差不多的数出来。&lt;/p&gt;
+&lt;h2 id="锤点三精确到吓人的-tco-表却没有来源" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%94%a4%e7%82%b9%e4%b8%89%e7%b2%be%e7%a1%ae%e5%88%b0%e5%90%93%e4%ba%ba%e7%9a%84-tco-%e8%a1%a8%e5%8d%b4%e6%b2%a1%e6%9c%89%e6%9d%a5%e6%ba%90"&gt;
+#
+&lt;/a&gt;
+锤点三，精确到吓人的 TCO 表，却没有来源
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;ainewshub&lt;sup id="fnref2:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 给了一张三年总拥有成本表，1000 芯片集群，NVIDIA H100 总成本 1.77 亿美元，Google TPU v6 总成本 7850 万美元，省 9850 万美元。还细分到硬件降 48%、电费降 66%、制冷降 67%、支持降 63%、网络降 67%、地产降 63%。（全是编的）&lt;/p&gt;
+&lt;p&gt;这种精确到个位百分比的分项拆解看起来很专业。问题是没有一项能溯源。配套的客户案例也一样，Midjourney，还有一家所谓 C 轮计算机视觉创业公司月支出从 34 万美元降到 8.9 万美元，全是无法核实的具体数字。&lt;/p&gt;
+&lt;h2 id="最可恶的是-data-verified" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e5%8f%af%e6%81%b6%e7%9a%84%e6%98%af-data-verified"&gt;
+#
+&lt;/a&gt;
+最可恶的是 “data verified”
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;顺着 ainewshub 那篇成本对比文再往上游追，它的来源指向&lt;strong&gt;同一个站点&lt;/strong&gt;的另一篇文章，AI Inference Costs: TPU vs GPU 2025&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt;。同样的数字在这里又复述了一遍，4 倍性价比、Midjourney 省 65%、TPU v5e 在 9 项里赢 8 项，我必须再次强调，这个数据是假的、是不存在的。&lt;/p&gt;
+&lt;p&gt;它结尾那句声明是这样写的：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Data verified as of November 26, 2025. Sources include Google Cloud documentation, MLPerf benchmarks, company earnings reports, and verified industry migrations.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;核实了个屁&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;它说核实了，却给不出任何一个能点开的链接，没有具体报告，没有方法。前面已经查过，它依赖的 MLPerf TPU LLM 推理结果&lt;strong&gt;根本不存在&lt;/strong&gt;。所谓 verified，全他妈假的。&lt;/p&gt;
+&lt;p&gt;同一个站点的不同文章，连这些假数字都对不上，写的人自己也不知道这个数从哪来，因为它本来就不存在。&lt;/p&gt;
+&lt;p&gt;一个成批生产幻觉数字、再统一盖上 data verified &amp;hellip; 这个垃圾网站真害人不浅&lt;/p&gt;
+&lt;h2 id="目前我查到的数据是这样至少比他们网站可信一点" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%9b%ae%e5%89%8d%e6%88%91%e6%9f%a5%e5%88%b0%e7%9a%84%e6%95%b0%e6%8d%ae%e6%98%af%e8%bf%99%e6%a0%b7%e8%87%b3%e5%b0%91%e6%af%94%e4%bb%96%e4%bb%ac%e7%bd%91%e7%ab%99%e5%8f%af%e4%bf%a1%e4%b8%80%e7%82%b9"&gt;
+#
+&lt;/a&gt;
+目前我查到的数据是这样（至少比他们网站可信一点）
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Artificial Analysis 的 System Load Test&lt;sup id="fnref1:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，跑的是 Llama 3.3 70B。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-throughput-test.png"
+alt="Artificial Analysis 的 System Load Test 结果"&gt;&lt;figcaption&gt;
+&lt;p&gt;Artificial Analysis System Load Test，Llama 3.3 70B 的峰值系统吞吐、每查询输出速度和按需租用价格。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;峰值系统吞吐，B200 是 15.4k tokens/s，H200 是 8.47k，H100 是 7.28k，TPU v6e 是 6.73k，MI300X 是 3.67k。TPU v6e 落在 NVIDIA 同代后面。每查询输出速度，TPU v6e 是 61.3 tokens/s，是这组里最慢的。&lt;/p&gt;
+&lt;p&gt;成本要分两种情况说，这里 TPU 也有能算的账。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-costs.png"
+alt="Llama 3.3 70B 在峰值吞吐下的每百万 token 成本"&gt;&lt;figcaption&gt;
+&lt;p&gt;Llama 3.3 70B 在峰值吞吐下的每百万 token 成本，TPU v6e 为 0.62 美元，与 H100 的 0.67 到 0.69 美元接近。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;在峰值吞吐下算每百万 token 成本，TPU v6e 是 0.62 美元，和 H100 的 0.67 到 0.69 美元接近，比 MI300X 的 0.90 美元和 B200 跑 vLLM 的 1.63 美元都便宜。&lt;strong&gt;如果负载是离线大批量、能把芯片喂满，TPU 的账是划算的&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;但线上服务很少跑在峰值吞吐上。一旦要求一个能用的交互速度，比如每查询 30 tokens/s 的参考速度，TPU v6e 的单位成本就跳到 5.13 美元，而 H100 是 1.06 美元。这就是 Artificial Analysis 说的大约 5 倍差距的来处。&lt;/p&gt;
+&lt;p&gt;后面我们会自己进行 benchmark 得到一手数据，到时再对比。&lt;/p&gt;
+&lt;h2 id="识别出-ai-生成垃圾文的方法" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%af%86%e5%88%ab%e5%87%ba-ai-%e7%94%9f%e6%88%90%e5%9e%83%e5%9c%be%e6%96%87%e7%9a%84%e6%96%b9%e6%b3%95"&gt;
+#
+&lt;/a&gt;
+识别出 AI 生成垃圾文的方法
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;只要遵循一个原则：任何数据、任何数字，必须有可点开的来源，必须有可复现的方法。&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://artificialanalysis.ai/benchmarks/hardware" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis，硬件基准测试&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://x.com/ArtificialAnlys/status/1993878037226557519" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis 在 X 上的原帖&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://introl.com/blog/google-tpu-v6e-vs-gpu-4x-better-ai-performance-per-dollar-guide" target="_blank" rel="noopener noreferrer"&gt;introl，Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/nvidia-vs-google-tpu-2025-cost-comparison" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org，Nvidia vs Google TPU 2025 Cost Comparison&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref2:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://mlcommons.org/benchmarks/inference-datacenter/" target="_blank" rel="noopener noreferrer"&gt;MLCommons，MLPerf Inference Datacenter 官方结果&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/ai-inference-costs-tpu-vs-gpu-2025" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org，AI Inference Costs: TPU vs GPU 2025&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TPU</category><category>GPU</category><category>AI</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tpu-tco/</guid></item><item><title>Claude Code 在 tmux 里要求重新登录？八成是 macOS Keychain 的锅</title><link>https://www.junyi.dev/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 终端里 claude 好好的，Team Account 也认得，进了 tmux 就让我重新登录。折腾了一会儿才发现是 macOS Security Session 的老问题。</description><content:encoded>&lt;p&gt;终端里 &lt;code&gt;claude&lt;/code&gt; 好好的，Team Account 也认得，进了 tmux 就让我重新登录。折腾了一会儿才发现是 macOS Security Session 的老问题。&lt;/p&gt;
 &lt;h2 id="现象" &gt;
 &lt;div&gt;
@@ -1082,165 +1222,4 @@ PCB 设计
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;figcaption&gt;图 4 - 升级之后的 Ultra Boost Converter&lt;/figcaption&gt;
-&lt;/figure&gt;</content:encoded><category>Projects</category><guid isPermaLink="true">https://www.junyi.dev/posts/boost-converter/</guid></item><item><title>隐藏 GitHub Pages 里的敏感文章（GitHub Actions）</title><link>https://www.junyi.dev/posts/github-actions/</link><pubDate>Mon, 18 Mar 2024 19:57:21 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-# 背景 如何防止他人看到你托管在 GitHub Pages 上的某些文章？
-这篇指南提供了一种在 GitHub Pages 上托管网站同时保持敏感内容私密的策略。</description><content:encoded>&lt;h2 id="背景" &gt;
-&lt;div&gt;
-&lt;a href="#%e8%83%8c%e6%99%af"&gt;
-#
-&lt;/a&gt;
-背景
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;如何&lt;strong&gt;防止他人看到你&lt;/strong&gt;托管在 GitHub Pages 上的某些文章？&lt;/p&gt;
-&lt;p&gt;这篇指南提供了一种在 GitHub Pages 上托管网站同时保持敏感内容私密的策略。&lt;/p&gt;
-&lt;p&gt;这个解决方案涉及到使用两个独立的 GitHub 仓库：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;私有仓库 &lt;code&gt;blog-src&lt;/code&gt;: 存放你的网站源代码。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;公开仓库 &lt;code&gt;blog.github.io&lt;/code&gt;: 用于生成的静态网站。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;这个方法确保敏感内容在 &lt;code&gt;blog-src&lt;/code&gt; 中保持私密。&lt;/p&gt;
-&lt;p&gt;每次对 &lt;code&gt;blog-src&lt;/code&gt; 进行提交时，一个自动化过程会构建静态网站并将其推送到 &lt;code&gt;blog.github.io&lt;/code&gt;（参见&lt;a href="#fig1"&gt;图 1&lt;/a&gt;）。&lt;/p&gt;
-&lt;figure&gt;
-&lt;img id="fig1" src="https://www.junyi.dev/posts/github-actions/fig1.png" alt="The Overview of using Github Actions to publish GitHub pages" width="500" /&gt;
-&lt;figcaption&gt;图 1 - 修改 &lt;code&gt;blog-src&lt;/code&gt; 时，自动构建网站并同步到 &lt;code&gt;blog.github.io&lt;/code&gt;&lt;/figcaption&gt;
-&lt;/figure&gt;
-&lt;p&gt;让我们看看如何实现这个功能！&lt;/p&gt;
-&lt;h2 id="第一步创建一个-personal-access-token" &gt;
-&lt;div&gt;
-&lt;a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-personal-access-token"&gt;
-#
-&lt;/a&gt;
-第一步，创建一个 personal access token
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;访问&lt;a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer"&gt;此页面&lt;/a&gt;（Settings ➜ Developer Settings ➜ Personal access tokens）&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Generate new token (classic)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;勾选所有的 &amp;ldquo;repo&amp;rdquo; 和 &amp;ldquo;workflow&amp;rdquo;。（参见&lt;a href="#fig2"&gt;图 2&lt;/a&gt;）&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;figure&gt;
-&lt;img src="https://www.junyi.dev/posts/github-actions/create-personal-key.png" alt="View Service" width="500" /&gt;
-&lt;figcaption&gt;图 2 - 给 GitHub Action 创建一个 personal access token&lt;/figcaption&gt;
-&lt;/figure&gt;
-&lt;figure&gt;
-&lt;img src="https://www.junyi.dev/posts/github-actions/created-token.png" alt="View Service" width="500" /&gt;
-&lt;figcaption&gt;图 3 - 创建好的 personal access token&lt;/figcaption&gt;
-&lt;/figure&gt;
-&lt;p&gt;复制你生成的 Token，比如我的是 &lt;code&gt;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&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;（此 Token 仅用作演示，实际已失效）&lt;/p&gt;
-&lt;h2 id="第二步给-blog-src-创建一个-repository-secret" &gt;
-&lt;div&gt;
-&lt;a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e7%bb%99-blog-src-%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa-repository-secret"&gt;
-#
-&lt;/a&gt;
-第二步，给 &lt;code&gt;blog-src&lt;/code&gt; 创建一个 repository secret
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;这个仓库包含我们网站的源代码，和一个 GitHub Action。&lt;/p&gt;
-&lt;p&gt;因此，我们需要把 personal access token（从第一步生成）放到 repository secret 里，以支持 GitHub Action 过程。&lt;/p&gt;
-&lt;p&gt;转到 &lt;code&gt;blog-src&lt;/code&gt; ➜ Settings ➜ Secrets and variables ➜ Actions ➜ New &lt;strong&gt;repository&lt;/strong&gt; secret&lt;/p&gt;
-&lt;figure&gt;
-&lt;img src="https://www.junyi.dev/posts/github-actions/new-repo-secret.png" alt="View Service" width="500" /&gt;
-&lt;figcaption&gt;图 4 - 创建 repository secret 的入口&lt;/figcaption&gt;
-&lt;/figure&gt;
-&lt;figure&gt;
-&lt;img src="https://www.junyi.dev/posts/github-actions/add-secret.png" alt="View Service" width="500" /&gt;
-&lt;figcaption&gt;图 5 - 创建一个 repository secret&lt;/figcaption&gt;
-&lt;/figure&gt;
-&lt;h2 id="第三步给-blog-src-设置一个-workflow" &gt;
-&lt;div&gt;
-&lt;a href="#%e7%ac%ac%e4%b8%89%e6%ad%a5%e7%bb%99-blog-src-%e8%ae%be%e7%bd%ae%e4%b8%80%e4%b8%aa-workflow"&gt;
-#
-&lt;/a&gt;
-第三步，给 &lt;code&gt;blog-src&lt;/code&gt; 设置一个 workflow
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;Repository ➜ Actions ➜ Set up a workflow yourself&lt;/p&gt;
-&lt;figure&gt;
-&lt;img src="https://www.junyi.dev/posts/github-actions/setup-actions.png" alt="Setup Actions", width="500" /&gt;
-&lt;figcaption&gt;图 6 - 设置一个 workflow.&lt;/figcaption&gt;
-&lt;/figure&gt;
-&lt;p&gt;你需要学习如何编写工作流，以下是一些你可以阅读的文档：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/quickstart" target="_blank" rel="noopener noreferrer"&gt;GitHub Actions 快速入门&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://docs.github.com/en/actions/examples" target="_blank" rel="noopener noreferrer"&gt;工作流示例&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;仔细设计你的 workflow 文件，这里是一个示例：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# main.yaml&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# A Sample workflow for building and deploying a site to GitHub Pages&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy Website to Pages
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;on&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;push&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;branches&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - main &lt;span style="color:#78787e"&gt;# Triggers this workflow whenever there&amp;#39;s a push to the `main` branch&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Allows you to run this workflow manually from the Actions tab&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;workflow_dispatch&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;schedule&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# Runs at 00:00 UTC every day&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;cron&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;0 0 * * *&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;permissions&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;contents&lt;/span&gt;: read
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;pages&lt;/span&gt;: write
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;id-token&lt;/span&gt;: write
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;concurrency&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;group&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cancel-in-progress&lt;/span&gt;: &lt;span style="color:#ff6ac1"&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Default to bash&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;defaults&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;shell&lt;/span&gt;: bash
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;jobs&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;build-and-deploy&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;runs-on&lt;/span&gt;: ubuntu-latest
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;env&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;YOUR_ENV_HERE&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0.1.2.3&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;steps&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Checkout
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: actions/checkout@v3
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;submodules&lt;/span&gt;: recursive
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;fetch-depth&lt;/span&gt;: &lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Build my website
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;run&lt;/span&gt;: |&lt;span style="color:#5af78e"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; echo &amp;#34;Building the website ... (Remember to replace it with the real command!!!)&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ff6ac1"&gt;name&lt;/span&gt;: Deploy to GitHub Pages
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;uses&lt;/span&gt;: peaceiris/actions-gh-pages@v3
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;with&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;personal_token&lt;/span&gt;: ${{ secrets.GH_PAGES_PAT }} &lt;span style="color:#78787e"&gt;# The pre-defined secret in Step 2.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;publish_dir&lt;/span&gt;: ./public &lt;span style="color:#78787e"&gt;# Content in this folder will be pushed to the target repo.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_name&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;user_email&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;github-actions[bot]@users.noreply.github.com&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;external_repository&lt;/span&gt;: Junyi-99/blog.github.io &lt;span style="color:#78787e"&gt;# Your GitHub Pages Repo (target repo)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;commit_message&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#39;Automated deployment from Repository blog-src&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第四步推送到-blog-src" &gt;
-&lt;div&gt;
-&lt;a href="#%e7%ac%ac%e5%9b%9b%e6%ad%a5%e6%8e%a8%e9%80%81%e5%88%b0-blog-src"&gt;
-#
-&lt;/a&gt;
-第四步，推送到 &lt;code&gt;blog-src&lt;/code&gt;
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;在这个步骤中，你需要做的就是向 &lt;code&gt;blog-src&lt;/code&gt; &lt;strong&gt;推送&lt;/strong&gt; 一些提交，如果一切顺利的话，你的 GitHub Actions 将会自动执行，构建你的网站，并将其推送到 &lt;code&gt;blog.github.io&lt;/code&gt; 仓库。&lt;/p&gt;
-&lt;p&gt;（文章结束）&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/posts/github-actions/</guid></item></channel></rss>
+&lt;/figure&gt;</content:encoded><category>Projects</category><guid isPermaLink="true">https://www.junyi.dev/posts/boost-converter/</guid></item></channel></rss>
