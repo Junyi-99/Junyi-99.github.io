@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 10 Jun 2026 15:26:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/gpu/index.xml" rel="self" type="application/rss+xml"/><item><title>Debunking introl and ainewshub: "TPU is 4x Cheaper than GPU" is an AI Hallucination</title><link>https://www.junyi.dev/en/posts/tpu-tco/</link><pubDate>Wed, 10 Jun 2026 15:26:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Artificial Analysis recently released a set of hardware benchmarks1. Using Llama 3.3 70B, vLLM, and a reference speed of 30 output tokens/s per query to compute the cost per million input/output tokens, NVIDIA has roughly a 5x per-dollar token advantage over TPU v6e (Trillium), and roughly a 2x advantage over AMD MI300X2.
+The hardware benchmark conclusion Artificial Analysis posted on X. NVIDIA has about a 5x per-dollar token advantage over TPU v6e and about 2x over MI300X. H100 is $1.06, MI300X is $2.24, TPU v6e is $5.13.
+Alongside this reproducible data, another kind of thing is also circulating online.
+# A High-Profile Comparison Article introl has an article titled Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar3. Its core argument is that TPU has 4x better performance per dollar than H100, and that TPU completely beats NVIDIA on inference economics. Its key data comes from another article, ainewshub.org&amp;amp;rsquo;s Nvidia vs Google TPU 2025 Cost Comparison4. Follow this citation chain down and you find that both are AI-generated, and the data is made up.</description><content:encoded>&lt;p&gt;Artificial Analysis recently released a set of hardware benchmarks&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;. Using Llama 3.3 70B, vLLM, and a reference speed of 30 output tokens/s per query to compute the cost per million input/output tokens, NVIDIA has roughly a 5x per-dollar token advantage over TPU v6e (Trillium), and roughly a 2x advantage over AMD MI300X&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-twitter.png"
+alt="The hardware benchmark conclusion Artificial Analysis posted on X" width="430"&gt;&lt;figcaption&gt;
+&lt;p&gt;The hardware benchmark conclusion Artificial Analysis posted on X. NVIDIA has about a 5x per-dollar token advantage over TPU v6e and about 2x over MI300X. H100 is $1.06, MI300X is $2.24, TPU v6e is $5.13.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Alongside this reproducible data, another kind of thing is also circulating online.&lt;/p&gt;
+&lt;h2 id="a-high-profile-comparison-article" &gt;
+&lt;div&gt;
+&lt;a href="#a-high-profile-comparison-article"&gt;
+#
+&lt;/a&gt;
+A High-Profile Comparison Article
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;introl has an article titled Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;. Its core argument is that TPU has 4x better performance per dollar than H100, and that TPU completely beats NVIDIA on inference economics. Its key data comes from another article, ainewshub.org&amp;rsquo;s Nvidia vs Google TPU 2025 Cost Comparison&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;. Follow this citation chain down and you find that both are AI-generated, and the data is made up.&lt;/p&gt;
+&lt;h2 id="hammer-one-the-core-citation-points-to-data-that-doesnt-exist" &gt;
+&lt;div&gt;
+&lt;a href="#hammer-one-the-core-citation-points-to-data-that-doesnt-exist"&gt;
+#
+&lt;/a&gt;
+Hammer One: The Core Citation Points to Data That Doesn&amp;rsquo;t Exist
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The most central sentence in the ainewshub article reads like this.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/hallucination-1.png"
+alt="The core claim in the ainewshub article and the source it claims"&gt;&lt;figcaption&gt;
+&lt;p&gt;The core claim in the ainewshub article, 4.7x better performance per dollar, but the source it cites is &lt;strong&gt;a non-existent&lt;/strong&gt; MLPerf v4.1 LLM inference result.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&amp;ldquo;4.7× better performance-per-dollar on LLM inference than Nvidia H100/H200&amp;rdquo;, with the source listed as Google Cloud MLPerf Inference v4.1 results + customer case studies, October 2025.&lt;/p&gt;
+&lt;p&gt;But in fact, in MLPerf Inference v4.1, Google&amp;rsquo;s TPU submissions include only one model, stable-diffusion-xl. I went to MLCommons&amp;rsquo; official results&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt; and filtered by Google plus TPU. Under v4.1 Closed Datacenter there are only two records, tpu-v5e-4 and tpu-v6-4, and both ran stable-diffusion-xl.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/mlperf-for-tpu-1.png"
+alt="Filtering MLPerf v4.1 for Google TPU shows only stable-diffusion-xl"&gt;&lt;figcaption&gt;
+&lt;p&gt;Filtering MLPerf v4.1 Closed Datacenter for Google TPU shows only two entries, tpu-v5e-4 and tpu-v6-4, both running stable-diffusion-xl. There is no LLM inference entry at all.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;No LLM inference entry at all! The so-called MLPerf v4.1 LLM inference 4.7x performance per dollar cited by this article &lt;strong&gt;simply does not exist in the source it claims&lt;/strong&gt;. The number was generated out of thin air and then attached to an authoritative-looking source.&lt;/p&gt;
+&lt;p&gt;Second, &lt;strong&gt;MLPerf does not report performance per dollar at all&lt;/strong&gt;. It reports throughput, samples/s and queries/s, with no pricing in it. So that 4.7x &lt;strong&gt;could not possibly&lt;/strong&gt; have been computed from MLPerf.&lt;/p&gt;
+&lt;h2 id="hammer-two-the-numbers-drift-between-reposts" &gt;
+&lt;div&gt;
+&lt;a href="#hammer-two-the-numbers-drift-between-reposts"&gt;
+#
+&lt;/a&gt;
+Hammer Two: The Numbers Drift Between Reposts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Put introl&lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; and ainewshub&lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; side by side and the numbers don&amp;rsquo;t match (and there are false statements).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Performance per dollar multiple: introl writes 4x, ainewshub writes 4.7x. (This one is pure deception, see above.)&lt;/li&gt;
+&lt;li&gt;MLPerf version: introl cites v3.1, ainewshub cites v4.1. (No idea where introl got its data.)&lt;/li&gt;
+&lt;li&gt;Midjourney case: introl writes monthly spend dropped from $2 million to $700k, ainewshub writes from $2.1 million to $700k. (I didn&amp;rsquo;t carefully verify this one, but it&amp;rsquo;s most likely hallucinated too.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Reposted again and again, it changes a little each time it&amp;rsquo;s retold. Damn it, every time the model generates it, it makes up a slightly different number.&lt;/p&gt;
+&lt;h2 id="hammer-three-a-frighteningly-precise-tco-table-with-no-source" &gt;
+&lt;div&gt;
+&lt;a href="#hammer-three-a-frighteningly-precise-tco-table-with-no-source"&gt;
+#
+&lt;/a&gt;
+Hammer Three: A Frighteningly Precise TCO Table, With No Source
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;ainewshub&lt;sup id="fnref2:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; gives a three-year total cost of ownership table, for a 1000-chip cluster, with NVIDIA H100 total cost $177 million, Google TPU v6 total cost $78.5 million, saving $98.5 million. It even breaks it down to hardware down 48%, power down 66%, cooling down 67%, support down 63%, networking down 67%, real estate down 63%. (All made up.)&lt;/p&gt;
+&lt;p&gt;This kind of breakdown precise to the single percentage point looks very professional. The problem is that not one item can be traced to a source. The accompanying customer cases are the same. Midjourney, and a so-called Series C computer vision startup whose monthly spend dropped from $340k to $89k, are all unverifiable specific numbers.&lt;/p&gt;
+&lt;h2 id="the-most-infuriating-part-is-data-verified" &gt;
+&lt;div&gt;
+&lt;a href="#the-most-infuriating-part-is-data-verified"&gt;
+#
+&lt;/a&gt;
+The Most Infuriating Part is &amp;ldquo;data verified&amp;rdquo;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Following the ainewshub cost comparison article further upstream, its source points to another article on &lt;strong&gt;the same site&lt;/strong&gt;, AI Inference Costs: TPU vs GPU 2025&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt;. The same numbers are repeated here again, 4x value for money, Midjourney saving 65%, TPU v5e winning 8 out of 9 items. I have to stress again, this data is fake, it does not exist.&lt;/p&gt;
+&lt;p&gt;The statement at the end reads like this.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Data verified as of November 26, 2025. Sources include Google Cloud documentation, MLPerf benchmarks, company earnings reports, and verified industry migrations.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Verified my ass.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It says it verified, yet it can&amp;rsquo;t provide a single clickable link, no specific report, no methodology. As checked above, the MLPerf TPU LLM inference results it relies on &lt;strong&gt;simply do not exist&lt;/strong&gt;. The so-called verified is all fucking fake.&lt;/p&gt;
+&lt;p&gt;Different articles on the same site can&amp;rsquo;t even keep these fake numbers consistent. The person who wrote them doesn&amp;rsquo;t know where the numbers came from either, because they never existed in the first place.&lt;/p&gt;
+&lt;p&gt;A site that mass-produces hallucinated numbers and then stamps them all with data verified &amp;hellip; this garbage website really does harm.&lt;/p&gt;
+&lt;h2 id="the-data-ive-found-so-far-at-least-a-bit-more-credible-than-their-site" &gt;
+&lt;div&gt;
+&lt;a href="#the-data-ive-found-so-far-at-least-a-bit-more-credible-than-their-site"&gt;
+#
+&lt;/a&gt;
+The Data I&amp;rsquo;ve Found So Far (At Least a Bit More Credible Than Their Site)
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Artificial Analysis&amp;rsquo; System Load Test&lt;sup id="fnref1:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, running Llama 3.3 70B.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-throughput-test.png"
+alt="Artificial Analysis System Load Test results"&gt;&lt;figcaption&gt;
+&lt;p&gt;Artificial Analysis System Load Test, peak system throughput, per-query output speed, and on-demand rental price for Llama 3.3 70B.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Peak system throughput: B200 is 15.4k tokens/s, H200 is 8.47k, H100 is 7.28k, TPU v6e is 6.73k, MI300X is 3.67k. TPU v6e falls behind NVIDIA&amp;rsquo;s same generation. Per-query output speed, TPU v6e is 61.3 tokens/s, the slowest in this group.&lt;/p&gt;
+&lt;p&gt;Cost has to be discussed in two cases, and here TPU has a case that adds up too.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-costs.png"
+alt="Cost per million tokens for Llama 3.3 70B at peak throughput"&gt;&lt;figcaption&gt;
+&lt;p&gt;Cost per million tokens for Llama 3.3 70B at peak throughput. TPU v6e is $0.62, close to H100&amp;rsquo;s $0.67 to $0.69.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Computing cost per million tokens at peak throughput, TPU v6e is $0.62, close to H100&amp;rsquo;s $0.67 to $0.69, and cheaper than MI300X&amp;rsquo;s $0.90 and B200 running vLLM at $1.63. &lt;strong&gt;If the workload is offline large-batch and can keep the chips fed, TPU&amp;rsquo;s economics work out.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;But online serving rarely runs at peak throughput. Once you require a usable interactive speed, for example the reference speed of 30 tokens/s per query, TPU v6e&amp;rsquo;s unit cost jumps to $5.13, while H100 is $1.06. This is where the roughly 5x gap Artificial Analysis mentions comes from.&lt;/p&gt;
+&lt;p&gt;Later we&amp;rsquo;ll run the benchmark ourselves to get first-hand data, and compare then.&lt;/p&gt;
+&lt;h2 id="how-to-spot-ai-generated-junk-articles" &gt;
+&lt;div&gt;
+&lt;a href="#how-to-spot-ai-generated-junk-articles"&gt;
+#
+&lt;/a&gt;
+How to Spot AI-Generated Junk Articles
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Just follow one principle: any data, any number, must have a clickable source and a reproducible method.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://artificialanalysis.ai/benchmarks/hardware" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis, hardware benchmarks&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://x.com/ArtificialAnlys/status/1993878037226557519" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis&amp;rsquo; original post on X&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://introl.com/blog/google-tpu-v6e-vs-gpu-4x-better-ai-performance-per-dollar-guide" target="_blank" rel="noopener noreferrer"&gt;introl, Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/nvidia-vs-google-tpu-2025-cost-comparison" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org, Nvidia vs Google TPU 2025 Cost Comparison&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref2:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://mlcommons.org/benchmarks/inference-datacenter/" target="_blank" rel="noopener noreferrer"&gt;MLCommons, MLPerf Inference Datacenter official results&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/ai-inference-costs-tpu-vs-gpu-2025" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org, AI Inference Costs: TPU vs GPU 2025&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TPU</category><category>GPU</category><category>AI</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tpu-tco/</guid></item></channel></rss>
