@@ -18,12 +18,12 @@ A High-Profile Comparison Article
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;introl has an article titled Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;. Its core argument is that TPU has 4x better performance per dollar than H100, and that TPU completely beats NVIDIA on inference economics. Its key data comes from another article, ainewshub.org&amp;rsquo;s Nvidia vs Google TPU 2025 Cost Comparison&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;. Follow this citation chain down and you find that both are AI-generated, and the data is made up.&lt;/p&gt;
-&lt;h2 id="hammer-one-the-core-citation-points-to-data-that-doesnt-exist" &gt;
+&lt;h2 id="the-first-problem-the-core-citation-points-to-data-that-doesnt-exist" &gt;
 &lt;div&gt;
-&lt;a href="#hammer-one-the-core-citation-points-to-data-that-doesnt-exist"&gt;
+&lt;a href="#the-first-problem-the-core-citation-points-to-data-that-doesnt-exist"&gt;
 #
 &lt;/a&gt;
-Hammer One: The Core Citation Points to Data That Doesn&amp;rsquo;t Exist
+The First Problem: The Core Citation Points to Data That Doesn&amp;rsquo;t Exist
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;The most central sentence in the ainewshub article reads like this.&lt;/p&gt;
@@ -41,12 +41,12 @@ alt="Filtering MLPerf v4.1 for Google TPU shows only stable-diffusion-xl"&gt;&lt
 &lt;/figure&gt;
 &lt;p&gt;No LLM inference entry at all! The so-called MLPerf v4.1 LLM inference 4.7x performance per dollar cited by this article &lt;strong&gt;simply does not exist in the source it claims&lt;/strong&gt;. The number was generated out of thin air and then attached to an authoritative-looking source.&lt;/p&gt;
 &lt;p&gt;Second, &lt;strong&gt;MLPerf does not report performance per dollar at all&lt;/strong&gt;. It reports throughput, samples/s and queries/s, with no pricing in it. So that 4.7x &lt;strong&gt;could not possibly&lt;/strong&gt; have been computed from MLPerf.&lt;/p&gt;
-&lt;h2 id="hammer-two-the-numbers-drift-between-reposts" &gt;
+&lt;h2 id="the-second-problem-the-numbers-drift-between-reposts" &gt;
 &lt;div&gt;
-&lt;a href="#hammer-two-the-numbers-drift-between-reposts"&gt;
+&lt;a href="#the-second-problem-the-numbers-drift-between-reposts"&gt;
 #
 &lt;/a&gt;
-Hammer Two: The Numbers Drift Between Reposts
+The Second Problem: The Numbers Drift Between Reposts
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;Put introl&lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; and ainewshub&lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; side by side and the numbers don&amp;rsquo;t match (and there are false statements).&lt;/p&gt;
@@ -56,12 +56,12 @@ Hammer Two: The Numbers Drift Between Reposts
 &lt;li&gt;Midjourney case: introl writes monthly spend dropped from $2 million to $700k, ainewshub writes from $2.1 million to $700k. (I didn&amp;rsquo;t carefully verify this one, but it&amp;rsquo;s most likely hallucinated too.)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Reposted again and again, it changes a little each time it&amp;rsquo;s retold. Damn it, every time the model generates it, it makes up a slightly different number.&lt;/p&gt;
-&lt;h2 id="hammer-three-a-frighteningly-precise-tco-table-with-no-source" &gt;
+&lt;h2 id="the-third-problem-a-frighteningly-precise-tco-table-with-no-source" &gt;
 &lt;div&gt;
-&lt;a href="#hammer-three-a-frighteningly-precise-tco-table-with-no-source"&gt;
+&lt;a href="#the-third-problem-a-frighteningly-precise-tco-table-with-no-source"&gt;
 #
 &lt;/a&gt;
-Hammer Three: A Frighteningly Precise TCO Table, With No Source
+The Third Problem: A Frighteningly Precise TCO Table, With No Source
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;ainewshub&lt;sup id="fnref2:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; gives a three-year total cost of ownership table, for a 1000-chip cluster, with NVIDIA H100 total cost $177 million, Google TPU v6 total cost $78.5 million, saving $98.5 million. It even breaks it down to hardware down 48%, power down 66%, cooling down 67%, support down 63%, networking down 67%, real estate down 63%. (All made up.)&lt;/p&gt;
