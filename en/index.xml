@@ -1,4 +1,437 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 10 Jun 2026 15:26:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/index.xml" rel="self" type="application/rss+xml"/><item><title>Debunking introl and ainewshub: "TPU is 4x Cheaper than GPU" is an AI Hallucination</title><link>https://www.junyi.dev/en/posts/tpu-tco/</link><pubDate>Wed, 10 Jun 2026 15:26:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 11 Jun 2026 00:00:00 Z</lastBuildDate><atom:link href="https://www.junyi.dev/en/index.xml" rel="self" type="application/rss+xml"/><item><title>LLM Inference on TPU v6e-4: Small Dense, Large MoE, and Large Dense Models</title><link>https://www.junyi.dev/en/posts/tpu-v6e/</link><pubDate>Thu, 11 Jun 2026 00:00:00 Z</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+# Abstract We benchmark LLM inference on one Google TPU v6e-4 host (four chips, one VM) with four chips in one VM. We use vLLM 0.20.0 with the tpu-inference backend and an fp8 KV cache.
+We test three Qwen3 models:
+Model Type Params Parallelism Chips Qwen3.5-4B dense 4B active tp1 1 Qwen3-30B-A3B MoE 30B total / 3B active tp4 4 Qwen3-32B dense 32B active tp4 4 We measure three parts of inference: prefill, decode, and end-to-end online serving.</description><content:encoded>&lt;h2 id="abstract" &gt;
+&lt;div&gt;
+&lt;a href="#abstract"&gt;
+#
+&lt;/a&gt;
+Abstract
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;We benchmark LLM inference on one Google &lt;code&gt;TPU v6e-4&lt;/code&gt; host (four chips, one VM) with four chips in one VM. We use &lt;code&gt;vLLM 0.20.0&lt;/code&gt; with the &lt;code&gt;tpu-inference&lt;/code&gt; backend and an &lt;code&gt;fp8&lt;/code&gt; KV cache.&lt;/p&gt;
+&lt;p&gt;We test three Qwen3 models:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Params&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Parallelism&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Chips&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3.5-4B&lt;/td&gt;
+&lt;td&gt;dense&lt;/td&gt;
+&lt;td style="text-align: right"&gt;4B active&lt;/td&gt;
+&lt;td style="text-align: right"&gt;tp1&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-30B-A3B&lt;/td&gt;
+&lt;td&gt;MoE&lt;/td&gt;
+&lt;td style="text-align: right"&gt;30B total / 3B active&lt;/td&gt;
+&lt;td style="text-align: right"&gt;tp4&lt;/td&gt;
+&lt;td style="text-align: right"&gt;4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-32B&lt;/td&gt;
+&lt;td&gt;dense&lt;/td&gt;
+&lt;td style="text-align: right"&gt;32B active&lt;/td&gt;
+&lt;td style="text-align: right"&gt;tp4&lt;/td&gt;
+&lt;td style="text-align: right"&gt;4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;We measure three parts of inference: prefill, decode, and end-to-end online serving.&lt;/p&gt;
+&lt;p&gt;The MoE model is fastest in all three tests. It reaches 26,063 tok/s in prefill, compared with 19,714 tok/s for the dense 32B model. At batch size 1, its decode latency is 7.0 ms per token, compared with 17.9 ms for the dense 32B model. In online serving, it reaches 1.27 req/s and 1,303 output tok/s, compared with 0.88 req/s and 901 output tok/s for the dense 32B model.&lt;/p&gt;
+&lt;p&gt;The 4B model has good latency at low load, but it does not handle high concurrency well on one chip. Its stable serving capacity is about 0.45 req/s.&lt;/p&gt;
+&lt;p&gt;This is not a TPU-versus-GPU comparison. We did not run a GPU baseline. The goal is to report clear TPU v6e numbers using the same vLLM tools that users would run in practice.&lt;/p&gt;
+&lt;h2 id="1-motivation" &gt;
+&lt;div&gt;
+&lt;a href="#1-motivation"&gt;
+#
+&lt;/a&gt;
+1. Motivation
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Public TPU data for LLM inference is limited. The only TPU submission Google has made to MLPerf Inference is SDXL image generation, not an LLM. The TPU LLM numbers is measured on Google&amp;rsquo;s JAX/JetStream stack rather than the vLLM path most practitioners deploy.&lt;/p&gt;
+&lt;p&gt;We measured the performance ourselves on one TPU v6e-4 host. The goal is to give simple, reproducible numbers for three common model types:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;a small dense model,&lt;/li&gt;
+&lt;li&gt;a large MoE model,&lt;/li&gt;
+&lt;li&gt;a large dense model.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;All comparisons are between these three models on the same TPU host. We do not compare against GPUs, prices, or total cost.&lt;/p&gt;
+&lt;h2 id="2-experimental-setup" &gt;
+&lt;div&gt;
+&lt;a href="#2-experimental-setup"&gt;
+#
+&lt;/a&gt;
+2. Experimental Setup
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;All measurements use one TPU v6e-4 host with four chips in one VM. The 4B model uses one chip. The 30B-A3B and 32B models use all four chips. For per-chip numbers, we divide the four-chip throughput by four.&lt;/p&gt;
+&lt;p&gt;We use &lt;code&gt;vLLM 0.20.0&lt;/code&gt; with the &lt;code&gt;tpu-inference&lt;/code&gt; backend. The KV cache uses &lt;code&gt;fp8_e5m2&lt;/code&gt; in all runs. We report exact versions because TPU performance can change quickly across releases.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Component&lt;/th&gt;
+&lt;th&gt;Version&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Python&lt;/td&gt;
+&lt;td&gt;3.11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;libtpu&lt;/td&gt;
+&lt;td&gt;0.0.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;JAX&lt;/td&gt;
+&lt;td&gt;0.10.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;vLLM&lt;/td&gt;
+&lt;td&gt;0.20.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;KV cache&lt;/td&gt;
+&lt;td&gt;fp8_e5m2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Total / active params&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Parallelism&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Chips&lt;/th&gt;
+&lt;th&gt;Config&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3.5-4B&lt;/td&gt;
+&lt;td&gt;dense&lt;/td&gt;
+&lt;td style="text-align: right"&gt;4B / 4B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;tp1&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1&lt;/td&gt;
+&lt;td&gt;GDN, MBT2048&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-30B-A3B&lt;/td&gt;
+&lt;td&gt;MoE&lt;/td&gt;
+&lt;td style="text-align: right"&gt;30B / 3B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;tp4&lt;/td&gt;
+&lt;td style="text-align: right"&gt;4&lt;/td&gt;
+&lt;td&gt;GMU0.8, MBT8192&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-32B&lt;/td&gt;
+&lt;td&gt;dense&lt;/td&gt;
+&lt;td style="text-align: right"&gt;32B / 32B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;tp4&lt;/td&gt;
+&lt;td style="text-align: right"&gt;4&lt;/td&gt;
+&lt;td&gt;GMU0.8, MBT8192&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The key comparison is between Qwen3-30B-A3B and Qwen3-32B. They have similar total size, but the MoE model only uses 3B parameters per token, while the dense 32B model uses all 32B.&lt;/p&gt;
+&lt;p&gt;We run three tests.&lt;/p&gt;
+&lt;p&gt;For prefill, we use concurrency 1 and output length 1. We vary context length over 512, 1024, 2048, 4096, and 8192 tokens. This measures how fast the model processes the input prompt.&lt;/p&gt;
+&lt;p&gt;For decode, we fix the output length at 128 tokens and vary batch size over 1, 4, 16, and 64. We mainly report context length 1024, with context length 4096 as a longer-KV case. This measures the cost of generating tokens after prefill.&lt;/p&gt;
+&lt;p&gt;For online serving, we use &lt;code&gt;vllm bench serve&lt;/code&gt; against the OpenAI-compatible endpoint. Input and output lengths are both 1024 tokens. We increase the request rate until the server saturates.&lt;/p&gt;
+&lt;p&gt;Metrics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;TTFT: time to first token. This mainly measures prefill.&lt;/li&gt;
+&lt;li&gt;TPOT: time per output token. This mainly measures decode.&lt;/li&gt;
+&lt;li&gt;E2E latency: full request time.&lt;/li&gt;
+&lt;li&gt;Prefill throughput: context length divided by p50 TTFT.&lt;/li&gt;
+&lt;li&gt;Decode throughput: batch size × 1000 divided by p50 TPOT.&lt;/li&gt;
+&lt;li&gt;Output throughput: generated tokens per second.&lt;/li&gt;
+&lt;li&gt;Request throughput: completed requests per second.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We report p50 unless stated otherwise.&lt;/p&gt;
+&lt;h2 id="3-results" &gt;
+&lt;div&gt;
+&lt;a href="#3-results"&gt;
+#
+&lt;/a&gt;
+3. Results
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="31-prefill" &gt;
+&lt;div&gt;
+&lt;a href="#31-prefill"&gt;
+##
+&lt;/a&gt;
+3.1 Prefill
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;figure&gt;
+&lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig1_prefill.png" alt="Prefill throughput versus context length on TPU v6e-4"&gt;
+&lt;figcaption&gt;Figure 1. Prefill throughput versus context length. Higher is better. The 30B-A3B and 32B results are total throughput across four chips. The 4B result uses one chip.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The MoE model has the highest prefill throughput.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Best prefill throughput&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Per-chip peak&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-30B-A3B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;26,063 tok/s&lt;/td&gt;
+&lt;td style="text-align: right"&gt;~6.5k tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-32B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;19,714 tok/s&lt;/td&gt;
+&lt;td style="text-align: right"&gt;~4.9k tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3.5-4B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;4,177 tok/s&lt;/td&gt;
+&lt;td style="text-align: right"&gt;~4.2k tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The p50 TTFT at each context length:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th style="text-align: right"&gt;ctx 512&lt;/th&gt;
+&lt;th style="text-align: right"&gt;ctx 1024&lt;/th&gt;
+&lt;th style="text-align: right"&gt;ctx 2048&lt;/th&gt;
+&lt;th style="text-align: right"&gt;ctx 4096&lt;/th&gt;
+&lt;th style="text-align: right"&gt;ctx 8192&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-30B-A3B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;35 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;51 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;84 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;157 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;318 ms&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-32B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;38 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;58 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;104 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;208 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;461 ms&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3.5-4B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;432 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;452 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;495 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;983 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1,961 ms&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The 4B result is limited by its single-chip setup and by &lt;code&gt;max-num-batched-tokens=2048&lt;/code&gt;. For contexts above 2048, prefill is split into chunks, so the curve flattens.&lt;/p&gt;
+&lt;h3 id="32-decode" &gt;
+&lt;div&gt;
+&lt;a href="#32-decode"&gt;
+##
+&lt;/a&gt;
+3.2 Decode
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;figure&gt;
+&lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig2_decode_tpot.png" alt="Decode per-token latency versus batch size"&gt;
+&lt;figcaption&gt;Figure 2. Decode latency per token at context length 1024. Lower is better.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure&gt;
+&lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig3_decode_throughput.png" alt="Aggregate decode throughput versus batch size"&gt;
+&lt;figcaption&gt;Figure 3. Total decode throughput at context length 1024. Higher is better.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Context length 1024, p50 TPOT and decode throughput:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th style="text-align: right"&gt;BS1 TPOT&lt;/th&gt;
+&lt;th style="text-align: right"&gt;BS64 TPOT&lt;/th&gt;
+&lt;th style="text-align: right"&gt;BS64 throughput&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-30B-A3B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;7.0 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;48.1 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1,330 tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-32B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;17.9 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;58.4 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1,096 tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3.5-4B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;10.7 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;80.5 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;795 tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The main decode result is simple: at batch size 1, the MoE model generates each token much faster than the dense 32B model. It needs 7.0 ms per token, while the dense 32B model needs 17.9 ms. That is about 2.5× lower latency.&lt;/p&gt;
+&lt;p&gt;This follows active parameter count. Decode is limited by reading model weights from HBM. The MoE model reads only 3B active parameters per token. The dense 32B model reads all 32B parameters per token.&lt;/p&gt;
+&lt;p&gt;Latency rises as batch size grows. The tail also grows at high batch size. For the MoE model at batch size 64, p99 TPOT reaches 152.7 ms, compared with 48.1 ms p50. Even so, the MoE model has the best p50 throughput at every measured batch size.&lt;/p&gt;
+&lt;h3 id="33-online-serving" &gt;
+&lt;div&gt;
+&lt;a href="#33-online-serving"&gt;
+##
+&lt;/a&gt;
+3.3 Online serving
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;figure&gt;
+&lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig4_e2e_pareto.png" alt="Online-serving throughput-latency curve"&gt;
+&lt;figcaption&gt;Figure 4. Online serving throughput and latency. The x-axis is output throughput. The y-axis is p50 TPOT. Lower-right is better.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;In online serving, higher request rate gives higher throughput, but also higher latency. Each model reaches a point where adding more requests no longer helps.&lt;/p&gt;
+&lt;p&gt;The MoE model saturates at 1.27 req/s and 1,303 output tok/s, with p50 TPOT of 22.3 ms.&lt;/p&gt;
+&lt;p&gt;The dense 32B model saturates at 0.88 req/s and 901 output tok/s, with p50 TPOT of 43.2 ms.&lt;/p&gt;
+&lt;p&gt;Below saturation, the MoE model keeps TPOT around 8–11 ms. The dense 32B model stays around 18–21 ms. The MoE model is faster per token and handles more requests.&lt;/p&gt;
+&lt;p&gt;The 4B model behaves differently. Its stable points are good. At a requested rate of 0.45 req/s, it sustains 0.40 req/s and 407 output tok/s, with p50 TPOT of 13.8 ms.&lt;/p&gt;
+&lt;p&gt;But under unlimited load, the single-chip 4B deployment collapses. It reaches about 40 concurrent requests, p50 TPOT rises to 134 ms, p50 E2E latency rises to 207 seconds, and output throughput drops to 143 tok/s. This is worse than its stable finite-rate points.&lt;/p&gt;
+&lt;p&gt;For this reason, we treat the unlimited-load point as a single-chip concurrency limit, not as useful serving capacity. We report the 4B model’s stable capacity as about 0.45 req/s.&lt;/p&gt;
+&lt;p&gt;At the saturation or stable operating point, p50 TTFT and p50 E2E latency are:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th style="text-align: right"&gt;p50 TTFT&lt;/th&gt;
+&lt;th style="text-align: right"&gt;p50 E2E latency&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-30B-A3B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;712 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;23.6 s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3-32B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1,190 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;45.4 s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qwen3.5-4B&lt;/td&gt;
+&lt;td style="text-align: right"&gt;507 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;14.6 s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;figure&gt;
+&lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig5_summary.png" alt="MoE-versus-dense efficiency summary"&gt;
+&lt;figcaption&gt;Figure 5. Summary relative to the dense Qwen3-32B baseline. Higher is better.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Across all three tests, the MoE model beats the dense 32B model at similar total parameter count:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Metric&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Qwen3-30B-A3B&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Qwen3-32B&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Best prefill throughput&lt;/td&gt;
+&lt;td style="text-align: right"&gt;26,063 tok/s&lt;/td&gt;
+&lt;td style="text-align: right"&gt;19,714 tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;BS1 decode TPOT&lt;/td&gt;
+&lt;td style="text-align: right"&gt;7.0 ms&lt;/td&gt;
+&lt;td style="text-align: right"&gt;17.9 ms&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Serving capacity&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1.27 req/s&lt;/td&gt;
+&lt;td style="text-align: right"&gt;0.88 req/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Output throughput at saturation&lt;/td&gt;
+&lt;td style="text-align: right"&gt;1,303 tok/s&lt;/td&gt;
+&lt;td style="text-align: right"&gt;901 tok/s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The MoE model gives about 2.5× lower single-stream decode latency, about 1.4× higher serving capacity, and about 1.3× higher prefill throughput.&lt;/p&gt;
+&lt;h2 id="4-discussion" &gt;
+&lt;div&gt;
+&lt;a href="#4-discussion"&gt;
+#
+&lt;/a&gt;
+4. Discussion
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Three points stand out.&lt;/p&gt;
+&lt;p&gt;First, active parameter count matters a lot for decode. The 30B-A3B MoE and the 32B dense model have similar total size, but very different active size. The MoE model uses 3B parameters per token. The dense model uses 32B. This explains the large decode gap: 7.0 ms versus 17.9 ms at batch size 1.&lt;/p&gt;
+&lt;p&gt;Second, the MoE model also wins in prefill. Its peak prefill throughput is 26,063 tok/s, or about 6.5k tok/s per chip. The dense 32B model reaches 19,714 tok/s, or about 4.9k tok/s per chip. On this host, the MoE model is faster in both prefill and decode.&lt;/p&gt;
+&lt;p&gt;Third, the small 4B model is limited by single-chip concurrency. It has good low-load latency, but one chip cannot absorb unlimited requests. Its practical serving capacity is about 0.45 req/s. To serve more traffic, the better path is to add chips or replicas, rather than pushing more concurrency onto one chip.&lt;/p&gt;
+&lt;h2 id="5-conclusion" &gt;
+&lt;div&gt;
+&lt;a href="#5-conclusion"&gt;
+#
+&lt;/a&gt;
+5. Conclusion
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;On one TPU v6e-4 host, using &lt;code&gt;vLLM 0.20.0&lt;/code&gt;, &lt;code&gt;tpu-inference&lt;/code&gt;, and an &lt;code&gt;fp8_e5m2&lt;/code&gt; KV cache, the large MoE model is the fastest of the three models we tested.&lt;/p&gt;
+&lt;p&gt;Compared with the dense 32B model, Qwen3-30B-A3B has:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;higher prefill throughput: 26,063 vs 19,714 tok/s,&lt;/li&gt;
+&lt;li&gt;lower batch-size-1 decode latency: 7.0 vs 17.9 ms,&lt;/li&gt;
+&lt;li&gt;higher serving capacity: 1.27 vs 0.88 req/s,&lt;/li&gt;
+&lt;li&gt;higher output throughput at saturation: 1,303 vs 901 tok/s.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The 4B dense model has good latency at low load, but on one chip it is concurrency-limited. Its stable serving capacity is about 0.45 req/s.&lt;/p&gt;
+&lt;h2 id="limitations" &gt;
+&lt;div&gt;
+&lt;a href="#limitations"&gt;
+#
+&lt;/a&gt;
+Limitations
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;These results are for one host only: four TPU v6e chips in one VM. We did not test multi-host scaling.&lt;/p&gt;
+&lt;p&gt;We did not run a GPU baseline, so this study makes no TPU-versus-GPU claim.&lt;/p&gt;
+&lt;p&gt;The online serving test uses one input/output shape: 1024 input tokens and 1024 output tokens. Other workloads may shift the balance between prefill and decode.&lt;/p&gt;
+&lt;p&gt;The results are version-specific. TPU support in vLLM changes quickly, so the numbers here apply to &lt;code&gt;vLLM 0.20.0&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;All runs use an &lt;code&gt;fp8_e5m2&lt;/code&gt; KV cache. We did not test other KV cache formats.&lt;/p&gt;
+&lt;h2 id="reproducibility" &gt;
+&lt;div&gt;
+&lt;a href="#reproducibility"&gt;
+#
+&lt;/a&gt;
+Reproducibility
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The main numbers are &lt;a href="https://www.junyi.dev/posts/tpu-v6e/data.json" target="_blank" rel="noopener noreferrer"&gt;./data.json&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Figures are generated by &lt;a href="https://www.junyi.dev/posts/tpu-v6e/figures/plot.py" target="_blank" rel="noopener noreferrer"&gt;./figures/plot.py&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Per-model results are at &lt;a href="https://www.junyi.dev/posts/tpu-v6e/rawdata.zip" target="_blank" rel="noopener noreferrer"&gt;./rawdata.zip&lt;/a&gt;&lt;/p&gt;</content:encoded><category>TPU</category><category>TPU-v6e</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tpu-v6e/</guid></item><item><title>Debunking introl and ainewshub: "TPU is 4x Cheaper than GPU" is an AI Hallucination</title><link>https://www.junyi.dev/en/posts/tpu-tco/</link><pubDate>Wed, 10 Jun 2026 15:26:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 Disclaimer: this article is not arguing that TPU is worse than GPU. TPU and GPU each have their own fit, and which one wins depends on the specific workload. My point is that the batch of comparison data currently circulating online is itself inaccurate, much of it AI-fabricated and impossible to trace. What I&amp;amp;rsquo;m taking apart below is exactly that fake data.
 Artificial Analysis recently released a set of hardware benchmarks1. Using Llama 3.3 70B, vLLM, and a reference speed of 30 output tokens/s per query to compute the cost per million input/output tokens, NVIDIA has roughly a 5x per-dollar token advantage over TPU v6e (Trillium), and roughly a 2x advantage over AMD MI300X2.
 The hardware benchmark conclusion Artificial Analysis posted on X. NVIDIA has about a 5x per-dollar token advantage over TPU v6e and about 2x over MI300X. H100 is $1.06, MI300X is $2.24, TPU v6e is $5.13.
@@ -1004,88 +1437,4 @@ Step 4. Push to &lt;code&gt;blog-src&lt;/code&gt;
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;All you need to do in this step is &lt;strong&gt;push&lt;/strong&gt; some commits to &lt;code&gt;blog-src&lt;/code&gt;, and if all goes well, your GitHub Actions will automatically execute, build your site, and push it to the &lt;code&gt;blog.github.io&lt;/code&gt; repository.&lt;/p&gt;
-&lt;p&gt;(END OF THE POST)&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/github-actions/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-git-crypt enables transparent encryption and decryption of files in a git repository.
-Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
-&lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/flow.svg" alt="BasicFlow"&gt;&lt;/p&gt;
-&lt;h2 id="step-1-install-git-crypt" &gt;
-&lt;div&gt;
-&lt;a href="#step-1-install-git-crypt"&gt;
-#
-&lt;/a&gt;
-Step 1: Install git-crypt
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install git-crypt
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git-crypt init &lt;span style="color:#78787e"&gt;# in an initialized git repository&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Specify files to encrypt by creating a .gitattributes file:&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code class="language-gitattributes" data-lang="gitattributes"&gt;# The config is similar to .gitignore
-accounts/*.bean filter=git-crypt diff=git-crypt
-*.md filter=git-crypt diff=git-crypt
-*.png filter=git-crypt diff=git-crypt
-*.jpg filter=git-crypt diff=git-crypt
-*.excalidraw filter=git-crypt diff=git-crypt
-*.txt filter=git-crypt diff=git-crypt
-*.pdf filter=git-crypt diff=git-crypt
-*.json filter=git-crypt diff=git-crypt
-# Making sure that .gitattributes is never encrypted. DON&amp;#39;T TOUCH THAT LINE AND ONE BELOW
-.gitattributes !filter !diff
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="step-2-add-files" &gt;
-&lt;div&gt;
-&lt;a href="#step-2-add-files"&gt;
-#
-&lt;/a&gt;
-Step 2: Add files
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git add .
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git commit -m &lt;span style="color:#5af78e"&gt;&amp;#34;Add git-crypt&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-3-check-git-crypt-status" &gt;
-&lt;div&gt;
-&lt;a href="#step-3-check-git-crypt-status"&gt;
-#
-&lt;/a&gt;
-Step 3: Check git-crypt status
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;git-crypt status -e&lt;/code&gt; Show encrypted files only&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;git-crypt status -u&lt;/code&gt; Show unencrypted files only&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;git-crypt status -f&lt;/code&gt; Fix problems with the repository&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="results" &gt;
-&lt;div&gt;
-&lt;a href="#results"&gt;
-#
-&lt;/a&gt;
-Results
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;The beancount file is encrypted.&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/image-1.png" alt="Alt text"&gt;&lt;/p&gt;
-&lt;h2 id="subsequent-updates" &gt;
-&lt;div&gt;
-&lt;a href="#subsequent-updates"&gt;
-#
-&lt;/a&gt;
-Subsequent Updates
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;h3 id="update-on-january-30-fuck" &gt;
-&lt;div&gt;
-&lt;a href="#update-on-january-30-fuck"&gt;
-##
-&lt;/a&gt;
-Update on January 30, FUCK
-&lt;/div&gt;
-&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;I messed around and locked myself out.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Detail&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;This silly tool allows you to lock the repository &lt;strong&gt;even if you don&amp;rsquo;t export the symmetric key&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;And then, I locked myself out without exporting the symmetric key.&lt;/p&gt;
-&lt;p&gt;Because for &amp;ldquo;security&amp;rdquo;, I only kept the encrypted commits and deleted all previous commit logs.&lt;/p&gt;
-&lt;p&gt;So I fucked up.&lt;/p&gt;
-&lt;p&gt;😊 What a “pleasant day” it has been.&lt;/p&gt;</content:encoded><category>git-crypt</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/git-crypt/</guid></item></channel></rss>
+&lt;p&gt;(END OF THE POST)&lt;/p&gt;</content:encoded><category>TechShare</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/github-actions/</guid></item></channel></rss>
