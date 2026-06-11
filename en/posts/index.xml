@@ -113,6 +113,7 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;figcaption&gt;Table 1. Model configurations used in all experiments. GDN = guided decoding off, GMU = GPU memory utilization, MBT = max-num-batched-tokens.&lt;/figcaption&gt;
 &lt;p&gt;The key comparison is between Qwen3-30B-A3B and Qwen3-32B. They have similar total size, but the MoE model only uses 3B parameters per token, while the dense 32B model uses all 32B.&lt;/p&gt;
 &lt;p&gt;We run three tests.&lt;/p&gt;
 &lt;p&gt;For prefill, we use concurrency 1 and output length 1. We vary context length over 512, 1024, 2048, 4096, and 8192 tokens. This measures how fast the model processes the input prompt.&lt;/p&gt;
@@ -176,7 +177,7 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;The p50 TTFT at each context length:&lt;/p&gt;
+&lt;figcaption&gt;Table 2. Peak prefill throughput and per-chip peak for each model.&lt;/figcaption&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -215,6 +216,7 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;figcaption&gt;Table 3. p50 TTFT at each context length (ms).&lt;/figcaption&gt;
 &lt;p&gt;The 4B result is limited by its single-chip setup and by &lt;code&gt;max-num-batched-tokens=2048&lt;/code&gt;. For contexts above 2048, prefill is split into chunks, so the curve flattens.&lt;/p&gt;
 &lt;h3 id="32-decode" &gt;
 &lt;div&gt;
@@ -232,7 +234,6 @@ Abstract
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig3_decode_throughput.png" alt="Aggregate decode throughput versus batch size at context 1024 and 4096"&gt;
 &lt;figcaption&gt;Figure 3. Aggregate decode throughput versus batch size. Solid lines: context 1024. Dashed lines: context 4096. Higher is better.&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;Decode TPOT at context 1024 (p50, p99, and aggregate throughput):&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -330,7 +331,7 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;Decode TPOT at context 4096 (p50, p99, and aggregate throughput):&lt;/p&gt;
+&lt;figcaption&gt;Table 4. Decode TPOT at context length 1024 (p50, p99, and aggregate throughput).&lt;/figcaption&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -428,9 +429,10 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;figcaption&gt;Table 5. Decode TPOT at context length 4096 (p50, p99, and aggregate throughput).&lt;/figcaption&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig6_decode_tail.png" alt="Decode p99/p50 TPOT ratio at context 1024 and 4096"&gt;
-&lt;figcaption&gt;Figure 6. Decode tail latency: p99/p50 TPOT ratio at each batch size. A ratio of 1.0 means p99 equals p50 (no tail). Higher bars indicate worse scheduling irregularity.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 4. Decode tail latency: p99/p50 TPOT ratio at each batch size. A ratio of 1.0 means p99 equals p50 (no tail). Higher bars indicate worse scheduling irregularity.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;At batch size 1, the MoE model is 2.5× faster than the dense 32B model: 7.0 ms versus 17.9 ms at context 1024. This follows active parameter count. Decode is memory-bandwidth-bound. The MoE model reads 3B active parameters per token; the dense 32B model reads all 32B.&lt;/p&gt;
 &lt;p&gt;The p99/p50 ratio reveals scheduling pressure at high batch sizes. The 30B-A3B at BS64 ctx 1024 has p99 TPOT of 152.7 ms against p50 of 48.1 ms (3.2×). The 4B at BS16 ctx 1024 has p99 TPOT of 647.3 ms against p50 of 41.4 ms (15.6×) — at this operating point the single-chip KV cache is under pressure and requests queue unevenly.&lt;/p&gt;
@@ -445,14 +447,13 @@ Abstract
 &lt;/h3&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig4_e2e_pareto.png" alt="Online-serving throughput-latency curve"&gt;
-&lt;figcaption&gt;Figure 4. Online serving throughput and latency. The x-axis is output throughput. The y-axis is p50 TPOT. Lower-right is better.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 5. Online serving throughput and latency. The x-axis is output throughput. The y-axis is p50 TPOT. Lower-right is better.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;In online serving, higher request rate gives higher throughput, but also higher latency. Each model reaches a point where adding more requests no longer helps.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig7_e2e_sweep.png" alt="End-to-end TTFT and TPOT versus output throughput"&gt;
-&lt;figcaption&gt;Figure 7. End-to-end latency sweep. Left: p50 TTFT versus output throughput. Right: p50 TPOT versus output throughput. The × marker on the 4B line marks the concurrency-collapse point under unlimited load.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 6. End-to-end latency sweep. Left: p50 TTFT versus output throughput. Right: p50 TPOT versus output throughput. The × marker on the 4B line marks the concurrency-collapse point under unlimited load.&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;&lt;strong&gt;Qwen3-30B-A3B&lt;/strong&gt; (ISL = OSL = 1024 tokens):&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -519,7 +520,7 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;Qwen3-32B&lt;/strong&gt; (ISL = OSL = 1024 tokens):&lt;/p&gt;
+&lt;figcaption&gt;Table 6. Qwen3-30B-A3B online serving results (ISL = OSL = 1024 tokens).&lt;/figcaption&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -586,7 +587,7 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;Qwen3.5-4B&lt;/strong&gt; (ISL = OSL = 1024 tokens):&lt;/p&gt;
+&lt;figcaption&gt;Table 7. Qwen3-32B online serving results (ISL = OSL = 1024 tokens).&lt;/figcaption&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -653,10 +654,10 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;figcaption&gt;Table 8. Qwen3.5-4B online serving results (ISL = OSL = 1024 tokens).&lt;/figcaption&gt;
 &lt;p&gt;The MoE model (30B-A3B) has a stable working zone up to about 0.6 req/s, where p50 TPOT stays below 12 ms and p99 TTFT stays below 1.4 seconds. At 0.8 req/s the server is already queuing: p99 TTFT jumps to 6.3 seconds while p50 TPOT jumps from 11 ms to 19 ms. Saturation at ∞ rate gives tight p99/p50 TPOT (22.8 ms versus 22.3 ms), meaning the server is consistently loaded with no idle cycles.&lt;/p&gt;
 &lt;p&gt;The dense 32B model’s TPOT p50 is nearly flat from 0.15 to 0.6 req/s (18–21 ms), then doubles at saturation (43.2 ms). Its TTFT p99 is noisy across the sweep, suggesting occasional prefill bursts even at low load.&lt;/p&gt;
 &lt;p&gt;The 4B model holds stable from 0.2 to 0.45 req/s. At 0.45 req/s it sustains 0.40 req/s and 407 output tok/s, with TPOT p50 of 13.8 ms and E2E p50 of 14.6 seconds. Under unlimited load it collapses entirely: output throughput drops from 407 tok/s to 143 tok/s, p50 TPOT rises from 13.8 ms to 133.8 ms, and p50 E2E latency reaches 206.8 seconds. The p99 TTFT at unlimited load is 219,855 ms — 220 seconds. This is not a degraded state; it is a broken one. We treat the unlimited-load point as a single-chip concurrency limit, not useful serving capacity.&lt;/p&gt;
-&lt;p&gt;At the saturation or stable operating point, p50 TTFT and p50 E2E latency are:&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -683,9 +684,10 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;figcaption&gt;Table 9. p50 TTFT and p50 E2E latency at the saturation or stable operating point.&lt;/figcaption&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig5_summary.png" alt="MoE-versus-dense efficiency summary"&gt;
-&lt;figcaption&gt;Figure 5. Summary relative to the dense Qwen3-32B baseline. Higher is better.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 7. Summary relative to the dense Qwen3-32B baseline. Higher is better.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;Across all three tests, the MoE model beats the dense 32B model at similar total parameter count:&lt;/p&gt;
 &lt;table&gt;
@@ -719,6 +721,7 @@ Abstract
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;figcaption&gt;Table 10. Summary comparison of Qwen3-30B-A3B versus Qwen3-32B across all three tests.&lt;/figcaption&gt;
 &lt;p&gt;The MoE model gives about 2.5× lower single-stream decode latency, about 1.4× higher serving capacity, and about 1.3× higher prefill throughput.&lt;/p&gt;
 &lt;h2 id="4-discussion" &gt;
 &lt;div&gt;
