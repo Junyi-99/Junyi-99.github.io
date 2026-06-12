@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 11 Mar 2026 04:29:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/llm-inference/index.xml" rel="self" type="application/rss+xml"/><item><title>Agent Mesh：聊聊我对多 AI 协同工作流的一些想法</title><link>https://www.junyi.dev/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-现在 AI 编程助手越来越多，从聊天框一路卷到了命令行 Agent（CLI）。用了一圈下来，我最大的感受是：没有哪个 Agent 能在所有方面都做到最好。
+现在 AI 编程助手越来越多，从聊天框一路卷到了跑在命令行里的 Agent。用了一圈下来，我最大的感受是：没有哪个 Agent 能在所有方面都做到最好。
 我日常主要在用 Claude Code、Google Gemini CLI 和 Moonshot Kimi Code。一开始也是把它们当独立工具用，后来发现这样太浪费了，因为它们各有各的长板，如果让它们根据各自的优势互相配合、互相委派任务，效果会好很多。我把这个思路叫做 Agent Mesh。
-下面展开聊聊我的观察和想法。</description><content:encoded>&lt;p&gt;现在 AI 编程助手越来越多，从聊天框一路卷到了命令行 Agent（CLI）。用了一圈下来，我最大的感受是：&lt;strong&gt;没有哪个 Agent 能在所有方面都做到最好。&lt;/strong&gt;&lt;/p&gt;
+下面展开聊聊我的观察和想法。</description><content:encoded>&lt;p&gt;现在 AI 编程助手越来越多，从聊天框一路卷到了跑在命令行里的 Agent。用了一圈下来，我最大的感受是：&lt;strong&gt;没有哪个 Agent 能在所有方面都做到最好。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;我日常主要在用 &lt;strong&gt;Claude Code&lt;/strong&gt;、&lt;strong&gt;Google Gemini CLI&lt;/strong&gt; 和 &lt;strong&gt;Moonshot Kimi Code&lt;/strong&gt;。一开始也是把它们当独立工具用，后来发现这样太浪费了，因为它们各有各的长板，如果让它们根据各自的优势互相配合、互相委派任务，效果会好很多。我把这个思路叫做 &lt;strong&gt;Agent Mesh&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;下面展开聊聊我的观察和想法。&lt;/p&gt;
 &lt;hr&gt;
@@ -21,7 +21,7 @@
 Claude Code：顶级架构师与执行引擎
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;日常用下来，Claude Code 给我的感觉就是一个&amp;quot;资深工程师&amp;quot;。不管是从零起一个新项目，还是啃一坨复杂的重构，它出的方案在架构层面的眼光是最好的。而且它不只是出方案——它自己就能跑起来：遍历文件、跑 bash、编译报错了自己改，整个循环它能自己转。我已经在所有的服务器上安装了 Claude Code，它大大提高了我的生产力，解放了我的很多精力。短板是幻觉，尤其是在生成大段文档、或者引用它没吃透的大型系统时，它会编东西出来。&lt;/p&gt;
+&lt;p&gt;日常用下来，Claude Code 给我的感觉就是一个&amp;quot;资深工程师&amp;quot;。不管是从零起一个新项目，还是啃一坨复杂的重构，它出的方案在架构层面的眼光是最好的。而且它不只是出方案，它自己就能跑起来：遍历文件、跑 bash、编译报错了自己改，整个循环它能自己转。我已经在所有的服务器上安装了 Claude Code，它大大提高了我的生产力，解放了我的很多精力。短板是幻觉，尤其是在生成大段文档、或者引用它没吃透的大型系统时，它会编东西出来。&lt;/p&gt;
 &lt;h3 id="gemini-cli大数据吞吐者与幻觉检查员" &gt;
 &lt;div&gt;
 &lt;a href="#gemini-cli%e5%a4%a7%e6%95%b0%e6%8d%ae%e5%90%9e%e5%90%90%e8%80%85%e4%b8%8e%e5%b9%bb%e8%a7%89%e6%a3%80%e6%9f%a5%e5%91%98"&gt;
@@ -30,16 +30,16 @@ Claude Code：顶级架构师与执行引擎
 Gemini CLI：大数据吞吐者与“幻觉检查员”
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;Gemini 最大的优势是那个 200 万 Token 的上下文窗口。实测下来，它真的能一口气吞掉整个仓库、很长很长的错误日志（我试过几百K的）。正因为它能把整个宏观上下文都装进脑子里，它天然就是比较好的审计者。当 Claude Code 生成了一个出色但可能存在幻觉的代码方案时，可以调用 Gemini 进行大规模跨文件验证。&lt;/p&gt;
-&lt;h3 id="kimi-code深度推理者与数据挖掘者-待评估" &gt;
+&lt;p&gt;Gemini 最大的优势是那个 200 万 Token 的上下文窗口。实测下来，它真的能一口气吞掉整个仓库、很长很长的错误日志，我试过几百 K 的那种。正因为它能把整个宏观上下文都装进脑子里，它天然就是比较好的审计者。当 Claude Code 生成了一个出色但可能存在幻觉的代码方案时，可以调用 Gemini 进行大规模跨文件验证。&lt;/p&gt;
+&lt;h3 id="kimi-code深度推理者与数据挖掘者待评估" &gt;
 &lt;div&gt;
-&lt;a href="#kimi-code%e6%b7%b1%e5%ba%a6%e6%8e%a8%e7%90%86%e8%80%85%e4%b8%8e%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98%e8%80%85-%e5%be%85%e8%af%84%e4%bc%b0"&gt;
+&lt;a href="#kimi-code%e6%b7%b1%e5%ba%a6%e6%8e%a8%e7%90%86%e8%80%85%e4%b8%8e%e6%95%b0%e6%8d%ae%e6%8c%96%e6%8e%98%e8%80%85%e5%be%85%e8%af%84%e4%bc%b0"&gt;
 ##
 &lt;/a&gt;
-Kimi Code：深度推理者与数据挖掘者（❓ 待评估）
+Kimi Code：深度推理者与数据挖掘者，待评估
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;Kimi Code 走的是一条完全不同的路。它底层是 K2.5 的&amp;quot;长思考&amp;quot;模型（k0），走显式思维链（类似 OpenAI o1 的路子），再加上&amp;quot;Agentic Swarm&amp;quot;的玩法，理论上可以拉起一堆子 Agent 去网上多跳检索文档，或者死磕那种深度嵌套的算法难题。不过我得打个问号：Claude 和 Gemini 我是每天在用的，它们的能力边界我心里有数，但 Kimi 在&amp;quot;数据挖掘&amp;quot;和&amp;quot;深度推理&amp;quot;上到底比其他两个强多少，说实话我目前主要是看它架构上的宣称，还没做过严格的对比评估。所以目前它在这块只能说占了一个理论上的生态位。&lt;/p&gt;
+&lt;p&gt;Kimi Code 走的是一条完全不同的路。它底层是 K2.5 的&amp;quot;长思考&amp;quot;模型 k0，走显式思维链，路子类似 OpenAI o1，再加上&amp;quot;Agentic Swarm&amp;quot;的玩法，理论上可以拉起一堆子 Agent 去网上多跳检索文档，或者死磕那种深度嵌套的算法难题。不过我得打个问号：Claude 和 Gemini 我是每天在用的，它们的能力边界我心里有数，但 Kimi 在&amp;quot;数据挖掘&amp;quot;和&amp;quot;深度推理&amp;quot;上到底比其他两个强多少，说实话我目前主要是看它架构上的宣称，还没做过严格的对比评估。所以目前它在这块只能说占了一个理论上的生态位。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="我理想中的-agent-mesh-长什么样" &gt;
 &lt;div&gt;
@@ -51,7 +51,7 @@ Kimi Code：深度推理者与数据挖掘者（❓ 待评估）
 &lt;/h2&gt;
 &lt;p&gt;&lt;img src="https://www.junyi.dev/posts/agent-mesh/diagram.svg" alt="Agent Mesh 工作流示意图"&gt;&lt;/p&gt;
 &lt;p&gt;搞清楚了每个 Agent 的长板和短板之后，自然就会想：能不能让它们互相配合，用 Prompt 把活儿串起来？这就是我说的 Agent Mesh。&lt;/p&gt;
-&lt;p&gt;大部分时候 Claude Code 是干活的主力，代码基本都是它在写。但它遇到吃不下的大上下文时，比如我要重构一个模块但不知道会影响那 50 万行老代码的哪些地方，就丢给 Gemini——让它把整个仓库读一遍，告诉我影响范围。&lt;/p&gt;
+&lt;p&gt;大部分时候 Claude Code 是干活的主力，代码基本都是它在写。但它遇到吃不下的大上下文时，比如我要重构一个模块但不知道会影响那 50 万行老代码的哪些地方，就丢给 Gemini，让它把整个仓库读一遍，告诉我影响范围。&lt;/p&gt;
 &lt;p&gt;反过来，Claude 执行完一份重构计划，我也会让 Gemini 拿着去跟实际项目文件交叉比对，看看有没有幻觉或坏掉的依赖。如果 Gemini 在审计过程中碰到特别硬的算法问题，还可以转手给 Kimi Code 去长考。&lt;/p&gt;
 &lt;p&gt;Kimi 想完之后也不直接改文件，而是把结论交回给 Claude Code，让 Claude 去落地执行。整个流程就是这样一个环：各自干各自最擅长的，结果互相流转。&lt;/p&gt;
 &lt;hr&gt;
@@ -71,8 +71,8 @@ Kimi Code：深度推理者与数据挖掘者（❓ 待评估）
 &lt;li&gt;通过 &lt;strong&gt;OpenHands / Open Code&lt;/strong&gt; 这样的开源 Agent 框架。&lt;/li&gt;
 &lt;li&gt;原生通过 &lt;strong&gt;Claude Code CLI&lt;/strong&gt; 使用。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;尽管共享完全相同的 LLM DNA（Claude 3.5 Sonnet），它们的实际能力却大相径庭。在严苛的工程流中，原生 &lt;strong&gt;Claude Code&lt;/strong&gt; 在 Agent 执行方面始终优于其他方式。为什么？因为 Agent 架构都由模型的创造者进行了独特的优化（包括但不限于：隐藏的循环机制、错误恢复策略，以及特定的上下文工程）。&lt;/p&gt;
-&lt;p&gt;即使使用像 Open Code 这样优秀的开源替代方案搭配 Claude 模型，其执行流畅度和架构视野也往往不及 Claude Code。这告诉我们，当我们为 Mesh 选择 Agent 时，我们选择的不仅仅是一个基座模型（如 Sonnet 或 GPT-4o），更是围绕它构建的工程脚手架。&lt;/p&gt;
+&lt;p&gt;尽管共享完全相同的 LLM DNA，也就是 Claude 3.5 Sonnet，它们的实际能力却大相径庭。在严苛的工程流中，原生 &lt;strong&gt;Claude Code&lt;/strong&gt; 在 Agent 执行方面始终优于其他方式。为什么？因为 Agent 架构都由模型的创造者进行了独特的优化，包括但不限于隐藏的循环机制、错误恢复策略，以及特定的上下文工程。&lt;/p&gt;
+&lt;p&gt;即使使用像 Open Code 这样优秀的开源替代方案搭配 Claude 模型，其执行流畅度和架构视野也往往不及 Claude Code。这告诉我们，当我们为 Mesh 选择 Agent 时，我们选择的不仅仅是一个基座模型，比如 Sonnet 或 GPT-4o，更是围绕它构建的工程脚手架。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="社区里的类似探索" &gt;
 &lt;div&gt;
@@ -82,7 +82,7 @@ Kimi Code：深度推理者与数据挖掘者（❓ 待评估）
 社区里的类似探索
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;写完这篇之后，我发现社区里已经有人在做类似的事情。&lt;strong&gt;&lt;a href="https://github.com/humania-org/humanize" target="_blank" rel="noopener noreferrer"&gt;Humanize&lt;/a&gt;&lt;/strong&gt; 是一个 Claude Code 插件，它实现了一个叫 &lt;strong&gt;RLCR&lt;/strong&gt;（Ralph-Loop with Codex Review）的工作流：Claude 负责写代码，Codex 独立审查，发现问题就打回去重做，循环往复直到通过为止。核心思路和 Agent Mesh 一样，让架构上不同的 AI 各司其职，通过 work-feedback loop 不断迭代，而不是指望一个模型一次搞定所有事。&lt;/p&gt;
+&lt;p&gt;写完这篇之后，我发现社区里已经有人在做类似的事情。&lt;strong&gt;&lt;a href="https://github.com/humania-org/humanize" target="_blank" rel="noopener noreferrer"&gt;Humanize&lt;/a&gt;&lt;/strong&gt; 是一个 Claude Code 插件，它实现了一个叫 &lt;strong&gt;RLCR&lt;/strong&gt; 的工作流，全称 Ralph-Loop with Codex Review：Claude 负责写代码，Codex 独立审查，发现问题就打回去重做，循环往复直到通过为止。核心思路和 Agent Mesh 一样，让架构上不同的 AI 各司其职，通过 work-feedback loop 不断迭代，而不是指望一个模型一次搞定所有事。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="写在最后" &gt;
 &lt;div&gt;
@@ -92,8 +92,8 @@ Kimi Code：深度推理者与数据挖掘者（❓ 待评估）
 写在最后
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;我不觉得未来会出现一个“万能模型”把所有事都干了。真正有意思的是&lt;strong&gt;编排&lt;/strong&gt;——让&lt;strong&gt;底层架构上有本质不同&lt;/strong&gt;的 Agent 各司其职。&lt;/p&gt;
-&lt;p&gt;我一直坚持的一个观点是：当我们说“不同”的智能体时，我们指的&lt;strong&gt;不是&lt;/strong&gt;拿同一个底层模型给它套上不同的系统提示词（比如玩“你是架构师”对“你是测试员”的角色扮演）。只有当智能体在&lt;strong&gt;处理信息的底层架构上存在根本差异&lt;/strong&gt;时，才能碰撞出真正的协同火花。&lt;/p&gt;
-&lt;p&gt;但是，你如何知道两个模型是真正不同的，还是只是同一个基础模型的微调版本？这时候，像 &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt;（一个分析语言模型之间进化关系和功能差异的研究框架，已在 &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt; 以 Oral 形式发表）这样的工具就变得无比重要了。通过分析模型之间的“基因”谱系和功能距离，我们可以有意地选择那些属于完全不同进化分支的 Agent，从而确保它们不会拥有相同的盲区。&lt;/p&gt;
-&lt;p&gt;我的实际工程经验告诉我：&lt;strong&gt;Claude Code 与 Gemini CLI 的协同目前是最强大、最直观的组合。&lt;/strong&gt; Gemini CLI 靠长上下文，把整个仓库和一堆日志全吞进去，专门负责抓幻觉、做宏观审计。Claude Code 则专注在它最擅长的事上——理解代码架构、在本地系统里精准执行。&lt;/p&gt;
-&lt;p&gt;当你有意识地把架构上截然不同的 Agent 组合在一起时，它们不再互相重叠，而是开始互补。这就是我想分享的 Agent Mesh 思路，希望对大家有启发。&lt;/p&gt;</content:encoded><category>AI Systems</category><category>LLM Inference</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/agent-mesh/</guid></item></channel></rss>
+&lt;p&gt;我不觉得未来会出现一个“万能模型”把所有事都干了。真正有意思的是&lt;strong&gt;编排&lt;/strong&gt;，让&lt;strong&gt;底层架构上有本质不同&lt;/strong&gt;的 Agent 各司其职。&lt;/p&gt;
+&lt;p&gt;我一直坚持的一个观点是：当我们说“不同”的智能体时，我们指的&lt;strong&gt;不是&lt;/strong&gt;拿同一个底层模型给它套上不同的系统提示词，比如玩”你是架构师”对”你是测试员”的角色扮演。只有当智能体在&lt;strong&gt;处理信息的底层架构上存在根本差异&lt;/strong&gt;时，才能碰撞出真正的协同火花。&lt;/p&gt;
+&lt;p&gt;但是，你如何知道两个模型是真正不同的，还是只是同一个基础模型的微调版本？这时候，像 &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt; 这样的工具就变得无比重要了。它是一个分析语言模型之间进化关系和功能差异的研究框架，已在 &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt; 以 Oral 形式发表。通过分析模型之间的“基因”谱系和功能距离，我们可以有意地选择那些属于完全不同进化分支的 Agent，从而确保它们不会拥有相同的盲区。&lt;/p&gt;
+&lt;p&gt;我的实际工程经验告诉我：&lt;strong&gt;Claude Code 与 Gemini CLI 的协同目前是最强大、最直观的组合。&lt;/strong&gt; Gemini CLI 靠长上下文，把整个仓库和一堆日志全吞进去，专门负责抓幻觉、做宏观审计。Claude Code 则专注在它最擅长的事上：理解代码架构、在本地系统里精准执行。&lt;/p&gt;
+&lt;p&gt;当你有意识地把架构上截然不同的 Agent 组合在一起时，它们不再互相重叠，开始互补。这就是我想分享的 Agent Mesh 思路，希望对大家有启发。&lt;/p&gt;</content:encoded><category>AI Systems</category><category>LLM Inference</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/agent-mesh/</guid></item></channel></rss>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 01 Aug 2025 01:16:29 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/techshare/index.xml" rel="self" type="application/rss+xml"/><item><title>MacBook Pro M1 键帽更换指南</title><link>https://www.junyi.dev/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 Shift 和 Space，外观变得非常难看）。
+众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里。你可以在图中看到我打磨过的 Shift 和 Space，外观变得非常难看。
 虽然有人说可以去 Apple 直营店更换键帽1，但据说每次只能更换几个。对于我这种整块键盘都打油的情况，显然还是自己动手来得更实际。
-写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频2只演示了普通按键（字母键和数字键）的拆解，刻意跳过了长键帽（如 Space、Caps Lock、ESC）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。</description><content:encoded>&lt;p&gt;众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里（你可以在图中看到我打磨过的 &lt;kbd&gt;Shift&lt;/kbd&gt; 和 &lt;kbd&gt;Space&lt;/kbd&gt;，外观变得非常难看）。&lt;/p&gt;
+写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频2只演示了普通按键的拆解，也就是字母键和数字键，刻意跳过了长键帽，比如 Space、Caps Lock、ESC，以及方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。</description><content:encoded>&lt;p&gt;众所周知，键帽一旦“打油”，就很难通过简单擦拭恢复原状。我曾尝试用砂纸打磨键帽，但不仅效果更差，产生的碎屑还会掉进缝隙里。你可以在图中看到我打磨过的 &lt;kbd&gt;Shift&lt;/kbd&gt; 和 &lt;kbd&gt;Space&lt;/kbd&gt;，外观变得非常难看。&lt;/p&gt;
 &lt;p&gt;虽然有人说可以去 Apple 直营店更换键帽&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，但据说每次只能更换几个。对于我这种&lt;strong&gt;整块键盘都打油&lt;/strong&gt;的情况，显然还是自己动手来得更实际。&lt;/p&gt;
-&lt;p&gt;写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;只演示了普通按键（字母键和数字键）的拆解，&lt;strong&gt;刻意跳过了&lt;/strong&gt;长键帽（如 &lt;kbd&gt;Space&lt;/kbd&gt;、&lt;kbd&gt;Caps Lock&lt;/kbd&gt;、&lt;kbd&gt;ESC&lt;/kbd&gt;）和方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。&lt;/p&gt;
+&lt;p&gt;写这篇博客的原因是，我发现网上几乎找不到一篇完整介绍 MacBook Pro M1 键帽更换的教程。大多数视频&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;只演示了普通按键的拆解，也就是字母键和数字键，&lt;strong&gt;刻意跳过了&lt;/strong&gt;长键帽，比如 &lt;kbd&gt;Space&lt;/kbd&gt;、&lt;kbd&gt;Caps Lock&lt;/kbd&gt;、&lt;kbd&gt;ESC&lt;/kbd&gt;，以及方向键的处理方式。而这些键的结构明显不同，拆装方式也更复杂。&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
 &lt;figcaption&gt;
-换键帽前（上）和换键帽后（下）
+上为换键帽前，下为换键帽后
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;我在淘宝上购买了全套键帽，花了 85 元，打算自己更换：&lt;/p&gt;
@@ -17,7 +17,7 @@
 淘宝购买的全套键帽
 &lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;（后来才看到，闲鱼全套键帽只要 ¥20 到 ¥40 之间每套&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;。。。）&lt;/p&gt;
+&lt;p&gt;后来才看到，闲鱼全套键帽每套只要 ¥20 到 ¥40&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="拆掉旧键帽" &gt;
 &lt;div&gt;
@@ -54,15 +54,15 @@
 &lt;p&gt;安装键帽与拆卸过程相反，首先把键帽从上方滑到卡槽里，然后按压键帽，直到键帽完全卡入卡槽。&lt;/p&gt;
 &lt;p&gt;⚠️ 注意不要大力按压键帽，因为键帽的塑料件非常脆弱。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3 id="长键帽拆装如-shiftcaps-lockesc" &gt;
+&lt;h3 id="长键帽拆装shiftcaps-lockesc" &gt;
 &lt;div&gt;
-&lt;a href="#%e9%95%bf%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e5%a6%82-shiftcaps-lockesc"&gt;
+&lt;a href="#%e9%95%bf%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85shiftcaps-lockesc"&gt;
 ##
 &lt;/a&gt;
-长键帽拆装（如 Shift、Caps Lock、ESC）
+长键帽拆装：Shift、Caps Lock、ESC
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;这类键帽内部通常带有一到两个平衡杆（铁丝），结构更复杂。&lt;/p&gt;
+&lt;p&gt;这类键帽内部通常带有一到两个平衡杆，也就是铁丝，结构更复杂。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;拆卸建议：&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;同样从右下角开始，再拆左下角；&lt;/li&gt;
@@ -71,7 +71,7 @@
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
 &lt;figcaption&gt;
-拆下的 Caps Lock 键（镊子指着）和 Shift 键（较长）
+镊子指着的是拆下的 Caps Lock 键，较长的是 Shift 键
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;&lt;strong&gt;安装建议：&lt;/strong&gt;&lt;/p&gt;
@@ -93,7 +93,7 @@
 &lt;a href="#%e7%9f%ad%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e6%96%b9%e5%90%91%e9%94%ae"&gt;
 ##
 &lt;/a&gt;
-短键帽拆装（方向键）
+短键帽拆装：方向键
 &lt;/div&gt;
 &lt;/h3&gt;
 &lt;ul&gt;
@@ -104,7 +104,7 @@
 &lt;p&gt;左/下/右方向键：先撬开右侧卡扣，然后&lt;strong&gt;从右向左滑出&lt;/strong&gt;。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;（在拆之前，请参考方向键构造图）&lt;/p&gt;
+&lt;p&gt;在拆之前，请参考方向键构造图。&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkeys.jpg" style="border-radius:0.5rem; width: 512px"&gt;
 &lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_side.jpg" style="border-radius:0.5rem; width: 512px"&gt;

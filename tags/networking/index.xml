@@ -162,7 +162,7 @@ TS_EXITNODE=100.x.x.x
 &lt;p&gt;nerdctl compose 作为 Docker Compose 的替代方案已经很成熟了，但在细节兼容性上仍有差距。&lt;code&gt;network_mode: service:&lt;/code&gt; 的缺失、容器名的自动生成规则不同，这些都是迁移时容易踩到的坑。而 Tailscale 在容器中使用 exit node 时，&lt;code&gt;SYS_MODULE&lt;/code&gt; 和 &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; 是两个容易被忽略但又不可或缺的配置。希望这篇记录能帮到遇到同样问题的人。&lt;/p&gt;</content:encoded><category>Containers</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>Zero Mq 注意事项</title><link>https://www.junyi.dev/posts/zero-mq/</link><pubDate>Thu, 01 Jul 2021 09:48:45 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 官方网站：ZeroMQ
 我用的实现版本：libzmq
-对我个人来说，ZMQ 可以免去我「维持 socket 通信可靠性」、「高性能并发」等任务。</description><content:encoded>&lt;p&gt;官方网站：&lt;a href="https://www.junyi.dev/2021/07/01/ZeroMQ%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/%5BZeroMQ%5D%28https://zeromq.org/%29" target="_blank" rel="noopener noreferrer"&gt;ZeroMQ&lt;/a&gt;&lt;/p&gt;
+对我个人来说，ZMQ 可以免去我「维持 socket 通信可靠性」、「高性能并发」等任务。</description><content:encoded>&lt;p&gt;官方网站：&lt;a href="https://zeromq.org/" target="_blank" rel="noopener noreferrer"&gt;ZeroMQ&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;我用的实现版本：&lt;a href="https://github.com/zeromq/libzmq" target="_blank" rel="noopener noreferrer"&gt;libzmq&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;对我个人来说，ZMQ 可以免去我「维持 socket 通信可靠性」、「高性能并发」等任务。&lt;/p&gt;
 &lt;p&gt;（虽然之前自己也写了一整套）&lt;/p&gt;
