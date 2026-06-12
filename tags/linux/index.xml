@@ -1,4 +1,250 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 05 Sep 2025 13:07:09 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>从树莓派到 NUC：玩具的升级</title><link>https://www.junyi.dev/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 10 Jun 2026 15:26:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>拆穿 introl 和 ainewshub，TPU 比 GPU 便宜 4 倍是 AI 编的幻觉</title><link>https://www.junyi.dev/posts/tpu-tco/</link><pubDate>Wed, 10 Jun 2026 15:26:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+声明：这篇文章不是要论证 TPU 不如 GPU。TPU 和 GPU 各有适用场景，谁强谁弱要看具体负载。我要说的是，目前网上流传的那批对比数据本身不准确，很多是 AI 编造、无法溯源的。下面拆的就是这些假数据。
+Artificial Analysis 最近放出一组硬件基准测试1，以 Llama 3.3 70B、vLLM、每查询 30 output tokens/s 的参考速度计算每百万输入输出 token 的成本，NVIDIA 对 TPU v6e (Trillium) 有大约 5 倍的每美元 token 优势，对 AMD MI300X 有大约 2 倍优势2。
+Artificial Analysis 在 X 上公布的硬件基准结论，NVIDIA 对 TPU v6e 有约 5 倍每美元 token 优势，对 MI300X 约 2 倍，H100 是 1.06 美元，MI300X 是 2.24 美元，TPU v6e 是 5.13 美元。
+跟这些能复现的数据一起在网上传的，还有另一类东西。
+# 一篇高调的对比文 introl 有一篇文章，标题叫 Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar3。核心论点是 TPU 每美元性能比 H100 好 4 倍，TPU 在推理经济性上全面压过 NVIDIA。它的关键数据来自另一篇文章，ainewshub.org 的 Nvidia vs Google TPU 2025 Cost Comparison4。顺着这条引用链往下看，会发现两篇都是 AI 生成的，数据是编的。</description><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;声明：这篇文章不是要论证 TPU 不如 GPU。TPU 和 GPU 各有适用场景，谁强谁弱要看具体负载。我要说的是，目前网上流传的那批对比数据本身不准确，很多是 AI 编造、无法溯源的。下面拆的就是这些假数据。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Artificial Analysis 最近放出一组硬件基准测试&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，以 Llama 3.3 70B、vLLM、每查询 30 output tokens/s 的参考速度计算每百万输入输出 token 的成本，NVIDIA 对 TPU v6e (Trillium) 有大约 5 倍的每美元 token 优势，对 AMD MI300X 有大约 2 倍优势&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-twitter.png"
+alt="Artificial Analysis 在 X 上公布的硬件基准结论" width="430"&gt;&lt;figcaption&gt;
+&lt;p&gt;Artificial Analysis 在 X 上公布的硬件基准结论，NVIDIA 对 TPU v6e 有约 5 倍每美元 token 优势，对 MI300X 约 2 倍，H100 是 1.06 美元，MI300X 是 2.24 美元，TPU v6e 是 5.13 美元。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;跟这些能复现的数据一起在网上传的，还有另一类东西。&lt;/p&gt;
+&lt;h2 id="一篇高调的对比文" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%80%e7%af%87%e9%ab%98%e8%b0%83%e7%9a%84%e5%af%b9%e6%af%94%e6%96%87"&gt;
+#
+&lt;/a&gt;
+一篇高调的对比文
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;introl 有一篇文章，标题叫 Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;。核心论点是 TPU 每美元性能比 H100 好 4 倍，TPU 在推理经济性上全面压过 NVIDIA。它的关键数据来自另一篇文章，ainewshub.org 的 Nvidia vs Google TPU 2025 Cost Comparison&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;。顺着这条引用链往下看，会发现两篇都是 AI 生成的，数据是编的。&lt;/p&gt;
+&lt;h2 id="锤点一核心引用指向一份不存在的数据" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%94%a4%e7%82%b9%e4%b8%80%e6%a0%b8%e5%bf%83%e5%bc%95%e7%94%a8%e6%8c%87%e5%90%91%e4%b8%80%e4%bb%bd%e4%b8%8d%e5%ad%98%e5%9c%a8%e7%9a%84%e6%95%b0%e6%8d%ae"&gt;
+#
+&lt;/a&gt;
+锤点一，核心引用指向一份不存在的数据
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;ainewshub 那篇最核心的一句话是这样写的。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/hallucination-1.png"
+alt="ainewshub 文章里的核心论断和它声称的来源"&gt;&lt;figcaption&gt;
+&lt;p&gt;ainewshub 文章里的核心论断，4.7 倍每美元性能，来源标的却是&lt;strong&gt;并不存在的&lt;/strong&gt; MLPerf v4.1 LLM 推理结果。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;“4.7× better performance-per-dollar on LLM inference than Nvidia H100/H200”，来源标的是 Google Cloud MLPerf Inference v4.1 results + customer case studies, October 2025。&lt;/p&gt;
+&lt;p&gt;但其实，MLPerf Inference v4.1 里，Google 的 TPU 提交项只有 stable-diffusion-xl 一个模型。我去 MLCommons 的官方结果&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;里按 Google 加 TPU 筛，v4.1 Closed Datacenter 下只有两条记录，tpu-v5e-4 和 tpu-v6-4，跑的都是 stable-diffusion-xl。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/mlperf-for-tpu-1.png"
+alt="MLPerf v4.1 里筛出 Google TPU，只有 stable-diffusion-xl 一项"&gt;&lt;figcaption&gt;
+&lt;p&gt;在 MLPerf v4.1 Closed Datacenter 里筛 Google TPU，只有 tpu-v5e-4 和 tpu-v6-4 两条，跑的都是 stable-diffusion-xl，没有任何 LLM 推理项。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;没有任何 LLM 推理项！这篇文章引用的所谓 MLPerf v4.1 的 LLM 推理每美元性能 4.7 倍，&lt;strong&gt;在它声称的来源里根本不存在&lt;/strong&gt;。数字是凭空生成的，然后挂了一个看起来权威的出处。&lt;/p&gt;
+&lt;p&gt;其次，&lt;strong&gt;MLPerf 压根不报每美元性能&lt;/strong&gt;。它报的是吞吐，samples/s 和 queries/s，里面没有价格。所以那 4.7 倍&lt;strong&gt;根本不可能&lt;/strong&gt;是从 MLPerf 算出来的。&lt;/p&gt;
+&lt;h2 id="锤点二数字在转载之间漂移" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%94%a4%e7%82%b9%e4%ba%8c%e6%95%b0%e5%ad%97%e5%9c%a8%e8%bd%ac%e8%bd%bd%e4%b9%8b%e9%97%b4%e6%bc%82%e7%a7%bb"&gt;
+#
+&lt;/a&gt;
+锤点二，数字在转载之间漂移
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;把 introl&lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 ainewshub&lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 两篇放一起时，数字对不上（而且有虚假陈述）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每美元性能倍数，introl 写 4 倍，ainewshub 写 4.7 倍。（这条纯骗人，见上文）&lt;/li&gt;
+&lt;li&gt;MLPerf 版本，introl 引 v3.1，ainewshub 引 v4.1。（不知道 introl 从哪哪来的数据）&lt;/li&gt;
+&lt;li&gt;Midjourney 案例，introl 写月支出从 200 万美元降到 70 万美元，ainewshub 写从 210 万美元降到 70 万美元。（这条我没仔细核查，大概率也是幻觉出来的）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;转载来转载去，每复述一次就变一点。他妈的，模型每生成一次，就重编一个差不多的数出来。&lt;/p&gt;
+&lt;h2 id="锤点三精确到吓人的-tco-表却没有来源" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%94%a4%e7%82%b9%e4%b8%89%e7%b2%be%e7%a1%ae%e5%88%b0%e5%90%93%e4%ba%ba%e7%9a%84-tco-%e8%a1%a8%e5%8d%b4%e6%b2%a1%e6%9c%89%e6%9d%a5%e6%ba%90"&gt;
+#
+&lt;/a&gt;
+锤点三，精确到吓人的 TCO 表，却没有来源
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;ainewshub&lt;sup id="fnref2:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 给了一张三年总拥有成本表，1000 芯片集群，NVIDIA H100 总成本 1.77 亿美元，Google TPU v6 总成本 7850 万美元，省 9850 万美元。还细分到硬件降 48%、电费降 66%、制冷降 67%、支持降 63%、网络降 67%、地产降 63%。（全是编的）&lt;/p&gt;
+&lt;p&gt;这种精确到个位百分比的分项拆解看起来很专业。问题是没有一项能溯源。配套的客户案例也一样，Midjourney，还有一家所谓 C 轮计算机视觉创业公司月支出从 34 万美元降到 8.9 万美元，全是无法核实的具体数字。&lt;/p&gt;
+&lt;h2 id="最可恶的是-data-verified" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e5%8f%af%e6%81%b6%e7%9a%84%e6%98%af-data-verified"&gt;
+#
+&lt;/a&gt;
+最可恶的是 “data verified”
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;顺着 ainewshub 那篇成本对比文再往上游追，它的来源指向&lt;strong&gt;同一个站点&lt;/strong&gt;的另一篇文章，AI Inference Costs: TPU vs GPU 2025&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt;。同样的数字在这里又复述了一遍，4 倍性价比、Midjourney 省 65%、TPU v5e 在 9 项里赢 8 项，我必须再次强调，这个数据是假的、是不存在的。&lt;/p&gt;
+&lt;p&gt;它结尾那句声明是这样写的：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Data verified as of November 26, 2025. Sources include Google Cloud documentation, MLPerf benchmarks, company earnings reports, and verified industry migrations.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;核实了个屁&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;它说核实了，却给不出任何一个能点开的链接，没有具体报告，没有方法。前面已经查过，它依赖的 MLPerf TPU LLM 推理结果&lt;strong&gt;根本不存在&lt;/strong&gt;。所谓 verified，全他妈假的。&lt;/p&gt;
+&lt;p&gt;同一个站点的不同文章，连这些假数字都对不上，写的人自己也不知道这个数从哪来，因为它本来就不存在。&lt;/p&gt;
+&lt;p&gt;一个成批生产幻觉数字、再统一盖上 data verified &amp;hellip; 这个垃圾网站真害人不浅&lt;/p&gt;
+&lt;h2 id="目前我查到的数据是这样至少比他们网站可信一点" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%9b%ae%e5%89%8d%e6%88%91%e6%9f%a5%e5%88%b0%e7%9a%84%e6%95%b0%e6%8d%ae%e6%98%af%e8%bf%99%e6%a0%b7%e8%87%b3%e5%b0%91%e6%af%94%e4%bb%96%e4%bb%ac%e7%bd%91%e7%ab%99%e5%8f%af%e4%bf%a1%e4%b8%80%e7%82%b9"&gt;
+#
+&lt;/a&gt;
+目前我查到的数据是这样（至少比他们网站可信一点）
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Artificial Analysis 的 System Load Test&lt;sup id="fnref1:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，跑的是 Llama 3.3 70B。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-throughput-test.png"
+alt="Artificial Analysis 的 System Load Test 结果"&gt;&lt;figcaption&gt;
+&lt;p&gt;Artificial Analysis System Load Test，Llama 3.3 70B 的峰值系统吞吐、每查询输出速度和按需租用价格。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;峰值系统吞吐，B200 是 15.4k tokens/s，H200 是 8.47k，H100 是 7.28k，TPU v6e 是 6.73k，MI300X 是 3.67k。TPU v6e 落在 NVIDIA 同代后面。每查询输出速度，TPU v6e 是 61.3 tokens/s，是这组里最慢的。&lt;/p&gt;
+&lt;p&gt;成本要分两种情况说，这里 TPU 也有能算的账。&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-costs.png"
+alt="Llama 3.3 70B 在峰值吞吐下的每百万 token 成本"&gt;&lt;figcaption&gt;
+&lt;p&gt;Llama 3.3 70B 在峰值吞吐下的每百万 token 成本，TPU v6e 为 0.62 美元，与 H100 的 0.67 到 0.69 美元接近。&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;在峰值吞吐下算每百万 token 成本，TPU v6e 是 0.62 美元，和 H100 的 0.67 到 0.69 美元接近，比 MI300X 的 0.90 美元和 B200 跑 vLLM 的 1.63 美元都便宜。&lt;strong&gt;如果负载是离线大批量、能把芯片喂满，TPU 的账是划算的&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;但线上服务很少跑在峰值吞吐上。一旦要求一个能用的交互速度，比如每查询 30 tokens/s 的参考速度，TPU v6e 的单位成本就跳到 5.13 美元，而 H100 是 1.06 美元。这就是 Artificial Analysis 说的大约 5 倍差距的来处。&lt;/p&gt;
+&lt;p&gt;后面我们会自己进行 benchmark 得到一手数据，到时再对比。&lt;/p&gt;
+&lt;h2 id="识别出-ai-生成垃圾文的方法" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%af%86%e5%88%ab%e5%87%ba-ai-%e7%94%9f%e6%88%90%e5%9e%83%e5%9c%be%e6%96%87%e7%9a%84%e6%96%b9%e6%b3%95"&gt;
+#
+&lt;/a&gt;
+识别出 AI 生成垃圾文的方法
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;只要遵循一个原则：任何数据、任何数字，必须有可点开的来源，必须有可复现的方法。&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://artificialanalysis.ai/benchmarks/hardware" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis，硬件基准测试&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://x.com/ArtificialAnlys/status/1993878037226557519" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis 在 X 上的原帖&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://introl.com/blog/google-tpu-v6e-vs-gpu-4x-better-ai-performance-per-dollar-guide" target="_blank" rel="noopener noreferrer"&gt;introl，Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/nvidia-vs-google-tpu-2025-cost-comparison" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org，Nvidia vs Google TPU 2025 Cost Comparison&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref2:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://mlcommons.org/benchmarks/inference-datacenter/" target="_blank" rel="noopener noreferrer"&gt;MLCommons，MLPerf Inference Datacenter 官方结果&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/ai-inference-costs-tpu-vs-gpu-2025" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org，AI Inference Costs: TPU vs GPU 2025&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TPU</category><category>Linux</category><category>AI Systems</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tpu-tco/</guid></item><item><title>Claude Code 在 tmux 里要求重新登录？八成是 macOS Keychain 的锅</title><link>https://www.junyi.dev/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+终端里 claude 好好的，Team Account 也认得，进了 tmux 就让我重新登录。折腾了一会儿才发现是 macOS Security Session 的老问题。</description><content:encoded>&lt;p&gt;终端里 &lt;code&gt;claude&lt;/code&gt; 好好的，Team Account 也认得，进了 tmux 就让我重新登录。折腾了一会儿才发现是 macOS Security Session 的老问题。&lt;/p&gt;
+&lt;h2 id="现象" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%8e%b0%e8%b1%a1"&gt;
+#
+&lt;/a&gt;
+现象
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Ghostty 里直接跑 &lt;code&gt;claude&lt;/code&gt;，没问题。tmux 里跑，要求登录。&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;排查过程（点击展开）&lt;/summary&gt;
+&lt;h3 id="环境变量" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f"&gt;
+##
+&lt;/a&gt;
+环境变量？
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;第一反应是 tmux 里环境变量不一样。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;env | grep -iE &lt;span style="color:#5af78e"&gt;&amp;#39;claude|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;两边都没有。Claude Code 认证不存环境变量。&lt;/p&gt;
+&lt;h3 id="配置文件" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6"&gt;
+##
+&lt;/a&gt;
+配置文件？
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat ~/.claude/.credentials.json 2&amp;gt;/dev/null &lt;span style="color:#ff6ac1"&gt;||&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;no credentials file&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;也没有。不在文件系统里。&lt;/p&gt;
+&lt;h3 id="keychain" &gt;
+&lt;div&gt;
+&lt;a href="#keychain"&gt;
+##
+&lt;/a&gt;
+Keychain
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security dump-keychain 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | grep -i -A3 &lt;span style="color:#5af78e"&gt;&amp;#39;claude\|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;找到了，存在 macOS Keychain 里，service name 是 &lt;code&gt;Claude Code-credentials&lt;/code&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;0x00000007 &amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+&amp;#34;acct&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;junyi&amp;#34;
+&amp;#34;svce&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+keychain: &amp;#34;/Users/junyi/Library/Keychains/login.keychain-db&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后试了下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;junyi&amp;#34;&lt;/span&gt; -w
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;终端里能输出 token，tmux 里报错。问题在这。&lt;/p&gt;
+&lt;/details&gt;
+&lt;h2 id="为什么" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88"&gt;
+#
+&lt;/a&gt;
+为什么
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;macOS 的 Keychain 访问绑在 &lt;strong&gt;Security Session&lt;/strong&gt; 上，底层对应的是 Bootstrap Namespace。你开终端窗口的时候，进程会挂到当前用户的 &lt;strong&gt;Aqua session&lt;/strong&gt;，Keychain 就是通过这个 session 解锁的。&lt;/p&gt;
+&lt;p&gt;但 &lt;code&gt;tmux server&lt;/code&gt; 是个常驻后台进程，第一次 &lt;code&gt;tmux new&lt;/code&gt; 的时候启动，之后就一直活着。你后面 &lt;code&gt;tmux attach&lt;/code&gt; 的时候，tmux server fork 出来的 shell 继承的是 &lt;strong&gt;server 启动时的那个旧 session&lt;/strong&gt;，不是你当前的 Aqua session。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;正常终端:
+Ghostty → fork shell → 继承 Aqua session → ✅ 能读 Keychain
+tmux:
+Ghostty → attach → tmux server (旧进程)
+→ fork shell → 继承旧 session
+→ ❌ 读不了 Keychain
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; 在 tmux 里挂掉也是这个原因。&lt;/p&gt;
+&lt;h2 id="修复" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%bf%ae%e5%a4%8d"&gt;
+#
+&lt;/a&gt;
+修复
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;装 &lt;code&gt;reattach-to-user-namespace&lt;/code&gt;，让 tmux 里的进程重新接入当前用户的 Aqua session：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install reattach-to-user-namespace
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.tmux.conf&lt;/code&gt; 加一行：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;set-option -g default-command &lt;span style="color:#5af78e"&gt;&amp;#34;reattach-to-user-namespace -l &lt;/span&gt;&lt;span style="color:#5af78e"&gt;${&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;SHELL&lt;/span&gt;&lt;span style="color:#5af78e"&gt;}&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后&lt;strong&gt;杀掉整个 tmux server 重开&lt;/strong&gt;。kill-session 没用，新 window 也没用，都还是从旧 server fork 的：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux kill-server
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux new -s main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;验证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$USER&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt; -w 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | head -c &lt;span style="color:#ff9f43"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;能输出 token 就说明通了。&lt;/p&gt;
+&lt;h2 id="顺带一提" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%a1%ba%e5%b8%a6%e4%b8%80%e6%8f%90"&gt;
+#
+&lt;/a&gt;
+顺带一提
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;tmux 里这些问题多半也是同一个原因：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; 不工作&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ssh-agent&lt;/code&gt; 访问不了&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;osascript&lt;/code&gt; 执行失败&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;、&lt;code&gt;op&lt;/code&gt; 等 CLI 工具认证挂了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;都是 &lt;code&gt;reattach-to-user-namespace&lt;/code&gt; 一把搞定。&lt;/p&gt;</content:encoded><category>Linux</category><category>tmux</category><category>AI Systems</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/posts/tmux-keychain/</guid></item><item><title>从树莓派到 NUC：玩具的升级</title><link>https://www.junyi.dev/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。</description><content:encoded>&lt;p&gt;陪伴我许久的树莓派 4B 终于迎来了「继任者」—— 小巧的 Intel NUC。从 ARM 到 x86，从 TF 卡到 SSD，这个看似简单的设备迭代，却让我的折腾体验有了质的飞跃。&lt;/p&gt;
 &lt;h2 id="树莓派的功与过" &gt;
 &lt;div&gt;
@@ -34,7 +280,7 @@ NUC 的开箱与性能跃升
 结语
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;偶尔看到树莓派的指示灯还在规律闪烁，会想起刚拿到它时的兴奋。其实折腾这些设备的乐趣，从来不是追求最新最强，而是看着它们在不同阶段找到合适的位置，就像看着自己用过的工具慢慢有了属于自己的故事。&lt;/p&gt;</content:encoded><category>Linux</category><category>Raspberry Pi</category><category>Intel NUC</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/intel-nuc/</guid></item><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;偶尔看到树莓派的指示灯还在规律闪烁，会想起刚拿到它时的兴奋。其实折腾这些设备的乐趣，从来不是追求最新最强，而是看着它们在不同阶段找到合适的位置，就像看着自己用过的工具慢慢有了属于自己的故事。&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/intel-nuc/</guid></item><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。
 本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。</description><content:encoded>&lt;p&gt;K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。&lt;/p&gt;
 &lt;p&gt;本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。&lt;/p&gt;
@@ -234,7 +480,88 @@ Step 2. 验证安装效果
 &lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</content:encoded><category>Linux</category><category>k3s</category><category>Raspberry Pi 5</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>树莓派编译 RTL8812AU / RTL8814AU 网卡驱动</title><link>https://www.junyi.dev/posts/raspberrypi-usb-wifi/</link><pubDate>Tue, 30 Mar 2021 15:49:16 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;/div&gt;</content:encoded><category>Linux</category><category>Containers</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>使用 git-crypt 加密你的仓库</title><link>https://www.junyi.dev/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+git-crypt enables transparent encryption and decryption of files in a git repository.
+Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
+&lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/flow.svg" alt="BasicFlow"&gt;&lt;/p&gt;
+&lt;h2 id="step-1-install-git-crypt" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-install-git-crypt"&gt;
+#
+&lt;/a&gt;
+Step 1: Install git-crypt
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install git-crypt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git-crypt init &lt;span style="color:#78787e"&gt;# in an initialized git repository&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Specify files to encrypt by creating a .gitattributes file:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-gitattributes" data-lang="gitattributes"&gt;# The config is similar to .gitignore
+accounts/*.bean filter=git-crypt diff=git-crypt
+*.md filter=git-crypt diff=git-crypt
+*.png filter=git-crypt diff=git-crypt
+*.jpg filter=git-crypt diff=git-crypt
+*.excalidraw filter=git-crypt diff=git-crypt
+*.txt filter=git-crypt diff=git-crypt
+*.pdf filter=git-crypt diff=git-crypt
+*.json filter=git-crypt diff=git-crypt
+# Making sure that .gitattributes is never encrypted. DON&amp;#39;T TOUCH THAT LINE AND ONE BELOW
+.gitattributes !filter !diff
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="step-2-add-files" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-add-files"&gt;
+#
+&lt;/a&gt;
+Step 2: Add files
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git commit -m &lt;span style="color:#5af78e"&gt;&amp;#34;Add git-crypt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="step-3-check-git-crypt-status" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-check-git-crypt-status"&gt;
+#
+&lt;/a&gt;
+Step 3: Check git-crypt status
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -e&lt;/code&gt; Show encrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -u&lt;/code&gt; Show unencrypted files only&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git-crypt status -f&lt;/code&gt; Fix problems with the repository&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="results" &gt;
+&lt;div&gt;
+&lt;a href="#results"&gt;
+#
+&lt;/a&gt;
+Results
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The beancount file is encrypted.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/git-crypt/image-1.png" alt="Alt text"&gt;&lt;/p&gt;
+&lt;h2 id="后续更新" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%90%8e%e7%bb%ad%e6%9b%b4%e6%96%b0"&gt;
+#
+&lt;/a&gt;
+后续更新
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="1-月-30-日更新" &gt;
+&lt;div&gt;
+&lt;a href="#1-%e6%9c%88-30-%e6%97%a5%e6%9b%b4%e6%96%b0"&gt;
+##
+&lt;/a&gt;
+1 月 30 日更新
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;我乱玩，把自己锁死了。&lt;/p&gt;
+&lt;p&gt;这个傻逼工具，是可以在你不 export symmetric key 的情况下，允许你 lock 仓库的。&lt;/p&gt;
+&lt;p&gt;然后我就在没有 export symmetric key 的情况下，把自己锁死了。&lt;/p&gt;
+&lt;p&gt;文件没有备份，因为我为了“安全”，只保留了加密后的 commit，历史的提交日志都删了。&lt;/p&gt;
+&lt;p&gt;😊 真是愉快的一天呢&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/git-crypt/</guid></item><item><title>树莓派编译 RTL8812AU / RTL8814AU 网卡驱动</title><link>https://www.junyi.dev/posts/raspberrypi-usb-wifi/</link><pubDate>Tue, 30 Mar 2021 15:49:16 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 本文仅用来记录 树莓派 4B 的各种成功的配置过程
 环境仅适用于 Raspbery Pi OS
 其他环境并未测试！</description><content:encoded>&lt;p&gt;本文仅用来记录 树莓派 4B 的各种成功的配置过程&lt;/p&gt;
@@ -350,4 +677,74 @@ Step 2. 验证安装效果
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;blkid
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ls -l /dev/disk/by-uuid/
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo mount -t ext4 -U 这里写你的UUID /mnt/seagate/storage
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded><category>Raspberry Pi</category><category>Linux</category><guid isPermaLink="true">https://www.junyi.dev/posts/raspberrypi-usb-wifi/</guid></item></channel></rss>
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded><category>Linux</category><guid isPermaLink="true">https://www.junyi.dev/posts/raspberrypi-usb-wifi/</guid></item><item><title>TVM AutoTVM 树莓派 4B 调优</title><link>https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</link><pubDate>Thu, 25 Feb 2021 17:52:38 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+细节请参阅官方文档，这里只作相关内容记录和踩坑记录而已。</description><content:encoded>&lt;p&gt;细节请参阅官方文档，这里只作相关内容记录和踩坑记录而已。&lt;/p&gt;
+&lt;h1 id="build-tvm-runtim-on-raspberry-pi-4b" &gt;
+&lt;div&gt;
+&lt;a href="#build-tvm-runtim-on-raspberry-pi-4b"&gt;
+##
+&lt;/a&gt;
+Build TVM Runtim on Raspberry Pi 4B
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;我们只用树莓派跑模型，所以只需要构建 Runtime&lt;/p&gt;
+&lt;p&gt;网络条件差的话记得更换 apt 的源&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone --recursive https://github.com/apache/tvm tvm
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; tvm
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mkdir build
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cp cmake/config.cmake build
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; build
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cmake ..
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;make runtime -j4
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果在 &lt;code&gt;cmake ..&lt;/code&gt; 的时候说找不到 cmake 那就&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install -y cmake
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果在 &lt;code&gt;cmake ..&lt;/code&gt; 的时候找不到 llvm 那就&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install -y llvm
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;我执行这条指令的时间是 2021 年 2 月 19 日，清华源 apt 给我装的是 llvm-7&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;编译好 runtime 之后，我们需要设置 &lt;code&gt;PYTHONPATH&lt;/code&gt; 环境变量（如果你用的是 bash，那你编辑 .bashrc，如果是 zsh，那你编辑 .zshrc）&lt;/p&gt;
+&lt;p&gt;(下面这条命令的 current working directory 为：&lt;code&gt;~&lt;/code&gt;，使用的是 &lt;code&gt;zsh&lt;/code&gt;)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;export PYTHONPATH=&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$PYTHONPATH&lt;/span&gt;&lt;span style="color:#5af78e"&gt;:~/tvm/python&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; ~/.zshrc
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;source&lt;/span&gt; ~/.zshrc
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id="config-rpc-server-on-raspberry-pi-4b" &gt;
+&lt;div&gt;
+&lt;a href="#config-rpc-server-on-raspberry-pi-4b"&gt;
+##
+&lt;/a&gt;
+Config RPC Server on Raspberry Pi 4B
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;由于 Raspberry OS 里，python 默认是 python2.7 ，所以我们这里强制使用 python3&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 -m tvm.exec.rpc_server --host 0.0.0.0 --port&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;9090&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;（Tips：共建和谐未来，建议所有项目都是用 python3， 抛弃 python2 人人有责）&lt;/p&gt;
+&lt;p&gt;如果你看到了这样的字眼，说明你成功在树莓派上启动了 RPC 服务器：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;INFO:RPCServer:bind to 0.0.0.0:9090
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id="prepare-pre-trained-model" &gt;
+&lt;div&gt;
+&lt;a href="#prepare-pre-trained-model"&gt;
+##
+&lt;/a&gt;
+Prepare Pre-trained model
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;查看 target (-mtriple 的值)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;➜ ~ gcc -dumpmachine
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;aarch64-linux-gnu
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 通过 gcc -dumpmachine 即可了解到 -mtriple 要写的值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 这条指令是在树莓派上运行的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;target&lt;/span&gt; &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; tvm.target.Target&lt;span style="color:#ff6ac1"&gt;(&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#39;llvm -device=arm_cpu -model=bcm2711 -mtriple=aarch64-linux-gnu -mattr=+neon&amp;#39;&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 这个代码是在训练机上运行的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;树莓派的 CPU 为 bcm2711，mtriple 是 aarch64-linux-gnu，mattr 一律写 +neon&lt;/p&gt;
+&lt;h1 id="踩坑记录注意事项" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%b8%a9%e5%9d%91%e8%ae%b0%e5%bd%95%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9"&gt;
+##
+&lt;/a&gt;
+踩坑记录（注意事项）
+&lt;/div&gt;
+&lt;/h1&gt;
+&lt;p&gt;RPC tracker - server 的模式，不能通过 frp 反代使用。&lt;/p&gt;
+&lt;p&gt;没有公网 IP 的话，必须 VPN 异地组网打洞才可以。&lt;/p&gt;
+&lt;p&gt;最终决定本地搭建一个 TVM 环境，用服务器进行 training，把模型下载到笔记本虚拟机，然后 tuning raspi&lt;/p&gt;</content:encoded><category>TVM</category><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</guid></item></channel></rss>

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Wed, 10 Jun 2026 15:26:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/ai-systems/index.xml" rel="self" type="application/rss+xml"/><item><title>Debunking introl and ainewshub: "TPU is 4x Cheaper than GPU" is an AI Hallucination</title><link>https://www.junyi.dev/en/posts/tpu-tco/</link><pubDate>Wed, 10 Jun 2026 15:26:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Disclaimer: this article is not arguing that TPU is worse than GPU. TPU and GPU each have their own fit, and which one wins depends on the specific workload. My point is that the batch of comparison data currently circulating online is itself inaccurate, much of it AI-fabricated and impossible to trace. What I&amp;amp;rsquo;m taking apart below is exactly that fake data.
+Artificial Analysis recently released a set of hardware benchmarks1. Using Llama 3.3 70B, vLLM, and a reference speed of 30 output tokens/s per query to compute the cost per million input/output tokens, NVIDIA has roughly a 5x per-dollar token advantage over TPU v6e (Trillium), and roughly a 2x advantage over AMD MI300X2.
+The hardware benchmark conclusion Artificial Analysis posted on X. NVIDIA has about a 5x per-dollar token advantage over TPU v6e and about 2x over MI300X. H100 is $1.06, MI300X is $2.24, TPU v6e is $5.13.
+Alongside this reproducible data, another kind of thing is also circulating online.
+# A High-Profile Comparison Article introl has an article titled Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar3. Its core argument is that TPU has 4x better performance per dollar than H100, and that TPU completely beats NVIDIA on inference economics. Its key data comes from another article, ainewshub.org&amp;amp;rsquo;s Nvidia vs Google TPU 2025 Cost Comparison4. Follow this citation chain down and you find that both are AI-generated, and the data is made up.</description><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;Disclaimer: this article is not arguing that TPU is worse than GPU. TPU and GPU each have their own fit, and which one wins depends on the specific workload. My point is that the batch of comparison data currently circulating online is itself inaccurate, much of it AI-fabricated and impossible to trace. What I&amp;rsquo;m taking apart below is exactly that fake data.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Artificial Analysis recently released a set of hardware benchmarks&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;. Using Llama 3.3 70B, vLLM, and a reference speed of 30 output tokens/s per query to compute the cost per million input/output tokens, NVIDIA has roughly a 5x per-dollar token advantage over TPU v6e (Trillium), and roughly a 2x advantage over AMD MI300X&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-twitter.png"
+alt="The hardware benchmark conclusion Artificial Analysis posted on X" width="430"&gt;&lt;figcaption&gt;
+&lt;p&gt;The hardware benchmark conclusion Artificial Analysis posted on X. NVIDIA has about a 5x per-dollar token advantage over TPU v6e and about 2x over MI300X. H100 is $1.06, MI300X is $2.24, TPU v6e is $5.13.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Alongside this reproducible data, another kind of thing is also circulating online.&lt;/p&gt;
+&lt;h2 id="a-high-profile-comparison-article" &gt;
+&lt;div&gt;
+&lt;a href="#a-high-profile-comparison-article"&gt;
+#
+&lt;/a&gt;
+A High-Profile Comparison Article
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;introl has an article titled Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;. Its core argument is that TPU has 4x better performance per dollar than H100, and that TPU completely beats NVIDIA on inference economics. Its key data comes from another article, ainewshub.org&amp;rsquo;s Nvidia vs Google TPU 2025 Cost Comparison&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;. Follow this citation chain down and you find that both are AI-generated, and the data is made up.&lt;/p&gt;
+&lt;h2 id="the-first-problem-the-core-citation-points-to-data-that-doesnt-exist" &gt;
+&lt;div&gt;
+&lt;a href="#the-first-problem-the-core-citation-points-to-data-that-doesnt-exist"&gt;
+#
+&lt;/a&gt;
+The First Problem: The Core Citation Points to Data That Doesn&amp;rsquo;t Exist
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The most central sentence in the ainewshub article reads like this.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/hallucination-1.png"
+alt="The core claim in the ainewshub article and the source it claims"&gt;&lt;figcaption&gt;
+&lt;p&gt;The core claim in the ainewshub article, 4.7x better performance per dollar, but the source it cites is &lt;strong&gt;a non-existent&lt;/strong&gt; MLPerf v4.1 LLM inference result.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&amp;ldquo;4.7× better performance-per-dollar on LLM inference than Nvidia H100/H200&amp;rdquo;, with the source listed as Google Cloud MLPerf Inference v4.1 results + customer case studies, October 2025.&lt;/p&gt;
+&lt;p&gt;But in fact, in MLPerf Inference v4.1, Google&amp;rsquo;s TPU submissions include only one model, stable-diffusion-xl. I went to MLCommons&amp;rsquo; official results&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt; and filtered by Google plus TPU. Under v4.1 Closed Datacenter there are only two records, tpu-v5e-4 and tpu-v6-4, and both ran stable-diffusion-xl.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/mlperf-for-tpu-1.png"
+alt="Filtering MLPerf v4.1 for Google TPU shows only stable-diffusion-xl"&gt;&lt;figcaption&gt;
+&lt;p&gt;Filtering MLPerf v4.1 Closed Datacenter for Google TPU shows only two entries, tpu-v5e-4 and tpu-v6-4, both running stable-diffusion-xl. There is no LLM inference entry at all.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;No LLM inference entry at all! The so-called MLPerf v4.1 LLM inference 4.7x performance per dollar cited by this article &lt;strong&gt;simply does not exist in the source it claims&lt;/strong&gt;. The number was generated out of thin air and then attached to an authoritative-looking source.&lt;/p&gt;
+&lt;p&gt;Second, &lt;strong&gt;MLPerf does not report performance per dollar at all&lt;/strong&gt;. It reports throughput, samples/s and queries/s, with no pricing in it. So that 4.7x &lt;strong&gt;could not possibly&lt;/strong&gt; have been computed from MLPerf.&lt;/p&gt;
+&lt;h2 id="the-second-problem-the-numbers-drift-between-reposts" &gt;
+&lt;div&gt;
+&lt;a href="#the-second-problem-the-numbers-drift-between-reposts"&gt;
+#
+&lt;/a&gt;
+The Second Problem: The Numbers Drift Between Reposts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Put introl&lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; and ainewshub&lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; side by side and the numbers don&amp;rsquo;t match (and there are false statements).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Performance per dollar multiple: introl writes 4x, ainewshub writes 4.7x. (This one is pure deception, see above.)&lt;/li&gt;
+&lt;li&gt;MLPerf version: introl cites v3.1, ainewshub cites v4.1. (No idea where introl got its data.)&lt;/li&gt;
+&lt;li&gt;Midjourney case: introl writes monthly spend dropped from $2 million to $700k, ainewshub writes from $2.1 million to $700k. (I didn&amp;rsquo;t carefully verify this one, but it&amp;rsquo;s most likely hallucinated too.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Reposted again and again, it changes a little each time it&amp;rsquo;s retold. Damn it, every time the model generates it, it makes up a slightly different number.&lt;/p&gt;
+&lt;h2 id="the-third-problem-a-frighteningly-precise-tco-table-with-no-source" &gt;
+&lt;div&gt;
+&lt;a href="#the-third-problem-a-frighteningly-precise-tco-table-with-no-source"&gt;
+#
+&lt;/a&gt;
+The Third Problem: A Frighteningly Precise TCO Table, With No Source
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;ainewshub&lt;sup id="fnref2:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; gives a three-year total cost of ownership table, for a 1000-chip cluster, with NVIDIA H100 total cost $177 million, Google TPU v6 total cost $78.5 million, saving $98.5 million. It even breaks it down to hardware down 48%, power down 66%, cooling down 67%, support down 63%, networking down 67%, real estate down 63%. (All made up.)&lt;/p&gt;
+&lt;p&gt;This kind of breakdown precise to the single percentage point looks very professional. The problem is that not one item can be traced to a source. The accompanying customer cases are the same. Midjourney, and a so-called Series C computer vision startup whose monthly spend dropped from $340k to $89k, are all unverifiable specific numbers.&lt;/p&gt;
+&lt;h2 id="the-most-infuriating-part-is-data-verified" &gt;
+&lt;div&gt;
+&lt;a href="#the-most-infuriating-part-is-data-verified"&gt;
+#
+&lt;/a&gt;
+The Most Infuriating Part is &amp;ldquo;data verified&amp;rdquo;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Following the ainewshub cost comparison article further upstream, its source points to another article on &lt;strong&gt;the same site&lt;/strong&gt;, AI Inference Costs: TPU vs GPU 2025&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt;. The same numbers are repeated here again, 4x value for money, Midjourney saving 65%, TPU v5e winning 8 out of 9 items. I have to stress again, this data is fake, it does not exist.&lt;/p&gt;
+&lt;p&gt;The statement at the end reads like this.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Data verified as of November 26, 2025. Sources include Google Cloud documentation, MLPerf benchmarks, company earnings reports, and verified industry migrations.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Verified, my ass.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It says it verified, yet it can&amp;rsquo;t provide a single clickable link, no specific report, no methodology. As checked above, the MLPerf TPU LLM inference results it relies on &lt;strong&gt;simply do not exist&lt;/strong&gt;. The so-called verified is all completely fake.&lt;/p&gt;
+&lt;p&gt;Different articles on the same site can&amp;rsquo;t even keep these fake numbers consistent. The person who wrote them doesn&amp;rsquo;t know where the numbers came from either, because they never existed in the first place.&lt;/p&gt;
+&lt;p&gt;A site that mass-produces hallucinated numbers and then stamps them all with data verified &amp;hellip; this garbage site does real damage.&lt;/p&gt;
+&lt;h2 id="the-data-ive-found-so-far-at-least-a-bit-more-credible-than-their-site" &gt;
+&lt;div&gt;
+&lt;a href="#the-data-ive-found-so-far-at-least-a-bit-more-credible-than-their-site"&gt;
+#
+&lt;/a&gt;
+The Data I&amp;rsquo;ve Found So Far (At Least a Bit More Credible Than Their Site)
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Artificial Analysis&amp;rsquo; System Load Test&lt;sup id="fnref1:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, running Llama 3.3 70B.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-throughput-test.png"
+alt="Artificial Analysis System Load Test results"&gt;&lt;figcaption&gt;
+&lt;p&gt;Artificial Analysis System Load Test, peak system throughput, per-query output speed, and on-demand rental price for Llama 3.3 70B.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Peak system throughput: B200 is 15.4k tokens/s, H200 is 8.47k, H100 is 7.28k, TPU v6e is 6.73k, MI300X is 3.67k. TPU v6e falls behind NVIDIA&amp;rsquo;s same generation. Per-query output speed, TPU v6e is 61.3 tokens/s, the slowest in this group.&lt;/p&gt;
+&lt;p&gt;Cost has to be discussed in two cases, and here TPU does have a favorable scenario too.&lt;/p&gt;
+&lt;figure&gt;&lt;img src="https://www.junyi.dev/posts/tpu-tco/artificial-analysis-costs.png"
+alt="Cost per million tokens for Llama 3.3 70B at peak throughput"&gt;&lt;figcaption&gt;
+&lt;p&gt;Cost per million tokens for Llama 3.3 70B at peak throughput. TPU v6e is $0.62, close to H100&amp;rsquo;s $0.67 to $0.69.&lt;/p&gt;
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Computing cost per million tokens at peak throughput, TPU v6e is $0.62, close to H100&amp;rsquo;s $0.67 to $0.69, and cheaper than MI300X&amp;rsquo;s $0.90 and B200 running vLLM at $1.63. &lt;strong&gt;If the workload is offline large-batch and can keep the chips fed, TPU&amp;rsquo;s economics work out.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;But online serving rarely runs at peak throughput. Once you require a usable interactive speed, for example the reference speed of 30 tokens/s per query, TPU v6e&amp;rsquo;s unit cost jumps to $5.13, while H100 is $1.06. This is where the roughly 5x gap Artificial Analysis mentions comes from.&lt;/p&gt;
+&lt;p&gt;Later we&amp;rsquo;ll run the benchmark ourselves to get first-hand data, and compare then.&lt;/p&gt;
+&lt;h2 id="how-to-spot-ai-generated-junk-articles" &gt;
+&lt;div&gt;
+&lt;a href="#how-to-spot-ai-generated-junk-articles"&gt;
+#
+&lt;/a&gt;
+How to Spot AI-Generated Junk Articles
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Just follow one principle: any data, any number, must have a clickable source and a reproducible method.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://artificialanalysis.ai/benchmarks/hardware" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis, hardware benchmarks&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://x.com/ArtificialAnlys/status/1993878037226557519" target="_blank" rel="noopener noreferrer"&gt;Artificial Analysis&amp;rsquo; original post on X&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://introl.com/blog/google-tpu-v6e-vs-gpu-4x-better-ai-performance-per-dollar-guide" target="_blank" rel="noopener noreferrer"&gt;introl, Google TPU v6e vs GPU: 4x Better AI Performance Per Dollar&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/nvidia-vs-google-tpu-2025-cost-comparison" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org, Nvidia vs Google TPU 2025 Cost Comparison&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref2:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://mlcommons.org/benchmarks/inference-datacenter/" target="_blank" rel="noopener noreferrer"&gt;MLCommons, MLPerf Inference Datacenter official results&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.ainewshub.org/post/ai-inference-costs-tpu-vs-gpu-2025" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org, AI Inference Costs: TPU vs GPU 2025&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TPU</category><category>Linux</category><category>AI Systems</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tpu-tco/</guid></item><item><title>Claude Code Asks to Re-login in tmux? It's Probably macOS Keychain</title><link>https://www.junyi.dev/en/posts/tmux-keychain/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+claude works fine in my terminal — Team Account, auth, everything. Open tmux, run claude, and it wants me to log in again. Took a bit of digging to figure out it&amp;amp;rsquo;s a macOS Security Session thing.</description><content:encoded>&lt;p&gt;&lt;code&gt;claude&lt;/code&gt; works fine in my terminal — Team Account, auth, everything. Open tmux, run &lt;code&gt;claude&lt;/code&gt;, and it wants me to log in again. Took a bit of digging to figure out it&amp;rsquo;s a macOS Security Session thing.&lt;/p&gt;
+&lt;h2 id="what-happens" &gt;
+&lt;div&gt;
+&lt;a href="#what-happens"&gt;
+#
+&lt;/a&gt;
+What happens
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;claude&lt;/code&gt; in Ghostty: works. &lt;code&gt;claude&lt;/code&gt; in tmux: asks to re-login.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;How I tracked it down (click to expand)&lt;/summary&gt;
+&lt;h3 id="environment-variables" &gt;
+&lt;div&gt;
+&lt;a href="#environment-variables"&gt;
+##
+&lt;/a&gt;
+Environment variables?
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;First thought: tmux has different env vars.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;env | grep -iE &lt;span style="color:#5af78e"&gt;&amp;#39;claude|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nothing on either side. Claude Code doesn&amp;rsquo;t store auth in env vars.&lt;/p&gt;
+&lt;h3 id="config-files" &gt;
+&lt;div&gt;
+&lt;a href="#config-files"&gt;
+##
+&lt;/a&gt;
+Config files?
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat ~/.claude/.credentials.json 2&amp;gt;/dev/null &lt;span style="color:#ff6ac1"&gt;||&lt;/span&gt; &lt;span style="color:#ff5c57"&gt;echo&lt;/span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;no credentials file&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nope. Not on disk either.&lt;/p&gt;
+&lt;h3 id="keychain" &gt;
+&lt;div&gt;
+&lt;a href="#keychain"&gt;
+##
+&lt;/a&gt;
+Keychain
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security dump-keychain 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | grep -i -A3 &lt;span style="color:#5af78e"&gt;&amp;#39;claude\|anthropic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Found it — stored in macOS Keychain as &lt;code&gt;Claude Code-credentials&lt;/code&gt;:&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;0x00000007 &amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+&amp;#34;acct&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;junyi&amp;#34;
+&amp;#34;svce&amp;#34;&amp;lt;blob&amp;gt;=&amp;#34;Claude Code-credentials&amp;#34;
+keychain: &amp;#34;/Users/junyi/Library/Keychains/login.keychain-db&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;junyi&amp;#34;&lt;/span&gt; -w
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Works in the terminal, errors in tmux. There it is.&lt;/p&gt;
+&lt;/details&gt;
+&lt;h2 id="why-this-happens" &gt;
+&lt;div&gt;
+&lt;a href="#why-this-happens"&gt;
+#
+&lt;/a&gt;
+Why this happens
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;macOS Keychain access is tied to a &lt;strong&gt;Security Session&lt;/strong&gt; (Bootstrap Namespace). When you open a terminal window, the process gets attached to your &lt;strong&gt;Aqua session&lt;/strong&gt;, which holds the Keychain unlock state.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tmux server&lt;/code&gt; is a long-running daemon — it starts on your first &lt;code&gt;tmux new&lt;/code&gt; and stays alive. When you &lt;code&gt;tmux attach&lt;/code&gt; later, shells forked inside tmux server inherit &lt;strong&gt;the server&amp;rsquo;s original session&lt;/strong&gt;, not your current Aqua session.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Normal terminal:
+Ghostty → fork shell → inherits Aqua session → ✅ Keychain works
+tmux:
+Ghostty → attach → tmux server (old process)
+→ fork shell → inherits old session
+→ ❌ Keychain blocked
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Same reason &lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; break inside tmux.&lt;/p&gt;
+&lt;h2 id="fix" &gt;
+&lt;div&gt;
+&lt;a href="#fix"&gt;
+#
+&lt;/a&gt;
+Fix
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Install &lt;code&gt;reattach-to-user-namespace&lt;/code&gt; to reconnect tmux processes to your Aqua session:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install reattach-to-user-namespace
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Add to &lt;code&gt;~/.tmux.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;set-option -g default-command &lt;span style="color:#5af78e"&gt;&amp;#34;reattach-to-user-namespace -l &lt;/span&gt;&lt;span style="color:#5af78e"&gt;${&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;SHELL&lt;/span&gt;&lt;span style="color:#5af78e"&gt;}&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then &lt;strong&gt;kill the entire tmux server&lt;/strong&gt; (kill-session won&amp;rsquo;t help — new windows still fork from the old server):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux kill-server
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmux new -s main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Verify:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security find-generic-password -s &lt;span style="color:#5af78e"&gt;&amp;#34;Claude Code-credentials&amp;#34;&lt;/span&gt; -a &lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;$USER&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;&lt;/span&gt; -w 2&amp;gt;&amp;amp;&lt;span style="color:#ff9f43"&gt;1&lt;/span&gt; | head -c &lt;span style="color:#ff9f43"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If it prints the token, you&amp;rsquo;re good.&lt;/p&gt;
+&lt;h2 id="while-youre-at-it" &gt;
+&lt;div&gt;
+&lt;a href="#while-youre-at-it"&gt;
+#
+&lt;/a&gt;
+While you&amp;rsquo;re at it
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;These tmux issues are probably the same root cause:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pbcopy&lt;/code&gt;/&lt;code&gt;pbpaste&lt;/code&gt; broken&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ssh-agent&lt;/code&gt; inaccessible&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;osascript&lt;/code&gt; failing&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;, &lt;code&gt;op&lt;/code&gt;, and other Keychain-dependent CLI tools not working&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;reattach-to-user-namespace&lt;/code&gt; fixes all of them.&lt;/p&gt;</content:encoded><category>Linux</category><category>tmux</category><category>AI Systems</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item><item><title>Agent Mesh: My Thoughts on Multi-AI Collaborative Workflows</title><link>https://www.junyi.dev/en/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: no single Agent is the best at everything.
+I mainly use Claude Code, Google Gemini CLI, and Moonshot Kimi Code day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach Agent Mesh.
+Here are my observations and thoughts.</description><content:encoded>&lt;p&gt;AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: &lt;strong&gt;no single Agent is the best at everything.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I mainly use &lt;strong&gt;Claude Code&lt;/strong&gt;, &lt;strong&gt;Google Gemini CLI&lt;/strong&gt;, and &lt;strong&gt;Moonshot Kimi Code&lt;/strong&gt; day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach &lt;strong&gt;Agent Mesh&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Here are my observations and thoughts.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="core-roles-my-observations-and-real-experience" &gt;
+&lt;div&gt;
+&lt;a href="#core-roles-my-observations-and-real-experience"&gt;
+#
+&lt;/a&gt;
+Core Roles: My Observations and Real Experience
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="claude-code-top-tier-architect-and-execution-engine" &gt;
+&lt;div&gt;
+&lt;a href="#claude-code-top-tier-architect-and-execution-engine"&gt;
+##
+&lt;/a&gt;
+Claude Code: Top-Tier Architect and Execution Engine
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;In daily use, Claude Code feels like a &amp;ldquo;senior engineer.&amp;rdquo; Whether spinning up a new project from scratch or tackling a complex refactor, its architectural vision is the best of the bunch. And it doesn&amp;rsquo;t just plan — it executes: traversing files, running bash, fixing its own compile errors, driving the whole loop autonomously. I&amp;rsquo;ve installed Claude Code on all my servers. It has massively boosted my productivity and freed up a lot of my energy. The weakness is hallucinations — especially when generating large blocks of documentation or referencing large systems it hasn&amp;rsquo;t fully digested, it will make things up.&lt;/p&gt;
+&lt;h3 id="gemini-cli-large-context-consumer-and-hallucination-checker" &gt;
+&lt;div&gt;
+&lt;a href="#gemini-cli-large-context-consumer-and-hallucination-checker"&gt;
+##
+&lt;/a&gt;
+Gemini CLI: Large-Context Consumer and &amp;ldquo;Hallucination Checker&amp;rdquo;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Gemini&amp;rsquo;s biggest advantage is that 2-million-token context window. In practice, it really can swallow an entire repository or very long error logs (I&amp;rsquo;ve tested with logs of several hundred KB). Because it can hold the entire macro context in its head, it&amp;rsquo;s a natural auditor. When Claude Code produces a brilliant but potentially hallucinated code plan, you can call on Gemini for large-scale cross-file verification.&lt;/p&gt;
+&lt;h3 id="kimi-code-deep-reasoner-and-data-miner--pending-evaluation" &gt;
+&lt;div&gt;
+&lt;a href="#kimi-code-deep-reasoner-and-data-miner--pending-evaluation"&gt;
+##
+&lt;/a&gt;
+Kimi Code: Deep Reasoner and Data Miner (❓ Pending Evaluation)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;Kimi Code takes a completely different path. Under the hood it runs K2.5&amp;rsquo;s &amp;ldquo;long thinking&amp;rdquo; model (k0), using explicit chain-of-thought (similar to OpenAI o1&amp;rsquo;s approach), plus an &amp;ldquo;Agentic Swarm&amp;rdquo; pattern that can theoretically spin up a swarm of sub-Agents for multi-hop document retrieval or grinding through deeply nested algorithmic problems. I do have a question mark here though: I use Claude and Gemini every day, so I have a solid feel for their capability boundaries, but how much better Kimi actually is at &amp;ldquo;data mining&amp;rdquo; and &amp;ldquo;deep reasoning&amp;rdquo; compared to the other two — honestly, I&amp;rsquo;m mostly going by its architectural claims and haven&amp;rsquo;t done rigorous head-to-head evaluations yet. So for now, its niche here is only a theoretical one.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="what-my-ideal-agent-mesh-looks-like" &gt;
+&lt;div&gt;
+&lt;a href="#what-my-ideal-agent-mesh-looks-like"&gt;
+#
+&lt;/a&gt;
+What My Ideal Agent Mesh Looks Like
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/agent-mesh/diagram.svg" alt="Agent Mesh Workflow Diagram"&gt;&lt;/p&gt;
+&lt;p&gt;Once you understand each Agent&amp;rsquo;s strengths and weaknesses, the natural next question is: can you have them collaborate, chaining tasks via prompts? That&amp;rsquo;s what I mean by Agent Mesh.&lt;/p&gt;
+&lt;p&gt;Most of the time, Claude Code is the workhorse — it writes the vast majority of the code. But when it hits a context ceiling, say I need to refactor a module but don&amp;rsquo;t know which parts of a 500K-line legacy codebase will be affected, I hand it off to Gemini — let it read the entire repo and report back the blast radius.&lt;/p&gt;
+&lt;p&gt;Conversely, after Claude executes a refactoring plan, I&amp;rsquo;ll have Gemini cross-reference it against the actual project files to catch hallucinations or broken dependencies. If Gemini encounters a particularly tough algorithmic problem during auditing, it can pass it to Kimi Code for extended reasoning.&lt;/p&gt;
+&lt;p&gt;After Kimi finishes thinking, it doesn&amp;rsquo;t touch files directly — it passes conclusions back to Claude Code for implementation. The whole flow is a loop: each does what it&amp;rsquo;s best at, and results flow between them.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="the-hidden-factor-agent-architecture-vs-base-model" &gt;
+&lt;div&gt;
+&lt;a href="#the-hidden-factor-agent-architecture-vs-base-model"&gt;
+#
+&lt;/a&gt;
+The Hidden Factor: Agent Architecture vs. Base Model
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;When trying to combine these Agents, I discovered a point that&amp;rsquo;s easy to overlook: &lt;strong&gt;the underlying base model is only half the equation — the &amp;ldquo;Agent architecture built around it&amp;rdquo; determines its actual capabilities.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The best example is Anthropic&amp;rsquo;s Claude 3.5 Sonnet. You can use this same base model in multiple environments:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;As a standard chat assistant in &lt;strong&gt;VS Code&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;As the driving engine inside &lt;strong&gt;Cursor IDE&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Through open-source Agent frameworks like &lt;strong&gt;OpenHands / Open Code&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Natively via the &lt;strong&gt;Claude Code CLI&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Despite sharing the exact same LLM DNA (Claude 3.5 Sonnet), their real-world capabilities differ dramatically. In demanding engineering workflows, native &lt;strong&gt;Claude Code&lt;/strong&gt; consistently outperforms the others in Agent execution. Why? Because the Agent architecture has been uniquely optimized by the model&amp;rsquo;s creators (including but not limited to: hidden loop mechanisms, error recovery strategies, and specific context engineering).&lt;/p&gt;
+&lt;p&gt;Even using excellent open-source alternatives like Open Code with the Claude model, the execution fluidity and architectural vision often falls short of Claude Code. This tells us that when choosing Agents for a Mesh, we&amp;rsquo;re not just picking a base model (like Sonnet or GPT-4o) — we&amp;rsquo;re picking the engineering scaffolding built around it.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="similar-explorations-in-the-community" &gt;
+&lt;div&gt;
+&lt;a href="#similar-explorations-in-the-community"&gt;
+#
+&lt;/a&gt;
+Similar Explorations in the Community
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;After writing this up, I found that others in the community are working on similar ideas. &lt;strong&gt;&lt;a href="https://github.com/humania-org/humanize" target="_blank" rel="noopener noreferrer"&gt;Humanize&lt;/a&gt;&lt;/strong&gt; is a Claude Code plugin that implements a workflow called &lt;strong&gt;RLCR&lt;/strong&gt; (Ralph-Loop with Codex Review): Claude writes the code, Codex independently reviews it, and if issues are found, it gets kicked back for rework, looping until everything passes. The core idea is the same as Agent Mesh: let architecturally different AIs each do what they&amp;rsquo;re best at, iterating through a work-feedback loop instead of expecting one model to nail everything in a single shot.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="final-thoughts" &gt;
+&lt;div&gt;
+&lt;a href="#final-thoughts"&gt;
+#
+&lt;/a&gt;
+Final Thoughts
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;I don&amp;rsquo;t think a single &amp;ldquo;do-it-all&amp;rdquo; model will emerge to handle everything. What&amp;rsquo;s truly interesting is &lt;strong&gt;orchestration&lt;/strong&gt; — having Agents with &lt;strong&gt;fundamentally different underlying architectures&lt;/strong&gt; each play to their strengths.&lt;/p&gt;
+&lt;p&gt;One view I&amp;rsquo;ve consistently held: when we say &amp;ldquo;different&amp;rdquo; agents, we do &lt;strong&gt;not&lt;/strong&gt; mean taking the same underlying model and wrapping it with different system prompts (e.g., role-playing &amp;ldquo;you are an architect&amp;rdquo; vs. &amp;ldquo;you are a tester&amp;rdquo;). True collaborative sparks only happen when agents have &lt;strong&gt;fundamental differences in how they process information at the architectural level&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;But how do you know whether two models are truly different, or just fine-tuned versions of the same base? This is where tools like &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt; (a research framework for analyzing evolutionary relationships and functional differences between language models, published in &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt;) become invaluable. By analyzing the &amp;ldquo;genetic&amp;rdquo; lineage and functional distance between models, we can deliberately select Agents from entirely different evolutionary branches, ensuring they don&amp;rsquo;t share the same blind spots.&lt;/p&gt;
+&lt;p&gt;My hands-on engineering experience tells me: &lt;strong&gt;the Claude Code + Gemini CLI synergy is currently the most powerful and intuitive combination.&lt;/strong&gt; Gemini CLI leverages its long context to swallow entire repos and stacks of logs, specializing in catching hallucinations and macro-level auditing. Claude Code focuses on what it does best — understanding code architecture and executing precisely in the local environment.&lt;/p&gt;
+&lt;p&gt;When you deliberately combine Agents with fundamentally different architectures, they stop overlapping and start complementing each other. That&amp;rsquo;s the Agent Mesh idea I wanted to share — hope it inspires some of you.&lt;/p&gt;</content:encoded><category>AI Systems</category><category>LLM Inference</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/agent-mesh/</guid></item></channel></rss>

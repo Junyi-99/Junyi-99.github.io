@@ -142,7 +142,7 @@ How to Spot AI-Generated Junk Articles
 &lt;p&gt;&lt;a href="https://www.ainewshub.org/post/ai-inference-costs-tpu-vs-gpu-2025" target="_blank" rel="noopener noreferrer"&gt;ainewshub.org, AI Inference Costs: TPU vs GPU 2025&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</content:encoded><category>TPU</category><category>GPU</category><category>AI</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tpu-tco/</guid></item><item><title>Agent Mesh: My Thoughts on Multi-AI Collaborative Workflows</title><link>https://www.junyi.dev/en/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;/div&gt;</content:encoded><category>TPU</category><category>Linux</category><category>AI Systems</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tpu-tco/</guid></item><item><title>Agent Mesh: My Thoughts on Multi-AI Collaborative Workflows</title><link>https://www.junyi.dev/en/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: no single Agent is the best at everything.
 I mainly use Claude Code, Google Gemini CLI, and Moonshot Kimi Code day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach Agent Mesh.
 Here are my observations and thoughts.</description><content:encoded>&lt;p&gt;AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: &lt;strong&gt;no single Agent is the best at everything.&lt;/strong&gt;&lt;/p&gt;
@@ -240,7 +240,7 @@ Final Thoughts
 &lt;p&gt;One view I&amp;rsquo;ve consistently held: when we say &amp;ldquo;different&amp;rdquo; agents, we do &lt;strong&gt;not&lt;/strong&gt; mean taking the same underlying model and wrapping it with different system prompts (e.g., role-playing &amp;ldquo;you are an architect&amp;rdquo; vs. &amp;ldquo;you are a tester&amp;rdquo;). True collaborative sparks only happen when agents have &lt;strong&gt;fundamental differences in how they process information at the architectural level&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;But how do you know whether two models are truly different, or just fine-tuned versions of the same base? This is where tools like &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt; (a research framework for analyzing evolutionary relationships and functional differences between language models, published in &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt;) become invaluable. By analyzing the &amp;ldquo;genetic&amp;rdquo; lineage and functional distance between models, we can deliberately select Agents from entirely different evolutionary branches, ensuring they don&amp;rsquo;t share the same blind spots.&lt;/p&gt;
 &lt;p&gt;My hands-on engineering experience tells me: &lt;strong&gt;the Claude Code + Gemini CLI synergy is currently the most powerful and intuitive combination.&lt;/strong&gt; Gemini CLI leverages its long context to swallow entire repos and stacks of logs, specializing in catching hallucinations and macro-level auditing. Claude Code focuses on what it does best — understanding code architecture and executing precisely in the local environment.&lt;/p&gt;
-&lt;p&gt;When you deliberately combine Agents with fundamentally different architectures, they stop overlapping and start complementing each other. That&amp;rsquo;s the Agent Mesh idea I wanted to share — hope it inspires some of you.&lt;/p&gt;</content:encoded><category>AI</category><category>Agent</category><category>Claude Code</category><category>Gemini</category><category>LLM</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/agent-mesh/</guid></item><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;When you deliberately combine Agents with fundamentally different architectures, they stop overlapping and start complementing each other. That&amp;rsquo;s the Agent Mesh idea I wanted to share — hope it inspires some of you.&lt;/p&gt;</content:encoded><category>AI Systems</category><category>LLM Inference</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/agent-mesh/</guid></item><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.
 This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;amp;rsquo;s what I ran into so others can avoid the same traps.</description><content:encoded>&lt;p&gt;In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.&lt;/p&gt;
 &lt;p&gt;This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;rsquo;s what I ran into so others can avoid the same traps.&lt;/p&gt;
@@ -401,7 +401,7 @@ Debugging Methodology
 Final Thoughts
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;nerdctl compose has matured as a Docker Compose alternative, but gaps remain in edge-case compatibility. The missing &lt;code&gt;network_mode: service:&lt;/code&gt; support and different container naming conventions are easy migration traps. For Tailscale in containers with exit node routing, &lt;code&gt;SYS_MODULE&lt;/code&gt; and &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; are two easily overlooked but essential configurations. Hope this write-up helps anyone hitting the same issues.&lt;/p&gt;</content:encoded><category>nerdctl</category><category>Tailscale</category><category>containerd</category><category>exit-node</category><category>sidecar</category><category>Docker Compose</category><category>WireGuard</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>From Raspberry Pi to NUC: An Upgrade of My Toy</title><link>https://www.junyi.dev/en/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;nerdctl compose has matured as a Docker Compose alternative, but gaps remain in edge-case compatibility. The missing &lt;code&gt;network_mode: service:&lt;/code&gt; support and different container naming conventions are easy migration traps. For Tailscale in containers with exit node routing, &lt;code&gt;SYS_MODULE&lt;/code&gt; and &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; are two easily overlooked but essential configurations. Hope this write-up helps anyone hitting the same issues.&lt;/p&gt;</content:encoded><category>Containers</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>From Raspberry Pi to NUC: An Upgrade of My Toy</title><link>https://www.junyi.dev/en/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.</description><content:encoded>&lt;p&gt;My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.&lt;/p&gt;
 &lt;h2 id="raspberry-pi-pros-and-cons" &gt;
 &lt;div&gt;
@@ -437,7 +437,184 @@ Unboxing the NUC and the Performance Leap
 Closing Thoughts
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Whenever I see the Pi’s LEDs blinking in rhythm, I remember the excitement of first unboxing it. The joy of tinkering was never about chasing the newest and the fastest, but about watching these devices find the right place at each stage — like tools slowly collecting stories of their own.&lt;/p&gt;</content:encoded><category>Linux</category><category>Raspberry Pi</category><category>Intel NUC</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;Whenever I see the Pi’s LEDs blinking in rhythm, I remember the excitement of first unboxing it. The joy of tinkering was never about chasing the newest and the fastest, but about watching these devices find the right place at each stage — like tools slowly collecting stories of their own.&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 Keycap Replacement Guide</title><link>https://www.junyi.dev/en/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded Shift and Space keys in the photo — they look terrible.)
+While some say you can go to an Apple Store to get them replaced1, it&amp;amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose entire keyboard is shiny, DIY replacement is clearly the more practical option.
+I&amp;amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online2 only show how to remove regular letter and number keys — they deliberately skip over the longer keys like Space, Caps Lock, ESC, and the arrow keys. These keys have different internal structures and require a different disassembly approach.</description><content:encoded>&lt;p&gt;As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded &lt;kbd&gt;Shift&lt;/kbd&gt; and &lt;kbd&gt;Space&lt;/kbd&gt; keys in the photo — they look terrible.)&lt;/p&gt;
+&lt;p&gt;While some say you can go to an Apple Store to get them replaced&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, it&amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose &lt;strong&gt;entire keyboard is shiny&lt;/strong&gt;, DIY replacement is clearly the more practical option.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; only show how to remove regular letter and number keys — they &lt;strong&gt;deliberately skip over&lt;/strong&gt; the longer keys like &lt;kbd&gt;Space&lt;/kbd&gt;, &lt;kbd&gt;Caps Lock&lt;/kbd&gt;, &lt;kbd&gt;ESC&lt;/kbd&gt;, and the arrow keys. These keys have different internal structures and require a different disassembly approach.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
+&lt;figcaption&gt;
+Keyboard before (top) and after (bottom) the keycap replacement
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;I bought a full set of replacement keycaps from Taobao for 85 RMB ($11.81 USD) and decided to do it myself:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/taobao.jpeg" style="border-radius:0.5rem; width: 256px"&gt;
+&lt;figcaption&gt;
+The full set of keycaps purchased from Taobao
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h2 id="removing-the-old-keycaps" &gt;
+&lt;div&gt;
+&lt;a href="#removing-the-old-keycaps"&gt;
+#
+&lt;/a&gt;
+Removing the Old Keycaps
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The MacBook Pro uses a scissor-switch keyboard mechanism, so we need to follow the correct disassembly procedure for scissor-switch keys.&lt;/p&gt;
+&lt;h3 id="regular-key-disassembly" &gt;
+&lt;div&gt;
+&lt;a href="#regular-key-disassembly"&gt;
+##
+&lt;/a&gt;
+Regular Key Disassembly
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Steps:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Locate the latches&lt;/strong&gt;: Each regular keycap has four clips, one at each corner.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Start at the bottom right&lt;/strong&gt;: Gently lift the bottom-right corner with a spudger. A soft “pop” sound means the latch has been released.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Then the bottom left&lt;/strong&gt;: Do the same for the bottom-left corner.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lift the keycap&lt;/strong&gt;: Once the bottom two clips are released, gently lift the entire keycap upward.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fully remove&lt;/strong&gt;: The top clips will naturally detach.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⚠️ Avoid applying excessive force — the scissor-switch mechanism is fragile.&lt;/li&gt;
+&lt;li&gt;⚠️ Never pull straight up — it may break the clips.&lt;/li&gt;
+&lt;li&gt;💡 Use a plastic spudger instead of metal tools to prevent scratches.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can refer to this video&lt;sup id="fnref1:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; — it clearly demonstrates how to remove regular keys.&lt;/p&gt;
+&lt;p&gt;To reinstall the keycap, reverse the removal steps: slide the keycap into the top clips first, then press down until it snaps into place.&lt;/p&gt;
+&lt;p&gt;⚠️ Be careful not to press too hard — the plastic components are delicate.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="long-key-disassembly-eg-shift-caps-lock-esc" &gt;
+&lt;div&gt;
+&lt;a href="#long-key-disassembly-eg-shift-caps-lock-esc"&gt;
+##
+&lt;/a&gt;
+Long Key Disassembly (e.g. Shift, Caps Lock, ESC)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;These larger keys usually contain one or two stabilizer wires (metal bars), making the structure more complex.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Removal Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Start from the bottom-right corner, then move to the bottom-left.&lt;/li&gt;
+&lt;li&gt;Do not use excessive force — &lt;strong&gt;avoid bending the metal stabilizer sockets&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Removed Caps Lock key (pointed to by tweezers) and the longer Shift key
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;Installation Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;For a single stabilizer wire&lt;/strong&gt;:&lt;br&gt;
+Attach the metal bar to the keycap first, slide it into the slot on the keyboard, then press down to install as usual.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;For two stabilizer wires&lt;/strong&gt;:&lt;br&gt;
+Mount the &lt;strong&gt;top stabilizer wire to the keycap&lt;/strong&gt;, and &lt;strong&gt;clip the bottom stabilizer wire into the keyboard&lt;/strong&gt;.&lt;br&gt;
+First align the keycap with the top clips and press gently, then push the bottom part into place.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/longkey.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Keycap with a single stabilizer wire: first secure the wire, then press the keycap into place
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h3 id="short-key-disassembly-arrow-keys" &gt;
+&lt;div&gt;
+&lt;a href="#short-key-disassembly-arrow-keys"&gt;
+##
+&lt;/a&gt;
+Short Key Disassembly (Arrow Keys)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Up Arrow&lt;/strong&gt;: First release the left-side clip, then &lt;strong&gt;slide the key to the right&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Left/Down/Right Arrows&lt;/strong&gt;: First release the right-side clip, then &lt;strong&gt;slide the key to the left&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(Before attempting this, refer to the structural images below.)&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkeys.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_side.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/arrowkey_top.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+Arrow key structure diagram
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h2 id="summary" &gt;
+&lt;div&gt;
+&lt;a href="#summary"&gt;
+#
+&lt;/a&gt;
+Summary
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Be sure to check &lt;strong&gt;all removed keycaps&lt;/strong&gt; before finishing — I realized I had left two stabilizer wires behind only when I was nearly done.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/final.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;figcaption&gt;
+All the old keycaps after removal
+&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h3 id="troubleshooting" &gt;
+&lt;div&gt;
+&lt;a href="#troubleshooting"&gt;
+##
+&lt;/a&gt;
+Troubleshooting
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Key doesn’t feel right after reinstallation?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check if the stabilizer wire is properly clipped in.&lt;/li&gt;
+&lt;li&gt;Ensure the scissor switch isn’t bent or broken.&lt;/li&gt;
+&lt;li&gt;Remove the keycap and reinstall in the correct order.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Keycap easily falls off?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Make sure all four clips are secured.&lt;/li&gt;
+&lt;li&gt;Verify the stabilizer is installed in the correct direction.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Key feels stuck or unresponsive?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check for dust or debris underneath the cap.&lt;/li&gt;
+&lt;li&gt;Ensure the scissor switch is properly aligned.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="pro-tips" &gt;
+&lt;div&gt;
+&lt;a href="#pro-tips"&gt;
+##
+&lt;/a&gt;
+Pro Tips
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;re unsure about your dexterity or notice any broken clips or switch parts, it&amp;rsquo;s best to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Contact Apple’s official repair service;&lt;/li&gt;
+&lt;li&gt;Find a trustworthy third-party repair shop;&lt;/li&gt;
+&lt;li&gt;Watch more tutorial videos and practice before diving in.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://discussionschinese.apple.com/thread/252109035?sortBy=rank" target="_blank" rel="noopener noreferrer"&gt;What to do when MacBook Pro keycaps get shiny — can Apple Stores replace them for free?&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.bilibili.com/video/BV1UR4y1E7be/" target="_blank" rel="noopener noreferrer"&gt;Bilibili: MacBook Scissor Key Keyboard Disassembly (Keycaps + Scissor Switch)&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TechShare</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/replace-keyboard/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 git-crypt enables transparent encryption and decryption of files in a git repository.
 Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
 &lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;
@@ -521,4 +698,4 @@ Update on January 30, FUCK
 &lt;p&gt;And then, I locked myself out without exporting the symmetric key.&lt;/p&gt;
 &lt;p&gt;Because for &amp;ldquo;security&amp;rdquo;, I only kept the encrypted commits and deleted all previous commit logs.&lt;/p&gt;
 &lt;p&gt;So I fucked up.&lt;/p&gt;
-&lt;p&gt;😊 What a “pleasant day” it has been.&lt;/p&gt;</content:encoded><category>git-crypt</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/git-crypt/</guid></item></channel></rss>
+&lt;p&gt;😊 What a “pleasant day” it has been.&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/git-crypt/</guid></item></channel></rss>

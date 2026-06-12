@@ -45,4 +45,4 @@
 &lt;p&gt;&lt;strong&gt;VFL 数据不够的情况下，我们怎么广泛评估算法好坏呢？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;大部分研究者手动切分数据集，要么随机切，要么平均切，要么看心情切。&lt;/p&gt;
 &lt;p&gt;比如数据集有 16 个 feature，我分成 2 个 party，partyA 有 9 个 feature，partyB 有 7 个 feature。&lt;/p&gt;
-&lt;p&gt;直到 &lt;a href="https://vertibench.xtra.science/" target="_blank" rel="noopener noreferrer"&gt;VertiBench (ICLR2024)&lt;/a&gt; 这篇工作，我们才有一个切分数据集的&lt;strong&gt;指导纲领&lt;/strong&gt;（两个指标）。&lt;/p&gt;</content:encoded><category>VFL</category><category>FL</category><category>Research</category><guid isPermaLink="true">https://www.junyi.dev/posts/vfl-1/</guid></item></channel></rss>
+&lt;p&gt;直到 &lt;a href="https://vertibench.xtra.science/" target="_blank" rel="noopener noreferrer"&gt;VertiBench (ICLR2024)&lt;/a&gt; 这篇工作，我们才有一个切分数据集的&lt;strong&gt;指导纲领&lt;/strong&gt;（两个指标）。&lt;/p&gt;</content:encoded><category>Distributed Systems</category><category>Research</category><guid isPermaLink="true">https://www.junyi.dev/posts/vfl-1/</guid></item></channel></rss>

@@ -13,7 +13,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 运行一个容器，将容器内 22 端口映射到本地 2222，容器设置为交互模式，开启伪输入终端，容器 image 叫做 dockerjunyi/tvm_cpu:0.7.0-x86_64，同时执行容器内的 /bin/bash&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker run -p 2222:22 -it dockerjunyi/tvm_cpu:0.7.0-x86_64 /bin/bash
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当然，运行起来容器之后，如果不想使用 docker 的交互模式，你也可以通过映射出的 ssh 端口来访问&lt;/p&gt;</content:encoded><category>TVM</category><category>Docker</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-docker/</guid></item><item><title>TVM AutoTVM 多 GPU 加速 Tuning</title><link>https://www.junyi.dev/posts/tvm-autotvm-tuning/</link><pubDate>Sat, 27 Feb 2021 23:32:44 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当然，运行起来容器之后，如果不想使用 docker 的交互模式，你也可以通过映射出的 ssh 端口来访问&lt;/p&gt;</content:encoded><category>TVM</category><category>Containers</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-docker/</guid></item><item><title>TVM AutoTVM 多 GPU 加速 Tuning</title><link>https://www.junyi.dev/posts/tvm-autotvm-tuning/</link><pubDate>Sat, 27 Feb 2021 23:32:44 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 场景 双 NVIDIA 1080Ti, Linux 服务器
 需求 AutoTVM 的 Tuning 可以让两张 CUDA 显卡同时运行模型 （AMD 的没试过）</description><content:encoded>&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;
 双 NVIDIA 1080Ti, Linux 服务器&lt;/p&gt;
@@ -80,7 +80,7 @@ Extract tasks 之后，你应该可以通过 &lt;code&gt;nvidia-smi&lt;/code&gt;
 2023年8月23日 补充
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;看到自己之前写的文章，感觉好幼稚啊哈哈哈哈&lt;/p&gt;</content:encoded><category>TVM</category><category>AutoTVM</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-autotvm-tuning/</guid></item><item><title>TVM AutoTVM 树莓派 4B 调优</title><link>https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</link><pubDate>Thu, 25 Feb 2021 17:52:38 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;看到自己之前写的文章，感觉好幼稚啊哈哈哈哈&lt;/p&gt;</content:encoded><category>TVM</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-autotvm-tuning/</guid></item><item><title>TVM AutoTVM 树莓派 4B 调优</title><link>https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</link><pubDate>Thu, 25 Feb 2021 17:52:38 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 细节请参阅官方文档，这里只作相关内容记录和踩坑记录而已。</description><content:encoded>&lt;p&gt;细节请参阅官方文档，这里只作相关内容记录和踩坑记录而已。&lt;/p&gt;
 &lt;h1 id="build-tvm-runtim-on-raspberry-pi-4b" &gt;
 &lt;div&gt;
@@ -150,7 +150,7 @@ Prepare Pre-trained model
 &lt;/h1&gt;
 &lt;p&gt;RPC tracker - server 的模式，不能通过 frp 反代使用。&lt;/p&gt;
 &lt;p&gt;没有公网 IP 的话，必须 VPN 异地组网打洞才可以。&lt;/p&gt;
-&lt;p&gt;最终决定本地搭建一个 TVM 环境，用服务器进行 training，把模型下载到笔记本虚拟机，然后 tuning raspi&lt;/p&gt;</content:encoded><category>TVM</category><category>AutoTVM</category><category>Raspberry Pi</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</guid></item><item><title>TVM 在 macOS 上的编译</title><link>https://www.junyi.dev/posts/tvm-compile-on-macos/</link><pubDate>Sun, 27 Dec 2020 15:02:48 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;最终决定本地搭建一个 TVM 环境，用服务器进行 training，把模型下载到笔记本虚拟机，然后 tuning raspi&lt;/p&gt;</content:encoded><category>TVM</category><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-autotvm-raspberrypy/</guid></item><item><title>TVM 在 macOS 上的编译</title><link>https://www.junyi.dev/posts/tvm-compile-on-macos/</link><pubDate>Sun, 27 Dec 2020 15:02:48 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 在 macOS 上编译 TVM 库是怎么回事呢？macOS 相信大家都很熟悉，但是在 macOS 上编译 TVM 库是怎么回事呢，下面就让小编带大家一起了解吧。</description><content:encoded>&lt;p&gt;在 macOS 上编译 TVM 库是怎么回事呢？macOS 相信大家都很熟悉，但是在 macOS 上编译 TVM 库是怎么回事呢，下面就让小编带大家一起了解吧。&lt;/p&gt;
 &lt;p&gt;在 macOS 上编译 TVM 库，其实大家放弃就可以了，大家可能会很惊讶在 macOS 上怎么会放弃编译 TVM 库呢？但事实就是这样，小编也感到非常惊讶。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;前排提示：放弃吧！别想着在 macOS 上部署 TVM 了！老老实实在 Linux 上搞吧！&lt;/strong&gt;&lt;/p&gt;

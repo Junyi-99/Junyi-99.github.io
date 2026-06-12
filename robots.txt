@@ -1,5 +1,7 @@
 User-agent: *
 # robotstxt.org - if environment is not `production` then robots will be disallowed.
 
-  Disallow:
+Disallow:
+
+Sitemap: https://www.junyi.dev/sitemap.xml
 

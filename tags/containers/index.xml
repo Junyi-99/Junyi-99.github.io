@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Fri, 06 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/containers/index.xml" rel="self" type="application/rss+xml"/><item><title>用 nerdctl + Tailscale Sidecar 让容器流量走 Exit Node：踩坑全记录</title><link>https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+在容器化部署中，有时候我们需要让容器的所有出站流量通过特定的网络出口。Tailscale 的 sidecar 模式可以做到这一点：用一个 Tailscale 容器作为 sidecar，其他容器共享它的网络命名空间，流量通过 WireGuard 隧道经由远端 exit node 出去。
+这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。</description><content:encoded>&lt;p&gt;在容器化部署中，有时候我们需要让容器的所有出站流量通过特定的网络出口。Tailscale 的 sidecar 模式可以做到这一点：用一个 Tailscale 容器作为 sidecar，其他容器共享它的网络命名空间，流量通过 WireGuard 隧道经由远端 exit node 出去。&lt;/p&gt;
+&lt;p&gt;这个方案在 Docker Compose 下很成熟，但迁移到 nerdctl（containerd）时，我踩了一连串的坑。记录下来，希望能帮后来人少走弯路。&lt;/p&gt;
+&lt;h2 id="最终目标" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%bb%88%e7%9b%ae%e6%a0%87"&gt;
+#
+&lt;/a&gt;
+最终目标
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;让任意容器通过 Tailscale sidecar 接入 tailnet，所有出站流量经由远程 exit node 转发。架构如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/architecture.svg" alt="nerdctl &amp;#43; Tailscale Sidecar 架构图"&gt;&lt;/p&gt;
+&lt;p&gt;为了方便验证网络是否通畅，我用 &lt;code&gt;nicolaka/netshoot&lt;/code&gt; 作为测试容器——它自带 curl、dig、tcpdump、iperf 等一整套网络排查工具，比临时装工具方便得多。&lt;/p&gt;
+&lt;h2 id="坑-1nerdctl-compose-不支持-network_mode-servicexxx" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-1nerdctl-compose-%e4%b8%8d%e6%94%af%e6%8c%81-network_mode-servicexxx"&gt;
+#
+&lt;/a&gt;
+坑 1：nerdctl compose 不支持 &lt;code&gt;network_mode: service:xxx&lt;/code&gt;
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Docker Compose 支持 &lt;code&gt;network_mode: service:&amp;lt;service_name&amp;gt;&lt;/code&gt; 语法，它会自动把 service 名解析为对应容器的网络命名空间。但 nerdctl compose 没有实现这个翻译层，直接报错：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;unsupported network_mode: service:tailscale-sidecar
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 改用 &lt;code&gt;network_mode: container:&amp;lt;container_name&amp;gt;&lt;/code&gt;，并通过 &lt;code&gt;container_name&lt;/code&gt; 字段固定 sidecar 容器的名称。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar &lt;span style="color:#78787e"&gt;# 固定名称&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#78787e"&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar &lt;span style="color:#78787e"&gt;# 用容器名而非服务名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果不固定 &lt;code&gt;container_name&lt;/code&gt;，nerdctl compose 会自动生成类似 &lt;code&gt;blockchain-tailscale-sidecar-1&lt;/code&gt; 的名称，导致引用不匹配。&lt;/p&gt;
+&lt;h2 id="坑-2tailscale-acl-中未定义-tag" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-2tailscale-acl-%e4%b8%ad%e6%9c%aa%e5%ae%9a%e4%b9%89-tag"&gt;
+#
+&lt;/a&gt;
+坑 2：Tailscale ACL 中未定义 tag
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;启动后 Tailscale 容器立即退出，日志显示：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Received error: requested tags [tag:container] are invalid or not permitted
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 在 Tailscale 管理后台的 ACL 策略中添加 tag 定义，并在生成 auth key 时勾选对应 tag：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;tagOwners&amp;#34;&lt;/span&gt;&lt;span style="color:#ff5c57"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;&amp;#34;tag:container&amp;#34;&lt;/span&gt;: [&lt;span style="color:#5af78e"&gt;&amp;#34;autogroup:admin&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="坑-3缺少-sys_module-capability" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-3%e7%bc%ba%e5%b0%91-sys_module-capability"&gt;
+#
+&lt;/a&gt;
+坑 3：缺少 &lt;code&gt;SYS_MODULE&lt;/code&gt; capability
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这个坑最隐蔽。容器能正常加入 tailnet，&lt;code&gt;tailscale ping&lt;/code&gt; 也通，但开启 exit node 后 TCP 流量完全不通，只有 ICMP 能过。&lt;/p&gt;
+&lt;p&gt;原因是内核模式（&lt;code&gt;TS_USERSPACE=false&lt;/code&gt;）需要加载 &lt;code&gt;xt_mark&lt;/code&gt;、&lt;code&gt;nf_nat&lt;/code&gt; 等内核模块来设置 iptables 转发规则。缺少 &lt;code&gt;SYS_MODULE&lt;/code&gt; capability 时，这些模块无法加载，iptables 规则写入但不生效，表现为 ICMP 正常而 TCP 断流。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE &lt;span style="color:#78787e"&gt;# 必须加上&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="坑-4exit-node-模式下-dns-失败" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%9d%91-4exit-node-%e6%a8%a1%e5%bc%8f%e4%b8%8b-dns-%e5%a4%b1%e8%b4%a5"&gt;
+#
+&lt;/a&gt;
+坑 4：Exit Node 模式下 DNS 失败
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;开启 exit node 后，容器所有出站流量都走 WireGuard 隧道到远端 exit node 再出去。但 &lt;code&gt;/etc/resolv.conf&lt;/code&gt; 里的 DNS 服务器仍然是本地地址（如 &lt;code&gt;10.0.2.3&lt;/code&gt;），这些地址从 exit node 那端是不可达的，DNS 查询自然失败。&lt;/p&gt;
+&lt;p&gt;症状是 &lt;code&gt;curl ifconfig.me&lt;/code&gt; 报 &lt;code&gt;Could not resolve host&lt;/code&gt;，而直接用 IP 访问则卡住或返回异常。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt; 让 Tailscale 接管 DNS，查询也走隧道：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="最终可用的-composeyaml" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%9c%80%e7%bb%88%e5%8f%af%e7%94%a8%e7%9a%84-composeyaml"&gt;
+#
+&lt;/a&gt;
+最终可用的 compose.yaml
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;services&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;tailscale-sidecar&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: tailscale/tailscale:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;container_name&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;hostname&lt;/span&gt;: tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;environment&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_AUTHKEY=${TS_AUTHKEY}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_EXTRA_ARGS=--advertise-tags=tag:container --exit-node=${TS_EXITNODE}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_STATE_DIR=/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_USERSPACE=false
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - TS_ACCEPT_DNS=true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;volumes&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - ${PWD}/tailscale-sidecar/state:/var/lib/tailscale
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;devices&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - /dev/net/tun:/dev/net/tun
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;cap_add&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - net_admin
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - SYS_MODULE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;restart&lt;/span&gt;: unless-stopped
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;netshoot&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;image&lt;/span&gt;: nicolaka/netshoot
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;depends_on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;network_mode&lt;/span&gt;: container:tailscale-sidecar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;command&lt;/span&gt;: sleep infinity
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要在同目录下准备 &lt;code&gt;.env&lt;/code&gt; 文件：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;TS_AUTHKEY=tskey-auth-xxxxx
+TS_EXITNODE=100.x.x.x
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="验证方法" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%aa%8c%e8%af%81%e6%96%b9%e6%b3%95"&gt;
+#
+&lt;/a&gt;
+验证方法
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;nicolaka/netshoot&lt;/code&gt; 自带丰富的网络工具，非常适合验证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 检查出口 IP，确认流量是否走了 exit node&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot curl ifconfig.me
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# DNS 解析测试&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot dig google.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 查看路由表&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot ip route show table all
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 抓包排查&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it netshoot tcpdump -i any -n
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Tailscale 侧的状态检查&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale exit-node status
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nerdctl &lt;span style="color:#ff5c57"&gt;exec&lt;/span&gt; -it tailscale-sidecar tailscale ping &amp;lt;exit-node-ip&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="排查思路总结" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%8e%92%e6%9f%a5%e6%80%9d%e8%b7%af%e6%80%bb%e7%bb%93"&gt;
+#
+&lt;/a&gt;
+排查思路总结
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这次排查的过程本身也值得回顾。面对&amp;quot;exit node 不工作&amp;quot;这样的复合问题，有效的方法是逐层剥离：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;先确认隧道连通性：&lt;/strong&gt; &lt;code&gt;tailscale ping&lt;/code&gt; 验证 WireGuard 隧道本身是否通。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对比实验：&lt;/strong&gt; 关掉 exit node 测试，确认问题出在 exit node 还是基础网络。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区分协议：&lt;/strong&gt; ICMP 通但 TCP 不通，指向 iptables/内核模块问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区分 DNS 和连通性：&lt;/strong&gt; 用 IP 直连绕过 DNS，分别定位。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对比已知可用的配置：&lt;/strong&gt; 发现之前能用的命令多了 &lt;code&gt;SYS_MODULE&lt;/code&gt;，一下锁定问题。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;每一步缩小范围，避免在错误的方向上浪费时间。&lt;/p&gt;
+&lt;h2 id="写在最后" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%86%99%e5%9c%a8%e6%9c%80%e5%90%8e"&gt;
+#
+&lt;/a&gt;
+写在最后
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;nerdctl compose 作为 Docker Compose 的替代方案已经很成熟了，但在细节兼容性上仍有差距。&lt;code&gt;network_mode: service:&lt;/code&gt; 的缺失、容器名的自动生成规则不同，这些都是迁移时容易踩到的坑。而 Tailscale 在容器中使用 exit node 时，&lt;code&gt;SYS_MODULE&lt;/code&gt; 和 &lt;code&gt;TS_ACCEPT_DNS&lt;/code&gt; 是两个容易被忽略但又不可或缺的配置。希望这篇记录能帮到遇到同样问题的人。&lt;/p&gt;</content:encoded><category>Containers</category><category>Networking</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/nerdctl-tailscale-sidecar-pitfalls/</guid></item><item><title>容器化、开箱即用的 VSCode + TeX 环境：告别配置烦恼，专注写作本身</title><link>https://www.junyi.dev/posts/latex-dev-container/</link><pubDate>Tue, 23 Sep 2025 13:02:12 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+这篇文章为「有洁癖的程序员」和「不想折腾环境的写作者」，提供一套开箱即用的容器化 LaTeX 方案：用容器隔离环境，用 Git 同步项目，做到「拉仓库 → 打开容器 → 立即编译」，彻底告别环境配置焦虑。
+你可以随时随地使用 Git 同步你的项目，随用随走，无需担心环境问题。同时，你也可以放心大胆地让 Claude Code、Codex 帮你写 LaTeX 代码，不担心执行危险指令（请做好 git push protect）</description><content:encoded>&lt;p&gt;这篇文章为「&lt;strong&gt;有洁癖的程序员&lt;/strong&gt;」和「&lt;strong&gt;不想折腾环境的写作者&lt;/strong&gt;」，提供一套开箱即用的容器化 LaTeX 方案：用容器隔离环境，用 Git 同步项目，做到「&lt;strong&gt;拉仓库&lt;/strong&gt; → &lt;strong&gt;打开容器&lt;/strong&gt; → &lt;strong&gt;立即编译&lt;/strong&gt;」，彻底告别环境配置焦虑。&lt;/p&gt;
+&lt;p&gt;你可以随时随地使用 Git 同步你的项目，随用随走，无需担心环境问题。同时，你也可以放心大胆地让 Claude Code、Codex 帮你写 LaTeX 代码，不担心执行危险指令（请做好 git push protect）&lt;/p&gt;
+&lt;h2 id="你只需要准备-1-件事" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%bd%a0%e5%8f%aa%e9%9c%80%e8%a6%81%e5%87%86%e5%a4%87-1-%e4%bb%b6%e4%ba%8b"&gt;
+#
+&lt;/a&gt;
+你只需要准备 1 件事
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;无需安装复杂的 TeX 发行版、不用配置系统环境变量，唯一要做的就是：&lt;/p&gt;
+&lt;p&gt;在 &lt;strong&gt;Cursor&lt;/strong&gt; 或 &lt;strong&gt;VSCode&lt;/strong&gt; 中，安装官方扩展 &lt;code&gt;Dev Containers&lt;/code&gt;&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px; margin: 20px 0;"&gt;
+&lt;figure style="flex: 1; text-align: center;"&gt;
+&lt;img src="dev-container-cursor.png" alt="Cursor 中的 Dev Container" style="width: 100%; height: auto; border-radius: 8px;"&gt;
+&lt;figcaption&gt;Cursor 中的 Dev Container&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;figure style="flex: 1; text-align: center;"&gt;
+&lt;img src="dev-container-vscode.png" alt="VS Code 中的 Dev Container" style="width: 100%; height: auto; border-radius: 8px;"&gt;
+&lt;figcaption&gt;VS Code 中的 Dev Container&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/div&gt;
+&lt;h2 id="三个步骤从-0-到能写-latex" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%89%e4%b8%aa%e6%ad%a5%e9%aa%a4%e4%bb%8e-0-%e5%88%b0%e8%83%bd%e5%86%99-latex"&gt;
+#
+&lt;/a&gt;
+三个步骤，从 0 到能写 LaTeX
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;假设你已有一个 LaTeX 项目文件夹（新建空文件夹也可以），跟着做就能用：&lt;/p&gt;
+&lt;h3 id="step-1-引入" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-%e5%bc%95%e5%85%a5"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 1 引入 &lt;a href="https://github.com/paperdebugger-bot/latex-devcontainer" target="_blank" rel="noopener noreferrer"&gt;Dev Container 配置&lt;/a&gt;&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;打开项目的终端（VSCode/Cursor 内置终端即可），执行以下命令，将预配置好的容器环境作为「子模块」引入项目（子模块不干扰主项目文件，方便后续更新）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git submodule add https://github.com/paperdebugger-bot/latex-devcontainer.git .devcontainer
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你的项目还没初始化 Git（&lt;code&gt;git init&lt;/code&gt;），也可以直接下载配置文件解压到 &lt;code&gt;.devcontainer&lt;/code&gt; 文件夹：&lt;a href="https://github.com/paperdebugger-bot/latex-devcontainer/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer"&gt;latex-devcontainer.zip&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id="step-2-重载编辑器窗口" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-%e9%87%8d%e8%bd%bd%e7%bc%96%e8%be%91%e5%99%a8%e7%aa%97%e5%8f%a3"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 2 重载编辑器窗口&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;按下快捷键 &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;Shift&lt;/kbd&gt; + &lt;kbd&gt;P&lt;/kbd&gt;（macOS 是 &lt;kbd&gt;⌘&lt;/kbd&gt; + &lt;kbd&gt;⇧&lt;/kbd&gt; + &lt;kbd&gt;P&lt;/kbd&gt;），在弹出的命令面板中输入 &lt;code&gt;Reload Window&lt;/code&gt; 并执行，让编辑器识别新添加的容器配置。&lt;/p&gt;
+&lt;h3 id="step-3-启动容器并使用" &gt;
+&lt;div&gt;
+&lt;a href="#step-3-%e5%90%af%e5%8a%a8%e5%ae%b9%e5%99%a8%e5%b9%b6%e4%bd%bf%e7%94%a8"&gt;
+##
+&lt;/a&gt;
+&lt;strong&gt;Step 3 启动容器并使用&lt;/strong&gt;
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;重载后，编辑器会自动弹出提示「是否在 Dev Container 中打开项目」，点击 &lt;strong&gt;Reopen in Container&lt;/strong&gt;；&lt;/p&gt;
+&lt;p&gt;接下来会让你选择容器版本，直接选 &lt;strong&gt;full&lt;/strong&gt; 即可 —— 等待 3-5 分钟（首次构建需下载镜像，后续会快很多），环境就搭建完成了！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;🎉 完成后你会获得什么？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;预装 &lt;strong&gt;TeX Live Full 发行版&lt;/strong&gt;（几乎包含所有宏包，不用手动装）；&lt;/li&gt;
+&lt;li&gt;自带 &lt;strong&gt;LaTeX Workshop 插件&lt;/strong&gt;（VSCode 最好用的 LaTeX 插件，支持实时预览、一键编译）&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;；&lt;/li&gt;
+&lt;li&gt;配置好的 &lt;strong&gt;PDF 预览&lt;/strong&gt; 功能；&lt;/li&gt;
+&lt;li&gt;干净的终端环境（可直接用 &lt;code&gt;pdflatex&lt;/code&gt; &lt;code&gt;xelatex&lt;/code&gt; 等命令）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="进阶选择不同的容器版本怎么挑" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%bf%9b%e9%98%b6%e9%80%89%e6%8b%a9%e4%b8%8d%e5%90%8c%e7%9a%84%e5%ae%b9%e5%99%a8%e7%89%88%e6%9c%ac%e6%80%8e%e4%b9%88%e6%8c%91"&gt;
+#
+&lt;/a&gt;
+进阶选择：不同的容器版本怎么挑？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;上面推荐的 &lt;strong&gt;full&lt;/strong&gt; 版本是「省事优先」，但如果你的项目&lt;em&gt;轻量化&lt;/em&gt;、或想&lt;em&gt;节省磁盘空间&lt;/em&gt;，可以选其他版本。核心区别在于「预装的 TeX 发行版」不同：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;容器版本&lt;/th&gt;
+&lt;th&gt;核心 TeX 发行版&lt;/th&gt;
+&lt;th&gt;特点&lt;/th&gt;
+&lt;th&gt;适合场景&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;full&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;TeX Live Full&lt;/td&gt;
+&lt;td&gt;预装所有宏包（约 6GB），编译任何项目都不会缺包&lt;/td&gt;
+&lt;td&gt;复杂论文、自定义模板、不想处理宏包问题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;tiny&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;TinyTeX&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td&gt;轻量版（约 1GB），默认含 200+ 常用宏包&lt;/td&gt;
+&lt;td&gt;简单报告、常规学术论文（缺包时需手动 &lt;code&gt;tlmgr install 宏包名&lt;/code&gt;）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;nano&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Tectonic&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td&gt;零配置引擎，自动处理依赖&lt;/td&gt;
+&lt;td&gt;快速写 Demo、极简文档（兼容性略弱，复杂宏包可能不支持）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;💡 &lt;strong&gt;切换方法&lt;/strong&gt;：&lt;br&gt;
+在启动容器时，选择对应版本即可；如果已启动容器，可通过 &lt;strong&gt;Ctrl + Shift + P → Dev Containers: Rebuild Container&lt;/strong&gt; 重新选择版本。&lt;/p&gt;
+&lt;h2 id="为什么推荐用-dev-container" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%8e%a8%e8%8d%90%e7%94%a8-dev-container"&gt;
+#
+&lt;/a&gt;
+为什么推荐用 Dev Container&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;？
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;很多人会问：「我直接在本地装 TeX Live 不行吗？」&lt;/p&gt;
+&lt;p&gt;当然可以，但 Dev Container 解决了 3 个核心痛点：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 1：环境隔离，不污染系统&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;容器是独立的「沙盒」，所有 TeX 依赖、插件都装在容器里，不会修改你本地的系统配置（比如不会和 Python、Java 等环境冲突）。想删除环境？直接删除容器即可，不留任何残留。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 2：跨设备同步，随用随走&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;把项目和 &lt;code&gt;.devcontainer&lt;/code&gt; 文件夹一起用 Git 管理，换电脑时只需「拉取仓库 → 打开容器」，10 分钟内就能恢复一模一样的写作环境——再也不用在公司电脑配一次、家里电脑又配一次。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;痛点 3：安全可控，放心用 AI 辅助&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;现在很多人用 Claude Code、Codex 生成 LaTeX 代码，这些工具可能会输出 &lt;code&gt;sudo&lt;/code&gt; 等危险命令。而容器内的操作不会影响本地系统，相当于加了一层「安全防护」（注意：仍需做好 Git 提交保护，避免泄露敏感内容）。&lt;/p&gt;
+&lt;h2 id="常见问题-qa" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98-qa"&gt;
+#
+&lt;/a&gt;
+常见问题 Q&amp;amp;A
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Q1：构建容器时速度很慢？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A1：&lt;/strong&gt; 首次构建需下载大镜像，建议换国内 Docker 镜像源（比如阿里云、网易云镜像），或在网络较好的环境下操作。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Q2：编译中文文档乱码？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A2：&lt;/strong&gt; &lt;code&gt;full&lt;/code&gt; 和 &lt;code&gt;tiny&lt;/code&gt; 版本已预装 &lt;code&gt;xeCJK&lt;/code&gt; 宏包，编译时选择 &lt;code&gt;xelatex&lt;/code&gt; 引擎即可（LaTeX Workshop 已默认配置）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Q3：如何更新容器配置？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A3：&lt;/strong&gt; 如果远程仓库的 &lt;code&gt;latex-devcontainer&lt;/code&gt; 有更新，可在项目终端执行：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git pull --recurse-submodules
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git submodule update --recursive --remote
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后重建容器（&lt;strong&gt;Rebuild Container&lt;/strong&gt;）即可应用更新。&lt;/p&gt;
+&lt;p&gt;这套方案我自己用了半年，从写技术报告到学术论文，没再遇到过一次「环境报错」。如果你也厌倦了配置 LaTeX 环境，不妨试试。&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop" target="_blank" rel="noopener noreferrer"&gt;LaTeX Workshop 插件文档&lt;/a&gt;：掌握更多编译、预览技巧&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://yihui.org/tinytex/" target="_blank" rel="noopener noreferrer"&gt;TinyTeX 官方网站&lt;/a&gt;：轻量 TeX 发行版的使用指南&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/%e5%9f%ba%e4%ba%8etinytex%e7%9a%84%e4%b8%ad%e6%96%87%e6%9c%ac%e5%9c%b0tex%e7%8e%af%e5%a2%83/" target="_blank" rel="noopener noreferrer"&gt;基于 tinytex 的中文本地 TeX 环境&lt;/a&gt;：如何配置 tinytex 环境&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://code.visualstudio.com/docs/devcontainers/containers" target="_blank" rel="noopener noreferrer"&gt;Dev Containers 官方文档&lt;/a&gt;：了解容器配置的更多细节&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>LaTex</category><category>Containers</category><category>Development</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/latex-dev-container/</guid></item><item><title>树莓派 5 集群 配置 k3s</title><link>https://www.junyi.dev/posts/k3s-101/</link><pubDate>Wed, 25 Dec 2024 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。
+本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。</description><content:encoded>&lt;p&gt;K3s 是由 Rancher Labs 开发的轻量级 Kubernetes 发行版，专为资源受限的环境和边缘计算场景设计。&lt;/p&gt;
+&lt;p&gt;本文将介绍如何在 Raspberry Pi 5 集群上部署 K3s，搭建一个功能完整的容器编排平台。&lt;/p&gt;
+&lt;h2 id="step-1-在-master-和-agent-节点分别执行命令" &gt;
+&lt;div&gt;
+&lt;a href="#step-1-%e5%9c%a8-master-%e5%92%8c-agent-%e8%8a%82%e7%82%b9%e5%88%86%e5%88%ab%e6%89%a7%e8%a1%8c%e5%91%bd%e4%bb%a4"&gt;
+#
+&lt;/a&gt;
+Step 1. 在 Master 和 Agent 节点分别执行命令
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;这部分参考了&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;的 &amp;ldquo;Setting Up with k3s&amp;rdquo; 章节&lt;/p&gt;
+&lt;h3 id="master-节点" &gt;
+&lt;div&gt;
+&lt;a href="#master-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Master 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-1&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="agent-节点" &gt;
+&lt;div&gt;
+&lt;a href="#agent-%e8%8a%82%e7%82%b9"&gt;
+##
+&lt;/a&gt;
+Agent 节点
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;pi-2&lt;/code&gt;, &lt;code&gt;pi-3&lt;/code&gt;, &lt;code&gt;pi-4&lt;/code&gt; 执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;K3S_URL&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://100.84.216.88:6443 &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;K3S_TOKEN&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;K10d0e1ccd102d3f60043941ab35d22f29ca15e0ecf48e138d502fd258ee232cb84::server:bc76905e2c32080b0c2a0501293876bd &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;5&lt;/span&gt;&lt;span&gt; sh -s -
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3S_URL 和 K3S_TOKEN 请写你自己的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# K3s agent 节点不需要配置 `system-default-registry`。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;details&gt;
+&lt;summary&gt;为什么我的 &lt;code&gt;K3S_URL&lt;/code&gt; 是 &lt;code&gt;100.84.216.88&lt;/code&gt;&lt;/summary&gt;
+&lt;p&gt;因为我使用 tailscale &lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; 给树莓派集群构建了虚拟局域网。&lt;/p&gt;
+&lt;p&gt;请根据你的实际情况进行配置。&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;如何查看 &lt;code&gt;K3S_TOKEN&lt;/code&gt;&lt;/summary&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat /var/lib/rancher/k3s/server/node-token
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/details&gt;
+&lt;h2 id="step-2-验证安装效果" &gt;
+&lt;div&gt;
+&lt;a href="#step-2-%e9%aa%8c%e8%af%81%e5%ae%89%e8%a3%85%e6%95%88%e6%9e%9c"&gt;
+#
+&lt;/a&gt;
+Step 2. 验证安装效果
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-5.png" alt="agent 已加入 master"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="其他k3s-在中国大陆地区的安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%85%b6%e4%bb%96k3s-%e5%9c%a8%e4%b8%ad%e5%9b%bd%e5%a4%a7%e9%99%86%e5%9c%b0%e5%8c%ba%e7%9a%84%e5%ae%89%e8%a3%85"&gt;
+#
+&lt;/a&gt;
+其他：K3s 在中国大陆地区的安装
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="方法一全新安装" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%b8%80%e5%85%a8%e6%96%b0%e5%ae%89%e8%a3%85"&gt;
+##
+&lt;/a&gt;
+方法一：全新安装
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 介绍了在安装时通过指定 &lt;code&gt;INSTALL_K3S_MIRROR=cn&lt;/code&gt; 和 &lt;code&gt;--system-default-registry&lt;/code&gt; 来更换 registry mirror。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 全新安装（master 节点）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2&lt;/span&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3&lt;/span&gt;&lt;span&gt; &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -s - &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;4&lt;/span&gt;&lt;span&gt; --system-default-registry&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;registry.cn-hangzhou.aliyuncs.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image.png" alt="全新安装命令执行结果" /&gt;
+&lt;figcaption&gt;全新安装 - 命令执行结果&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="方法二换源" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%96%b9%e6%b3%95%e4%ba%8c%e6%8d%a2%e6%ba%90"&gt;
+##
+&lt;/a&gt;
+方法二：换源
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;这个方法适用于在国外配置好环境之后，设备迁移到中国大陆地区的无法访问默认源的用户。&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;我执行完 Rancher 的快速入门指南里提供的命令，发现 pods 根本没启动的&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Rancher 快速入门指南提供的代码（正常安装 k3s 但是无法启动 pod）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | &lt;span style="color:#ff5c57"&gt;INSTALL_K3S_MIRROR&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;cn sh -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-2.png" alt="卡在 ContainerCreating 步骤" /&gt;
+&lt;figcaption&gt;卡在 ContainerCreating 步骤（黄色高亮部分）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;p&gt;在 &lt;code&gt;/etc/systemd/system/k3s.service&lt;/code&gt; 里面指定 &lt;code&gt;--system-default-registry&lt;/code&gt;，然后 &lt;code&gt;systemctl daemon-reload &amp;amp;&amp;amp; systemctl restart k3s&lt;/code&gt; 重启服务即可&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;display:grid;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 1&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Unit&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 2&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Description&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;Lightweight Kubernetes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 3&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Documentation&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;https://k3s.io
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 4&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Wants&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 5&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;After&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 6&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 7&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Install&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 8&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;WantedBy&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;multi-user.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 9&lt;/span&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;10&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;[&lt;/span&gt;Service&lt;span style="color:#ff6ac1"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;11&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Type&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;notify
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;12&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/default/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;13&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/sysconfig/%N
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;14&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;EnvironmentFile&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/etc/systemd/system/k3s.service.env
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;15&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;KillMode&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;process
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;16&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Delegate&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;17&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Having non-zero Limit*s causes performance problems due to accounting overhead&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;18&lt;/span&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# in the kernel. We recommend using cgroups to do container-local accounting.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;19&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNOFILE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;1048576&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;20&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitNPROC&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;21&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;LimitCORE&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;22&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TasksMax&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;23&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;TimeoutStartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#ff9f43"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;24&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;Restart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;always
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;25&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;RestartSec&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;5s
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;26&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/bin/sh -xc &lt;span style="color:#5af78e"&gt;&amp;#39;! /usr/bin/systemctl is-enabled --quiet nm-cloud-setup.service 2&amp;gt;/dev/null&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;27&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe br_netfilter
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;28&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStartPre&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;-/sbin/modprobe overlay
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;29&lt;/span&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;ExecStart&lt;/span&gt;&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;/usr/local/bin/k3s &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;30&lt;/span&gt;&lt;span&gt; server &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;31&lt;/span&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;--system-default-registry&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex; background-color:#3d3f4a"&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;32&lt;/span&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#39;registry.cn-hangzhou.aliyuncs.com&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl restart k3s
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-3.png" alt="k3s正在重启服务" /&gt;
+&lt;figcaption&gt;k3s 正在重启服务，已经有一个服务就绪（黄色高亮）&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/k3s-101/image-4.png" alt="Container 成功被创建" /&gt;
+&lt;figcaption&gt;稍等一会，全部的 Container 成功被创建&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;一些题外话&lt;/summary&gt;
+&lt;p&gt;&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt; 说通过 &lt;code&gt;crictl info&lt;/code&gt; 找到 &lt;code&gt;/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl&lt;/code&gt; 文件，然后修改这个文件中描述的 endpoint 地址&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;但是这个方案看起来特别奇怪。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;sup id="fnref:7"&gt;&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref"&gt;7&lt;/a&gt;&lt;/sup&gt; 里面提到&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;启动时，K3s 会检查&lt;code&gt;/etc/rancher/k3s/&lt;/code&gt;中是否存在&lt;code&gt;registries.yaml&lt;/code&gt;文件，并指示 containerd 使用文件中定义的镜像仓库。如果你想使用一个私有的镜像仓库，那么你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;但是通过 &lt;sup id="fnref1:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; 和 &lt;sup id="fnref1:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt; 的方式安装之后，并没有出现 &lt;code&gt;/etc/rancher/k3s/registries.yaml&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;那么它是怎么知道 registry 的 mirror 是谁呢？&lt;/p&gt;
+&lt;/details&gt;
+&lt;h3 id="安装后的验证" &gt;
+&lt;div&gt;
+&lt;a href="#%e5%ae%89%e8%a3%85%e5%90%8e%e7%9a%84%e9%aa%8c%e8%af%81"&gt;
+##
+&lt;/a&gt;
+安装后的验证
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get pods -n kube-system
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://www.junyi.dev/posts/k3s-101/image-1.png" alt="alt text"&gt;&lt;/p&gt;
+&lt;style&gt;
+@import 'style.css';
+&lt;/style&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://yiwei.dev/posts/k3s-nat/" target="_blank" rel="noopener noreferrer"&gt;https://yiwei.dev/posts/k3s-nat/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer"&gt;https://tailscale.com/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://forums.rancher.cn/t/k3s/3314" target="_blank" rel="noopener noreferrer"&gt;https://forums.rancher.cn/t/k3s/3314&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://cloud.tencent.com/developer/article/2264278" target="_blank" rel="noopener noreferrer"&gt;https://cloud.tencent.com/developer/article/2264278&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&amp;#160;&lt;a href="#fnref1:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/quick-start/_index/#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC&lt;/a&gt;&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;&lt;a href="https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90" target="_blank" rel="noopener noreferrer"&gt;https://www.xuxusheng.com/post/k3s%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E5%8A%A0%E9%80%9F%E6%BA%90&lt;/a&gt;&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:7"&gt;
+&lt;p&gt;&lt;a href="https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors" target="_blank" rel="noopener noreferrer"&gt;https://docs.rancher.cn/docs/k3s/installation/private-registry/_index/#mirrors&lt;/a&gt;\&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>Linux</category><category>Containers</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/k3s-101/</guid></item><item><title>TVM Dockerfile (CPU only)</title><link>https://www.junyi.dev/posts/tvm-docker/</link><pubDate>Thu, 15 Apr 2021 20:39:13 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+写了一个 Dockerfile，可以一键部署 TVM 的 CPU 版本</description><content:encoded>&lt;p&gt;写了一个 Dockerfile，可以一键部署 TVM 的 CPU 版本&lt;/p&gt;
+&lt;p&gt;映射 container 端口 22 即可使用 ssh，用户名密码都是 tvm&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://gist.github.com/Junyi-99/dbfe984fe3e3af4d2a2c7d11a48ad151" target="_blank" rel="noopener noreferrer"&gt;在 GitHub 查看 Dockerfile&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;构建指令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker build -t tvm_cpu:0.7.0-x86_64 .
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或者你也可以直接拉取我的镜像：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker pull dockerjunyi/tvm_cpu:0.7.0-x86_64
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用方法：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# -p 容器内 22 端口映射到本地 2222&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# -i 交互模式运行容器&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# -t 开启伪输入终端（与 -i 连用）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 运行一个容器，将容器内 22 端口映射到本地 2222，容器设置为交互模式，开启伪输入终端，容器 image 叫做 dockerjunyi/tvm_cpu:0.7.0-x86_64，同时执行容器内的 /bin/bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker run -p 2222:22 -it dockerjunyi/tvm_cpu:0.7.0-x86_64 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当然，运行起来容器之后，如果不想使用 docker 的交互模式，你也可以通过映射出的 ssh 端口来访问&lt;/p&gt;</content:encoded><category>TVM</category><category>Containers</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/tvm-docker/</guid></item></channel></rss>

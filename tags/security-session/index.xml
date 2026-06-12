@@ -100,4 +100,4 @@ Ghostty → attach → tmux server (旧进程)
 &lt;li&gt;&lt;code&gt;osascript&lt;/code&gt; 执行失败&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;、&lt;code&gt;op&lt;/code&gt; 等 CLI 工具认证挂了&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;都是 &lt;code&gt;reattach-to-user-namespace&lt;/code&gt; 一把搞定。&lt;/p&gt;</content:encoded><category>macOS</category><category>tmux</category><category>Claude Code</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/posts/tmux-keychain/</guid></item></channel></rss>
+&lt;p&gt;都是 &lt;code&gt;reattach-to-user-namespace&lt;/code&gt; 一把搞定。&lt;/p&gt;</content:encoded><category>Linux</category><category>tmux</category><category>AI Systems</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/posts/tmux-keychain/</guid></item></channel></rss>

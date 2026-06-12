@@ -100,4 +100,4 @@ While you&amp;rsquo;re at it
 &lt;li&gt;&lt;code&gt;osascript&lt;/code&gt; failing&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;, &lt;code&gt;op&lt;/code&gt;, and other Keychain-dependent CLI tools not working&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;code&gt;reattach-to-user-namespace&lt;/code&gt; fixes all of them.&lt;/p&gt;</content:encoded><category>macOS</category><category>tmux</category><category>Claude Code</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item></channel></rss>
+&lt;p&gt;&lt;code&gt;reattach-to-user-namespace&lt;/code&gt; fixes all of them.&lt;/p&gt;</content:encoded><category>Linux</category><category>tmux</category><category>AI Systems</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item></channel></rss>
