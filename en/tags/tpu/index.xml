@@ -148,7 +148,7 @@ Abstract
 &lt;/h3&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig1_prefill.png" alt="Prefill throughput versus context length on TPU v6e-4"&gt;
-&lt;figcaption&gt;Figure 1. Prefill throughput versus context length. Higher is better. The 30B-A3B and 32B results are total throughput across four chips. The 4B result uses one chip.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 1. Prefill throughput versus context length. Higher is better. Throughput is aggregate over the chips each model uses — &lt;b&gt;the 30B-A3B and 32B use four chips&lt;/b&gt;, the 4B uses one.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;The MoE model has the highest prefill throughput.&lt;/p&gt;
 &lt;table&gt;
@@ -232,7 +232,7 @@ Abstract
 &lt;/figure&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig3_decode_throughput.png" alt="Aggregate decode throughput versus batch size at context 1024 and 4096"&gt;
-&lt;figcaption&gt;Figure 3. Aggregate decode throughput versus batch size. Solid lines: context 1024. Dashed lines: context 4096. Higher is better.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 3. Aggregate decode throughput versus batch size. Solid lines: context 1024. Dashed lines: context 4096. Higher is better. Throughput is aggregate over the chips each model uses — the 30B-A3B and 32B use four chips, the 4B uses one.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -430,12 +430,8 @@ Abstract
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;figcaption&gt;Table 5. Decode TPOT at context length 4096 (p50, p99, and aggregate throughput).&lt;/figcaption&gt;
-&lt;figure&gt;
-&lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig6_decode_tail.png" alt="Decode p99/p50 TPOT ratio at context 1024 and 4096"&gt;
-&lt;figcaption&gt;Figure 4. Decode tail latency: p99/p50 TPOT ratio at each batch size. A ratio of 1.0 means p99 equals p50 (no tail). Higher bars indicate worse scheduling irregularity.&lt;/figcaption&gt;
-&lt;/figure&gt;
 &lt;p&gt;At batch size 1, the MoE model is 2.5× faster than the dense 32B model: 7.0 ms versus 17.9 ms at context 1024. This follows active parameter count. Decode is memory-bandwidth-bound. The MoE model reads 3B active parameters per token; the dense 32B model reads all 32B.&lt;/p&gt;
-&lt;p&gt;The p99/p50 ratio reveals scheduling pressure at high batch sizes. The 30B-A3B at BS64 ctx 1024 has p99 TPOT of 152.7 ms against p50 of 48.1 ms (3.2×). The 4B at BS16 ctx 1024 has p99 TPOT of 647.3 ms against p50 of 41.4 ms (15.6×) — at this operating point the single-chip KV cache is under pressure and requests queue unevenly.&lt;/p&gt;
+&lt;p&gt;Tail latency — the p99 columns of Tables 4 and 5 — stays tight for the four-chip models until BS64 (the 30B-A3B reaches p99 152.7 ms against a 48.1 ms p50 at ctx 1024). The 4B model on one chip is the outlier: at BS16 ctx 1024 its p99 TPOT reaches 647.3 ms against a 41.4 ms p50. These decode runs are driven at an unlimited request rate, so on the single chip the prefill chunks of newly admitted requests repeatedly preempt in-flight decode — the median inter-token latency stays near 12 ms while a heavy minority of requests stall. This marks the 4B&amp;rsquo;s single-chip concurrency limit, not steady-state decode.&lt;/p&gt;
 &lt;p&gt;At context 4096, longer KV sequences reduce throughput across all models. The 30B-A3B at BS64 drops from 1,331 tok/s (ctx 1024) to 661 tok/s (ctx 4096). The dense 32B drops less in relative terms (1,096 to 775 tok/s) because its compute is already the bottleneck at ctx 1024. The 4B model saturates at BS16 for ctx 4096: p50 TPOT at BS64 equals BS16 (85.0 ms both), meaning additional concurrency gives no throughput gain on one chip.&lt;/p&gt;
 &lt;h3 id="33-online-serving" &gt;
 &lt;div&gt;
@@ -447,12 +443,12 @@ Abstract
 &lt;/h3&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig4_e2e_pareto.png" alt="Online-serving throughput-latency curve"&gt;
-&lt;figcaption&gt;Figure 5. Online serving throughput and latency. The x-axis is output throughput. The y-axis is p50 TPOT. Lower-right is better.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 4. Online serving throughput and latency. The x-axis is output throughput. The y-axis is p50 TPOT. Lower-right is better. Throughput is aggregate over the chips each model uses — the 30B-A3B and 32B use four chips, the 4B uses one.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;In online serving, higher request rate gives higher throughput, but also higher latency. Each model reaches a point where adding more requests no longer helps.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig7_e2e_sweep.png" alt="End-to-end TTFT and TPOT versus output throughput"&gt;
-&lt;figcaption&gt;Figure 6. End-to-end latency sweep. Left: p50 TTFT versus output throughput. Right: p50 TPOT versus output throughput. The × marker on the 4B line marks the concurrency-collapse point under unlimited load.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 5. End-to-end latency sweep. Left: p50 TTFT versus output throughput. Right: p50 TPOT versus output throughput. The × marker on the 4B line marks the concurrency-collapse point under unlimited load. Throughput is aggregate over the chips each model uses — the 30B-A3B and 32B use four chips, the 4B uses one.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -687,7 +683,7 @@ Abstract
 &lt;figcaption&gt;Table 9. p50 TTFT and p50 E2E latency at the saturation or stable operating point.&lt;/figcaption&gt;
 &lt;figure&gt;
 &lt;img style="border-radius: 8px" src="https://www.junyi.dev/posts/tpu-v6e/figures/fig5_summary.png" alt="MoE-versus-dense efficiency summary"&gt;
-&lt;figcaption&gt;Figure 7. Summary relative to the dense Qwen3-32B baseline. Higher is better.&lt;/figcaption&gt;
+&lt;figcaption&gt;Figure 6. Summary relative to the dense Qwen3-32B baseline. Higher is better.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;Across all three tests, the MoE model beats the dense 32B model at similar total parameter count:&lt;/p&gt;
 &lt;table&gt;

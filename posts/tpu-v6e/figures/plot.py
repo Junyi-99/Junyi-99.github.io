@@ -9,7 +9,6 @@ fig2  – decode p50 TPOT vs batch size (ctx 1024 solid, ctx 4096 dashed)
 fig3  – decode aggregate throughput vs batch size (ctx 1024 solid, ctx 4096 dashed)
 fig4  – E2E serving Pareto (output throughput vs p50 TPOT)
 fig5  – summary bar chart normalized to dense-32B
-fig6  – decode tail: p99/p50 TPOT ratio, two panels (ctx 1024, ctx 4096)
 fig7  – E2E latency sweep: TTFT and TPOT vs output throughput, two panels
 """
 import json
@@ -298,52 +297,6 @@ def fig5():
     save(fig, "fig5_summary")
 
 
-# ── fig6: decode tail latency (p99/p50 TPOT ratio), two panels ───────────────
-def fig6():
-    bss = [1, 4, 16, 64]
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.5))
-
-    for ax, ctx in zip(axes, [1024, 4096]):
-        x  = np.arange(len(bss))
-        w  = 0.25
-        dx = {"Qwen3.5-4B": -w, "Qwen3-30B-A3B": 0.0, "Qwen3-32B": w}
-
-        for m in ORDER:
-            s    = STYLE[m]
-            pts  = {p["bs"]: (p["p99_tpot_ms"], p["p50_tpot_ms"])
-                    for p in M[m]["decode"] if p["ctx"] == ctx}
-            ratios = [pts[b][0] / pts[b][1] for b in bss]
-            ax.bar(x + dx[m], ratios, width=w, color=s["color"],
-                   label=s["label"], edgecolor="white", linewidth=0.4)
-
-            for xi, r in enumerate(ratios):
-                if r >= 1.8:
-                    va  = "bottom"
-                    ypos = r + (0.08 if ctx == 1024 else 0.04)
-                    txt = f"{r:.1f}×"
-                    kw  = dict(fontsize=7, color=s["color"], ha="center", va=va)
-                    if r > 10:
-                        kw["fontweight"] = "bold"
-                    ax.text(xi + dx[m], ypos, txt, **kw)
-
-        ax.axhline(1.0, color="0.4", linewidth=0.8, linestyle="--", zorder=0)
-        ax.set_xticks(x)
-        ax.set_xticklabels([f"BS {b}" for b in bss])
-        ax.set_xlabel("Batch size")
-        if ax is axes[0]:
-            ax.set_ylabel("p99 / p50 TPOT ratio  (1.0 = no tail)")
-            ax.set_ylim(0, 20)
-            ax.set_title("(a) Context 1024", fontsize=10, pad=5)
-        else:
-            ax.set_ylim(0, 6.5)
-            ax.set_title("(b) Context 4096", fontsize=10, pad=5)
-            ax.legend(frameon=False, loc="upper right",
-                      fontsize=8, handlelength=1.2, handletextpad=0.4)
-
-    fig.subplots_adjust(wspace=0.32)
-    save(fig, "fig6_decode_tail")
-
-
 # ── fig7: E2E serving sweep (TTFT + TPOT vs output throughput), two panels ───
 def fig7():
     fig, (ax_ttft, ax_tpot) = plt.subplots(1, 2, figsize=(7.2, 3.5))
@@ -439,6 +392,5 @@ if __name__ == "__main__":
     fig3()
     fig4()
     fig5()
-    fig6()
     fig7()
     print("done")
