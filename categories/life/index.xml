@@ -240,6 +240,14 @@ INTO THE MODERN 2026 年初，我在新加坡 “INTO THE MODERN” 印象派画
 &lt;p&gt;prof: 实验本身没有价值，只有当你能把它 转化为结论、并且解释“为什么”时，它才变成论文的一部分。&lt;/p&gt;
 &lt;p&gt;prof: 除了展示你的结果图表，还要进一步分析你的图表。&lt;/p&gt;
 &lt;p&gt;prof: 要 跳出 本科、硕士 的 思维模式，要 try to make a paper 出来。&lt;/p&gt;
+&lt;p&gt;做模型相关研究时，不要只停在 benchmark 或现象描述上。要尽量 open the box，去解释现象背后的原因：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;深入模型的 activation，观察里面有没有稳定的 pattern。&lt;/li&gt;
+&lt;li&gt;从机理上解释为什么会出现这样的结果。&lt;/li&gt;
+&lt;li&gt;这个解释过程越往下可能越不准，但这不妨碍你沿着这个方向研究它。&lt;/li&gt;
+&lt;li&gt;现在基于 Transformer 的架构一定有某种共性在里面。可以基于这样的框架，研究不同 model family 的特性。&lt;/li&gt;
+&lt;li&gt;关键问题是：What is the common pattern? 共性是什么？&lt;/li&gt;
+&lt;/ul&gt;
 &lt;hr&gt;
 &lt;p&gt;你和 SOTA 的 finding 有什么区别？&lt;/p&gt;
 &lt;p&gt;你的 finding 和之前 paper 的 finding 有什么不一样？&lt;/p&gt;
