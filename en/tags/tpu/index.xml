@@ -59,7 +59,7 @@ Put the tutorial beside the instruction
 Draw the TPU layout
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Layout notation can interrupt that flow. &lt;strong&gt;Logical shape and physical storage layout describe different things.&lt;/strong&gt; A &lt;code&gt;128 × 128&lt;/code&gt; array can be split into tiles, with another level of tiling inside each tile. OpenXLA&amp;rsquo;s &lt;a href="https://openxla.org/xla/shapes" target="_blank" rel="noopener noreferrer"&gt;Shapes and layout&lt;/a&gt; and &lt;a href="https://openxla.org/xla/tiled_layout" target="_blank" rel="noopener noreferrer"&gt;Tiled layout&lt;/a&gt; document the representation.&lt;/p&gt;
+&lt;p&gt;Layout is an important part of HLO. &lt;strong&gt;Logical shape and physical storage layout describe different things.&lt;/strong&gt; A &lt;code&gt;128 × 128&lt;/code&gt; array can be split into tiles, with another level of tiling inside each tile. OpenXLA&amp;rsquo;s &lt;a href="https://openxla.org/xla/shapes" target="_blank" rel="noopener noreferrer"&gt;Shapes and layout&lt;/a&gt; and &lt;a href="https://openxla.org/xla/tiled_layout" target="_blank" rel="noopener noreferrer"&gt;Tiled layout&lt;/a&gt; document the representation.&lt;/p&gt;
 &lt;p&gt;For the common TPU layout &lt;code&gt;T(8,128)(2,1)&lt;/code&gt;, HLO Visualizer draws a corner of a tile, labeling physical offsets and inner tile boundaries. The two sets of numbers become something you can see.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/array-layout.png" alt="A diagram of bf16 T(8,128)(2,1) tiling, with physical offsets and red outlines around 2-by-1 inner tiles" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;

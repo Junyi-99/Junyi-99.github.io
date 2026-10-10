@@ -59,7 +59,7 @@
 TPU 的 layout，直接画出来
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;HLO 里最容易让人停住的部分之一是 layout。&lt;strong&gt;逻辑 shape 和物理存储布局是两回事&lt;/strong&gt;：一个 &lt;code&gt;128 × 128&lt;/code&gt; 的数组，还可以按 tile 分块，再在 tile 内继续分块。OpenXLA 的 &lt;a href="https://openxla.org/xla/shapes" target="_blank" rel="noopener noreferrer"&gt;Shapes and layout&lt;/a&gt; 与 &lt;a href="https://openxla.org/xla/tiled_layout" target="_blank" rel="noopener noreferrer"&gt;Tiled layout&lt;/a&gt; 给出了正式说明。&lt;/p&gt;
+&lt;p&gt;HLO 里一个很重要的部分是 layout。&lt;strong&gt;逻辑 shape 和物理存储布局是两回事&lt;/strong&gt;：一个 &lt;code&gt;128 × 128&lt;/code&gt; 的数组，还可以按 tile 分块，再在 tile 内继续分块。OpenXLA 的 &lt;a href="https://openxla.org/xla/shapes" target="_blank" rel="noopener noreferrer"&gt;Shapes and layout&lt;/a&gt; 与 &lt;a href="https://openxla.org/xla/tiled_layout" target="_blank" rel="noopener noreferrer"&gt;Tiled layout&lt;/a&gt; 给出了正式说明。&lt;/p&gt;
 &lt;p&gt;对于 TPU 示例里常见的 &lt;code&gt;T(8,128)(2,1)&lt;/code&gt;，HLO Visualizer 会画出 tile 的一个局部，标明元素在 tile 内的物理偏移和内层 tile 的边界。这样就能把字符串里的两组数字和实际排列对应起来。&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/array-layout.png" alt="bf16 数组的 T(8,128)(2,1) 布局图，数字标记 tile 内的物理偏移，红框标记 2×1 内层 tile" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;
