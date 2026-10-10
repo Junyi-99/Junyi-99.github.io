@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 10 Oct 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/jax/index.xml" rel="self" type="application/rss+xml"/><item><title>HLO Visualizer：把 XLA HLO 变成看得懂的图</title><link>https://www.junyi.dev/posts/hlo-visualizer/</link><pubDate>Sat, 10 Oct 2026 14:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 调 JAX / TPU 程序的时候，迟早会碰到 HLO。想知道一个计算被编译成了什么、为什么多出几次 copy、一个 fusion 里到底装了哪些操作，最后都要打开编译器吐出来的那份文本。
 但能打开，不等于能看懂。指令里挤着 shape、layout、tiling、memory space 和 computation 引用，光认出 bf16 和 fusion 还远远不够。
-所以我做了 HLO Visualizer：把 HLO 文本变成可以探索的图，点一下节点，就能把这条指令一块一块地读明白。
-在线体验</description><content:encoded>&lt;p&gt;调 JAX / TPU 程序的时候，迟早会碰到 HLO。想知道一个计算被编译成了什么、为什么多出几次 copy、一个 fusion 里到底装了哪些操作，最后都要打开编译器吐出来的那份文本。&lt;/p&gt;
+所以我做了 HLO Visualizer：把 HLO 文本变成可以探索的图，点一下节点，就能把这条指令一块一块地读明白。</description><content:encoded>&lt;p&gt;调 JAX / TPU 程序的时候，迟早会碰到 HLO。想知道一个计算被编译成了什么、为什么多出几次 copy、一个 fusion 里到底装了哪些操作，最后都要打开编译器吐出来的那份文本。&lt;/p&gt;
 &lt;p&gt;但能打开，不等于能看懂。指令里挤着 shape、layout、tiling、memory space 和 computation 引用，光认出 &lt;code&gt;bf16&lt;/code&gt; 和 &lt;code&gt;fusion&lt;/code&gt; 还远远不够。&lt;/p&gt;
 &lt;p&gt;所以我做了 &lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;HLO Visualizer&lt;/a&gt;&lt;/strong&gt;：把 HLO 文本变成可以探索的图，点一下节点，就能把这条指令一块一块地读明白。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/?example=attention.after" target="_blank" rel="noopener noreferrer"&gt;在线体验&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id="从画出计算图到读懂这条指令" &gt;
 &lt;div&gt;
 &lt;a href="#%e4%bb%8e%e7%94%bb%e5%87%ba%e8%ae%a1%e7%ae%97%e5%9b%be%e5%88%b0%e8%af%bb%e6%87%82%e8%bf%99%e6%9d%a1%e6%8c%87%e4%bb%a4"&gt;
