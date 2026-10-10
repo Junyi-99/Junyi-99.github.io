@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 10 Oct 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/jax/index.xml" rel="self" type="application/rss+xml"/><item><title>HLO Visualizer: Learn XLA HLO by Exploring It</title><link>https://www.junyi.dev/en/posts/hlo-visualizer/</link><pubDate>Sat, 10 Oct 2026 14:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+When working with JAX on TPU, you eventually need to read HLO. You want to know what a computation became after compilation, why extra copies appeared, or what is inside a fusion. The answers start with a compiler-generated text file.
+Opening that file is easy. Understanding it takes more work: instructions pack together shapes, layouts, tiling, memory spaces, and references to other computations.
+I built HLO Visualizer to make that easier. It turns HLO text into an explorable graph, with explanations of the instruction you select, piece by piece.
+Try it online · Source on GitHub</description><content:encoded>&lt;p&gt;When working with JAX on TPU, you eventually need to read HLO. You want to know what a computation became after compilation, why extra copies appeared, or what is inside a fusion. The answers start with a compiler-generated text file.&lt;/p&gt;
+&lt;p&gt;Opening that file is easy. Understanding it takes more work: instructions pack together shapes, layouts, tiling, memory spaces, and references to other computations.&lt;/p&gt;
+&lt;p&gt;I built &lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;HLO Visualizer&lt;/a&gt;&lt;/strong&gt; to make that easier. It turns HLO text into an explorable graph, with explanations of the instruction you select, piece by piece.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/?example=attention.after" target="_blank" rel="noopener noreferrer"&gt;Try it online&lt;/a&gt; · &lt;a href="https://github.com/Junyi-99/hlo-visualizer" target="_blank" rel="noopener noreferrer"&gt;Source on GitHub&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="from-seeing-the-graph-to-understanding-an-instruction" &gt;
+&lt;div&gt;
+&lt;a href="#from-seeing-the-graph-to-understanding-an-instruction"&gt;
+#
+&lt;/a&gt;
+From seeing the graph to understanding an instruction
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;There is already an official HLO visualization tool: &lt;strong&gt;XProf&amp;rsquo;s Graph Viewer&lt;/strong&gt;. It lets you explore an operation&amp;rsquo;s neighborhood, expand or collapse fusions, and connect the graph to profiling data. That is useful when you have identified an expensive operation and want to understand its dependencies. The &lt;a href="https://openxla.org/xprof/graph_viewer" target="_blank" rel="noopener noreferrer"&gt;official documentation&lt;/a&gt; describes this workflow.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/xprof-graph-viewer.png" alt="The official XProf Graph Viewer showing HLO instructions and dependencies around reduce.111" loading="lazy"&gt;
+&lt;figcaption&gt;XProf Graph Viewer. Image from the &lt;a href="https://openxla.org/xprof/graph_viewer"&gt;OpenXLA documentation&lt;/a&gt;, used with attribution under &lt;a href="https://creativecommons.org/licenses/by/4.0/"&gt;CC BY 4.0&lt;/a&gt;.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;My focus is the next question a learner asks: &lt;strong&gt;once I can see a node, what does each part of its instruction mean?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;HLO Visualizer puts the graph and the explanation in one interface. Nodes distinguish inputs, computation, transfers, and control flow. Select one to trace dependencies, inspect its original HLO, and navigate to the computations it references.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/attention-graph.jpg" alt="HLO Visualizer showing compiled attention on TPU, with inputs, HBM-to-VMEM transfers, and fusion nodes" loading="lazy"&gt;
+&lt;figcaption&gt;The attention example in HLO Visualizer. Follow inputs, transfers, and fusions, then click a node for details. This and the official screenshot use different programs; they illustrate the interfaces and reading workflows.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;XProf connects HLO to measured performance. HLO Visualizer starts with &lt;strong&gt;a piece of HLO text you want to understand&lt;/strong&gt;. Paste it, open a &lt;code&gt;.hlo&lt;/code&gt; or &lt;code&gt;.txt&lt;/code&gt; file, or choose a bundled example. You can explore examples without a TPU or a captured profile. For actual execution times, use XProf alongside it.&lt;/p&gt;
+&lt;h2 id="put-the-tutorial-beside-the-instruction" &gt;
+&lt;div&gt;
+&lt;a href="#put-the-tutorial-beside-the-instruction"&gt;
+#
+&lt;/a&gt;
+Put the tutorial beside the instruction
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Google DeepMind&amp;rsquo;s &lt;em&gt;How to Scale Your Model&lt;/em&gt; has a useful introduction, &lt;a href="https://jax-ml.github.io/scaling-book/profiling/#how-to-read-an-xla-op" target="_blank" rel="noopener noreferrer"&gt;How to read an XLA op&lt;/a&gt;. It explains names, types, layouts, memory locations, and operands through a fusion example. OpenXLA&amp;rsquo;s &lt;a href="https://openxla.org/xla/operation_semantics" target="_blank" rel="noopener noreferrer"&gt;Operation semantics&lt;/a&gt; is the reference for precise operation behavior.&lt;/p&gt;
+&lt;p&gt;The next step is applying those rules to your own program. I want to make that step more direct: &lt;strong&gt;learn the rule once, then see it explained on the instruction you are reading.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Consider this simplified instruction:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;%x = bf16[128,128]{1,0:T(8,128)(2,1)S(1)} parameter(0)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It contains several layers of information:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;%x&lt;/code&gt; names the instruction&amp;rsquo;s result.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bf16[128,128]&lt;/code&gt; gives the logical type and shape.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;1,0&lt;/code&gt; is the minor-to-major dimension order.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;T(8,128)(2,1)&lt;/code&gt; describes two levels of physical tiling.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;S(1)&lt;/code&gt; means VMEM in these TPU examples.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;parameter(0)&lt;/code&gt; declares input 0 of the current computation.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The inspector breaks the original instruction into colored segments and explains its name, operation, operands, and attributes. Expand the type to inspect shape, dimension order, tiling, and memory space separately. Tuple elements can be explored individually too.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/decomposition.png" alt="The inspector breaking a while instruction into result type, name, operation, inputs, loop condition, and loop body" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;
+&lt;figcaption&gt;A while instruction, broken down into explanations of its state, condition, and body.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The difference is practical: documentation teaches the syntax; the inspector applies explanations to your selected instruction. You spend less time matching text to diagrams and reference pages, and can keep following the program.&lt;/p&gt;
+&lt;h2 id="draw-the-tpu-layout" &gt;
+&lt;div&gt;
+&lt;a href="#draw-the-tpu-layout"&gt;
+#
+&lt;/a&gt;
+Draw the TPU layout
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Layout notation can interrupt that flow. &lt;strong&gt;Logical shape and physical storage layout describe different things.&lt;/strong&gt; A &lt;code&gt;128 × 128&lt;/code&gt; array can be split into tiles, with another level of tiling inside each tile. OpenXLA&amp;rsquo;s &lt;a href="https://openxla.org/xla/shapes" target="_blank" rel="noopener noreferrer"&gt;Shapes and layout&lt;/a&gt; and &lt;a href="https://openxla.org/xla/tiled_layout" target="_blank" rel="noopener noreferrer"&gt;Tiled layout&lt;/a&gt; document the representation.&lt;/p&gt;
+&lt;p&gt;For the common TPU layout &lt;code&gt;T(8,128)(2,1)&lt;/code&gt;, HLO Visualizer draws a corner of a tile, labeling physical offsets and inner tile boundaries. The two sets of numbers become something you can see.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/array-layout.png" alt="A diagram of bf16 T(8,128)(2,1) tiling, with physical offsets and red outlines around 2-by-1 inner tiles" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;
+&lt;figcaption&gt;The top-left corner of an 8×128 outer tile. Red outlines mark 2×1 inner tiles; numbers are physical offsets within the tile.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;The tool also explains TPU memory locations such as HBM, VMEM, and SMEM, helping you interpret transfer instructions. Memory-space numbers depend on the backend; the explanations here use the project&amp;rsquo;s TPU v6e examples as their context.&lt;/p&gt;
+&lt;h2 id="start-with-a-small-program" &gt;
+&lt;div&gt;
+&lt;a href="#start-with-a-small-program"&gt;
+#
+&lt;/a&gt;
+Start with a small program
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;The bundled examples come from &lt;strong&gt;21 small JAX programs compiled on TPU v6e&lt;/strong&gt;, each with HLO before and after optimization. Try &lt;a href="https://www.junyi.dev/hlo-visualizer/?example=attention.after" target="_blank" rel="noopener noreferrer"&gt;attention&lt;/a&gt; for inputs and fusions, &lt;a href="https://www.junyi.dev/hlo-visualizer/?example=fori_matmul.after" target="_blank" rel="noopener noreferrer"&gt;fori_matmul&lt;/a&gt; for loops, or &lt;a href="https://www.junyi.dev/hlo-visualizer/?example=gather_scatter.after" target="_blank" rel="noopener noreferrer"&gt;gather_scatter&lt;/a&gt; for indexing operations.&lt;/p&gt;
+&lt;p&gt;Open an example, enter its entry computation from the sidebar, and select a node. Inspect its inputs and result type, then explore a computation referenced by a fusion or while. Switch between Before and After in Examples to inspect how compilation changes the graph.&lt;/p&gt;
+&lt;p&gt;To explore your own code, export HLO through &lt;a href="https://docs.jax.dev/en/latest/aot.html" target="_blank" rel="noopener noreferrer"&gt;JAX&amp;rsquo;s lowering and compilation interfaces&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;import&lt;/span&gt; jax
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;import&lt;/span&gt; jax.numpy &lt;span style="color:#ff6ac1"&gt;as&lt;/span&gt; jnp
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;def&lt;/span&gt; &lt;span style="color:#57c7ff"&gt;f&lt;/span&gt;(x, w):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;return&lt;/span&gt; jax&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;nn&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;relu(x &lt;span style="color:#ff6ac1"&gt;@&lt;/span&gt; w)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;x &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;ones((&lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;, &lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;), dtype&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;bfloat16)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;w &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;ones((&lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;, &lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;), dtype&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;bfloat16)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lowered &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; jax&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;jit(f)&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;lower(x, w)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# HLO before optimization&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;print&lt;/span&gt;(lowered&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;as_text(dialect&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;hlo&amp;#34;&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# Compiled HLO; layouts and memory spaces depend on the backend&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;print&lt;/span&gt;(lowered&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;compile()&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;as_text())
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Copy either output and paste it through &lt;strong&gt;Open HLO&lt;/strong&gt;. HLO text from XLA&amp;rsquo;s &lt;code&gt;--xla_dump_to&lt;/code&gt; works too.&lt;/p&gt;
+&lt;p&gt;I want someone learning HLO for the first time to be able to connect the syntax to a small, real program. &lt;strong&gt;Open the graph, select an instruction, and follow the data.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;Try HLO Visualizer&lt;/a&gt;&lt;/strong&gt;. If it helps you understand your HLO, a star on &lt;a href="https://github.com/Junyi-99/hlo-visualizer" target="_blank" rel="noopener noreferrer"&gt;GitHub&lt;/a&gt; is welcome. Please open an issue for instructions that are unclear or do not parse correctly.&lt;/p&gt;</content:encoded><category>TPU</category><category>JAX</category><category>XLA</category><category>HLO</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/hlo-visualizer/</guid></item></channel></rss>

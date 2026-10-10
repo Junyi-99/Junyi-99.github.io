@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>zh-cn</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 10 Oct 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/tags/xla/index.xml" rel="self" type="application/rss+xml"/><item><title>HLO Visualizer：把 XLA HLO 变成看得懂的图</title><link>https://www.junyi.dev/posts/hlo-visualizer/</link><pubDate>Sat, 10 Oct 2026 14:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+调 JAX / TPU 程序的时候，迟早会碰到 HLO。想知道一个计算被编译成了什么、为什么多出几次 copy、一个 fusion 里到底装了哪些操作，最后都要打开编译器吐出来的那份文本。
+但能打开，不等于能看懂。指令里挤着 shape、layout、tiling、memory space 和 computation 引用，光认出 bf16 和 fusion 还远远不够。
+所以我做了 HLO Visualizer：把 HLO 文本变成可以探索的图，点一下节点，就能把这条指令一块一块地读明白。
+在线体验 · GitHub 源码</description><content:encoded>&lt;p&gt;调 JAX / TPU 程序的时候，迟早会碰到 HLO。想知道一个计算被编译成了什么、为什么多出几次 copy、一个 fusion 里到底装了哪些操作，最后都要打开编译器吐出来的那份文本。&lt;/p&gt;
+&lt;p&gt;但能打开，不等于能看懂。指令里挤着 shape、layout、tiling、memory space 和 computation 引用，光认出 &lt;code&gt;bf16&lt;/code&gt; 和 &lt;code&gt;fusion&lt;/code&gt; 还远远不够。&lt;/p&gt;
+&lt;p&gt;所以我做了 &lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;HLO Visualizer&lt;/a&gt;&lt;/strong&gt;：把 HLO 文本变成可以探索的图，点一下节点，就能把这条指令一块一块地读明白。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/?example=attention.after" target="_blank" rel="noopener noreferrer"&gt;在线体验&lt;/a&gt; · &lt;a href="https://github.com/Junyi-99/hlo-visualizer" target="_blank" rel="noopener noreferrer"&gt;GitHub 源码&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="从画出计算图到读懂这条指令" &gt;
+&lt;div&gt;
+&lt;a href="#%e4%bb%8e%e7%94%bb%e5%87%ba%e8%ae%a1%e7%ae%97%e5%9b%be%e5%88%b0%e8%af%bb%e6%87%82%e8%bf%99%e6%9d%a1%e6%8c%87%e4%bb%a4"&gt;
+#
+&lt;/a&gt;
+从「画出计算图」到「读懂这条指令」
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;官方已经有 HLO 可视化工具了：&lt;strong&gt;XProf 的 Graph Viewer&lt;/strong&gt;。它能围绕某条操作查看依赖关系、展开或折叠 fusion，并把图与 profiling 数据关联起来。定位到耗时操作后，再跳进图里看它的上下游，这个工作流很有用。&lt;a href="https://openxla.org/xprof/graph_viewer" target="_blank" rel="noopener noreferrer"&gt;官方文档&lt;/a&gt;也介绍了这些功能。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/xprof-graph-viewer.png" alt="XProf 官方 Graph Viewer，展示 reduce.111 周围的 HLO 指令与依赖关系" loading="lazy"&gt;
+&lt;figcaption&gt;XProf Graph Viewer。图片来自 &lt;a href="https://openxla.org/xprof/graph_viewer"&gt;OpenXLA 官方文档&lt;/a&gt;，按 &lt;a href="https://creativecommons.org/licenses/by/4.0/"&gt;CC BY 4.0&lt;/a&gt; 署名使用。&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;我想解决的是学习 HLO 时的另一个卡点：&lt;strong&gt;看见节点以后，能不能顺手理解节点里的每个符号？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;HLO Visualizer 把图和指令解释放在同一个界面里。图上的节点按输入、计算、数据搬运、控制流等类别区分；选中节点后，可以追踪上下游，查看原始 HLO，再进入它引用的 computation。读图和读指令之间不需要一直切换窗口。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/attention-graph.jpg" alt="HLO Visualizer 展示 TPU 上编译后的 attention 入口计算，包含输入、HBM 到 VMEM 的搬运和 fusion 节点" loading="lazy"&gt;
+&lt;figcaption&gt;HLO Visualizer 的 attention 示例：先看清输入、数据搬运和 fusion 之间的关系，再点击节点看细节。与上面的官方截图使用不同程序，展示的是界面与阅读方式。&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;XProf 的强项是把 HLO 与真实运行表现联系起来。我的工具更侧重 &lt;strong&gt;拿到一份 HLO 文本，就开始理解它&lt;/strong&gt;：可以粘贴、打开 &lt;code&gt;.hlo&lt;/code&gt; / &lt;code&gt;.txt&lt;/code&gt; 文件，或者直接选内置示例。浏览示例无需准备 TPU 或采集 profile。判断某条指令实际花了多少时间，仍然要结合 XProf。&lt;/p&gt;
+&lt;h2 id="把教程放到你正在读的指令旁边" &gt;
+&lt;div&gt;
+&lt;a href="#%e6%8a%8a%e6%95%99%e7%a8%8b%e6%94%be%e5%88%b0%e4%bd%a0%e6%ad%a3%e5%9c%a8%e8%af%bb%e7%9a%84%e6%8c%87%e4%bb%a4%e6%97%81%e8%be%b9"&gt;
+#
+&lt;/a&gt;
+把教程放到你正在读的指令旁边
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Google DeepMind 的 &lt;em&gt;How to Scale Your Model&lt;/em&gt; 中，&lt;a href="https://jax-ml.github.io/scaling-book/profiling/#how-to-read-an-xla-op" target="_blank" rel="noopener noreferrer"&gt;How to read an XLA op&lt;/a&gt; 是很好的入门材料：它用一条 fusion 说明名称、类型、布局、内存位置和输入该怎么读。OpenXLA 的 &lt;a href="https://openxla.org/xla/operation_semantics" target="_blank" rel="noopener noreferrer"&gt;Operation semantics&lt;/a&gt; 则适合查操作的准确语义。&lt;/p&gt;
+&lt;p&gt;读完教程，再面对自己的 HLO，还是需要把这些知识逐项对应回去。我希望这个过程更直接：&lt;strong&gt;教程讲一次规则，工具在每一条实际指令上帮你对照规则。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;比如下面是一条简化的指令：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;%x = bf16[128,128]{1,0:T(8,128)(2,1)S(1)} parameter(0)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;它同时包含几层信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;%x&lt;/code&gt; 是这条指令结果的名字。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bf16[128,128]&lt;/code&gt; 是逻辑类型和 shape。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;1,0&lt;/code&gt; 是布局的 minor-to-major 维度顺序。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;T(8,128)(2,1)&lt;/code&gt; 表示两层物理 tiling。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;S(1)&lt;/code&gt; 在这里的 TPU 示例中表示 VMEM。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;parameter(0)&lt;/code&gt; 表示当前 computation 的第 0 个输入。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Inspector 会把原始指令分成对应的彩色片段，解释名称、操作、输入和属性。类型还可以继续展开，分别看 shape、维度顺序、tiling 和内存空间；tuple 里的元素也能逐层查看。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/decomposition.png" alt="Inspector 把 while 指令拆成结果类型、名称、操作、输入、循环条件和循环体，并分别解释" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;
+&lt;figcaption&gt;一条 while 指令拆开以后，循环状态、condition 和 body 就有了各自的解释。&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;这里的区别很具体：文档告诉你一种语法怎么读，工具把解释放在你当前选中的指令旁边。少一点在文本、图和文档之间来回找对应关系的时间，就更容易沿着一个实际程序学下去。&lt;/p&gt;
+&lt;h2 id="tpu-的-layout直接画出来" &gt;
+&lt;div&gt;
+&lt;a href="#tpu-%e7%9a%84-layout%e7%9b%b4%e6%8e%a5%e7%94%bb%e5%87%ba%e6%9d%a5"&gt;
+#
+&lt;/a&gt;
+TPU 的 layout，直接画出来
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;HLO 里最容易让人停住的部分之一是 layout。&lt;strong&gt;逻辑 shape 和物理存储布局是两回事&lt;/strong&gt;：一个 &lt;code&gt;128 × 128&lt;/code&gt; 的数组，还可以按 tile 分块，再在 tile 内继续分块。OpenXLA 的 &lt;a href="https://openxla.org/xla/shapes" target="_blank" rel="noopener noreferrer"&gt;Shapes and layout&lt;/a&gt; 与 &lt;a href="https://openxla.org/xla/tiled_layout" target="_blank" rel="noopener noreferrer"&gt;Tiled layout&lt;/a&gt; 给出了正式说明。&lt;/p&gt;
+&lt;p&gt;对于 TPU 示例里常见的 &lt;code&gt;T(8,128)(2,1)&lt;/code&gt;，HLO Visualizer 会画出 tile 的一个局部，标明元素在 tile 内的物理偏移和内层 tile 的边界。这样就能把字符串里的两组数字和实际排列对应起来。&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/hlo-visualizer/array-layout.png" alt="bf16 数组的 T(8,128)(2,1) 布局图，数字标记 tile 内的物理偏移，红框标记 2×1 内层 tile" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;
+&lt;figcaption&gt;8×128 外层 tile 的左上角；红框是 2×1 内层 tile，格子里的数字是 tile 内的物理偏移。&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;工具也会按 TPU 的内存空间解释 HBM、VMEM、SMEM 等位置，帮助理解数据搬运指令。这里的空间编号与后端有关，文章和截图里的解释以项目提供的 TPU v6e 示例为背景。&lt;/p&gt;
+&lt;h2 id="用一个小程序开始" &gt;
+&lt;div&gt;
+&lt;a href="#%e7%94%a8%e4%b8%80%e4%b8%aa%e5%b0%8f%e7%a8%8b%e5%ba%8f%e5%bc%80%e5%a7%8b"&gt;
+#
+&lt;/a&gt;
+用一个小程序开始
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;内置示例来自 &lt;strong&gt;21 个在 TPU v6e 上编译的 JAX 小程序&lt;/strong&gt;，每个都提供优化前和优化后的 HLO。你可以从 &lt;a href="https://www.junyi.dev/hlo-visualizer/?example=attention.after" target="_blank" rel="noopener noreferrer"&gt;attention&lt;/a&gt; 看输入和 fusion，也可以从 &lt;a href="https://www.junyi.dev/hlo-visualizer/?example=fori_matmul.after" target="_blank" rel="noopener noreferrer"&gt;fori_matmul&lt;/a&gt; 看循环，或者从 &lt;a href="https://www.junyi.dev/hlo-visualizer/?example=gather_scatter.after" target="_blank" rel="noopener noreferrer"&gt;gather_scatter&lt;/a&gt; 看索引操作。&lt;/p&gt;
+&lt;p&gt;一个简单的学习顺序是：打开示例，从左侧进入入口 computation，点一个节点看输入和结果类型，再进入 fusion 或 while 引用的 computation。然后在 Examples 中切换同一个程序的 Before / After，观察编译前后图的变化。&lt;/p&gt;
+&lt;p&gt;如果想看自己的代码，可以按照 &lt;a href="https://docs.jax.dev/en/latest/aot.html" target="_blank" rel="noopener noreferrer"&gt;JAX 的 lowering / compilation 接口&lt;/a&gt; 导出 HLO：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;import&lt;/span&gt; jax
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;import&lt;/span&gt; jax.numpy &lt;span style="color:#ff6ac1"&gt;as&lt;/span&gt; jnp
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;def&lt;/span&gt; &lt;span style="color:#57c7ff"&gt;f&lt;/span&gt;(x, w):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ff6ac1"&gt;return&lt;/span&gt; jax&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;nn&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;relu(x &lt;span style="color:#ff6ac1"&gt;@&lt;/span&gt; w)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;x &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;ones((&lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;, &lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;), dtype&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;bfloat16)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;w &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;ones((&lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;, &lt;span style="color:#ff9f43"&gt;128&lt;/span&gt;), dtype&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;jnp&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;bfloat16)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lowered &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; jax&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;jit(f)&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;lower(x, w)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 优化前的 HLO&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;print&lt;/span&gt;(lowered&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;as_text(dialect&lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt;&lt;span style="color:#5af78e"&gt;&amp;#34;hlo&amp;#34;&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#78787e"&gt;# 编译后的 HLO；具体布局与内存空间取决于后端&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;print&lt;/span&gt;(lowered&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;compile()&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;as_text())
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;复制其中一份输出，点击 &lt;strong&gt;Open HLO&lt;/strong&gt; 粘贴进去即可。XLA 通过 &lt;code&gt;--xla_dump_to&lt;/code&gt; 导出的 HLO 文本也可以打开。&lt;/p&gt;
+&lt;p&gt;我希望第一次学习 HLO 的人，也能从一个小程序开始，把抽象的语法和眼前的计算对应起来。&lt;strong&gt;打开图，点一条指令，顺着数据往下看。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;试试 HLO Visualizer&lt;/a&gt;&lt;/strong&gt;。如果它让你更容易读懂自己的 HLO，欢迎给 &lt;a href="https://github.com/Junyi-99/hlo-visualizer" target="_blank" rel="noopener noreferrer"&gt;GitHub 仓库&lt;/a&gt; 点个 star；遇到看不懂或解析不对的指令，也欢迎提 issue。&lt;/p&gt;</content:encoded><category>TPU</category><category>JAX</category><category>XLA</category><category>HLO</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/hlo-visualizer/</guid></item></channel></rss>
