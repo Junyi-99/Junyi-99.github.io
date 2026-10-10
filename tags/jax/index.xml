@@ -19,13 +19,12 @@
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/xprof-graph-viewer.png" alt="XProf 官方 Graph Viewer，展示 reduce.111 周围的 HLO 指令与依赖关系" loading="lazy"&gt;
 &lt;figcaption&gt;XProf Graph Viewer。图片来自 &lt;a href="https://openxla.org/xprof/graph_viewer"&gt;OpenXLA 官方文档&lt;/a&gt;，按 &lt;a href="https://creativecommons.org/licenses/by/4.0/"&gt;CC BY 4.0&lt;/a&gt; 署名使用。&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;我想解决的是学习 HLO 时的另一个卡点：&lt;strong&gt;看见节点以后，能不能顺手理解节点里的每个符号？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;HLO Visualizer 把图和指令解释放在同一个界面里。图上的节点按输入、计算、数据搬运、控制流等类别区分；选中节点后，可以追踪上下游，查看原始 HLO，再进入它引用的 computation。读图和读指令之间不需要一直切换窗口。&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/attention-graph.jpg" alt="HLO Visualizer 展示 TPU 上编译后的 attention 入口计算，包含输入、HBM 到 VMEM 的搬运和 fusion 节点" loading="lazy"&gt;
 &lt;figcaption&gt;HLO Visualizer 的 attention 示例：先看清输入、数据搬运和 fusion 之间的关系，再点击节点看细节。与上面的官方截图使用不同程序，展示的是界面与阅读方式。&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;XProf 的强项是把 HLO 与真实运行表现联系起来。我的工具更侧重 &lt;strong&gt;拿到一份 HLO 文本，就开始理解它&lt;/strong&gt;：可以粘贴、打开 &lt;code&gt;.hlo&lt;/code&gt; / &lt;code&gt;.txt&lt;/code&gt; 文件，或者直接选内置示例。浏览示例无需准备 TPU 或采集 profile。判断某条指令实际花了多少时间，仍然要结合 XProf。&lt;/p&gt;
+&lt;p&gt;XProf 的强项是把 HLO 与真实运行表现联系起来。我的工具更侧重 &lt;strong&gt;拿到一份 HLO 文本，就开始理解它&lt;/strong&gt;。&lt;/p&gt;
 &lt;h2 id="把教程放到你正在读的指令旁边" &gt;
 &lt;div&gt;
 &lt;a href="#%e6%8a%8a%e6%95%99%e7%a8%8b%e6%94%be%e5%88%b0%e4%bd%a0%e6%ad%a3%e5%9c%a8%e8%af%bb%e7%9a%84%e6%8c%87%e4%bb%a4%e6%97%81%e8%be%b9"&gt;
@@ -35,7 +34,7 @@
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;Google DeepMind 的 &lt;em&gt;How to Scale Your Model&lt;/em&gt; 中，&lt;a href="https://jax-ml.github.io/scaling-book/profiling/#how-to-read-an-xla-op" target="_blank" rel="noopener noreferrer"&gt;How to read an XLA op&lt;/a&gt; 是很好的入门材料：它用一条 fusion 说明名称、类型、布局、内存位置和输入该怎么读。OpenXLA 的 &lt;a href="https://openxla.org/xla/operation_semantics" target="_blank" rel="noopener noreferrer"&gt;Operation semantics&lt;/a&gt; 则适合查操作的准确语义。&lt;/p&gt;
-&lt;p&gt;读完教程，再面对自己的 HLO，还是需要把这些知识逐项对应回去。我希望这个过程更直接：&lt;strong&gt;教程讲一次规则，工具在每一条实际指令上帮你对照规则。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;读完教程，再面对自己的 HLO，还是需要把这些知识逐项对应回去。&lt;/p&gt;
 &lt;p&gt;比如下面是一条简化的指令：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;%x = bf16[128,128]{1,0:T(8,128)(2,1)S(1)} parameter(0)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;它同时包含几层信息：&lt;/p&gt;
@@ -52,7 +51,6 @@
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/decomposition.png" alt="Inspector 把 while 指令拆成结果类型、名称、操作、输入、循环条件和循环体，并分别解释" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;
 &lt;figcaption&gt;一条 while 指令拆开以后，循环状态、condition 和 body 就有了各自的解释。&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;这里的区别很具体：文档告诉你一种语法怎么读，工具把解释放在你当前选中的指令旁边。少一点在文本、图和文档之间来回找对应关系的时间，就更容易沿着一个实际程序学下去。&lt;/p&gt;
 &lt;h2 id="tpu-的-layout直接画出来" &gt;
 &lt;div&gt;
 &lt;a href="#tpu-%e7%9a%84-layout%e7%9b%b4%e6%8e%a5%e7%94%bb%e5%87%ba%e6%9d%a5"&gt;

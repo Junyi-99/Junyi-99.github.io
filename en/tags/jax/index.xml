@@ -19,13 +19,12 @@ From seeing the graph to understanding an instruction
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/xprof-graph-viewer.png" alt="The official XProf Graph Viewer showing HLO instructions and dependencies around reduce.111" loading="lazy"&gt;
 &lt;figcaption&gt;XProf Graph Viewer. Image from the &lt;a href="https://openxla.org/xprof/graph_viewer"&gt;OpenXLA documentation&lt;/a&gt;, used with attribution under &lt;a href="https://creativecommons.org/licenses/by/4.0/"&gt;CC BY 4.0&lt;/a&gt;.&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;My focus is the next question a learner asks: &lt;strong&gt;once I can see a node, what does each part of its instruction mean?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;HLO Visualizer puts the graph and the explanation in one interface. Nodes distinguish inputs, computation, transfers, and control flow. Select one to trace dependencies, inspect its original HLO, and navigate to the computations it references.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/attention-graph.jpg" alt="HLO Visualizer showing compiled attention on TPU, with inputs, HBM-to-VMEM transfers, and fusion nodes" loading="lazy"&gt;
 &lt;figcaption&gt;The attention example in HLO Visualizer. Follow inputs, transfers, and fusions, then click a node for details. This and the official screenshot use different programs; they illustrate the interfaces and reading workflows.&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;XProf connects HLO to measured performance. HLO Visualizer starts with &lt;strong&gt;a piece of HLO text you want to understand&lt;/strong&gt;. Paste it, open a &lt;code&gt;.hlo&lt;/code&gt; or &lt;code&gt;.txt&lt;/code&gt; file, or choose a bundled example. You can explore examples without a TPU or a captured profile. For actual execution times, use XProf alongside it.&lt;/p&gt;
+&lt;p&gt;XProf connects HLO to measured performance. HLO Visualizer starts with &lt;strong&gt;a piece of HLO text you want to understand&lt;/strong&gt;.&lt;/p&gt;
 &lt;h2 id="put-the-tutorial-beside-the-instruction" &gt;
 &lt;div&gt;
 &lt;a href="#put-the-tutorial-beside-the-instruction"&gt;
@@ -35,7 +34,7 @@ Put the tutorial beside the instruction
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;Google DeepMind&amp;rsquo;s &lt;em&gt;How to Scale Your Model&lt;/em&gt; has a useful introduction, &lt;a href="https://jax-ml.github.io/scaling-book/profiling/#how-to-read-an-xla-op" target="_blank" rel="noopener noreferrer"&gt;How to read an XLA op&lt;/a&gt;. It explains names, types, layouts, memory locations, and operands through a fusion example. OpenXLA&amp;rsquo;s &lt;a href="https://openxla.org/xla/operation_semantics" target="_blank" rel="noopener noreferrer"&gt;Operation semantics&lt;/a&gt; is the reference for precise operation behavior.&lt;/p&gt;
-&lt;p&gt;The next step is applying those rules to your own program. I want to make that step more direct: &lt;strong&gt;learn the rule once, then see it explained on the instruction you are reading.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The next step is applying those rules to your own program.&lt;/p&gt;
 &lt;p&gt;Consider this simplified instruction:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;%x = bf16[128,128]{1,0:T(8,128)(2,1)S(1)} parameter(0)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It contains several layers of information:&lt;/p&gt;
@@ -52,7 +51,6 @@ Put the tutorial beside the instruction
 &lt;img src="https://www.junyi.dev/posts/hlo-visualizer/decomposition.png" alt="The inspector breaking a while instruction into result type, name, operation, inputs, loop condition, and loop body" loading="lazy" style="max-width: 480px; width: 100%; display: block; margin: auto;"&gt;
 &lt;figcaption&gt;A while instruction, broken down into explanations of its state, condition, and body.&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;The difference is practical: documentation teaches the syntax; the inspector applies explanations to your selected instruction. You spend less time matching text to diagrams and reference pages, and can keep following the program.&lt;/p&gt;
 &lt;h2 id="draw-the-tpu-layout" &gt;
 &lt;div&gt;
 &lt;a href="#draw-the-tpu-layout"&gt;
