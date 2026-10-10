@@ -2,10 +2,10 @@
 When working with JAX on TPU, you eventually need to read HLO. You want to know what a computation became after compilation, why extra copies appeared, or what is inside a fusion. The answers start with a compiler-generated text file.
 Opening that file is easy. Understanding it takes more work: instructions pack together shapes, layouts, tiling, memory spaces, and references to other computations.
 I built HLO Visualizer to make that easier. It turns HLO text into an explorable graph, with explanations of the instruction you select, piece by piece.
-Try it online · Source on GitHub</description><content:encoded>&lt;p&gt;When working with JAX on TPU, you eventually need to read HLO. You want to know what a computation became after compilation, why extra copies appeared, or what is inside a fusion. The answers start with a compiler-generated text file.&lt;/p&gt;
+Try it online</description><content:encoded>&lt;p&gt;When working with JAX on TPU, you eventually need to read HLO. You want to know what a computation became after compilation, why extra copies appeared, or what is inside a fusion. The answers start with a compiler-generated text file.&lt;/p&gt;
 &lt;p&gt;Opening that file is easy. Understanding it takes more work: instructions pack together shapes, layouts, tiling, memory spaces, and references to other computations.&lt;/p&gt;
 &lt;p&gt;I built &lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;HLO Visualizer&lt;/a&gt;&lt;/strong&gt; to make that easier. It turns HLO text into an explorable graph, with explanations of the instruction you select, piece by piece.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/?example=attention.after" target="_blank" rel="noopener noreferrer"&gt;Try it online&lt;/a&gt; · &lt;a href="https://github.com/Junyi-99/hlo-visualizer" target="_blank" rel="noopener noreferrer"&gt;Source on GitHub&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/?example=attention.after" target="_blank" rel="noopener noreferrer"&gt;Try it online&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id="from-seeing-the-graph-to-understanding-an-instruction" &gt;
 &lt;div&gt;
 &lt;a href="#from-seeing-the-graph-to-understanding-an-instruction"&gt;
