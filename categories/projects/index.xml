@@ -38,7 +38,7 @@ PCB 设计
 &lt;li&gt;&lt;del&gt;横着的座子不好用，换成罚站的好用&lt;/del&gt;&lt;/li&gt;
 &lt;li&gt;&amp;hellip;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;虽然 JYF 老师偶尔“内涵”我一下，但还是得感谢 JYF 老师，他的帮助这是让这个项目&lt;strong&gt;一次成功&lt;/strong&gt;的关键。&lt;/p&gt;
+&lt;p&gt;虽然 JYF 老师偶尔“内涵”我一下，但还是得感谢 JYF 老师，他的帮助是让这个项目&lt;strong&gt;一次成功&lt;/strong&gt;的关键。&lt;/p&gt;
 &lt;!-- &lt;figure&gt;
 &lt;img style="border-radius: 8px; overflow: hidden; box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.05);" src="https://www.junyi.dev/posts/boost-converter/subtext.png" alt="Subtexted by JYF" width="50%" /&gt;
 &lt;figcaption&gt;图 2 - JYF 内涵我&lt;/figcaption&gt;
@@ -53,7 +53,7 @@ PCB 设计
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;这是我第一次手工焊接 QFN 芯片，弄坏了一个 PCB 才焊接好。最后的成品质量很高。&lt;/p&gt;
-&lt;p&gt;之前焊接 0805 很丑，现在焊接 0603 封装现在也不在话下。&lt;del&gt;以后失业可以去工厂打螺丝了&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;之前焊接 0805 很丑，现在焊接 0603 封装也不在话下。&lt;del&gt;以后失业可以去工厂打螺丝了&lt;/del&gt;&lt;/p&gt;
 &lt;p&gt;这次焊接跟之前相比，有了很大进步（在这里看我之前的电路板：&lt;a href="https://oshwhub.com/osdubv/myfirstespproject_copy" target="_blank" rel="noopener noreferrer"&gt;超迷你 ESP8266 开发板&lt;/a&gt;）&lt;/p&gt;
 &lt;h2 id="成品图" &gt;
 &lt;div&gt;

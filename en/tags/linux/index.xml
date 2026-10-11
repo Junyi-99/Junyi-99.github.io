@@ -245,7 +245,7 @@ While you&amp;rsquo;re at it
 &lt;li&gt;&lt;code&gt;gh auth&lt;/code&gt;, &lt;code&gt;op&lt;/code&gt;, and other Keychain-dependent CLI tools not working&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;code&gt;reattach-to-user-namespace&lt;/code&gt; fixes all of them.&lt;/p&gt;</content:encoded><category>Linux</category><category>tmux</category><category>AI Systems</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item><item><title>From Raspberry Pi to NUC: An Upgrade of My Toy</title><link>https://www.junyi.dev/en/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.</description><content:encoded>&lt;p&gt;My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.&lt;/p&gt;
+I replaced the Raspberry Pi 4B I used for lightweight services with an Intel NUC, moving from ARM to x86 and from a TF card to an SSD.</description><content:encoded>&lt;p&gt;I replaced the Raspberry Pi 4B I used for lightweight services with an Intel NUC, moving from ARM to x86 and from a TF card to an SSD.&lt;/p&gt;
 &lt;h2 id="raspberry-pi-pros-and-cons" &gt;
 &lt;div&gt;
 &lt;a href="#raspberry-pi-pros-and-cons"&gt;
@@ -254,33 +254,24 @@ My long‑serving Raspberry Pi 4B has finally met its “successor” — the co
 Raspberry Pi: Pros and Cons
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;The Raspberry Pi 4B used to be a key pillar of my digital life. It quietly ran various lightweight services: monitoring my home network traffic, running automation scripts, and even serving as a temporary dev/test environment. To keep it stable, I set up a cron job to automatically reboot every Sunday, which kept it fairly reliable most of the time.&lt;/p&gt;
+&lt;p&gt;The Raspberry Pi 4B monitored my home network traffic, ran automation scripts, and occasionally served as a development and test environment. I also configured it to &lt;strong&gt;reboot automatically every Sunday&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;But its shortcomings surfaced as I pushed it further. What worried me most was the reliability of TF‑card storage — even with so‑called “endurance” cards, you can’t fully avoid I/O risks. After I published the article on &lt;a href="https://www.junyi.dev/posts/k3s-101/" target="_blank" rel="noopener noreferrer"&gt;setting up k3s on a Raspberry Pi 5 cluster&lt;/a&gt;, my four‑node cluster ran stably for only a week before one node died due to a sudden flood of I/O errors. Ironically, that node was using a carefully chosen high‑endurance card, which ended up lasting even shorter than the ordinary card in the 4B.&lt;/p&gt;
-&lt;p&gt;Performance bottlenecks also became more evident under heavier workloads: compiling a slightly larger project meant a long progress‑bar crawl, and occasional stutters with multiple services running in parallel reminded me of the hardware’s limits. While attaching an external SSD can ease the storage issue, it undoubtedly increases complexity; at that point, it made more sense to upgrade to a more reliable platform.&lt;/p&gt;
-&lt;h2 id="unboxing-the-nuc-and-the-performance-leap" &gt;
+&lt;p&gt;Compiling larger projects took a long time, and running several services at once sometimes caused stutters. An external SSD could address the storage problem, but I eventually chose to move to a NUC.&lt;/p&gt;
+&lt;h2 id="moving-to-the-nuc" &gt;
 &lt;div&gt;
-&lt;a href="#unboxing-the-nuc-and-the-performance-leap"&gt;
+&lt;a href="#moving-to-the-nuc"&gt;
 #
 &lt;/a&gt;
-Unboxing the NUC and the Performance Leap
+Moving to the NUC
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Unboxing the NUC, my first impression was: “too refined to be a mini PC.” The palm‑sized body isn’t much bigger than a Pi, but the hefty metal shell feels solid. I installed &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The performance gap is downright comforting: a Go project that took 3 minutes to compile on the Pi finishes in just 1 minute on the NUC.&lt;/p&gt;
+&lt;p&gt;The NUC isn&amp;rsquo;t much bigger than a Pi, but its metal shell is noticeably heavier. I installed &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The same Go project takes 3 minutes to compile on the Pi and 1 minute on the NUC.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
-&lt;figcaption&gt;Fig.1 - Compact yet powerful Intel NUC&lt;/figcaption&gt;
+&lt;figcaption&gt;Fig.1 - Intel NUC&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;The NUC brings not just performance but peace of mind: the built‑in SSD eliminates the TF‑card read/write anxiety, and the extra memory plus x86 architecture make heavier tasks easy. I finally feel comfortable running a small database locally — I used to worry frequent writes would burn out the card.&lt;/p&gt;
-&lt;p&gt;As for the retired Raspberry Pis, they’ll pivot to edge‑computing nodes and keep contributing.&lt;/p&gt;
-&lt;h2 id="closing-thoughts" &gt;
-&lt;div&gt;
-&lt;a href="#closing-thoughts"&gt;
-#
-&lt;/a&gt;
-Closing Thoughts
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;Whenever I see the Pi’s LEDs blinking in rhythm, I remember the excitement of first unboxing it. The joy of tinkering was never about chasing the newest and the fastest, but about watching these devices find the right place at each stage — like tools slowly collecting stories of their own.&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;With the built-in SSD, I also feel comfortable running a small database locally. Before, I worried that frequent writes would wear out the TF card.&lt;/p&gt;
+&lt;p&gt;The retired Raspberry Pis will continue serving as edge-computing nodes.&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>Using git-crypt to Encrypt and Decrypt files while using git</title><link>https://www.junyi.dev/en/posts/git-crypt/</link><pubDate>Tue, 30 Jan 2024 13:12:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 git-crypt enables transparent encryption and decryption of files in a git repository.
 Here is a demo of how to use git-crypt to encrypt files in a git repository.</description><content:encoded>&lt;p&gt;&lt;code&gt;git-crypt&lt;/code&gt; enables transparent encryption and decryption of files in a git repository.&lt;/p&gt;
 &lt;p&gt;Here is a demo of how to use &lt;code&gt;git-crypt&lt;/code&gt; to encrypt files in a git repository.&lt;/p&gt;

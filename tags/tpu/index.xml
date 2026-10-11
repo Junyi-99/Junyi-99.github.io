@@ -93,7 +93,7 @@ TPU 的 layout，直接画出来
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;复制其中一份输出，点击 &lt;strong&gt;Open HLO&lt;/strong&gt; 粘贴进去即可。XLA 通过 &lt;code&gt;--xla_dump_to&lt;/code&gt; 导出的 HLO 文本也可以打开。&lt;/p&gt;
 &lt;p&gt;我希望第一次学习 HLO 的人，也能从一个小程序开始，把抽象的语法和眼前的计算对应起来。&lt;strong&gt;打开图，点一条指令，顺着数据往下看。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;试试 HLO Visualizer&lt;/a&gt;&lt;/strong&gt;。如果它让你更容易读懂自己的 HLO，欢迎给 &lt;a href="https://github.com/Junyi-99/hlo-visualizer" target="_blank" rel="noopener noreferrer"&gt;GitHub 仓库&lt;/a&gt; 点个 star；遇到看不懂或解析不对的指令，也欢迎提 issue。&lt;/p&gt;</content:encoded><category>TPU</category><category>JAX</category><category>XLA</category><category>HLO</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/posts/hlo-visualizer/</guid></item><item><title>LLM Inference on TPU v6e-4: Small Dense, Large MoE, and Large Dense Models</title><link>https://www.junyi.dev/posts/tpu-v6e/</link><pubDate>Thu, 11 Jun 2026 00:00:00 Z</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-# Abstract We benchmark LLM inference on one Google TPU v6e-4 host (four chips, one VM) with four chips in one VM. We use vLLM 0.20.0 with the tpu-inference backend and an fp8 KV cache.
+# Abstract We benchmark LLM inference on one Google TPU v6e-4 host (four chips, one VM). We use vLLM 0.20.0 with the tpu-inference backend and an fp8 KV cache.
 We test three Qwen3 models:
 Model Type Params Parallelism Chips Qwen3.5-4B dense 4B active tp1 1 Qwen3-30B-A3B MoE 30B total / 3B active tp4 4 Qwen3-32B dense 32B active tp4 4 We measure three parts of inference: prefill, decode, and end-to-end online serving.</description><content:encoded>&lt;h2 id="abstract" &gt;
 &lt;div&gt;
@@ -103,7 +103,7 @@ Model Type Params Parallelism Chips Qwen3.5-4B dense 4B active tp1 1 Qwen3-30B-A
 Abstract
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;We benchmark LLM inference on one Google &lt;code&gt;TPU v6e-4&lt;/code&gt; host (four chips, one VM) with four chips in one VM. We use &lt;code&gt;vLLM 0.20.0&lt;/code&gt; with the &lt;code&gt;tpu-inference&lt;/code&gt; backend and an &lt;code&gt;fp8&lt;/code&gt; KV cache.&lt;/p&gt;
+&lt;p&gt;We benchmark LLM inference on one Google &lt;code&gt;TPU v6e-4&lt;/code&gt; host (four chips, one VM). We use &lt;code&gt;vLLM 0.20.0&lt;/code&gt; with the &lt;code&gt;tpu-inference&lt;/code&gt; backend and an &lt;code&gt;fp8&lt;/code&gt; KV cache.&lt;/p&gt;
 &lt;p&gt;We test three Qwen3 models:&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -142,7 +142,7 @@ Abstract
 &lt;p&gt;We measure three parts of inference: prefill, decode, and end-to-end online serving.&lt;/p&gt;
 &lt;p&gt;The MoE model is fastest in all three tests. It reaches 26,063 tok/s in prefill, compared with 19,714 tok/s for the dense 32B model. At batch size 1, its decode latency is 7.0 ms per token, compared with 17.9 ms for the dense 32B model. In online serving, it reaches 1.27 req/s and 1,303 output tok/s, compared with 0.88 req/s and 901 output tok/s for the dense 32B model.&lt;/p&gt;
 &lt;p&gt;The 4B model has good latency at low load, but it does not handle high concurrency well on one chip. Its stable serving capacity is about 0.45 req/s.&lt;/p&gt;
-&lt;p&gt;This is not a TPU-versus-GPU comparison. We did not run a GPU baseline. The goal is to report clear TPU v6e numbers using the same vLLM tools that users would run in practice.&lt;/p&gt;
+&lt;p&gt;The goal is to report TPU v6e performance using the same vLLM tools that users would run in practice.&lt;/p&gt;
 &lt;h2 id="1-motivation" &gt;
 &lt;div&gt;
 &lt;a href="#1-motivation"&gt;
@@ -151,14 +151,13 @@ Abstract
 1. Motivation
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Public TPU data for LLM inference is limited. The only TPU submission Google has made to MLPerf Inference is SDXL image generation, not an LLM. The TPU LLM numbers is measured on Google&amp;rsquo;s JAX/JetStream stack rather than the vLLM path most practitioners deploy.&lt;/p&gt;
+&lt;p&gt;Public TPU data for LLM inference is limited. The only TPU submission Google has made to MLPerf Inference is SDXL image generation, not an LLM. The TPU LLM numbers are measured on Google&amp;rsquo;s JAX/JetStream stack rather than the vLLM path most practitioners deploy.&lt;/p&gt;
 &lt;p&gt;We measured the performance ourselves on one TPU v6e-4 host. The goal is to give simple, reproducible numbers for three common model types:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;a small dense model,&lt;/li&gt;
 &lt;li&gt;a large MoE model,&lt;/li&gt;
 &lt;li&gt;a large dense model.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;All comparisons are between these three models on the same TPU host. We do not compare against GPUs, prices, or total cost.&lt;/p&gt;
 &lt;h2 id="2-experimental-setup" &gt;
 &lt;div&gt;
 &lt;a href="#2-experimental-setup"&gt;
@@ -821,10 +820,8 @@ Abstract
 4. Discussion
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Three points stand out.&lt;/p&gt;
-&lt;p&gt;First, active parameter count matters a lot for decode. The 30B-A3B MoE and the 32B dense model have similar total size, but very different active size. The MoE model uses 3B parameters per token. The dense model uses 32B. This explains the large decode gap: 7.0 ms versus 17.9 ms at batch size 1.&lt;/p&gt;
-&lt;p&gt;Second, the MoE model also wins in prefill. Its peak prefill throughput is 26,063 tok/s, or about 6.5k tok/s per chip. The dense 32B model reaches 19,714 tok/s, or about 4.9k tok/s per chip. On this host, the MoE model is faster in both prefill and decode.&lt;/p&gt;
-&lt;p&gt;Third, the small 4B model is limited by single-chip concurrency. It has good low-load latency, but one chip cannot absorb unlimited requests. Its practical serving capacity is about 0.45 req/s. To serve more traffic, the better path is to add chips or replicas, rather than pushing more concurrency onto one chip.&lt;/p&gt;
+&lt;p&gt;The large MoE and dense models have similar total parameter counts but different active sizes. The lower active parameter count helps explain the MoE model&amp;rsquo;s decode advantage.&lt;/p&gt;
+&lt;p&gt;The small 4B model is limited by its single-chip setup. To serve more traffic, the better path is to add chips or replicas, rather than increasing concurrency on one chip.&lt;/p&gt;
 &lt;h2 id="5-conclusion" &gt;
 &lt;div&gt;
 &lt;a href="#5-conclusion"&gt;
@@ -833,15 +830,7 @@ Abstract
 5. Conclusion
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;On one TPU v6e-4 host, using &lt;code&gt;vLLM 0.20.0&lt;/code&gt;, &lt;code&gt;tpu-inference&lt;/code&gt;, and an &lt;code&gt;fp8_e5m2&lt;/code&gt; KV cache, the large MoE model is the fastest of the three models we tested.&lt;/p&gt;
-&lt;p&gt;Compared with the dense 32B model, Qwen3-30B-A3B has:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;higher prefill throughput: 26,063 vs 19,714 tok/s,&lt;/li&gt;
-&lt;li&gt;lower batch-size-1 decode latency: 7.0 vs 17.9 ms,&lt;/li&gt;
-&lt;li&gt;higher serving capacity: 1.27 vs 0.88 req/s,&lt;/li&gt;
-&lt;li&gt;higher output throughput at saturation: 1,303 vs 901 tok/s.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The 4B dense model has good latency at low load, but on one chip it is concurrency-limited. Its stable serving capacity is about 0.45 req/s.&lt;/p&gt;
+&lt;p&gt;In these tests, Qwen3-30B-A3B has the highest prefill throughput, the lowest batch-size-1 decode latency, and the highest serving capacity. The 4B dense model has good low-load latency, but its single-chip setup limits concurrency.&lt;/p&gt;
 &lt;h2 id="limitations" &gt;
 &lt;div&gt;
 &lt;a href="#limitations"&gt;

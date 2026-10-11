@@ -46,7 +46,7 @@ Something like: write fewer hard rules, throw more data and compute at it. But t
 &lt;div class="idea-step__body"&gt;
 &lt;div class="idea-step__name"&gt;what stuck&lt;/div&gt;
 &lt;div class="idea-step__prose"&gt;
-I didn&amp;rsquo;t push back. I read it, it made sense, I took it. Two things stuck. One, the test: does it get better on its own with 10x the data, 10x the model, 10x the training time? Two, where my own knowledge goes: into the goal, the data, the environment, and the metrics, not into a pile of fragile if-else. Tell the model what a good answer is, give it data and a verifier, don&amp;rsquo;t hand-write rules to fake being smart.
+Two things stuck: judge a method by whether it improves as resources increase; put domain knowledge into goals, data, environments, and evaluation, rather than hard-coded rules.
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;

@@ -93,7 +93,7 @@ Start with a small program
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Copy either output and paste it through &lt;strong&gt;Open HLO&lt;/strong&gt;. HLO text from XLA&amp;rsquo;s &lt;code&gt;--xla_dump_to&lt;/code&gt; works too.&lt;/p&gt;
 &lt;p&gt;I want someone learning HLO for the first time to be able to connect the syntax to a small, real program. &lt;strong&gt;Open the graph, select an instruction, and follow the data.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;a href="https://www.junyi.dev/hlo-visualizer/" target="_blank" rel="noopener noreferrer"&gt;Try HLO Visualizer&lt;/a&gt;&lt;/strong&gt;. If it helps you understand your HLO, a star on &lt;a href="https://github.com/Junyi-99/hlo-visualizer" target="_blank" rel="noopener noreferrer"&gt;GitHub&lt;/a&gt; is welcome. Please open an issue for instructions that are unclear or do not parse correctly.&lt;/p&gt;</content:encoded><category>TPU</category><category>JAX</category><category>XLA</category><category>HLO</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/hlo-visualizer/</guid></item><item><title>LLM Inference on TPU v6e-4: Small Dense, Large MoE, and Large Dense Models</title><link>https://www.junyi.dev/en/posts/tpu-v6e/</link><pubDate>Thu, 11 Jun 2026 00:00:00 Z</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-# Abstract We benchmark LLM inference on one Google TPU v6e-4 host (four chips, one VM) with four chips in one VM. We use vLLM 0.20.0 with the tpu-inference backend and an fp8 KV cache.
+# Abstract We benchmark LLM inference on one Google TPU v6e-4 host (four chips, one VM). We use vLLM 0.20.0 with the tpu-inference backend and an fp8 KV cache.
 We test three Qwen3 models:
 Model Type Params Parallelism Chips Qwen3.5-4B dense 4B active tp1 1 Qwen3-30B-A3B MoE 30B total / 3B active tp4 4 Qwen3-32B dense 32B active tp4 4 We measure three parts of inference: prefill, decode, and end-to-end online serving.</description><content:encoded>&lt;h2 id="abstract" &gt;
 &lt;div&gt;
@@ -103,7 +103,7 @@ Model Type Params Parallelism Chips Qwen3.5-4B dense 4B active tp1 1 Qwen3-30B-A
 Abstract
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;We benchmark LLM inference on one Google &lt;code&gt;TPU v6e-4&lt;/code&gt; host (four chips, one VM) with four chips in one VM. We use &lt;code&gt;vLLM 0.20.0&lt;/code&gt; with the &lt;code&gt;tpu-inference&lt;/code&gt; backend and an &lt;code&gt;fp8&lt;/code&gt; KV cache.&lt;/p&gt;
+&lt;p&gt;We benchmark LLM inference on one Google &lt;code&gt;TPU v6e-4&lt;/code&gt; host (four chips, one VM). We use &lt;code&gt;vLLM 0.20.0&lt;/code&gt; with the &lt;code&gt;tpu-inference&lt;/code&gt; backend and an &lt;code&gt;fp8&lt;/code&gt; KV cache.&lt;/p&gt;
 &lt;p&gt;We test three Qwen3 models:&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -142,7 +142,7 @@ Abstract
 &lt;p&gt;We measure three parts of inference: prefill, decode, and end-to-end online serving.&lt;/p&gt;
 &lt;p&gt;The MoE model is fastest in all three tests. It reaches 26,063 tok/s in prefill, compared with 19,714 tok/s for the dense 32B model. At batch size 1, its decode latency is 7.0 ms per token, compared with 17.9 ms for the dense 32B model. In online serving, it reaches 1.27 req/s and 1,303 output tok/s, compared with 0.88 req/s and 901 output tok/s for the dense 32B model.&lt;/p&gt;
 &lt;p&gt;The 4B model has good latency at low load, but it does not handle high concurrency well on one chip. Its stable serving capacity is about 0.45 req/s.&lt;/p&gt;
-&lt;p&gt;This is not a TPU-versus-GPU comparison. We did not run a GPU baseline. The goal is to report clear TPU v6e numbers using the same vLLM tools that users would run in practice.&lt;/p&gt;
+&lt;p&gt;The goal is to report TPU v6e performance using the same vLLM tools that users would run in practice.&lt;/p&gt;
 &lt;h2 id="1-motivation" &gt;
 &lt;div&gt;
 &lt;a href="#1-motivation"&gt;
@@ -151,14 +151,13 @@ Abstract
 1. Motivation
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Public TPU data for LLM inference is limited. The only TPU submission Google has made to MLPerf Inference is SDXL image generation, not an LLM. The TPU LLM numbers is measured on Google&amp;rsquo;s JAX/JetStream stack rather than the vLLM path most practitioners deploy.&lt;/p&gt;
+&lt;p&gt;Public TPU data for LLM inference is limited. The only TPU submission Google has made to MLPerf Inference is SDXL image generation, not an LLM. The TPU LLM numbers are measured on Google&amp;rsquo;s JAX/JetStream stack rather than the vLLM path most practitioners deploy.&lt;/p&gt;
 &lt;p&gt;We measured the performance ourselves on one TPU v6e-4 host. The goal is to give simple, reproducible numbers for three common model types:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;a small dense model,&lt;/li&gt;
 &lt;li&gt;a large MoE model,&lt;/li&gt;
 &lt;li&gt;a large dense model.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;All comparisons are between these three models on the same TPU host. We do not compare against GPUs, prices, or total cost.&lt;/p&gt;
 &lt;h2 id="2-experimental-setup" &gt;
 &lt;div&gt;
 &lt;a href="#2-experimental-setup"&gt;
@@ -821,10 +820,8 @@ Abstract
 4. Discussion
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Three points stand out.&lt;/p&gt;
-&lt;p&gt;First, active parameter count matters a lot for decode. The 30B-A3B MoE and the 32B dense model have similar total size, but very different active size. The MoE model uses 3B parameters per token. The dense model uses 32B. This explains the large decode gap: 7.0 ms versus 17.9 ms at batch size 1.&lt;/p&gt;
-&lt;p&gt;Second, the MoE model also wins in prefill. Its peak prefill throughput is 26,063 tok/s, or about 6.5k tok/s per chip. The dense 32B model reaches 19,714 tok/s, or about 4.9k tok/s per chip. On this host, the MoE model is faster in both prefill and decode.&lt;/p&gt;
-&lt;p&gt;Third, the small 4B model is limited by single-chip concurrency. It has good low-load latency, but one chip cannot absorb unlimited requests. Its practical serving capacity is about 0.45 req/s. To serve more traffic, the better path is to add chips or replicas, rather than pushing more concurrency onto one chip.&lt;/p&gt;
+&lt;p&gt;The large MoE and dense models have similar total parameter counts but different active sizes. The lower active parameter count helps explain the MoE model&amp;rsquo;s decode advantage.&lt;/p&gt;
+&lt;p&gt;The small 4B model is limited by its single-chip setup. To serve more traffic, the better path is to add chips or replicas, rather than increasing concurrency on one chip.&lt;/p&gt;
 &lt;h2 id="5-conclusion" &gt;
 &lt;div&gt;
 &lt;a href="#5-conclusion"&gt;
@@ -833,15 +830,7 @@ Abstract
 5. Conclusion
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;On one TPU v6e-4 host, using &lt;code&gt;vLLM 0.20.0&lt;/code&gt;, &lt;code&gt;tpu-inference&lt;/code&gt;, and an &lt;code&gt;fp8_e5m2&lt;/code&gt; KV cache, the large MoE model is the fastest of the three models we tested.&lt;/p&gt;
-&lt;p&gt;Compared with the dense 32B model, Qwen3-30B-A3B has:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;higher prefill throughput: 26,063 vs 19,714 tok/s,&lt;/li&gt;
-&lt;li&gt;lower batch-size-1 decode latency: 7.0 vs 17.9 ms,&lt;/li&gt;
-&lt;li&gt;higher serving capacity: 1.27 vs 0.88 req/s,&lt;/li&gt;
-&lt;li&gt;higher output throughput at saturation: 1,303 vs 901 tok/s.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The 4B dense model has good latency at low load, but on one chip it is concurrency-limited. Its stable serving capacity is about 0.45 req/s.&lt;/p&gt;
+&lt;p&gt;In these tests, Qwen3-30B-A3B has the highest prefill throughput, the lowest batch-size-1 decode latency, and the highest serving capacity. The 4B dense model has good low-load latency, but its single-chip setup limits concurrency.&lt;/p&gt;
 &lt;h2 id="limitations" &gt;
 &lt;div&gt;
 &lt;a href="#limitations"&gt;
@@ -1113,10 +1102,8 @@ While you&amp;rsquo;re at it
 &lt;/ul&gt;
 &lt;p&gt;&lt;code&gt;reattach-to-user-namespace&lt;/code&gt; fixes all of them.&lt;/p&gt;</content:encoded><category>Linux</category><category>tmux</category><category>AI Systems</category><category>Keychain</category><category>Security Session</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/tmux-keychain/</guid></item><item><title>Agent Mesh: My Thoughts on Multi-AI Collaborative Workflows</title><link>https://www.junyi.dev/en/posts/agent-mesh/</link><pubDate>Wed, 11 Mar 2026 04:29:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: no single Agent is the best at everything.
-I mainly use Claude Code, Google Gemini CLI, and Moonshot Kimi Code day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach Agent Mesh.
-Here are my observations and thoughts.</description><content:encoded>&lt;p&gt;AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: &lt;strong&gt;no single Agent is the best at everything.&lt;/strong&gt;&lt;/p&gt;
+I mainly use Claude Code, Google Gemini CLI, and Moonshot Kimi Code day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach Agent Mesh.</description><content:encoded>&lt;p&gt;AI coding assistants are everywhere now, from chat windows to CLI Agents. After using a bunch of them, my biggest takeaway is: &lt;strong&gt;no single Agent is the best at everything.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;I mainly use &lt;strong&gt;Claude Code&lt;/strong&gt;, &lt;strong&gt;Google Gemini CLI&lt;/strong&gt;, and &lt;strong&gt;Moonshot Kimi Code&lt;/strong&gt; day-to-day. At first I treated them as standalone tools, but soon realized that was a waste — each has distinct strengths, and if you let them collaborate and delegate tasks based on those strengths, the results are much better. I call this approach &lt;strong&gt;Agent Mesh&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Here are my observations and thoughts.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="core-roles-my-observations-and-real-experience" &gt;
 &lt;div&gt;
@@ -1126,15 +1113,15 @@ Here are my observations and thoughts.</description><content:encoded>&lt;p&gt;AI
 Core Roles: My Observations and Real Experience
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;h3 id="claude-code-top-tier-architect-and-execution-engine" &gt;
+&lt;h3 id="claude-code-planning-and-execution" &gt;
 &lt;div&gt;
-&lt;a href="#claude-code-top-tier-architect-and-execution-engine"&gt;
+&lt;a href="#claude-code-planning-and-execution"&gt;
 ##
 &lt;/a&gt;
-Claude Code: Top-Tier Architect and Execution Engine
+Claude Code: Planning and Execution
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;In daily use, Claude Code feels like a &amp;ldquo;senior engineer.&amp;rdquo; Whether spinning up a new project from scratch or tackling a complex refactor, its architectural vision is the best of the bunch. And it doesn&amp;rsquo;t just plan — it executes: traversing files, running bash, fixing its own compile errors, driving the whole loop autonomously. I&amp;rsquo;ve installed Claude Code on all my servers. It has massively boosted my productivity and freed up a lot of my energy. The weakness is hallucinations — especially when generating large blocks of documentation or referencing large systems it hasn&amp;rsquo;t fully digested, it will make things up.&lt;/p&gt;
+&lt;p&gt;I mainly use Claude Code to create projects and refactor code. It can traverse files, run bash, fix compile errors, and continue with the next step. I&amp;rsquo;ve installed it on all my servers. Its weakness is hallucinations, especially when generating long documents or referencing large systems it hasn&amp;rsquo;t fully understood.&lt;/p&gt;
 &lt;h3 id="gemini-cli-large-context-consumer-and-hallucination-checker" &gt;
 &lt;div&gt;
 &lt;a href="#gemini-cli-large-context-consumer-and-hallucination-checker"&gt;
@@ -1163,7 +1150,6 @@ What My Ideal Agent Mesh Looks Like
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;&lt;img src="https://www.junyi.dev/posts/agent-mesh/diagram.svg" alt="Agent Mesh Workflow Diagram"&gt;&lt;/p&gt;
-&lt;p&gt;Once you understand each Agent&amp;rsquo;s strengths and weaknesses, the natural next question is: can you have them collaborate, chaining tasks via prompts? That&amp;rsquo;s what I mean by Agent Mesh.&lt;/p&gt;
 &lt;p&gt;Most of the time, Claude Code is the workhorse — it writes the vast majority of the code. But when it hits a context ceiling, say I need to refactor a module but don&amp;rsquo;t know which parts of a 500K-line legacy codebase will be affected, I hand it off to Gemini — let it read the entire repo and report back the blast radius.&lt;/p&gt;
 &lt;p&gt;Conversely, after Claude executes a refactoring plan, I&amp;rsquo;ll have Gemini cross-reference it against the actual project files to catch hallucinations or broken dependencies. If Gemini encounters a particularly tough algorithmic problem during auditing, it can pass it to Kimi Code for extended reasoning.&lt;/p&gt;
 &lt;p&gt;After Kimi finishes thinking, it doesn&amp;rsquo;t touch files directly — it passes conclusions back to Claude Code for implementation. The whole flow is a loop: each does what it&amp;rsquo;s best at, and results flow between them.&lt;/p&gt;
@@ -1176,16 +1162,15 @@ What My Ideal Agent Mesh Looks Like
 The Hidden Factor: Agent Architecture vs. Base Model
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;When trying to combine these Agents, I discovered a point that&amp;rsquo;s easy to overlook: &lt;strong&gt;the underlying base model is only half the equation — the &amp;ldquo;Agent architecture built around it&amp;rdquo; determines its actual capabilities.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;The best example is Anthropic&amp;rsquo;s Claude 3.5 Sonnet. You can use this same base model in multiple environments:&lt;/p&gt;
+&lt;p&gt;When combining these Agents, I consider &lt;strong&gt;both the base model and the tool&amp;rsquo;s execution workflow&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;For example, Anthropic&amp;rsquo;s Claude 3.5 Sonnet can be used in multiple environments:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;As a standard chat assistant in &lt;strong&gt;VS Code&lt;/strong&gt;.&lt;/li&gt;
 &lt;li&gt;As the driving engine inside &lt;strong&gt;Cursor IDE&lt;/strong&gt;.&lt;/li&gt;
 &lt;li&gt;Through open-source Agent frameworks like &lt;strong&gt;OpenHands / Open Code&lt;/strong&gt;.&lt;/li&gt;
 &lt;li&gt;Natively via the &lt;strong&gt;Claude Code CLI&lt;/strong&gt;.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Despite sharing the exact same LLM DNA (Claude 3.5 Sonnet), their real-world capabilities differ dramatically. In demanding engineering workflows, native &lt;strong&gt;Claude Code&lt;/strong&gt; consistently outperforms the others in Agent execution. Why? Because the Agent architecture has been uniquely optimized by the model&amp;rsquo;s creators (including but not limited to: hidden loop mechanisms, error recovery strategies, and specific context engineering).&lt;/p&gt;
-&lt;p&gt;Even using excellent open-source alternatives like Open Code with the Claude model, the execution fluidity and architectural vision often falls short of Claude Code. This tells us that when choosing Agents for a Mesh, we&amp;rsquo;re not just picking a base model (like Sonnet or GPT-4o) — we&amp;rsquo;re picking the engineering scaffolding built around it.&lt;/p&gt;
+&lt;p&gt;In the engineering workflows I&amp;rsquo;ve used, tools can feel different even when they use the same model. Claude Code&amp;rsquo;s file operations, command execution, and error recovery work together more smoothly for me.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="similar-explorations-in-the-community" &gt;
 &lt;div&gt;
@@ -1205,11 +1190,8 @@ Similar Explorations in the Community
 Final Thoughts
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;I don&amp;rsquo;t think a single &amp;ldquo;do-it-all&amp;rdquo; model will emerge to handle everything. What&amp;rsquo;s truly interesting is &lt;strong&gt;orchestration&lt;/strong&gt; — having Agents with &lt;strong&gt;fundamentally different underlying architectures&lt;/strong&gt; each play to their strengths.&lt;/p&gt;
-&lt;p&gt;One view I&amp;rsquo;ve consistently held: when we say &amp;ldquo;different&amp;rdquo; agents, we do &lt;strong&gt;not&lt;/strong&gt; mean taking the same underlying model and wrapping it with different system prompts (e.g., role-playing &amp;ldquo;you are an architect&amp;rdquo; vs. &amp;ldquo;you are a tester&amp;rdquo;). True collaborative sparks only happen when agents have &lt;strong&gt;fundamental differences in how they process information at the architectural level&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;But how do you know whether two models are truly different, or just fine-tuned versions of the same base? This is where tools like &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt; (a research framework for analyzing evolutionary relationships and functional differences between language models, published in &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt;) become invaluable. By analyzing the &amp;ldquo;genetic&amp;rdquo; lineage and functional distance between models, we can deliberately select Agents from entirely different evolutionary branches, ensuring they don&amp;rsquo;t share the same blind spots.&lt;/p&gt;
-&lt;p&gt;My hands-on engineering experience tells me: &lt;strong&gt;the Claude Code + Gemini CLI synergy is currently the most powerful and intuitive combination.&lt;/strong&gt; Gemini CLI leverages its long context to swallow entire repos and stacks of logs, specializing in catching hallucinations and macro-level auditing. Claude Code focuses on what it does best — understanding code architecture and executing precisely in the local environment.&lt;/p&gt;
-&lt;p&gt;When you deliberately combine Agents with fundamentally different architectures, they stop overlapping and start complementing each other. That&amp;rsquo;s the Agent Mesh idea I wanted to share — hope it inspires some of you.&lt;/p&gt;</content:encoded><category>AI Systems</category><category>LLM Inference</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/agent-mesh/</guid></item><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;Alongside assigning different roles to the same model, I also consider differences between models and Agent workflows. &lt;strong&gt;&lt;a href="https://github.com/Xtra-Computing/LLM-DNA" target="_blank" rel="noopener noreferrer"&gt;LLM-DNA&lt;/a&gt;&lt;/strong&gt; is a research framework for analyzing evolutionary relationships and functional differences between language models, published in &lt;a href="https://openreview.net/forum?id=UIxHaAqFqQ" target="_blank" rel="noopener noreferrer"&gt;ICLR'26&lt;/a&gt;. It can help explore differences between models.&lt;/p&gt;
+&lt;p&gt;In my projects, &lt;strong&gt;Claude Code and Gemini CLI are the combination I find easiest to work with&lt;/strong&gt;: Claude writes and executes code, while Gemini reviews changes in the context of the whole repository.&lt;/p&gt;</content:encoded><category>AI Systems</category><category>LLM Inference</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/agent-mesh/</guid></item><item><title>nerdctl + Tailscale Sidecar Exit Node: A Complete Pitfall Guide</title><link>https://www.junyi.dev/en/posts/nerdctl-tailscale-sidecar-pitfalls/</link><pubDate>Fri, 06 Mar 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.
 This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;amp;rsquo;s what I ran into so others can avoid the same traps.</description><content:encoded>&lt;p&gt;In containerized deployments, sometimes you need all outbound traffic from a container to go through a specific network exit. Tailscale&amp;rsquo;s sidecar pattern makes this possible: a Tailscale container acts as a sidecar, other containers share its network namespace, and traffic flows through a WireGuard tunnel via a remote exit node.&lt;/p&gt;
 &lt;p&gt;This setup is well-documented for Docker Compose, but migrating to nerdctl (containerd) introduced a series of pitfalls. Here&amp;rsquo;s what I ran into so others can avoid the same traps.&lt;/p&gt;
@@ -1414,7 +1396,7 @@ Layers of pigment were stacked high, brushstrokes clearly visible, as if freezin
 &lt;p&gt;“There really is no such thing as Art. There are only artists.”&lt;br&gt;
 &amp;mdash; E. H. Gombrich, &lt;em&gt;The Story of Art&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;</content:encoded><category>Personal</category><category>Life</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/into-the-modern/</guid></item><item><title>From Raspberry Pi to NUC: An Upgrade of My Toy</title><link>https://www.junyi.dev/en/posts/intel-nuc/</link><pubDate>Fri, 05 Sep 2025 13:07:09 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.</description><content:encoded>&lt;p&gt;My long‑serving Raspberry Pi 4B has finally met its “successor” — the compact Intel NUC. From ARM to x86, from a TF card to an SSD, this seemingly simple hardware upgrade has brought a qualitative leap to my tinkering experience.&lt;/p&gt;
+I replaced the Raspberry Pi 4B I used for lightweight services with an Intel NUC, moving from ARM to x86 and from a TF card to an SSD.</description><content:encoded>&lt;p&gt;I replaced the Raspberry Pi 4B I used for lightweight services with an Intel NUC, moving from ARM to x86 and from a TF card to an SSD.&lt;/p&gt;
 &lt;h2 id="raspberry-pi-pros-and-cons" &gt;
 &lt;div&gt;
 &lt;a href="#raspberry-pi-pros-and-cons"&gt;
@@ -1423,38 +1405,29 @@ My long‑serving Raspberry Pi 4B has finally met its “successor” — the co
 Raspberry Pi: Pros and Cons
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;The Raspberry Pi 4B used to be a key pillar of my digital life. It quietly ran various lightweight services: monitoring my home network traffic, running automation scripts, and even serving as a temporary dev/test environment. To keep it stable, I set up a cron job to automatically reboot every Sunday, which kept it fairly reliable most of the time.&lt;/p&gt;
+&lt;p&gt;The Raspberry Pi 4B monitored my home network traffic, ran automation scripts, and occasionally served as a development and test environment. I also configured it to &lt;strong&gt;reboot automatically every Sunday&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;But its shortcomings surfaced as I pushed it further. What worried me most was the reliability of TF‑card storage — even with so‑called “endurance” cards, you can’t fully avoid I/O risks. After I published the article on &lt;a href="https://www.junyi.dev/posts/k3s-101/" target="_blank" rel="noopener noreferrer"&gt;setting up k3s on a Raspberry Pi 5 cluster&lt;/a&gt;, my four‑node cluster ran stably for only a week before one node died due to a sudden flood of I/O errors. Ironically, that node was using a carefully chosen high‑endurance card, which ended up lasting even shorter than the ordinary card in the 4B.&lt;/p&gt;
-&lt;p&gt;Performance bottlenecks also became more evident under heavier workloads: compiling a slightly larger project meant a long progress‑bar crawl, and occasional stutters with multiple services running in parallel reminded me of the hardware’s limits. While attaching an external SSD can ease the storage issue, it undoubtedly increases complexity; at that point, it made more sense to upgrade to a more reliable platform.&lt;/p&gt;
-&lt;h2 id="unboxing-the-nuc-and-the-performance-leap" &gt;
+&lt;p&gt;Compiling larger projects took a long time, and running several services at once sometimes caused stutters. An external SSD could address the storage problem, but I eventually chose to move to a NUC.&lt;/p&gt;
+&lt;h2 id="moving-to-the-nuc" &gt;
 &lt;div&gt;
-&lt;a href="#unboxing-the-nuc-and-the-performance-leap"&gt;
+&lt;a href="#moving-to-the-nuc"&gt;
 #
 &lt;/a&gt;
-Unboxing the NUC and the Performance Leap
+Moving to the NUC
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Unboxing the NUC, my first impression was: “too refined to be a mini PC.” The palm‑sized body isn’t much bigger than a Pi, but the hefty metal shell feels solid. I installed &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The performance gap is downright comforting: a Go project that took 3 minutes to compile on the Pi finishes in just 1 minute on the NUC.&lt;/p&gt;
+&lt;p&gt;The NUC isn&amp;rsquo;t much bigger than a Pi, but its metal shell is noticeably heavier. I installed &lt;a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener noreferrer"&gt;Ubuntu Desktop 24.04&lt;/a&gt;. The same Go project takes 3 minutes to compile on the Pi and 1 minute on the NUC.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img id="fig1" src="https://www.junyi.dev/posts/intel-nuc/nuc1.jpg" alt="The Intel NUC" max-width="500px" style="border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);" /&gt;
-&lt;figcaption&gt;Fig.1 - Compact yet powerful Intel NUC&lt;/figcaption&gt;
+&lt;figcaption&gt;Fig.1 - Intel NUC&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;p&gt;The NUC brings not just performance but peace of mind: the built‑in SSD eliminates the TF‑card read/write anxiety, and the extra memory plus x86 architecture make heavier tasks easy. I finally feel comfortable running a small database locally — I used to worry frequent writes would burn out the card.&lt;/p&gt;
-&lt;p&gt;As for the retired Raspberry Pis, they’ll pivot to edge‑computing nodes and keep contributing.&lt;/p&gt;
-&lt;h2 id="closing-thoughts" &gt;
-&lt;div&gt;
-&lt;a href="#closing-thoughts"&gt;
-#
-&lt;/a&gt;
-Closing Thoughts
-&lt;/div&gt;
-&lt;/h2&gt;
-&lt;p&gt;Whenever I see the Pi’s LEDs blinking in rhythm, I remember the excitement of first unboxing it. The joy of tinkering was never about chasing the newest and the fastest, but about watching these devices find the right place at each stage — like tools slowly collecting stories of their own.&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 Keycap Replacement Guide</title><link>https://www.junyi.dev/en/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+&lt;p&gt;With the built-in SSD, I also feel comfortable running a small database locally. Before, I worried that frequent writes would wear out the TF card.&lt;/p&gt;
+&lt;p&gt;The retired Raspberry Pis will continue serving as edge-computing nodes.&lt;/p&gt;</content:encoded><category>Linux</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/intel-nuc/</guid></item><item><title>MacBook Pro M1 Keycap Replacement Guide</title><link>https://www.junyi.dev/en/posts/replace-keyboard/</link><pubDate>Fri, 01 Aug 2025 01:16:29 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded Shift and Space keys in the photo — they look terrible.)
 While some say you can go to an Apple Store to get them replaced1, it&amp;amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose entire keyboard is shiny, DIY replacement is clearly the more practical option.
-I&amp;amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online2 only show how to remove regular letter and number keys — they deliberately skip over the longer keys like Space, Caps Lock, ESC, and the arrow keys. These keys have different internal structures and require a different disassembly approach.</description><content:encoded>&lt;p&gt;As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded &lt;kbd&gt;Shift&lt;/kbd&gt; and &lt;kbd&gt;Space&lt;/kbd&gt; keys in the photo — they look terrible.)&lt;/p&gt;
+I&amp;amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online2 only show how to remove regular letter and number keys. They don&amp;amp;rsquo;t cover the longer keys like Space, Caps Lock, ESC, or the arrow keys. These keys have different internal structures and require a different disassembly approach.</description><content:encoded>&lt;p&gt;As we all know, once keycaps get greasy and shiny (“oiled”), it&amp;rsquo;s almost impossible to restore them by simply wiping. I once tried sanding the keycaps, but not only did it make things worse, the plastic debris also fell into the gaps between the keys. (You can see my sanded &lt;kbd&gt;Shift&lt;/kbd&gt; and &lt;kbd&gt;Space&lt;/kbd&gt; keys in the photo — they look terrible.)&lt;/p&gt;
 &lt;p&gt;While some say you can go to an Apple Store to get them replaced&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, it&amp;rsquo;s said they only allow a few keycaps to be replaced each time. For someone like me whose &lt;strong&gt;entire keyboard is shiny&lt;/strong&gt;, DIY replacement is clearly the more practical option.&lt;/p&gt;
-&lt;p&gt;I&amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; only show how to remove regular letter and number keys — they &lt;strong&gt;deliberately skip over&lt;/strong&gt; the longer keys like &lt;kbd&gt;Space&lt;/kbd&gt;, &lt;kbd&gt;Caps Lock&lt;/kbd&gt;, &lt;kbd&gt;ESC&lt;/kbd&gt;, and the arrow keys. These keys have different internal structures and require a different disassembly approach.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m writing this blog post because I found it incredibly difficult to locate a complete guide on how to replace MacBook Pro M1 keycaps. Most of the videos online&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt; only show how to remove regular letter and number keys. They don&amp;rsquo;t cover the longer keys like &lt;kbd&gt;Space&lt;/kbd&gt;, &lt;kbd&gt;Caps Lock&lt;/kbd&gt;, &lt;kbd&gt;ESC&lt;/kbd&gt;, or the arrow keys. These keys have different internal structures and require a different disassembly approach.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/replace-keyboard/beforeafter.png" style="border-radius:0.5rem; width: 1024px"&gt;
 &lt;figcaption&gt;
