@@ -1,0 +1,1529 @@
+{
+  "source": {
+    "file": "report.html",
+    "sha256": "41855f59ba7d8e319454478c2c179d7803a3cdb8108aab1f4985ce93c4dfa353",
+    "measured": "2026-10-12",
+    "sections": [
+      "1. Setup",
+      "3b. Questions per call",
+      "6b. In-process latency per variant",
+      "7a. Per-host tables",
+      "8a. Latency vs the GPU hosts",
+      "8b. Where the time goes",
+      "8c. Device ops",
+      "8d. Analysis",
+      "9. Cost: input tokens per $"
+    ],
+    "method": "20 warmups and 20 synchronized timed calls; in-process p50 in milliseconds; GPU is the minimum p50 over baseline eager and the fast variants for each host/model/question count",
+    "gpu": {
+      "laya": "0.4.6",
+      "commit": "c73908d96f",
+      "checkpoint": "1c5edc17a7"
+    },
+    "tpu": {
+      "jax_commit": "9f389b6",
+      "pallas_commit": "6f3a930",
+      "checkpoint_english": "55cf4c4e",
+      "checkpoint_multilingual": "e4e9ddf2",
+      "jax": "0.11.2",
+      "jaxlib": "0.11.2",
+      "libtpu": "0.0.50",
+      "dtype": "bfloat16",
+      "chips_per_run": 1,
+      "harness_commit": "04f22c6",
+      "harness_dirty": true
+    },
+    "measured_as_reported": "2026-10-12 through 2026-10-14",
+    "collection_date_source": "User-supplied correction: performance and price data collected on Oct 12, 2026."
+  },
+  "caveats": [
+    "Framework and checkpoint revisions differ between GPU and TPU; output parity across those runs was not measured.",
+    "Asterisk marks shared GPU hosts; host-side contention can affect latency.",
+    "The runs are serial and warmed, not a concurrent production load test.",
+    "JAX and Pallas were measured on different dates and commits; the same-commit JAX control closely reproduces the earlier JAX results.",
+    "Only p50 and p95 summaries are available here; these are not confidence intervals."
+  ],
+  "same_commit_jax_control_p50_ms": {
+    "english": {
+      "1": 2.25,
+      "50": 76.62
+    },
+    "multilingual": {
+      "1": 1.67,
+      "50": 41.38
+    }
+  },
+  "latency": [
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "RTX 3090",
+      "backend": "tilelang",
+      "p50_ms": 8.7,
+      "p95_ms": 8.8
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "A100 SXM4*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 6.4,
+      "p95_ms": 6.5
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "RTX A6000",
+      "backend": "tilelang",
+      "p50_ms": 6.6,
+      "p95_ms": 6.6
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 4.8,
+      "p95_ms": 4.8
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "H200 NVL*",
+      "backend": "tilelang_nograph",
+      "p50_ms": 5.8,
+      "p95_ms": 6.5
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "TPU v5e",
+      "backend": "jax",
+      "p50_ms": 3.6,
+      "p95_ms": 3.63
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "TPU v6e",
+      "backend": "jax",
+      "p50_ms": 2.27,
+      "p95_ms": 2.3
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 2.18,
+      "p95_ms": 2.24
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "RTX 3090",
+      "backend": "compile_cudagraph",
+      "p50_ms": 154.4,
+      "p95_ms": 155.6
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "A100 SXM4*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 68.8,
+      "p95_ms": 69.5
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "RTX A6000",
+      "backend": "compile_cudagraph",
+      "p50_ms": 117.7,
+      "p95_ms": 117.9
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 44.0,
+      "p95_ms": 44.3
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 39.8,
+      "p95_ms": 40.4
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "TPU v5e",
+      "backend": "jax",
+      "p50_ms": 183.22,
+      "p95_ms": 183.32
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "TPU v6e",
+      "backend": "jax",
+      "p50_ms": 76.79,
+      "p95_ms": 77.17
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 33.69,
+      "p95_ms": 33.74
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "RTX 3090",
+      "backend": "compile_cudagraph",
+      "p50_ms": 4.9,
+      "p95_ms": 4.9
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "A100 SXM4*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 4.0,
+      "p95_ms": 4.1
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "RTX A6000",
+      "backend": "compile_cudagraph",
+      "p50_ms": 4.0,
+      "p95_ms": 4.0
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 3.2,
+      "p95_ms": 3.2
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "H200 NVL*",
+      "backend": "tilelang",
+      "p50_ms": 4.1,
+      "p95_ms": 4.2
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "TPU v5e",
+      "backend": "jax",
+      "p50_ms": 2.26,
+      "p95_ms": 2.31
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "TPU v6e",
+      "backend": "jax",
+      "p50_ms": 1.61,
+      "p95_ms": 1.64
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 1.55,
+      "p95_ms": 1.57
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "RTX 3090",
+      "backend": "compile_cudagraph",
+      "p50_ms": 67.9,
+      "p95_ms": 68.8
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "A100 SXM4*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 36.2,
+      "p95_ms": 36.8
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "RTX A6000",
+      "backend": "compile_cudagraph",
+      "p50_ms": 53.8,
+      "p95_ms": 54.0
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 23.2,
+      "p95_ms": 23.4
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 21.2,
+      "p95_ms": 21.7
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "TPU v5e",
+      "backend": "jax",
+      "p50_ms": 87.51,
+      "p95_ms": 87.66
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "TPU v6e",
+      "backend": "jax",
+      "p50_ms": 41.24,
+      "p95_ms": 41.92
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 17.83,
+      "p95_ms": 17.87
+    }
+  ],
+  "baseline_latency": [
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "p50_ms": 25.8,
+      "p95_ms": 26.4
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 5,
+      "p50_ms": 33.0,
+      "p95_ms": 33.5
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 10,
+      "p50_ms": 55.3,
+      "p95_ms": 56.0
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "p50_ms": 210.9,
+      "p95_ms": 211.8
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "p50_ms": 21.1,
+      "p95_ms": 21.6
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 5,
+      "p50_ms": 23.4,
+      "p95_ms": 23.7
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 10,
+      "p50_ms": 26.5,
+      "p95_ms": 26.9
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "p50_ms": 99.7,
+      "p95_ms": 100.4
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "p50_ms": 19.9,
+      "p95_ms": 22.8
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 5,
+      "p50_ms": 21.8,
+      "p95_ms": 23.4
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 10,
+      "p50_ms": 28.1,
+      "p95_ms": 28.4
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "p50_ms": 102.2,
+      "p95_ms": 103.6
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "p50_ms": 16.3,
+      "p95_ms": 16.8
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 5,
+      "p50_ms": 18.3,
+      "p95_ms": 19.1
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 10,
+      "p50_ms": 19.2,
+      "p95_ms": 19.5
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "p50_ms": 55.1,
+      "p95_ms": 55.8
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "p50_ms": 17.0,
+      "p95_ms": 18.0
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 5,
+      "p50_ms": 29.0,
+      "p95_ms": 29.2
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 10,
+      "p50_ms": 48.8,
+      "p95_ms": 48.9
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "p50_ms": 192.8,
+      "p95_ms": 193.3
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "p50_ms": 13.6,
+      "p95_ms": 13.8
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 5,
+      "p50_ms": 15.9,
+      "p95_ms": 18.4
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 10,
+      "p50_ms": 24.3,
+      "p95_ms": 24.4
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "p50_ms": 94.4,
+      "p95_ms": 94.5
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "p50_ms": 15.9,
+      "p95_ms": 16.0
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 5,
+      "p50_ms": 18.1,
+      "p95_ms": 18.6
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 10,
+      "p50_ms": 19.2,
+      "p95_ms": 19.3
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "p50_ms": 75.0,
+      "p95_ms": 75.3
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "p50_ms": 13.1,
+      "p95_ms": 13.2
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 5,
+      "p50_ms": 14.6,
+      "p95_ms": 14.7
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 10,
+      "p50_ms": 15.3,
+      "p95_ms": 15.4
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "p50_ms": 40.8,
+      "p95_ms": 40.9
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "p50_ms": 13.3,
+      "p95_ms": 14.7
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 5,
+      "p50_ms": 15.9,
+      "p95_ms": 18.0
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 10,
+      "p50_ms": 17.7,
+      "p95_ms": 18.3
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "p50_ms": 57.5,
+      "p95_ms": 62.1
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "p50_ms": 12.4,
+      "p95_ms": 21.2
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 5,
+      "p50_ms": 13.6,
+      "p95_ms": 22.4
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 10,
+      "p50_ms": 15.9,
+      "p95_ms": 16.5
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "p50_ms": 34.0,
+      "p95_ms": 34.3
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 1,
+      "p50_ms": 3.6,
+      "p95_ms": 3.63
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 1,
+      "p50_ms": 2.27,
+      "p95_ms": 2.3
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 5,
+      "p50_ms": 15.32,
+      "p95_ms": 15.34
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 5,
+      "p50_ms": 7.32,
+      "p95_ms": 7.35
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 10,
+      "p50_ms": 32.56,
+      "p95_ms": 32.61
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 10,
+      "p50_ms": 16.53,
+      "p95_ms": 16.57
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 50,
+      "p50_ms": 183.22,
+      "p95_ms": 183.32
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 50,
+      "p50_ms": 76.79,
+      "p95_ms": 77.17
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 1,
+      "p50_ms": 2.26,
+      "p95_ms": 2.31
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 1,
+      "p50_ms": 1.61,
+      "p95_ms": 1.64
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 5,
+      "p50_ms": 6.91,
+      "p95_ms": 6.93
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 5,
+      "p50_ms": 3.71,
+      "p95_ms": 3.74
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 10,
+      "p50_ms": 13.64,
+      "p95_ms": 13.73
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 10,
+      "p50_ms": 7.18,
+      "p95_ms": 7.19
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 50,
+      "p50_ms": 87.51,
+      "p95_ms": 87.66
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 50,
+      "p50_ms": 41.24,
+      "p95_ms": 41.92
+    }
+  ],
+  "baseline_decomposition": [
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "unprofiled_p50_ms": 25.0,
+      "profiled_busy_ms": 9.8,
+      "remainder_estimate_ms": 15.2,
+      "cuda_launch_kernel_per_call": 1210
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "unprofiled_p50_ms": 211.7,
+      "profiled_busy_ms": 193.2,
+      "remainder_estimate_ms": 18.5,
+      "cuda_launch_kernel_per_call": 1212
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "unprofiled_p50_ms": 24.2,
+      "profiled_busy_ms": 5.3,
+      "remainder_estimate_ms": 18.9,
+      "cuda_launch_kernel_per_call": 986
+    },
+    {
+      "device": "RTX 3090",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "unprofiled_p50_ms": 99.4,
+      "profiled_busy_ms": 83.4,
+      "remainder_estimate_ms": 16.0,
+      "cuda_launch_kernel_per_call": 970
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "unprofiled_p50_ms": 19.3,
+      "profiled_busy_ms": 7.5,
+      "remainder_estimate_ms": 11.8,
+      "cuda_launch_kernel_per_call": 1213
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "unprofiled_p50_ms": 101.9,
+      "profiled_busy_ms": 87.9,
+      "remainder_estimate_ms": 14.0,
+      "cuda_launch_kernel_per_call": 1296
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "unprofiled_p50_ms": 19.5,
+      "profiled_busy_ms": 5.8,
+      "remainder_estimate_ms": 13.7,
+      "cuda_launch_kernel_per_call": 986
+    },
+    {
+      "device": "A100 SXM4*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "unprofiled_p50_ms": 55.7,
+      "profiled_busy_ms": 42.8,
+      "remainder_estimate_ms": 12.9,
+      "cuda_launch_kernel_per_call": 1055
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "unprofiled_p50_ms": 17.1,
+      "profiled_busy_ms": 10.0,
+      "remainder_estimate_ms": 7.1,
+      "cuda_launch_kernel_per_call": 1210
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "unprofiled_p50_ms": 192.8,
+      "profiled_busy_ms": 181.9,
+      "remainder_estimate_ms": 10.9,
+      "cuda_launch_kernel_per_call": 1240
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "unprofiled_p50_ms": 16.7,
+      "profiled_busy_ms": 4.9,
+      "remainder_estimate_ms": 11.8,
+      "cuda_launch_kernel_per_call": 986
+    },
+    {
+      "device": "RTX A6000",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "unprofiled_p50_ms": 94.5,
+      "profiled_busy_ms": 84.7,
+      "remainder_estimate_ms": 9.8,
+      "cuda_launch_kernel_per_call": 1014
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "unprofiled_p50_ms": 16.4,
+      "profiled_busy_ms": 5.1,
+      "remainder_estimate_ms": 11.3,
+      "cuda_launch_kernel_per_call": 1090
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "unprofiled_p50_ms": 75.3,
+      "profiled_busy_ms": 63.2,
+      "remainder_estimate_ms": 12.1,
+      "cuda_launch_kernel_per_call": 1176
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "unprofiled_p50_ms": 16.0,
+      "profiled_busy_ms": 3.3,
+      "remainder_estimate_ms": 12.7,
+      "cuda_launch_kernel_per_call": 888
+    },
+    {
+      "device": "H100 PCIe*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "unprofiled_p50_ms": 41.6,
+      "profiled_busy_ms": 30.9,
+      "remainder_estimate_ms": 10.7,
+      "cuda_launch_kernel_per_call": 960
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 1,
+      "unprofiled_p50_ms": 22.1,
+      "profiled_busy_ms": 4.5,
+      "remainder_estimate_ms": 17.6,
+      "cuda_launch_kernel_per_call": 1090
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "english",
+      "questions": 50,
+      "unprofiled_p50_ms": 58.9,
+      "profiled_busy_ms": 46.3,
+      "remainder_estimate_ms": 12.6,
+      "cuda_launch_kernel_per_call": 1176
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 1,
+      "unprofiled_p50_ms": 15.2,
+      "profiled_busy_ms": 3.0,
+      "remainder_estimate_ms": 12.2,
+      "cuda_launch_kernel_per_call": 888
+    },
+    {
+      "device": "H200 NVL*",
+      "backend": "torch eager",
+      "model": "multilingual",
+      "questions": 50,
+      "unprofiled_p50_ms": 35.5,
+      "profiled_busy_ms": 23.4,
+      "remainder_estimate_ms": 12.1,
+      "cuda_launch_kernel_per_call": 960
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 1,
+      "unprofiled_p50_ms": 3.6,
+      "profiled_busy_ms": 2.01,
+      "remainder_estimate_ms": 1.59,
+      "profiled_duration_ms": 3.89,
+      "profiled_idle_ms": 1.88
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 50,
+      "unprofiled_p50_ms": 183.22,
+      "profiled_busy_ms": 175.68,
+      "remainder_estimate_ms": 7.54,
+      "profiled_duration_ms": 185.07,
+      "profiled_idle_ms": 9.39
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 1,
+      "unprofiled_p50_ms": 2.26,
+      "profiled_busy_ms": 0.68,
+      "remainder_estimate_ms": 1.58,
+      "profiled_duration_ms": 2.48,
+      "profiled_idle_ms": 1.8
+    },
+    {
+      "device": "TPU v5e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 50,
+      "unprofiled_p50_ms": 87.51,
+      "profiled_busy_ms": 81.06,
+      "remainder_estimate_ms": 6.45,
+      "profiled_duration_ms": 89.53,
+      "profiled_idle_ms": 8.47
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 1,
+      "unprofiled_p50_ms": 2.27,
+      "profiled_busy_ms": 0.87,
+      "remainder_estimate_ms": 1.4,
+      "profiled_duration_ms": 2.51,
+      "profiled_idle_ms": 1.64
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "english",
+      "questions": 50,
+      "unprofiled_p50_ms": 76.79,
+      "profiled_busy_ms": 69.72,
+      "remainder_estimate_ms": 7.07,
+      "profiled_duration_ms": 78.07,
+      "profiled_idle_ms": 8.35
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 1,
+      "unprofiled_p50_ms": 1.61,
+      "profiled_busy_ms": 0.35,
+      "remainder_estimate_ms": 1.26,
+      "profiled_duration_ms": 1.89,
+      "profiled_idle_ms": 1.54
+    },
+    {
+      "device": "TPU v6e",
+      "backend": "jax",
+      "model": "multilingual",
+      "questions": 50,
+      "unprofiled_p50_ms": 41.24,
+      "profiled_busy_ms": 35.54,
+      "remainder_estimate_ms": 5.7,
+      "profiled_duration_ms": 42.7,
+      "profiled_idle_ms": 7.16
+    }
+  ],
+  "latency_curve": [
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 4.8,
+      "p95_ms": 4.8,
+      "source": "report table 6b"
+    },
+    {
+      "model": "english",
+      "questions": 5,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 7.8,
+      "source": "report table 8a; cross-checked against Figure 19"
+    },
+    {
+      "model": "english",
+      "questions": 10,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 11.6,
+      "source": "report table 8a; cross-checked against Figure 19"
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 44.0,
+      "p95_ms": 44.3,
+      "source": "report table 6b"
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "H200 NVL*",
+      "backend": "tilelang_nograph",
+      "p50_ms": 5.8,
+      "p95_ms": 6.5,
+      "source": "report table 6b"
+    },
+    {
+      "model": "english",
+      "questions": 5,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 10.0,
+      "source": "report Figure 19 SVG, log-axis inversion rounded to 0.1 ms",
+      "svg_extracted": true
+    },
+    {
+      "model": "english",
+      "questions": 10,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 13.8,
+      "source": "report Figure 19 SVG, log-axis inversion rounded to 0.1 ms",
+      "svg_extracted": true
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 39.8,
+      "p95_ms": 40.4,
+      "source": "report table 6b"
+    },
+    {
+      "model": "english",
+      "questions": 1,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 2.18,
+      "p95_ms": 2.24
+    },
+    {
+      "model": "english",
+      "questions": 5,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 6.22,
+      "p95_ms": 6.25
+    },
+    {
+      "model": "english",
+      "questions": 10,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 10.12,
+      "p95_ms": 10.16
+    },
+    {
+      "model": "english",
+      "questions": 50,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 33.69,
+      "p95_ms": 33.74
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 3.2,
+      "p95_ms": 3.2,
+      "source": "report table 6b"
+    },
+    {
+      "model": "multilingual",
+      "questions": 5,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 5.0,
+      "source": "report table 8a; cross-checked against Figure 19"
+    },
+    {
+      "model": "multilingual",
+      "questions": 10,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 7.0,
+      "source": "report table 8a; cross-checked against Figure 19"
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "H100 PCIe*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 23.2,
+      "p95_ms": 23.4,
+      "source": "report table 6b"
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "H200 NVL*",
+      "backend": "tilelang",
+      "p50_ms": 4.1,
+      "p95_ms": 4.2,
+      "source": "report table 6b"
+    },
+    {
+      "model": "multilingual",
+      "questions": 5,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 5.8,
+      "source": "report Figure 19 SVG, log-axis inversion rounded to 0.1 ms",
+      "svg_extracted": true
+    },
+    {
+      "model": "multilingual",
+      "questions": 10,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 7.5,
+      "source": "report Figure 19 SVG, log-axis inversion rounded to 0.1 ms",
+      "svg_extracted": true
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "H200 NVL*",
+      "backend": "compile_cudagraph",
+      "p50_ms": 21.2,
+      "p95_ms": 21.7,
+      "source": "report table 6b"
+    },
+    {
+      "model": "multilingual",
+      "questions": 1,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 1.55,
+      "p95_ms": 1.57
+    },
+    {
+      "model": "multilingual",
+      "questions": 5,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 3.43,
+      "p95_ms": 3.45
+    },
+    {
+      "model": "multilingual",
+      "questions": 10,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 5.46,
+      "p95_ms": 5.49
+    },
+    {
+      "model": "multilingual",
+      "questions": 50,
+      "device": "TPU v6e",
+      "backend": "pallas",
+      "p50_ms": 17.83,
+      "p95_ms": 17.87
+    }
+  ],
+  "decomposition_method": "GPU busy = sum of profiled device kernel/memcpy time; TPU busy = profiled device duration minus IDLE. Remainder = separately measured unprofiled p50 minus busy estimate. This is approximate, not CPU self time; host and device timings overlap. GPU p50 here is the profiler section companion unprofiled series, not the baseline latency series.",
+  "cost": {
+    "model": "english",
+    "latency_measurement_dates": "2026-10-12",
+    "prices": [
+      {
+        "host": "xtraa100*",
+        "device": "A100-SXM4-80GB",
+        "provider": "Vast.ai",
+        "source_url": "https://vast.ai/pricing",
+        "on_demand_usd_per_hour": 1.176,
+        "preemptible_usd_per_hour": 0.727,
+        "source_note": "Vast.ai median, A100 SXM4 80GB, only 2 / 2 offers; RunPod",
+        "snapshot_date": "2026-10-12",
+        "official_page_checked": "2026-10-15",
+        "official_numeric_verification": "marketplace snapshot from report; exact rates not verified against current listings",
+        "snapshot_date_source": "user"
+      },
+      {
+        "host": "xtrah100*",
+        "device": "H100 PCIe",
+        "provider": "Nebius",
+        "source_url": "https://nebius.com/prices",
+        "on_demand_usd_per_hour": 4.5,
+        "preemptible_usd_per_hour": 0.79,
+        "source_note": "Nebius H100 (SXM; measured card is H100 PCIe); RunPod",
+        "snapshot_date": "2026-10-12",
+        "official_page_checked": "2026-10-15",
+        "official_numeric_verification": "on-demand and starting spot rate",
+        "snapshot_date_source": "user"
+      },
+      {
+        "host": "xtrah200*",
+        "device": "H200 NVL",
+        "provider": "Nebius",
+        "source_url": "https://nebius.com/prices",
+        "on_demand_usd_per_hour": 5.4,
+        "preemptible_usd_per_hour": 0.79,
+        "source_note": "Nebius H200 (SXM; measured card is H200 NVL); RunPod",
+        "snapshot_date": "2026-10-12",
+        "official_page_checked": "2026-10-15",
+        "official_numeric_verification": "on-demand and starting spot rate",
+        "snapshot_date_source": "user"
+      },
+      {
+        "host": "v6e-1 pallas",
+        "device": "TPU v6 lite",
+        "provider": "Google Cloud",
+        "source_url": "https://cloud.google.com/tpu/pricing",
+        "on_demand_usd_per_hour": 2.7,
+        "preemptible_usd_per_hour": 0.97,
+        "source_note": "Google Cloud TPU v6e (RunPod column = GCP on-demand)",
+        "snapshot_date": "2026-10-12",
+        "official_page_checked": "2026-10-15",
+        "official_numeric_verification": "on-demand only; spot uses report snapshot",
+        "snapshot_date_source": "user"
+      }
+    ],
+    "records": [
+      {
+        "host": "xtraa100*",
+        "device": "A100-SXM4-80GB",
+        "model": "english",
+        "questions": 1,
+        "backend": "compile_cudagraph",
+        "input_tokens_per_call": 194,
+        "input_tokens_per_second": 30250.0,
+        "on_demand_million_tokens_per_usd": 92.60204081632654,
+        "preemptible_million_tokens_per_usd": 149.7936726272352
+      },
+      {
+        "host": "xtraa100*",
+        "device": "A100-SXM4-80GB",
+        "model": "english",
+        "questions": 50,
+        "backend": "compile_cudagraph",
+        "input_tokens_per_call": 9975,
+        "input_tokens_per_second": 145069.0,
+        "on_demand_million_tokens_per_usd": 444.0887755102041,
+        "preemptible_million_tokens_per_usd": 718.3609353507566
+      },
+      {
+        "host": "xtrah100*",
+        "device": "H100 PCIe",
+        "model": "english",
+        "questions": 1,
+        "backend": "compile_cudagraph",
+        "input_tokens_per_call": 194,
+        "input_tokens_per_second": 40341.0,
+        "on_demand_million_tokens_per_usd": 32.2728,
+        "preemptible_million_tokens_per_usd": 183.83240506329113
+      },
+      {
+        "host": "xtrah100*",
+        "device": "H100 PCIe",
+        "model": "english",
+        "questions": 50,
+        "backend": "compile_cudagraph",
+        "input_tokens_per_call": 9975,
+        "input_tokens_per_second": 226669.0,
+        "on_demand_million_tokens_per_usd": 181.3352,
+        "preemptible_million_tokens_per_usd": 1032.9220253164556
+      },
+      {
+        "host": "xtrah200*",
+        "device": "H200 NVL",
+        "model": "english",
+        "questions": 1,
+        "backend": "tilelang_nograph",
+        "input_tokens_per_call": 194,
+        "input_tokens_per_second": 33171.0,
+        "on_demand_million_tokens_per_usd": 22.114,
+        "preemptible_million_tokens_per_usd": 151.15898734177213
+      },
+      {
+        "host": "xtrah200*",
+        "device": "H200 NVL",
+        "model": "english",
+        "questions": 50,
+        "backend": "compile_cudagraph",
+        "input_tokens_per_call": 9975,
+        "input_tokens_per_second": 250410.0,
+        "on_demand_million_tokens_per_usd": 166.94,
+        "preemptible_million_tokens_per_usd": 1141.1088607594936
+      },
+      {
+        "host": "v6e-1 pallas",
+        "device": "TPU v6 lite",
+        "model": "english",
+        "questions": 1,
+        "backend": "pallas",
+        "input_tokens_per_call": 194,
+        "input_tokens_per_second": 89029.0,
+        "on_demand_million_tokens_per_usd": 118.70533333333333,
+        "preemptible_million_tokens_per_usd": 330.41690721649485
+      },
+      {
+        "host": "v6e-1 pallas",
+        "device": "TPU v6 lite",
+        "model": "english",
+        "questions": 50,
+        "backend": "pallas",
+        "input_tokens_per_call": 9975,
+        "input_tokens_per_second": 296054.0,
+        "on_demand_million_tokens_per_usd": 394.73866666666663,
+        "preemptible_million_tokens_per_usd": 1098.757113402062
+      }
+    ],
+    "formula": "million model input tokens per USD = recorded model input tokens per second * 3600 / USD per device-hour / 1e6",
+    "rate_source": "report section 9, tokens/s derived from unrounded per-call p50; displayed p50 values elsewhere are rounded",
+    "caveats": [
+      "Only English and optimized GPU / TPU v6e Pallas are included.",
+      "Nebius H100/H200 rate cards quote SXM, while measured cards are PCIe/NVL; spot is the published starting price, not an assured hourly quote.",
+      "TPU spot rate of USD 0.970/chip-hour is the report assumption, not numerically confirmed on the current public pricing page.",
+      "Single serial stream with warmed execution; excludes startup, idle fleet time, interruptions, storage, networking, and taxes.",
+      "Input tokens count repeated state per question, not unique user text or generated output."
+    ],
+    "chart_hosts": [
+      "xtraa100*",
+      "xtrah100*",
+      "v6e-1 pallas"
+    ]
+  },
+  "curve_svg_provenance": [
+    {
+      "model": "english",
+      "device": "H100 PCIe*",
+      "svg_group": "f19_line2d_39",
+      "coordinates": [
+        [
+          63.033264,
+          224.219877
+        ],
+        [
+          183.972963,
+          206.164967
+        ],
+        [
+          236.058856,
+          191.102535
+        ],
+        [
+          356.998554,
+          141.259966
+        ]
+      ],
+      "y_tick_10": 196.78638,
+      "y_tick_100": 110.50114,
+      "inverse": "10 ** (1 + (y_tick_10 - point_y) / (y_tick_10 - y_tick_100))"
+    },
+    {
+      "model": "english",
+      "device": "H200 NVL*",
+      "svg_group": "f19_line2d_40",
+      "coordinates": [
+        [
+          63.033264,
+          216.886717
+        ],
+        [
+          183.972963,
+          196.651499
+        ],
+        [
+          236.058856,
+          184.640068
+        ],
+        [
+          356.998554,
+          144.992662
+        ]
+      ],
+      "y_tick_10": 196.78638,
+      "y_tick_100": 110.50114,
+      "inverse": "10 ** (1 + (y_tick_10 - point_y) / (y_tick_10 - y_tick_100))"
+    },
+    {
+      "model": "multilingual",
+      "device": "H100 PCIe*",
+      "svg_group": "f19_line2d_75",
+      "coordinates": [
+        [
+          452.553264,
+          224.874141
+        ],
+        [
+          573.492963,
+          206.343796
+        ],
+        [
+          625.578856,
+          192.335503
+        ],
+        [
+          746.518554,
+          143.266248
+        ]
+      ],
+      "y_tick_10": 177.73995,
+      "y_tick_100": 83.643459,
+      "inverse": "10 ** (1 + (y_tick_10 - point_y) / (y_tick_10 - y_tick_100))"
+    },
+    {
+      "model": "multilingual",
+      "device": "H200 NVL*",
+      "svg_group": "f19_line2d_76",
+      "coordinates": [
+        [
+          452.553264,
+          214.005188
+        ],
+        [
+          573.492963,
+          199.805169
+        ],
+        [
+          625.578856,
+          189.677481
+        ],
+        [
+          746.518554,
+          147.094068
+        ]
+      ],
+      "y_tick_10": 177.73995,
+      "y_tick_100": 83.643459,
+      "inverse": "10 ** (1 + (y_tick_10 - point_y) / (y_tick_10 - y_tick_100))"
+    }
+  ]
+}

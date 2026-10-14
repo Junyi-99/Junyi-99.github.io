@@ -1,4 +1,225 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Sat, 10 Oct 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/tpu/index.xml" rel="self" type="application/rss+xml"/><item><title>HLO Visualizer: Learn XLA HLO by Exploring It</title><link>https://www.junyi.dev/en/posts/hlo-visualizer/</link><pubDate>Sat, 10 Oct 2026 14:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 15 Oct 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/tags/tpu/index.xml" rel="self" type="application/rss+xml"/><item><title>deciax: Running a Decision Model on TPU with JAX and Pallas</title><link>https://www.junyi.dev/en/posts/deciax/</link><pubDate>Thu, 15 Oct 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
+Routing a support ticket, checking whether it asks for a refund, and scoring its urgency all call for structured decisions. A model can return choices and probabilities directly, without generating a textual answer token by token.
+Laya is a Decision Model that handles choice, score, and yes/no questions in a single forward pass. I ported its inference path to JAX and built deciax to run these models on TPU, then optimized the computation with Pallas.
+In this benchmark1, a single TPU v6e chip reached a single-question p50 of 2.18 ms for the English model and 1.55 ms for the multilingual model. The fastest measured results on A100 SXM4, H100 PCIe, and H200 NVL were 6.4 / 4.0 ms, 4.8 / 3.2 ms, and 5.8 / 4.1 ms, respectively (English / multilingual).
+At 50 questions per call, v6e Pallas reached 33.69 / 17.83 ms, roughly 2.3× faster than plain JAX. The fastest measured A100, H100, and H200 results were 68.8 / 36.2 ms, 44.0 / 23.2 ms, and 39.8 / 21.2 ms, respectively.</description><content:encoded>&lt;p&gt;Routing a support ticket, checking whether it asks for a refund, and scoring its urgency all call for structured decisions. A model can return choices and probabilities directly, without generating a textual answer token by token.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/NandhaKishorM/laya" target="_blank" rel="noopener noreferrer"&gt;Laya&lt;/a&gt; is a Decision Model that handles choice, score, and yes/no questions in a single forward pass. I ported its inference path to JAX and built &lt;strong&gt;&lt;a href="https://pypi.org/project/deciax/" target="_blank" rel="noopener noreferrer"&gt;deciax&lt;/a&gt;&lt;/strong&gt; to run these models on TPU, then optimized the computation with Pallas.&lt;/p&gt;
+&lt;p&gt;In this benchmark&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, a single TPU v6e chip reached a single-question p50 of &lt;strong&gt;2.18 ms&lt;/strong&gt; for the English model and &lt;strong&gt;1.55 ms&lt;/strong&gt; for the multilingual model. The fastest measured results on A100 SXM4, H100 PCIe, and H200 NVL were &lt;strong&gt;6.4 / 4.0 ms, 4.8 / 3.2 ms, and 5.8 / 4.1 ms&lt;/strong&gt;, respectively (English / multilingual).&lt;/p&gt;
+&lt;p&gt;At 50 questions per call, v6e Pallas reached &lt;strong&gt;33.69 / 17.83 ms&lt;/strong&gt;, roughly &lt;strong&gt;2.3× faster&lt;/strong&gt; than plain JAX. The fastest measured A100, H100, and H200 results were &lt;strong&gt;68.8 / 36.2 ms, 44.0 / 23.2 ms, and 39.8 / 21.2 ms&lt;/strong&gt;, respectively.&lt;/p&gt;
+&lt;h2 id="one-input-several-decisions" &gt;
+&lt;div&gt;
+&lt;a href="#one-input-several-decisions"&gt;
+#
+&lt;/a&gt;
+One input, several decisions
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;deciax takes an input and a set of questions, then returns structured results. Here is a duplicate-charge ticket:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff6ac1"&gt;import&lt;/span&gt; deciax
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;decider &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; deciax&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;load(&lt;span style="color:#5af78e"&gt;&amp;#34;laya&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;result &lt;span style="color:#ff6ac1"&gt;=&lt;/span&gt; decider&lt;span style="color:#ff6ac1"&gt;.&lt;/span&gt;decide(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {&lt;span style="color:#5af78e"&gt;&amp;#34;user&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;I was charged twice this month. Please refund the duplicate.&amp;#34;&lt;/span&gt;},
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;department&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;type&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;choice&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;instructions&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;Which department should handle this?&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;criteria&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;billing&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;payments, invoices, refunds&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;technical&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;bugs, outages, system errors&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;other&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;everything else&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;urgency&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;type&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;score&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;instructions&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;How urgent is this?&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;criteria&amp;#34;&lt;/span&gt;: [&lt;span style="color:#5af78e"&gt;&amp;#34;not urgent&amp;#34;&lt;/span&gt;, &lt;span style="color:#5af78e"&gt;&amp;#34;soon&amp;#34;&lt;/span&gt;, &lt;span style="color:#5af78e"&gt;&amp;#34;blocking&amp;#34;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;refund_requested&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;type&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;noul&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#5af78e"&gt;&amp;#34;instructions&amp;#34;&lt;/span&gt;: &lt;span style="color:#5af78e"&gt;&amp;#34;Does the user ask for a refund?&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;print&lt;/span&gt;(result)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="move-the-inference-path-to-jax" &gt;
+&lt;div&gt;
+&lt;a href="#move-the-inference-path-to-jax"&gt;
+#
+&lt;/a&gt;
+Move the inference path to JAX
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;deciax preserves Laya&amp;rsquo;s input construction, ModernBERT encoder, and decision heads while moving inference to JAX. Its runtime does not require PyTorch, Transformers, or Laya; the checkpoints and tokenizer still come from the original model. It also offers a &lt;code&gt;/v1/systemone&lt;/code&gt; HTTP endpoint. The &lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;project documentation&lt;/a&gt; lists its current scope.&lt;/p&gt;
+&lt;h2 id="start-with-the-baseline-pytorch-eager-and-jax" &gt;
+&lt;div&gt;
+&lt;a href="#start-with-the-baseline-pytorch-eager-and-jax"&gt;
+#
+&lt;/a&gt;
+Start with the baseline: PyTorch eager and JAX
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Measurements ran on Oct 12, 2026, across RTX 3090, A100 SXM4, RTX A6000, H100 PCIe, and H200 NVL hosts, plus single-chip TPU v5e and v6e runs.&lt;/p&gt;
+&lt;p&gt;Latency figures show &lt;strong&gt;warmed in-process p50 per call&lt;/strong&gt;&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;, including input encoding, inference, and result handling. Solid bars show p50; dashed markers show p95.&lt;/p&gt;
+&lt;p&gt;First, compare PyTorch eager on GPU with ordinary JAX on TPU:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/deciax/figures/baseline-latency.png" alt="Baseline p50 and p95 latency for PyTorch eager and plain JAX, with 1 and 50 questions on English and multilingual models" loading="lazy"&gt;
+&lt;figcaption&gt;Baseline latency in ms; lower is better. Solid bars show p50, dashed markers show p95, and labels read p50 / p95. Asterisks mark shared hosts.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;For English single-question calls, GPU eager p50 ranged from 13.3 to 25.8 ms, while v6e JAX took 2.27 ms. At 50 questions, v6e JAX took 76.79 ms, compared with the lowest GPU eager result of 57.5 ms on H200 NVL. Multilingual followed a similar pattern: v6e JAX grew from 1.61 ms to 41.24 ms, while H200 eager took 34.0 ms at 50 questions.&lt;/p&gt;
+&lt;h2 id="where-time-goes-dispatch-overhead-and-model-computation" &gt;
+&lt;div&gt;
+&lt;a href="#where-time-goes-dispatch-overhead-and-model-computation"&gt;
+#
+&lt;/a&gt;
+Where time goes: dispatch overhead and model computation
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Next, break down baseline calls using the English model&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/deciax/figures/baseline-breakdown.png" alt="English baseline time breakdown: substantial dispatch and remaining processing time at one question, with device computation dominating at 50 questions" loading="lazy"&gt;
+&lt;figcaption&gt;Blue is profiled device busy time; the hatched segment is total latency minus that estimate. Labels show independently measured p50. These come from separate measurement series, so the split is approximate. The remainder includes dispatch, Python, input/output handling, and idle gaps; it is not CPU self time.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Single-question GPU eager calls issue many small kernels: the English model used &lt;strong&gt;1,090–1,213 cudaLaunchKernel calls&lt;/strong&gt; per inference. The large remainder outside device execution points toward both kernel fusion and reducing dispatch overhead.&lt;/p&gt;
+&lt;p&gt;At 50 questions, computation accounts for most of the call. English v6e JAX took 76.79 ms end to end, with separately measured forward-only time of 71.27 ms and encoding near 3 ms. In XProf, &lt;code&gt;dot_general&lt;/code&gt; and &lt;code&gt;sub&lt;/code&gt; accounted for about 38% and 21% of this device time, directing attention to matrix computation and data movement in elementwise operations.&lt;/p&gt;
+&lt;p&gt;After the port, JAX operations serve as the baseline for exploring how to fuse computation on TPU. At the measured shapes, Pallas fuses multiple computations within each layer into one kernel&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;h2 id="optimized-the-fastest-measured-implementation-on-each-platform" &gt;
+&lt;div&gt;
+&lt;a href="#optimized-the-fastest-measured-implementation-on-each-platform"&gt;
+#
+&lt;/a&gt;
+Optimized: the fastest measured implementation on each platform
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;GPU testing covers TileLang, CUDA Graph, and torch.compile. We select &lt;strong&gt;the fastest measured implementation&lt;/strong&gt; for each host, model, and question count to make the comparison as fair as possible. The TPU path uses v6e Pallas.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/deciax/figures/latency-1q.png" alt="Optimized single-question latency: each GPU's fastest measured implementation versus v6e Pallas, with p50 bars and p95 markers" loading="lazy"&gt;
+&lt;figcaption&gt;One question per call, in ms; lower is better. Solid bars show p50, dashed markers show p95, and labels read p50 / p95. Asterisks mark shared hosts. GPU testing covers TileLang, CUDA Graph, and torch.compile; each card uses its fastest measured implementation to make the comparison as fair as possible.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;Single-question v6e Pallas p50 was &lt;strong&gt;2.18 ms&lt;/strong&gt; for English and &lt;strong&gt;1.55 ms&lt;/strong&gt; for multilingual. The lowest English GPU result was 4.8 ms on H100 PCIe using torch.compile with cudagraph; the lowest multilingual result was 3.2 ms. Pallas makes little difference relative to plain JAX at this shape.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/deciax/figures/latency-50q.png" alt="Optimized 50-question calls: each GPU's fastest implementation versus v6e Pallas, with English p50 of 33.69 ms and multilingual p50 of 17.83 ms" loading="lazy"&gt;
+&lt;figcaption&gt;50 questions per call. Solid bars show p50, dashed markers show p95, and labels read p50 / p95. Every GPU's fastest variant here is torch.compile with cudagraph. v6e Pallas p50 is 33.69 ms / 17.83 ms, versus 39.8 ms / 21.2 ms for the fastest GPU (English / multilingual).&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;At 50 questions, English v6e latency fell from 76.79 ms with JAX to &lt;strong&gt;33.69 ms&lt;/strong&gt; with Pallas; multilingual fell from 41.24 ms to &lt;strong&gt;17.83 ms&lt;/strong&gt;. These are speedups of &lt;strong&gt;2.28× and 2.31×&lt;/strong&gt;. English forward-only time fell from 71.27 ms to 28.25 ms, and multilingual from 36.54 ms to 13.36 ms.&lt;/p&gt;
+&lt;h2 id="latency-as-the-question-count-grows" &gt;
+&lt;div&gt;
+&lt;a href="#latency-as-the-question-count-grows"&gt;
+#
+&lt;/a&gt;
+Latency as the question count grows
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Connect the measurements at 1, 5, 10, and 50 questions to compare latency on H100, H200, and v6e Pallas:&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/deciax/figures/latency-curve.png" alt="p50 latency curves for 1, 5, 10, and 50 questions on H100 PCIe, H200 NVL, and v6e Pallas" loading="lazy"&gt;
+&lt;figcaption&gt;The x-axis is questions per call and the y-axis is p50 in ms; both use log scales. H100 PCIe and H200 NVL use their fastest measured implementation at each question count, alongside v6e Pallas. Each GPU curve corresponds to one fixed card.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="http-serving-and-installation" &gt;
+&lt;div&gt;
+&lt;a href="#http-serving-and-installation"&gt;
+#
+&lt;/a&gt;
+HTTP serving and installation
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;We also measured &lt;code&gt;deciax.serve&lt;/code&gt;. For single-question calls over loopback with keep-alive, v6e Pallas HTTP p50 was &lt;strong&gt;3.0 ms&lt;/strong&gt; for English and &lt;strong&gt;2.4 ms&lt;/strong&gt; for multilingual. This includes the local HTTP round trip, but no external network latency or concurrent load test.&lt;/p&gt;
+&lt;p&gt;Use Python 3.14 or newer. Install it on a TPU host with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m pip install &lt;span style="color:#5af78e"&gt;&amp;#34;deciax[tpu]==0.1.1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This release supports the Python interface example above. To inspect the Pallas implementation measured here, check out the corresponding code from the &lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;repository&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone https://github.com/Junyi-99/deciax.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; deciax
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git checkout 6f3a930
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;uv sync --extra tpu
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="cost-million-model-input-tokens-per-us-dollar" &gt;
+&lt;div&gt;
+&lt;a href="#cost-million-model-input-tokens-per-us-dollar"&gt;
+#
+&lt;/a&gt;
+Cost: Million model input tokens per US dollar
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Cost compares only &lt;strong&gt;optimized English-model implementations&lt;/strong&gt;: the fastest measured GPU variant and v6e Pallas on TPU. We calculate both on-demand and preemptible / spot scenarios.&lt;/p&gt;
+&lt;p&gt;Performance and price data were collected on Oct 12, 2026.&lt;/p&gt;
+&lt;p&gt;Prices are &lt;strong&gt;USD per GPU-hour or TPU chip-hour&lt;/strong&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Hardware&lt;/th&gt;
+&lt;th&gt;Provider&lt;/th&gt;
+&lt;th style="text-align: right"&gt;On-demand&lt;/th&gt;
+&lt;th style="text-align: right"&gt;Preemptible / Spot&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;A100 SXM4 80GB&lt;/td&gt;
+&lt;td&gt;&lt;a href="https://vast.ai/pricing" target="_blank" rel="noopener noreferrer"&gt;Vast.ai&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$1.176&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$0.727&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;H100 (SXM pricing)&lt;/td&gt;
+&lt;td&gt;&lt;a href="https://nebius.com/prices" target="_blank" rel="noopener noreferrer"&gt;Nebius&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$4.500&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$0.790&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;H200 (SXM pricing)&lt;/td&gt;
+&lt;td&gt;&lt;a href="https://nebius.com/prices" target="_blank" rel="noopener noreferrer"&gt;Nebius&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$5.400&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$0.790&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TPU v6e&lt;/td&gt;
+&lt;td&gt;&lt;a href="https://cloud.google.com/tpu/pricing" target="_blank" rel="noopener noreferrer"&gt;Google Cloud&lt;/a&gt;&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$2.700&lt;/td&gt;
+&lt;td style="text-align: right"&gt;$0.970&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The calculation is&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Million model input tokens per US dollar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; = model input tokens per second × 3600 / hourly price / 1,000,000
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Model input tokens include the ticket text repeated for each question.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/deciax/figures/cost-english.png" alt="Million model input tokens per US dollar for optimized English-model inference on A100, H100, and TPU v6e Pallas, at on-demand and preemptible/spot rates" loading="lazy"&gt;
+&lt;figcaption&gt;Million model input tokens per dollar; higher is better. English only, comparing the fastest measured A100 and H100 implementations with v6e Pallas. The top panel uses one question per call; the bottom uses 50. Prices, dates, and suppliers are listed above; preemptible / spot retains the report's pricing assumptions.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id="conclusion" &gt;
+&lt;div&gt;
+&lt;a href="#conclusion"&gt;
+#
+&lt;/a&gt;
+Conclusion
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;deciax brings Laya&amp;rsquo;s structured decisions to TPU. In this experiment, plain JAX already handled single-question calls in about 2 ms, with little additional benefit from Pallas at that shape. At 50 questions per call, the fused Pallas path was roughly &lt;strong&gt;2.3× faster&lt;/strong&gt; than plain JAX. The question count changes both the dominant overhead and the benefit of optimization.&lt;/p&gt;
+&lt;p&gt;For the inputs, models, and implementations tested here, v6e Pallas had lower latency than the compared GPU implementations at both one and 50 questions.&lt;/p&gt;
+&lt;p&gt;You can try deciax in &lt;a href="https://colab.research.google.com/drive/1sY_4BeRq_em4tzePW3poPyl-lGXyxO1g?usp=sharing" target="_blank" rel="noopener noreferrer"&gt;Colab&lt;/a&gt; or explore the code in the &lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Performance data in this post comes from development commit &lt;a href="https://github.com/Junyi-99/deciax/commit/6f3a930" target="_blank" rel="noopener noreferrer"&gt;6f3a930&lt;/a&gt;.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Inputs use upstream&amp;rsquo;s &lt;em&gt;Payout failing&lt;/em&gt; ticket with alternating &lt;code&gt;noul&lt;/code&gt; and &lt;code&gt;choice&lt;/code&gt; questions. Each series uses 20 warmups followed by 20 timed calls with device synchronization.&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;GPU p50 in the breakdown comes from the profiling companion timing series, separate from the preceding baseline figure.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;The Pallas path in this report fuses normalization, QKV projection, RoPE, attention, output projection, and the MLP. For the path with sequence length at most 512, each layer uses one &lt;code&gt;pallas_call&lt;/code&gt;.&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;Nebius Spot uses the starting price; TPU preemptible uses the report snapshot.&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;English calls contain 194 model input tokens at one question and 9,975 at 50 questions. We use the report&amp;rsquo;s recorded input tokens/s, derived from token counts divided by the original p50 latency.&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content:encoded><category>TPU</category><category>JAX</category><category>Pallas</category><category>Inference</category><category>Tech</category><guid isPermaLink="true">https://www.junyi.dev/en/posts/deciax/</guid></item><item><title>HLO Visualizer: Learn XLA HLO by Exploring It</title><link>https://www.junyi.dev/en/posts/hlo-visualizer/</link><pubDate>Sat, 10 Oct 2026 14:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
 When working with JAX on TPU, you eventually need to read HLO. You want to know what a computation became after compilation, why extra copies appeared, or what is inside a fusion. The answers start with a compiler-generated text file.
 Instructions pack together shapes, layouts, tiling, memory spaces, and references to other computations.
 I built HLO Visualizer to make that easier. It turns HLO text into an explorable graph, with explanations of the instruction you select, piece by piece.</description><content:encoded>&lt;p&gt;When working with JAX on TPU, you eventually need to read HLO. You want to know what a computation became after compilation, why extra copies appeared, or what is inside a fusion. The answers start with a compiler-generated text file.&lt;/p&gt;
