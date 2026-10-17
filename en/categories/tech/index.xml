@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Junyi's Lab</title><link>https://www.junyi.dev/</link><description>Recent blog posts on Junyi's Lab</description><generator>Hugo (https://gohugo.io)</generator><language>en</language><managingEditor>junyi.h@comp.nus.edu.sg (Junyi Hou)</managingEditor><webMaster>junyi.h@comp.nus.edu.sg (Junyi Hou)</webMaster><lastBuildDate>Thu, 15 Oct 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://www.junyi.dev/en/categories/tech/index.xml" rel="self" type="application/rss+xml"/><item><title>deciax: Running a Decision Model on TPU with JAX and Pallas</title><link>https://www.junyi.dev/en/posts/deciax/</link><pubDate>Thu, 15 Oct 2026 00:00:00 +0800</pubDate><author>junyi.h@comp.nus.edu.sg (Junyi Hou)</author><description>
-Routing a support ticket, checking whether it asks for a refund, and scoring its urgency all call for structured decisions. A model can return choices and probabilities directly, without generating a textual answer token by token.
 Laya is a Decision Model that handles choice, score, and yes/no questions in a single forward pass. I ported its inference path to JAX and built deciax to run these models on TPU, then optimized the computation with Pallas.
 In this benchmark1, a single TPU v6e chip reached a single-question p50 of 2.18 ms for the English model and 1.55 ms for the multilingual model. The fastest measured results on A100 SXM4, H100 PCIe, and H200 NVL were 6.4 / 4.0 ms, 4.8 / 3.2 ms, and 5.8 / 4.1 ms, respectively (English / multilingual).
-At 50 questions per call, v6e Pallas reached 33.69 / 17.83 ms, roughly 2.3× faster than plain JAX. The fastest measured A100, H100, and H200 results were 68.8 / 36.2 ms, 44.0 / 23.2 ms, and 39.8 / 21.2 ms, respectively.</description><content:encoded>&lt;p&gt;Routing a support ticket, checking whether it asks for a refund, and scoring its urgency all call for structured decisions. A model can return choices and probabilities directly, without generating a textual answer token by token.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://github.com/NandhaKishorM/laya" target="_blank" rel="noopener noreferrer"&gt;Laya&lt;/a&gt; is a Decision Model that handles choice, score, and yes/no questions in a single forward pass. I ported its inference path to JAX and built &lt;strong&gt;&lt;a href="https://pypi.org/project/deciax/" target="_blank" rel="noopener noreferrer"&gt;deciax&lt;/a&gt;&lt;/strong&gt; to run these models on TPU, then optimized the computation with Pallas.&lt;/p&gt;
+At 50 questions per call, v6e Pallas reached 33.69 / 17.83 ms, roughly 2.3× faster than plain JAX. The fastest measured A100, H100, and H200 results were 68.8 / 36.2 ms, 44.0 / 23.2 ms, and 39.8 / 21.2 ms, respectively.</description><content:encoded>&lt;p&gt;&lt;a href="https://github.com/NandhaKishorM/laya" target="_blank" rel="noopener noreferrer"&gt;Laya&lt;/a&gt; is a Decision Model that handles choice, score, and yes/no questions in a single forward pass. I ported its inference path to JAX and built &lt;strong&gt;&lt;a href="https://pypi.org/project/deciax/" target="_blank" rel="noopener noreferrer"&gt;deciax&lt;/a&gt;&lt;/strong&gt; to run these models on TPU, then optimized the computation with Pallas.&lt;/p&gt;
 &lt;p&gt;In this benchmark&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;, a single TPU v6e chip reached a single-question p50 of &lt;strong&gt;2.18 ms&lt;/strong&gt; for the English model and &lt;strong&gt;1.55 ms&lt;/strong&gt; for the multilingual model. The fastest measured results on A100 SXM4, H100 PCIe, and H200 NVL were &lt;strong&gt;6.4 / 4.0 ms, 4.8 / 3.2 ms, and 5.8 / 4.1 ms&lt;/strong&gt;, respectively (English / multilingual).&lt;/p&gt;
 &lt;p&gt;At 50 questions per call, v6e Pallas reached &lt;strong&gt;33.69 / 17.83 ms&lt;/strong&gt;, roughly &lt;strong&gt;2.3× faster&lt;/strong&gt; than plain JAX. The fastest measured A100, H100, and H200 results were &lt;strong&gt;68.8 / 36.2 ms, 44.0 / 23.2 ms, and 39.8 / 21.2 ms&lt;/strong&gt;, respectively.&lt;/p&gt;
-&lt;h2 id="one-input-several-decisions" &gt;
+&lt;h2 id="starting-from-an-example" &gt;
 &lt;div&gt;
-&lt;a href="#one-input-several-decisions"&gt;
+&lt;a href="#starting-from-an-example"&gt;
 #
 &lt;/a&gt;
-One input, several decisions
+Starting from an example
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;deciax takes an input and a set of questions, then returns structured results. Here is a duplicate-charge ticket:&lt;/p&gt;
@@ -42,23 +40,27 @@ One input, several decisions
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;print&lt;/span&gt;(result)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="move-the-inference-path-to-jax" &gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="we-first-implement-laya-by-jax" &gt;
 &lt;div&gt;
-&lt;a href="#move-the-inference-path-to-jax"&gt;
+&lt;a href="#we-first-implement-laya-by-jax"&gt;
 #
 &lt;/a&gt;
-Move the inference path to JAX
+We first implement Laya by JAX
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;deciax preserves Laya&amp;rsquo;s input construction, ModernBERT encoder, and decision heads while moving inference to JAX. Its runtime does not require PyTorch, Transformers, or Laya; the checkpoints and tokenizer still come from the original model. It also offers a &lt;code&gt;/v1/systemone&lt;/code&gt; HTTP endpoint. The &lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;project documentation&lt;/a&gt; lists its current scope.&lt;/p&gt;
-&lt;h2 id="start-with-the-baseline-pytorch-eager-and-jax" &gt;
+&lt;p&gt;We first reimplement Laya&amp;rsquo;s inference computation in JAX: the ModernBERT encoder processes the input, and the decision heads produce results for each question. We keep Laya&amp;rsquo;s input construction and reuse its checkpoints and tokenizer. This gives us a plain JAX implementation that runs on TPU, providing the baseline for the measurements below and the later Pallas optimizations.&lt;/p&gt;
+&lt;figure&gt;
+&lt;img src="https://www.junyi.dev/posts/deciax/figures/laya-architecture.svg" alt="Laya architecture: per-question input, ModernBERT encoder, Transformer head layers, option scorer and action head." loading="lazy"&gt;
+&lt;figcaption&gt;Laya’s inference path in deciax. Each question becomes a separate input row; option scores and an action probability are produced from the head outputs.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h3 id="how-well-does-the-jax-implementation-perform" &gt;
 &lt;div&gt;
-&lt;a href="#start-with-the-baseline-pytorch-eager-and-jax"&gt;
-#
+&lt;a href="#how-well-does-the-jax-implementation-perform"&gt;
+##
 &lt;/a&gt;
-Start with the baseline: PyTorch eager and JAX
+How well does the JAX implementation perform?
 &lt;/div&gt;
-&lt;/h2&gt;
+&lt;/h3&gt;
 &lt;p&gt;Measurements ran on Oct 12, 2026, across RTX 3090, A100 SXM4, RTX A6000, H100 PCIe, and H200 NVL hosts, plus single-chip TPU v5e and v6e runs.&lt;/p&gt;
 &lt;p&gt;Latency figures show &lt;strong&gt;warmed in-process p50 per call&lt;/strong&gt;&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;, including input encoding, inference, and result handling. Solid bars show p50; dashed markers show p95.&lt;/p&gt;
 &lt;p&gt;First, compare PyTorch eager on GPU with ordinary JAX on TPU:&lt;/p&gt;
@@ -67,14 +69,14 @@ Start with the baseline: PyTorch eager and JAX
 &lt;figcaption&gt;Baseline latency in ms; lower is better. Solid bars show p50, dashed markers show p95, and labels read p50 / p95. Asterisks mark shared hosts.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;For English single-question calls, GPU eager p50 ranged from 13.3 to 25.8 ms, while v6e JAX took 2.27 ms. At 50 questions, v6e JAX took 76.79 ms, compared with the lowest GPU eager result of 57.5 ms on H200 NVL. Multilingual followed a similar pattern: v6e JAX grew from 1.61 ms to 41.24 ms, while H200 eager took 34.0 ms at 50 questions.&lt;/p&gt;
-&lt;h2 id="where-time-goes-dispatch-overhead-and-model-computation" &gt;
+&lt;h3 id="time-breakdown" &gt;
 &lt;div&gt;
-&lt;a href="#where-time-goes-dispatch-overhead-and-model-computation"&gt;
-#
+&lt;a href="#time-breakdown"&gt;
+##
 &lt;/a&gt;
-Where time goes: dispatch overhead and model computation
+Time breakdown
 &lt;/div&gt;
-&lt;/h2&gt;
+&lt;/h3&gt;
 &lt;p&gt;Next, break down baseline calls using the English model&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/deciax/figures/baseline-breakdown.png" alt="English baseline time breakdown: substantial dispatch and remaining processing time at one question, with device computation dominating at 50 questions" loading="lazy"&gt;
@@ -82,16 +84,16 @@ Where time goes: dispatch overhead and model computation
 &lt;/figure&gt;
 &lt;p&gt;Single-question GPU eager calls issue many small kernels: the English model used &lt;strong&gt;1,090–1,213 cudaLaunchKernel calls&lt;/strong&gt; per inference. The large remainder outside device execution points toward both kernel fusion and reducing dispatch overhead.&lt;/p&gt;
 &lt;p&gt;At 50 questions, computation accounts for most of the call. English v6e JAX took 76.79 ms end to end, with separately measured forward-only time of 71.27 ms and encoding near 3 ms. In XProf, &lt;code&gt;dot_general&lt;/code&gt; and &lt;code&gt;sub&lt;/code&gt; accounted for about 38% and 21% of this device time, directing attention to matrix computation and data movement in elementwise operations.&lt;/p&gt;
-&lt;p&gt;After the port, JAX operations serve as the baseline for exploring how to fuse computation on TPU. At the measured shapes, Pallas fuses multiple computations within each layer into one kernel&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-&lt;h2 id="optimized-the-fastest-measured-implementation-on-each-platform" &gt;
+&lt;h2 id="what-if-we-make-it-faster" &gt;
 &lt;div&gt;
-&lt;a href="#optimized-the-fastest-measured-implementation-on-each-platform"&gt;
+&lt;a href="#what-if-we-make-it-faster"&gt;
 #
 &lt;/a&gt;
-Optimized: the fastest measured implementation on each platform
+What if we make it faster?
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;GPU testing covers TileLang, CUDA Graph, and torch.compile. We select &lt;strong&gt;the fastest measured implementation&lt;/strong&gt; for each host, model, and question count to make the comparison as fair as possible. The TPU path uses v6e Pallas.&lt;/p&gt;
+&lt;p&gt;We optimize Laya on TPU with Pallas kernel fusion. For sequences up to 512 tokens, each encoder and Transformer head layer runs as a single kernel, combining normalization, projections, attention, and the MLP, with RoPE in the encoder&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;. Intermediate results stay in on-chip VMEM instead of being repeatedly written to and read from HBM, and each kernel reuses its resident weights across row blocks. We also use a transposed attention formulation to better fit the TPU’s matrix unit. &lt;a href="https://github.com/Junyi-99/deciax/pull/1" target="_blank" rel="noopener noreferrer"&gt;PR #1&lt;/a&gt; describes these optimizations and the three-kernel path used for longer sequences.&lt;/p&gt;
+&lt;p&gt;To make the comparison as fair as possible, we also test optimized GPU versions of Laya using TileLang, CUDA Graph, and &lt;code&gt;torch.compile&lt;/code&gt;. For each host, model, and question count, we select &lt;strong&gt;the fastest measured implementation&lt;/strong&gt; and compare it with Pallas on TPU v6e.&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/deciax/figures/latency-1q.png" alt="Optimized single-question latency: each GPU's fastest measured implementation versus v6e Pallas, with p50 bars and p95 markers" loading="lazy"&gt;
 &lt;figcaption&gt;One question per call, in ms; lower is better. Solid bars show p50, dashed markers show p95, and labels read p50 / p95. Asterisks mark shared hosts. GPU testing covers TileLang, CUDA Graph, and torch.compile; each card uses its fastest measured implementation to make the comparison as fair as possible.&lt;/figcaption&gt;
@@ -102,27 +104,36 @@ Optimized: the fastest measured implementation on each platform
 &lt;figcaption&gt;50 questions per call. Solid bars show p50, dashed markers show p95, and labels read p50 / p95. Every GPU's fastest variant here is torch.compile with cudagraph. v6e Pallas p50 is 33.69 ms / 17.83 ms, versus 39.8 ms / 21.2 ms for the fastest GPU (English / multilingual).&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;At 50 questions, English v6e latency fell from 76.79 ms with JAX to &lt;strong&gt;33.69 ms&lt;/strong&gt; with Pallas; multilingual fell from 41.24 ms to &lt;strong&gt;17.83 ms&lt;/strong&gt;. These are speedups of &lt;strong&gt;2.28× and 2.31×&lt;/strong&gt;. English forward-only time fell from 71.27 ms to 28.25 ms, and multilingual from 36.54 ms to 13.36 ms.&lt;/p&gt;
-&lt;h2 id="latency-as-the-question-count-grows" &gt;
+&lt;h2 id="performance-across-batch-sizes" &gt;
 &lt;div&gt;
-&lt;a href="#latency-as-the-question-count-grows"&gt;
+&lt;a href="#performance-across-batch-sizes"&gt;
 #
 &lt;/a&gt;
-Latency as the question count grows
+Performance across batch sizes
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;p&gt;Connect the measurements at 1, 5, 10, and 50 questions to compare latency on H100, H200, and v6e Pallas:&lt;/p&gt;
+&lt;p&gt;Batch size matters because it changes how much parallel work the hardware has available. Small batches may leave compute units underutilized, while dispatch overhead accounts for a larger share of each call. Larger batches can improve utilization, reuse weights across more inputs, and spread fixed overhead over more decisions. However, they also require more computation and memory, so higher throughput can come with longer per-call latency. An implementation that performs well at a small batch size may therefore behave differently at a larger one.&lt;/p&gt;
+&lt;p&gt;In Laya, each question becomes a separate input row, so we vary the logical batch size by sending 1, 5, 10, or 50 questions per call for the same input. The TPU implementation pads these rows to supported batch buckets; the question count is the number of useful rows, not necessarily the executed tensor’s batch dimension. The figure below compares per-call latency on H100, H200, and v6e Pallas across these batch sizes, showing how the cost of processing more decisions scales:&lt;/p&gt;
 &lt;figure&gt;
 &lt;img src="https://www.junyi.dev/posts/deciax/figures/latency-curve.png" alt="p50 latency curves for 1, 5, 10, and 50 questions on H100 PCIe, H200 NVL, and v6e Pallas" loading="lazy"&gt;
 &lt;figcaption&gt;The x-axis is questions per call and the y-axis is p50 in ms; both use log scales. H100 PCIe and H200 NVL use their fastest measured implementation at each question count, alongside v6e Pallas. Each GPU curve corresponds to one fixed card.&lt;/figcaption&gt;
 &lt;/figure&gt;
-&lt;h2 id="http-serving-and-installation" &gt;
+&lt;h2 id="serving-the-model" &gt;
+&lt;div&gt;
+&lt;a href="#serving-the-model"&gt;
+#
+&lt;/a&gt;
+Serving the model
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;h3 id="http-serving-and-installation" &gt;
 &lt;div&gt;
 &lt;a href="#http-serving-and-installation"&gt;
-#
+##
 &lt;/a&gt;
 HTTP serving and installation
 &lt;/div&gt;
-&lt;/h2&gt;
+&lt;/h3&gt;
 &lt;p&gt;We also measured &lt;code&gt;deciax.serve&lt;/code&gt;. For single-question calls over loopback with keep-alive, v6e Pallas HTTP p50 was &lt;strong&gt;3.0 ms&lt;/strong&gt; for English and &lt;strong&gt;2.4 ms&lt;/strong&gt; for multilingual. This includes the local HTTP round trip, but no external network latency or concurrent load test.&lt;/p&gt;
 &lt;p&gt;Use Python 3.14 or newer. Install it on a TPU host with:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m pip install &lt;span style="color:#5af78e"&gt;&amp;#34;deciax[tpu]==0.1.1&amp;#34;&lt;/span&gt;
@@ -131,14 +142,14 @@ HTTP serving and installation
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; deciax
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git checkout 6f3a930
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;uv sync --extra tpu
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="cost-million-model-input-tokens-per-us-dollar" &gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="cost-million-model-input-tokens-per-us-dollar" &gt;
 &lt;div&gt;
 &lt;a href="#cost-million-model-input-tokens-per-us-dollar"&gt;
-#
+##
 &lt;/a&gt;
 Cost: Million model input tokens per US dollar
 &lt;/div&gt;
-&lt;/h2&gt;
+&lt;/h3&gt;
 &lt;p&gt;Cost compares only &lt;strong&gt;optimized English-model implementations&lt;/strong&gt;: the fastest measured GPU variant and v6e Pallas on TPU. We calculate both on-demand and preemptible / spot scenarios.&lt;/p&gt;
 &lt;p&gt;Performance and price data were collected on Oct 12, 2026.&lt;/p&gt;
 &lt;p&gt;Prices are &lt;strong&gt;USD per GPU-hour or TPU chip-hour&lt;/strong&gt;.&lt;/p&gt;

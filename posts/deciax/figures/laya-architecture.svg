@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1040" viewBox="0 0 960 1040" role="img" aria-labelledby="title desc">
+<title id="title">Laya inference architecture in deciax</title>
+<desc id="desc">Each question forms a separate input row. ModernBERT is followed by a question-type embedding and Transformer head layers. Option marker states feed an option scorer. The CLS state and option probability statistics feed an action head. Calibrated probabilities become structured answers.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#64748b" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172b4d}.title{font-size:28px;font-weight:700}.label{font-size:21px;font-weight:600}.sub{font-size:17px;fill:#52647a}.mono{font-family:monospace;font-size:16px}.arrow{fill:none;stroke:#64748b;stroke-width:2;marker-end:url(#arrow)}</style>
+<rect width="960" height="1040" rx="20" fill="#f8fafc"/>
+<text x="48" y="55" class="title">Laya · from input to structured decisions</text>
+<text x="48" y="85" class="sub">Inference architecture implemented in deciax</text>
+<rect x="48" y="115" width="864" height="123" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="480.0" y="147" text-anchor="middle" class="label">Build one input row per question</text>
+<text x="480.0" y="174" text-anchor="middle" class="sub">[CLS] type + instructions [SEP] [MASK] option 1 … [MASK] option K</text>
+<text x="480.0" y="198" text-anchor="middle" class="sub">[SEP] state / context [SEP]</text>
+<text x="480.0" y="222" text-anchor="middle" class="sub">Multiple questions → separate rows, batched for execution</text>
+<path d="M480 238V270" class="arrow"/>
+<rect x="180" y="273" width="600" height="84" rx="12" fill="#eaf2ff" stroke="#cbd5e1"/>
+<text x="480.0" y="305" text-anchor="middle" class="label">ModernBERT encoder</text>
+<text x="480.0" y="332" text-anchor="middle" class="sub">Contextual token representations</text>
+<path d="M480 357V389" class="arrow"/>
+<rect x="180" y="392" width="600" height="68" rx="12" fill="#eaf2ff" stroke="#cbd5e1"/>
+<text x="480.0" y="424" text-anchor="middle" class="label">Add question-type embedding</text>
+<path d="M480 460V492" class="arrow"/>
+<rect x="180" y="495" width="600" height="89" rx="12" fill="#eaf2ff" stroke="#cbd5e1"/>
+<text x="480.0" y="527" text-anchor="middle" class="label">Transformer head layers</text>
+<text x="480.0" y="554" text-anchor="middle" class="sub">Self-attention + ReLU feed-forward · default: 2 layers</text>
+<path d="M350 584V618H262V645" class="arrow"/>
+<path d="M650 584V645" class="arrow"/>
+<text x="710" y="617" text-anchor="middle" class="sub">[CLS] state</text>
+<rect x="48" y="648" width="428" height="108" rx="12" fill="#eaf8f1" stroke="#cbd5e1"/>
+<text x="262.0" y="680" text-anchor="middle" class="label">Option scorer</text>
+<text x="262.0" y="707" text-anchor="middle" class="sub">Read each option’s [MASK] state</text>
+<text x="262.0" y="731" text-anchor="middle" class="sub">LayerNorm → Linear → GELU → Linear</text>
+<rect x="544" y="648" width="368" height="108" rx="12" fill="#fff5e6" stroke="#cbd5e1"/>
+<text x="728.0" y="680" text-anchor="middle" class="label">Action head</text>
+<text x="728.0" y="707" text-anchor="middle" class="sub">[CLS] + option statistics</text>
+<text x="728.0" y="731" text-anchor="middle" class="sub">Linear → GELU → Linear</text>
+<path d="M476 704H541" class="arrow"/>
+<text x="493" y="783" text-anchor="middle" class="sub">Option statistics: top-1 probability, margin, normalized entropy, K / 255</text>
+<path d="M262 756V807" class="arrow"/>
+<path d="M728 756V807" class="arrow"/>
+<rect x="48" y="810" width="428" height="80" rx="12" fill="#eaf8f1" stroke="#cbd5e1"/>
+<text x="262.0" y="842" text-anchor="middle" class="label">Calibrated option probabilities</text>
+<text x="262.0" y="869" text-anchor="middle" class="sub">softmax(option logits / temperature)</text>
+<rect x="544" y="810" width="368" height="80" rx="12" fill="#fff5e6" stroke="#cbd5e1"/>
+<text x="728.0" y="842" text-anchor="middle" class="label">Action probability</text>
+<text x="728.0" y="869" text-anchor="middle" class="sub">softmax(action logits)[0]</text>
+<path d="M262 890V913H480V934" class="arrow"/>
+<path d="M728 890V913H480" fill="none" stroke="#64748b" stroke-width="2"/>
+<rect x="48" y="937" width="864" height="76" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="480.0" y="969" text-anchor="middle" class="label">Structured answers</text>
+<text x="480.0" y="996" text-anchor="middle" class="sub">Choice: argmax  ·  Score: expected level  ·  Yes / no: P(true)</text>
+</svg>
