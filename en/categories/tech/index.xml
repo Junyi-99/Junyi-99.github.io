@@ -126,23 +126,32 @@ Performance across batch sizes
 Serving the model
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;h3 id="http-serving-and-installation" &gt;
+&lt;h3 id="http-serving" &gt;
 &lt;div&gt;
-&lt;a href="#http-serving-and-installation"&gt;
+&lt;a href="#http-serving"&gt;
 ##
 &lt;/a&gt;
-HTTP serving and installation
+HTTP serving
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;We also measured &lt;code&gt;deciax.serve&lt;/code&gt;. For single-question calls over loopback with keep-alive, v6e Pallas HTTP p50 was &lt;strong&gt;3.0 ms&lt;/strong&gt; for English and &lt;strong&gt;2.4 ms&lt;/strong&gt; for multilingual. This includes the local HTTP round trip, but no external network latency or concurrent load test.&lt;/p&gt;
-&lt;p&gt;Use Python 3.14 or newer. Install it on a TPU host with:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m pip install &lt;span style="color:#5af78e"&gt;&amp;#34;deciax[tpu]==0.1.1&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This release supports the Python interface example above. To inspect the Pallas implementation measured here, check out the corresponding code from the &lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;repository&lt;/a&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone https://github.com/Junyi-99/deciax.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; deciax
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git checkout 6f3a930
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;uv sync --extra tpu
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="cost-million-model-input-tokens-per-us-dollar" &gt;
+&lt;p&gt;To call Laya from another application, we expose the same decision interface through &lt;code&gt;deciax.serve&lt;/code&gt;: send the input and questions to &lt;code&gt;POST /v1/systemone&lt;/code&gt;, and receive structured answers as JSON. The server loads the model at startup and reuses it across requests.&lt;/p&gt;
+&lt;p&gt;With deciax installed on a TPU host, start an HTTP server on port 8000 using the Pallas implementation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m deciax.serve --model laya --impl pallas --port &lt;span style="color:#ff9f43"&gt;8000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Once startup and warmup finish, send a request from another terminal:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl http://127.0.0.1:8000/v1/systemone &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -H &lt;span style="color:#5af78e"&gt;&amp;#39;Content-Type: application/json&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -d &lt;span style="color:#5af78e"&gt;&amp;#39;{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;state&amp;#34;: &amp;#34;I was charged twice. Please refund the duplicate charge.&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;questions&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;refund&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;type&amp;#34;: &amp;#34;noul&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;instructions&amp;#34;: &amp;#34;Does the user ask for a refund?&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; }&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The response contains &lt;code&gt;answers.refund.noul&lt;/code&gt;, the probability that the answer is true, alongside confidence, action probability, and token usage. The service also exposes &lt;code&gt;GET /health&lt;/code&gt; and &lt;code&gt;POST /v1/systemone/batch&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;For single-question calls over loopback with keep-alive, we measured HTTP p50 of &lt;strong&gt;3.0 ms&lt;/strong&gt; for English and &lt;strong&gt;2.4 ms&lt;/strong&gt; for multilingual on v6e Pallas.&lt;/p&gt;
+&lt;h3 id="cost-million-model-input-tokens-per-us-dollar" &gt;
 &lt;div&gt;
 &lt;a href="#cost-million-model-input-tokens-per-us-dollar"&gt;
 ##
@@ -208,6 +217,15 @@ Conclusion
 &lt;p&gt;deciax brings Laya&amp;rsquo;s structured decisions to TPU. In this experiment, plain JAX already handled single-question calls in about 2 ms, with little additional benefit from Pallas at that shape. At 50 questions per call, the fused Pallas path was roughly &lt;strong&gt;2.3× faster&lt;/strong&gt; than plain JAX. The question count changes both the dominant overhead and the benefit of optimization.&lt;/p&gt;
 &lt;p&gt;For the inputs, models, and implementations tested here, v6e Pallas had lower latency than the compared GPU implementations at both one and 50 questions.&lt;/p&gt;
 &lt;p&gt;You can try deciax in &lt;a href="https://colab.research.google.com/drive/1sY_4BeRq_em4tzePW3poPyl-lGXyxO1g?usp=sharing" target="_blank" rel="noopener noreferrer"&gt;Colab&lt;/a&gt; or explore the code in the &lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id="acknowledgments" &gt;
+&lt;div&gt;
+&lt;a href="#acknowledgments"&gt;
+#
+&lt;/a&gt;
+Acknowledgments
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;Thank you to the 2026 TPU Builders Program and &lt;a href="https://sites.research.google/trc/about/" target="_blank" rel="noopener noreferrer"&gt;TPU Research Cloud (TRC)&lt;/a&gt; for providing the TPU resources used in this work.&lt;/p&gt;
 &lt;div class="footnotes" role="doc-endnotes"&gt;
 &lt;hr&gt;
 &lt;ol&gt;

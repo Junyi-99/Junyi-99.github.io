@@ -126,23 +126,32 @@ JAX 实现的性能如何？
 部署模型服务
 &lt;/div&gt;
 &lt;/h2&gt;
-&lt;h3 id="http-服务与安装" &gt;
+&lt;h3 id="http-服务" &gt;
 &lt;div&gt;
-&lt;a href="#http-%e6%9c%8d%e5%8a%a1%e4%b8%8e%e5%ae%89%e8%a3%85"&gt;
+&lt;a href="#http-%e6%9c%8d%e5%8a%a1"&gt;
 ##
 &lt;/a&gt;
-HTTP 服务与安装
+HTTP 服务
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;我们也测了 &lt;code&gt;deciax.serve&lt;/code&gt;。单问题、loopback、keep-alive 条件下，v6e Pallas 的 HTTP p50 是英文 &lt;strong&gt;3.0 ms&lt;/strong&gt;、多语言 &lt;strong&gt;2.4 ms&lt;/strong&gt;。这包含本机 HTTP 往返，但没有外部网络延迟，也没有并发负载测试。&lt;/p&gt;
-&lt;p&gt;使用 Python 3.14 或更高版本。在 TPU 环境中安装：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m pip install &lt;span style="color:#5af78e"&gt;&amp;#34;deciax[tpu]==0.1.1&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个版本可以用于上面的 Python 接口示例。要检查本次 Pallas 实现，可以从&lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;项目仓库&lt;/a&gt;检出报告对应的代码：&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git clone https://github.com/Junyi-99/deciax.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ff5c57"&gt;cd&lt;/span&gt; deciax
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git checkout 6f3a930
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;uv sync --extra tpu
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="costmillion-model-input-tokens-per-us-dollar" &gt;
+&lt;p&gt;为了让其他应用调用 Laya，我们通过 &lt;code&gt;deciax.serve&lt;/code&gt; 将同样的决策接口暴露为 HTTP 服务：向 &lt;code&gt;POST /v1/systemone&lt;/code&gt; 发送输入和问题，服务以 JSON 返回结构化答案。模型在服务启动时加载，并在后续请求之间复用。&lt;/p&gt;
+&lt;p&gt;在已安装 deciax 的 TPU 主机上，运行以下命令，使用 Pallas 实现在 8000 端口启动 HTTP server：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python -m deciax.serve --model laya --impl pallas --port &lt;span style="color:#ff9f43"&gt;8000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;启动和预热完成后，在另一个终端发送请求：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl http://127.0.0.1:8000/v1/systemone &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -H &lt;span style="color:#5af78e"&gt;&amp;#39;Content-Type: application/json&amp;#39;&lt;/span&gt; &lt;span style="color:#5af78e"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; -d &lt;span style="color:#5af78e"&gt;&amp;#39;{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;state&amp;#34;: &amp;#34;I was charged twice. Please refund the duplicate charge.&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;questions&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;refund&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;type&amp;#34;: &amp;#34;noul&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; &amp;#34;instructions&amp;#34;: &amp;#34;Does the user ask for a refund?&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#5af78e"&gt; }&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;返回结果中的 &lt;code&gt;answers.refund.noul&lt;/code&gt; 表示答案为真的概率，同时还包含置信度、action probability 和 token 用量。服务也提供 &lt;code&gt;GET /health&lt;/code&gt; 健康检查和 &lt;code&gt;POST /v1/systemone/batch&lt;/code&gt; 批量接口。&lt;/p&gt;
+&lt;p&gt;在 loopback、keep-alive 条件下，我们测得 v6e Pallas 的单问题 HTTP p50 为英文 &lt;strong&gt;3.0 ms&lt;/strong&gt;、多语言 &lt;strong&gt;2.4 ms&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id="costmillion-model-input-tokens-per-us-dollar" &gt;
 &lt;div&gt;
 &lt;a href="#costmillion-model-input-tokens-per-us-dollar"&gt;
 ##
@@ -208,6 +217,15 @@ Cost：Million model input tokens per US dollar
 &lt;p&gt;deciax 把 Laya 的结构化决策能力带到了 TPU 上。这次实验中，普通 JAX 已经能把单问题调用做到约 2 ms，Pallas 在这个形状下的额外收益很小；当每次调用增加到 50 个问题，融合后的 Pallas 路径相较普通 JAX 提速约 &lt;strong&gt;2.3 倍&lt;/strong&gt;。问题数改变了主要开销，也改变了优化的收益。&lt;/p&gt;
 &lt;p&gt;在本文测试的输入、模型和实现范围内，v6e Pallas 的单问题和 50 问题延迟都低于参与对比的 GPU 实现。&lt;/p&gt;
 &lt;p&gt;如果你想试试 deciax，可以在 &lt;a href="https://colab.research.google.com/drive/1sY_4BeRq_em4tzePW3poPyl-lGXyxO1g?usp=sharing" target="_blank" rel="noopener noreferrer"&gt;Colab&lt;/a&gt; 中体验，也可以到 &lt;a href="https://github.com/Junyi-99/deciax" target="_blank" rel="noopener noreferrer"&gt;GitHub 仓库&lt;/a&gt;查看代码。&lt;/p&gt;
+&lt;h2 id="致谢" &gt;
+&lt;div&gt;
+&lt;a href="#%e8%87%b4%e8%b0%a2"&gt;
+#
+&lt;/a&gt;
+致谢
+&lt;/div&gt;
+&lt;/h2&gt;
+&lt;p&gt;感谢 2026 TPU Builders Program 和 &lt;a href="https://sites.research.google/trc/about/" target="_blank" rel="noopener noreferrer"&gt;TPU Research Cloud（TRC）&lt;/a&gt; 为本文工作提供 TPU 计算资源。&lt;/p&gt;
 &lt;div class="footnotes" role="doc-endnotes"&gt;
 &lt;hr&gt;
 &lt;ol&gt;
