@@ -978,12 +978,15 @@ TS_EXITNODE=100.x.x.x
 &lt;li&gt;拆下时注意不要用力过猛，&lt;strong&gt;避免下方金属卡槽变形&lt;/strong&gt;。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;
-&lt;div style="display:flex; gap:0.5rem; justify-content:center; max-width: 1024px; margin: 0 auto;"&gt;
-&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock-1.jpg" style="border-radius:0.5rem; width: 50%; min-width:0; object-fit:cover;"&gt;
-&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock-2.jpg" style="border-radius:0.5rem; width: 50%; min-width:0; object-fit:cover;"&gt;
+&lt;div style="display:flex; gap:0.5rem; align-items:stretch; max-width: 1024px; margin: 0 auto;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock-3.jpg" style="border-radius:0.5rem; width: 49%; min-width:0; object-fit:cover;"&gt;
+&lt;div style="display:flex; flex-direction:column; gap:0.5rem; width: 51%; min-width:0;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock-1.jpg" style="border-radius:0.5rem; width: 100%; flex:1; min-height:0; object-fit:cover;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock-2.jpg" style="border-radius:0.5rem; width: 100%; flex:1; min-height:0; object-fit:cover;"&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 &lt;figcaption&gt;
-拆下的 Caps Lock 键帽翻面放在旁边，可以看到底部的金属平衡杆；右侧是露出的剪刀脚和键位卡槽
+左：拆下的 Caps Lock 键帽翻面放在键位旁。右：近景，键帽底部的金属平衡杆，以及露出的剪刀脚和卡槽
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;&lt;strong&gt;安装建议：&lt;/strong&gt;&lt;/p&gt;
