@@ -861,6 +861,39 @@ Keycap with a single stabilizer wire: first secure the wire, then press the keyc
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;hr&gt;
+&lt;h3 id="long-key-disassembly-space" &gt;
+&lt;div&gt;
+&lt;a href="#long-key-disassembly-space"&gt;
+##
+&lt;/a&gt;
+Long Key Disassembly (Space)
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;kbd&gt;Space&lt;/kbd&gt; is the longest keycap and is built differently from the other long keys: there is a scissor mechanism at each end, a single rubber dome in the middle, and one stabilizer wire running the full length of the keycap.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Removal Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Start from the edge closest to the trackpad. Work the pry tool along the whole front edge so it lifts evenly rather than at a single corner.&lt;/li&gt;
+&lt;li&gt;Once the front edge is free, the keycap comes up together with its stabilizer wire. Unhook it from the scissor mechanisms at both ends.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Installation Tips:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Attach the stabilizer wire to the keycap first, align it with the scissor mechanisms at both ends, then press along the front edge until it clicks in.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;div style="display:flex; flex-direction:column; gap:0.5rem; max-width: 1024px; margin: 0 auto;"&gt;
+&lt;div style="display:flex; gap:0.5rem;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-open-1.jpg" style="border-radius:0.5rem; flex:1.89; width:0; min-width:0; height:auto;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-open-2.jpg" style="border-radius:0.5rem; flex:1.59; width:0; min-width:0; height:auto;"&gt;
+&lt;/div&gt;
+&lt;div style="display:flex; gap:0.5rem;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-detail-1.jpg" style="border-radius:0.5rem; flex:2.77; width:0; min-width:0; height:auto;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-detail-2.jpg" style="border-radius:0.5rem; flex:1.21; width:0; min-width:0; height:auto;"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;
+Top row: prying the Space bar up along its front edge, with backlight leaking through the gap. Bottom row: the empty slot with a scissor mechanism at each end and a rubber dome in the middle, and the underside of the keycap with its full-length stabilizer wire
+&lt;/figcaption&gt;
+&lt;/figure&gt;
 &lt;h3 id="short-key-disassembly-arrow-keys" &gt;
 &lt;div&gt;
 &lt;a href="#short-key-disassembly-arrow-keys"&gt;

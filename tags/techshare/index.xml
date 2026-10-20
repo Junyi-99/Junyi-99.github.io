@@ -94,6 +94,39 @@
 只有一个平衡杆的键帽，先把平衡杆卡住缺口，然后再正常装
 &lt;/figcaption&gt;
 &lt;/figure&gt;
+&lt;h3 id="长键帽拆装space" &gt;
+&lt;div&gt;
+&lt;a href="#%e9%95%bf%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85space"&gt;
+##
+&lt;/a&gt;
+长键帽拆装：Space
+&lt;/div&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;kbd&gt;Space&lt;/kbd&gt; 是最长的键帽，底下的结构和其他长键不同：左右两端各有一组剪刀脚，中间只有一个硅胶碗，键帽背面带一根贯穿全长的平衡杆。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;拆卸建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从靠近触控板的一侧下手，撬棒沿着键帽前沿慢慢把整条边翘起来，不要只撬一个角；&lt;/li&gt;
+&lt;li&gt;前沿脱开后，键帽会连着平衡杆一起抬起，再从两端的剪刀脚上取下。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;安装建议：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;先把平衡杆装回键帽，对准两端剪刀脚的卡槽放下，再沿前沿按压到位。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;
+&lt;div style="display:flex; flex-direction:column; gap:0.5rem; max-width: 1024px; margin: 0 auto;"&gt;
+&lt;div style="display:flex; gap:0.5rem;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-open-1.jpg" style="border-radius:0.5rem; flex:1.89; width:0; min-width:0; height:auto;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-open-2.jpg" style="border-radius:0.5rem; flex:1.59; width:0; min-width:0; height:auto;"&gt;
+&lt;/div&gt;
+&lt;div style="display:flex; gap:0.5rem;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-detail-1.jpg" style="border-radius:0.5rem; flex:2.77; width:0; min-width:0; height:auto;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/space-detail-2.jpg" style="border-radius:0.5rem; flex:1.21; width:0; min-width:0; height:auto;"&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;
+上排：沿前沿把 Space 撬起，缝隙里能看到背光漏出来。下排：拆下后的键位，两端是剪刀脚，中间是硅胶碗；键帽背面是贯穿全长的平衡杆
+&lt;/figcaption&gt;
+&lt;/figure&gt;
 &lt;h3 id="短键帽拆装方向键" &gt;
 &lt;div&gt;
 &lt;a href="#%e7%9f%ad%e9%94%ae%e5%b8%bd%e6%8b%86%e8%a3%85%e6%96%b9%e5%90%91%e9%94%ae"&gt;
