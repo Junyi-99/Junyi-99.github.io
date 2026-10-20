@@ -68,9 +68,12 @@ Long Key Disassembly (e.g. Shift, Caps Lock, ESC)
 &lt;li&gt;Do not use excessive force — &lt;strong&gt;avoid bending the metal stabilizer sockets&lt;/strong&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;
-&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock.jpg" style="border-radius:0.5rem; width: 512px"&gt;
+&lt;div style="display:flex; gap:0.5rem; justify-content:center; max-width: 1024px; margin: 0 auto;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock-1.jpg" style="border-radius:0.5rem; width: 50%; min-width:0; object-fit:cover;"&gt;
+&lt;img src="https://www.junyi.dev/posts/replace-keyboard/capslock-2.jpg" style="border-radius:0.5rem; width: 50%; min-width:0; object-fit:cover;"&gt;
+&lt;/div&gt;
 &lt;figcaption&gt;
-Removed Caps Lock key (pointed to by tweezers) and the longer Shift key
+The removed Caps Lock keycap flipped over, showing its metal stabilizer wire, next to the exposed scissor mechanism and socket
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;&lt;strong&gt;Installation Tips:&lt;/strong&gt;&lt;/p&gt;
