@@ -102,16 +102,19 @@ Keycap with a single stabilizer wire: first secure the wire, then press the keyc
 Long Key Disassembly (Space)
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;&lt;kbd&gt;Space&lt;/kbd&gt; is the longest keycap and is built differently from the other long keys: there is a scissor mechanism at each end, a single rubber dome in the middle, and one stabilizer wire running the full length of the keycap.&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;Space&lt;/kbd&gt; is the longest keycap and is built differently from the other long keys: there is a scissor mechanism at each end, a single rubber dome in the middle, and two stabilizer wires.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Removal Tips:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Start from the bottom-right corner, just like the other keys.&lt;/li&gt;
 &lt;li&gt;Then work the pry tool slowly along the edge closest to the trackpad until that whole front edge is lifted.&lt;/li&gt;
-&lt;li&gt;Once the front edge is free, the keycap comes up together with its stabilizer wire. Unhook it from the scissor mechanisms at both ends.&lt;/li&gt;
+&lt;li&gt;Once the front edge is free, the keycap comes up together with the stabilizer wires. Unhook it from the scissor mechanisms at both ends and keep both wires.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Installation Tips:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Attach the stabilizer wire to the keycap first, align it with the scissor mechanisms at both ends, then press along the front edge until it clicks in.&lt;/li&gt;
+&lt;li&gt;The two stabilizer wires go in different places: one sits in the slots of the scissor mechanisms on the keyboard, the other hangs on the keycap.&lt;/li&gt;
+&lt;li&gt;Place the keycap so its wire hooks into the metal slots on the keyboard.&lt;/li&gt;
+&lt;li&gt;Check that both wires are level and spread as far apart as they can go.&lt;/li&gt;
+&lt;li&gt;Press one side of the Space bar until it clicks, then press the other side.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;
 &lt;div style="display:flex; flex-direction:column; gap:0.5rem; max-width: 1024px; margin: 0 auto;"&gt;
@@ -125,7 +128,7 @@ Long Key Disassembly (Space)
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;figcaption&gt;
-Top row: starting from the bottom-right corner and lifting the whole trackpad-side edge of the Space bar, with backlight leaking through the gap. Bottom row: the empty slot with a scissor mechanism at each end and a rubber dome in the middle, and the underside of the keycap with its full-length stabilizer wire
+Top row: starting from the bottom-right corner and lifting the whole trackpad-side edge of the Space bar, with backlight leaking through the gap. Bottom row: the empty slot with a scissor mechanism at each end and a rubber dome in the middle, and the underside of the keycap with its stabilizer wire
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;h3 id="short-key-disassembly-arrow-keys" &gt;

@@ -102,16 +102,19 @@
 长键帽拆装：Space
 &lt;/div&gt;
 &lt;/h3&gt;
-&lt;p&gt;&lt;kbd&gt;Space&lt;/kbd&gt; 是最长的键帽，底下的结构和其他长键不同：左右两端各有一组剪刀脚，中间只有一个硅胶碗，键帽背面带一根贯穿全长的平衡杆。&lt;/p&gt;
+&lt;p&gt;&lt;kbd&gt;Space&lt;/kbd&gt; 是最长的键帽，底下的结构和其他长键不同：左右两端各有一组剪刀脚，中间只有一个硅胶碗，另外还有两根平衡杆。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;拆卸建议：&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;和其他键一样，先从右下角撬起；&lt;/li&gt;
 &lt;li&gt;然后沿着靠近触控板的这一侧慢慢往左推进，直到整条前沿完全翘起；&lt;/li&gt;
-&lt;li&gt;前沿脱开后，键帽会连着平衡杆一起抬起，再从两端的剪刀脚上取下。&lt;/li&gt;
+&lt;li&gt;前沿脱开后，键帽会连着平衡杆一起抬起，再从两端的剪刀脚上取下，注意收好两根平衡杆。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;安装建议：&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;先把平衡杆装回键帽，对准两端剪刀脚的卡槽放下，再沿前沿按压到位。&lt;/li&gt;
+&lt;li&gt;两根平衡杆分开装：一根装进键盘上剪刀脚的卡槽里，另一根挂在键帽上；&lt;/li&gt;
+&lt;li&gt;把键帽放上去，让键帽上的平衡杆勾住键盘的金属卡槽；&lt;/li&gt;
+&lt;li&gt;确认两根平衡杆都是平的，并且彼此拉开到最大距离；&lt;/li&gt;
+&lt;li&gt;先压 Space 的一侧，听到咔哒声，再压另一侧。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;figure&gt;
 &lt;div style="display:flex; flex-direction:column; gap:0.5rem; max-width: 1024px; margin: 0 auto;"&gt;
@@ -125,7 +128,7 @@
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;figcaption&gt;
-上排：从右下角开始，把 Space 靠触控板的一侧整条翘起，缝隙里能看到背光漏出来。下排：拆下后的键位，两端是剪刀脚，中间是硅胶碗；键帽背面是贯穿全长的平衡杆
+上排：从右下角开始，把 Space 靠触控板的一侧整条翘起，缝隙里能看到背光漏出来。下排：拆下后的键位，两端是剪刀脚，中间是硅胶碗；键帽背面挂着平衡杆
 &lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;h3 id="短键帽拆装方向键" &gt;
