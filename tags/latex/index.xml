@@ -28,9 +28,9 @@
 &lt;/div&gt;
 &lt;/h2&gt;
 &lt;p&gt;假设你已有一个 LaTeX 项目文件夹（新建空文件夹也可以），跟着做就能用：&lt;/p&gt;
-&lt;h3 id="step-1-引入" &gt;
+&lt;h3 id="step-1-引入-dev-container-配置" &gt;
 &lt;div&gt;
-&lt;a href="#step-1-%e5%bc%95%e5%85%a5"&gt;
+&lt;a href="#step-1-%e5%bc%95%e5%85%a5-dev-container-%e9%85%8d%e7%bd%ae"&gt;
 ##
 &lt;/a&gt;
 &lt;strong&gt;Step 1 引入 &lt;a href="https://github.com/paperdebugger-bot/latex-devcontainer" target="_blank" rel="noopener noreferrer"&gt;Dev Container 配置&lt;/a&gt;&lt;/strong&gt;
